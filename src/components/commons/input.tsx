@@ -24,6 +24,12 @@ const inputVariants = cva('outline-none', {
 type InputProps = VariantProps<typeof inputVariants> &
   React.InputHTMLAttributes<HTMLInputElement>;
 
+/**
+ * 인풋 공통 컴포넌트
+ * @param variant - Input의 테마 종류
+ * @param sizes - Input의 크기 종류
+ * @returns - <input />
+ */
 const Input = ({ variant, sizes, ...inputProps }: InputProps) => {
   return (
     <input
