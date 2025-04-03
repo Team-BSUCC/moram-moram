@@ -4,27 +4,35 @@ import { useTransition } from 'react';
 import { signIn } from '../services/auth-server-service';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
-import { signInSchema, SignInSchema } from '../auth-schema';
+import FormSchema from '../../../shared/constants/auth-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { SignInDTO } from '../types/auth-type';
+import { z } from 'zod';
+
+const signInDefaultValue: SignInDTO = {
+  email: '',
+  password: '',
+};
+
+const signInSchema = z.object({
+  email: FormSchema.NON_EMPTY,
+  password: FormSchema.NON_EMPTY,
+});
 
 const useSignInForm = () => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
-
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
-  } = useForm<SignInSchema>({
+  } = useForm<SignInDTO>({
     resolver: zodResolver(signInSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    defaultValues: signInDefaultValue,
   });
 
-  const onSubmit = (data: SignInSchema) => {
+  const onSubmit = (data: SignInDTO) => {
     startTransition(async () => {
       const { error } = await signIn(data);
       if (error) {

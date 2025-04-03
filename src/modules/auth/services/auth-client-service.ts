@@ -1,6 +1,7 @@
 'use client';
 
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
+import URL from '@/shared/constants/url-constants';
 
 const supabase = getBrowserClient();
 
@@ -9,7 +10,7 @@ export const signWithGoogle = async () => {
   const { data } = await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${origin}/callback`,
+      redirectTo: `${origin}/${URL.CALL_BACK}`,
     },
   });
   if (data) alert('로그인 되었습니다.');
@@ -20,7 +21,7 @@ export const signWithKaKao = async () => {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
-      redirectTo: `${origin}/callback`,
+      redirectTo: `${origin}/${URL.CALL_BACK}`,
     },
   });
   if (error) throw error;

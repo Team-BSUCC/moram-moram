@@ -54,6 +54,10 @@ export const signUp = async ({
   return { error: undefined };
 };
 
+/**
+ * 로그아웃 함수자가 설정한 닉네임
+ * @return {error} error 메세지 혹은 null
+ */
 export const signOut = async (): Promise<{ error: string | null }> => {
   const supabase = getServerClient();
   const { error } = await supabase.auth.signOut();
@@ -81,6 +85,12 @@ export const checkNicknameDuplicated = async (
     return false;
   }
 };
+
+/**
+ * 이메일 중복 체크를 하는 함수
+ * @param {string} email 사용자가 설정한 닉네임
+ * @throws {error} supabase 에러
+ */
 
 export const checkEmailDuplicated = async (email: string): Promise<boolean> => {
   const supabase = getServerClient();

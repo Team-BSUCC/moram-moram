@@ -5,3 +5,5 @@ export type User = {
 };
 
 export type SignInDTO = Omit<User, 'nickname'>;
+
+export type SignUpDTO = User & { confirmPassword: string };

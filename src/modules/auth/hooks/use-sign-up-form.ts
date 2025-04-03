@@ -3,13 +3,15 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
-import { signUpSchema, SignUpSchema } from '../auth-schema';
+import FormSchema from '../../../shared/constants/auth-schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   checkEmailDuplicated,
   checkNicknameDuplicated,
   signUp,
 } from '../services/auth-server-service';
+import { SignUpDTO } from '../types/auth-type';
+import { z } from 'zod';
 
 const useSignUpForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -20,6 +22,25 @@ const useSignUpForm = () => {
 
   const router = useRouter();
 
+  const signUpDefaultValue: SignUpDTO = {
+    email: '',
+    password: '',
+    confirmPassword: '',
+    nickname: '',
+  };
+
+  const signUpSchema = z
+    .object({
+      email: FormSchema.EMAIL,
+      password: FormSchema.PASSWORD,
+      confirmPassword: FormSchema.CONFIRM_PASSWORD,
+      nickname: FormSchema.NICKNAME,
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: '비밀번호가 일치하지 않습니다.',
+      path: ['confirmPassword'],
+    });
+
   const {
     register,
     handleSubmit,
@@ -27,18 +48,13 @@ const useSignUpForm = () => {
     setError,
     getValues,
     trigger,
-  } = useForm<SignUpSchema>({
+  } = useForm<SignUpDTO>({
     mode: 'onChange',
     resolver: zodResolver(signUpSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-      confirmPassword: '',
-      nickname: '',
-    },
+    defaultValues: signUpDefaultValue,
   });
 
-  const onSubmit = (data: SignUpSchema) => {
+  const onSubmit = (data: SignUpDTO) => {
     if (!emailChecked) {
       setError('email', { message: '이메일 중복 확인을 해주세요.' });
       return;
