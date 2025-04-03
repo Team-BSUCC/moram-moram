@@ -20,7 +20,11 @@ export default function RootLayout({
           헤더
           {/* <Header /> 컴포넌트가 들어올 예정입니다. */}
         </header>
-        <main className='mt-[60px] flex-grow'>{children}</main>
+        <main className='mt-[60px] flex-grow'>
+          <div className='flex h-full w-full items-center justify-center'>
+            <div className='h-full w-[70%]'>{children}</div>
+          </div>
+        </main>
         <footer>
           푸터
           {/* <Footer /> 컴포넌트가 들어올 예정입니다. */}
