@@ -48,19 +48,9 @@ type TextProps = VariantProps<typeof textVariants> & {
  * @returns - 텍스트 컴포넌트
  */
 
-const Text = ({
-  variant,
-  size,
-  align,
-  line,
-  children,
-  ...props
-}: TextProps) => {
+const Text = ({ variant, size, align, line, children }: TextProps) => {
   return (
-    <p
-      className={twMerge(textVariants({ variant, size, align, line }))}
-      {...props}
-    >
+    <p className={twMerge(textVariants({ variant, size, align, line }))}>
       {children}
     </p>
   );
