@@ -13,15 +13,19 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
   const handleDragStop = (e: DraggableEvent, data: DraggableData) => {
     setPosition({ x: data.x, y: data.y });
   };
+  //드래그중 일때 위치 업데이트
+  const handleDrag = (e: DraggableEvent, data: DraggableData) => {
+    setPosition({ x: data.x, y: data.y });
+  };
 
   return (
     <div className='h-dvh w-dvw'>
       <Draggable
         handle='.handle' // 드래그 핸들 지정 (선택사항)
-        defaultPosition={{ x: 0, y: 0 }}
         position={position}
         grid={[1, 1]}
         scale={1}
+        onDrag={handleDrag}
         onStop={handleDragStop}
         bounds='parent' // 부모 요소 내부로 제한 (선택사항)
       >
