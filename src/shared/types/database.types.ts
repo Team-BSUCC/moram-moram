@@ -11,7 +11,6 @@ export type Database = {
     Tables: {
       cell_todos: {
         Row: {
-          category: number
           cell_id: string
           created_at: string
           id: string
@@ -19,7 +18,6 @@ export type Database = {
           title: string | null
         }
         Insert: {
-          category?: number
           cell_id: string
           created_at?: string
           id?: string
@@ -27,7 +25,6 @@ export type Database = {
           title?: string | null
         }
         Update: {
-          category?: number
           cell_id?: string
           created_at?: string
           id?: string
@@ -39,32 +36,67 @@ export type Database = {
             foreignKeyName: "cell_todos_cell_id_fkey"
             columns: ["cell_id"]
             isOneToOne: false
-            referencedRelation: "mandalart_cells"
+            referencedRelation: "mandalart_subtopics"
             referencedColumns: ["id"]
           },
         ]
       }
-      mandalart_blocks: {
+      mandalart_subtopics: {
         Row: {
-          block_index: number
+          cell_index: number
+          content: string | null
           created_at: string
           id: string
-          mandalart_id: string | null
-          primary: boolean | null
+          is_done: boolean | null
+          topic_id: string
         }
         Insert: {
-          block_index: number
+          cell_index: number
+          content?: string | null
           created_at?: string
           id?: string
-          mandalart_id?: string | null
-          primary?: boolean | null
+          is_done?: boolean | null
+          topic_id: string
         }
         Update: {
-          block_index?: number
+          cell_index?: number
+          content?: string | null
           created_at?: string
           id?: string
-          mandalart_id?: string | null
-          primary?: boolean | null
+          is_done?: boolean | null
+          topic_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mandalart_cells_block_id_fkey"
+            columns: ["topic_id"]
+            isOneToOne: false
+            referencedRelation: "mandalart_topics"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mandalart_topics: {
+        Row: {
+          created_at: string
+          id: string
+          mandalart_id: string
+          topic: string
+          topic_index: number
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          mandalart_id: string
+          topic: string
+          topic_index: number
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          mandalart_id?: string
+          topic?: string
+          topic_index?: number
         }
         Relationships: [
           {
@@ -72,44 +104,6 @@ export type Database = {
             columns: ["mandalart_id"]
             isOneToOne: false
             referencedRelation: "mandalarts"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      mandalart_cells: {
-        Row: {
-          block_id: string
-          cell_index: number
-          content: string | null
-          created_at: string
-          id: string
-          is_center: boolean | null
-          is_done: boolean | null
-        }
-        Insert: {
-          block_id: string
-          cell_index: number
-          content?: string | null
-          created_at?: string
-          id?: string
-          is_center?: boolean | null
-          is_done?: boolean | null
-        }
-        Update: {
-          block_id?: string
-          cell_index?: number
-          content?: string | null
-          created_at?: string
-          id?: string
-          is_center?: boolean | null
-          is_done?: boolean | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "mandalart_cells_block_id_fkey"
-            columns: ["block_id"]
-            isOneToOne: false
-            referencedRelation: "mandalart_blocks"
             referencedColumns: ["id"]
           },
         ]
@@ -144,86 +138,7 @@ export type Database = {
             referencedRelation: "rooms"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "mandalarts_user_id_fkey"
-            columns: ["room_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
         ]
-      }
-      post: {
-        Row: {
-          created_at: string
-          id: string
-          mandalart_id: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          mandalart_id: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          mandalart_id?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "post_mandalart_id_fkey"
-            columns: ["mandalart_id"]
-            isOneToOne: false
-            referencedRelation: "mandalarts"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "post_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "users"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      realtime: {
-        Row: {
-          cell_id: number
-          id: number
-          text: string | null
-        }
-        Insert: {
-          cell_id: number
-          id?: number
-          text?: string | null
-        }
-        Update: {
-          cell_id?: number
-          id?: number
-          text?: string | null
-        }
-        Relationships: []
-      }
-      realtime3: {
-        Row: {
-          cell: number | null
-          content: string | null
-          id: string
-        }
-        Insert: {
-          cell?: number | null
-          content?: string | null
-          id?: string
-        }
-        Update: {
-          cell?: number | null
-          content?: string | null
-          id?: string
-        }
-        Relationships: []
       }
       "room_ participants": {
         Row: {
