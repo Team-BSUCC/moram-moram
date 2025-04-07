@@ -8,13 +8,16 @@ const THROTTLE_MS = 50;
 export const RealtimeCursors = ({
   roomName,
   username,
+  userId,
 }: {
   roomName: string;
   username: string;
+  userId: string;
 }) => {
   const { cursors } = useRealtimeCursors({
     roomName,
     username,
+    userId,
     throttleMs: THROTTLE_MS,
   });
 

@@ -42,8 +42,6 @@ const supabase = getBrowserClient();
 const generateRandomColor = () =>
   `hsl(${Math.floor(Math.random() * 360)}, 100%, 70%)`;
 
-const generateRandomNumber = () => Math.floor(Math.random() * 100);
-
 const EVENT_NAME = 'realtime-cursor-move';
 
 type CursorEventPayload = {
@@ -52,7 +50,7 @@ type CursorEventPayload = {
     y: number;
   };
   user: {
-    id: number;
+    id: string;
     name: string;
   };
   color: string;
@@ -62,14 +60,16 @@ type CursorEventPayload = {
 export const useRealtimeCursors = ({
   roomName,
   username,
+  userId: id,
   throttleMs,
 }: {
   roomName: string;
   username: string;
+  userId: string;
   throttleMs: number;
 }) => {
   const [color] = useState(generateRandomColor());
-  const [userId] = useState(generateRandomNumber());
+  const [userId] = useState(id);
   const [cursors, setCursors] = useState<Record<string, CursorEventPayload>>(
     {}
   );
