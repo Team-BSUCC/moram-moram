@@ -5,6 +5,11 @@ import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
 type FloatingSheetProps = { children: ReactNode };
 
+/**
+ * FloatingSheet 공통 컴포넌트 - 드래그 가능한 플로팅 패널을 제공합니다
+ * @param children - 플로팅 시트 내부에 표시될 콘텐츠
+ * @returns - 드래그 가능한 플로팅 패널 요소
+ */
 const FloatingSheet = ({ children }: FloatingSheetProps) => {
   // 초기 위치 상태 관리 (선택사항)
   const [position, setPosition] = useState({ x: 0, y: 0 });
