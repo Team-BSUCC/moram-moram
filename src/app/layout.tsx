@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
@@ -8,6 +9,13 @@ export const metadata: Metadata = {
   // openGraph:
 };
 
+const pretendard = localFont({
+  src: '../../public/fonts/pretendard-variable.woff2',
+  display: 'swap',
+  weight: '45 920',
+  variable: '--font-pretendard',
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -15,7 +23,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko-kr' className='h-full w-full'>
-      <body className='flex h-full w-full flex-col antialiased'>
+      <body
+        className={`${pretendard.variable} flex h-full w-full flex-col antialiased`}
+      >
         <header className='fixed left-0 right-0 top-0 z-50 h-[60px]'>
           {/* <Header /> 컴포넌트가 들어올 예정입니다. */}
           <div className='flex h-full gap-20 border-2'>헤더</div>
