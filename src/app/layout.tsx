@@ -31,25 +31,25 @@ export default function RootLayout({
           {/* <Header /> 컴포넌트가 들어올 예정입니다. */}
           <div className='flex h-full gap-3 border-2 bg-pink-pastel'>
             임시헤더
-            <Link href='' className='border bg-purple-pastel'>
+            <Link href='/sign-in' className='border bg-purple-pastel'>
               로그인
             </Link>
-            <Link href='' className='border bg-purple-pastel'>
+            <Link href='/sign-up' className='border bg-purple-pastel'>
               회원가입
             </Link>
-            <Link href='' className='border bg-purple-pastel'>
+            <Link href='/dashboard' className='border bg-purple-pastel'>
               대쉬보드
             </Link>
-            <Link href='' className='border bg-purple-pastel'>
+            <Link href='/hub' className='border bg-purple-pastel'>
               허브
             </Link>
-            <Link href='' className='border bg-purple-pastel'>
+            <Link href='/mandalart' className='border bg-purple-pastel'>
               만다라트
             </Link>
-            <Link href='' className='border bg-purple-pastel'>
+            <Link href='/status' className='border bg-purple-pastel'>
               스테이트
             </Link>
-            <Link href='' className='border bg-purple-pastel'>
+            <Link href='/studio' className='border bg-purple-pastel'>
               스튜디오
             </Link>
           </div>
