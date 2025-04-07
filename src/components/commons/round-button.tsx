@@ -29,6 +29,7 @@ type RoundButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
     children?: string;
     imgSrc?: string;
     alt?: string;
+    className?: never;
   };
 
 /**

@@ -36,6 +36,7 @@ const textVariants = cva(
 
 type TextProps = VariantProps<typeof textVariants> & {
   children: React.ReactNode;
+  className?: never;
 };
 
 /**
@@ -47,9 +48,19 @@ type TextProps = VariantProps<typeof textVariants> & {
  * @param children - 버튼의 기본 속성
  * @returns - 텍스트 컴포넌트
  */
-const Text = ({ variant, size, align, line, children }: TextProps) => {
+const Text = ({
+  variant,
+  size,
+  align,
+  line,
+  children,
+  ...props
+}: TextProps) => {
   return (
-    <p className={twMerge(textVariants({ variant, size, align, line }))}>
+    <p
+      className={twMerge(textVariants({ variant, size, align, line }))}
+      {...props}
+    >
       {children}
     </p>
   );

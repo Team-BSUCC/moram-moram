@@ -25,6 +25,7 @@ type TitleProps = {
   children: ReactNode;
   as: 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
   highlightColor?: 'bg-red-500' | 'bg-blue-500';
+  className?: never;
 } & VariantProps<typeof titleVariants>;
 
 /**
@@ -34,11 +35,18 @@ type TitleProps = {
  * @param children - Title 안에 들어가는 텍스트
  * @returns - <Heading Tags>{children}</Heading Tags>
  */
-const Title = ({ as, size, variant, children, highlightColor }: TitleProps) => {
+const Title = ({
+  as,
+  size,
+  variant,
+  children,
+  highlightColor,
+  ...props
+}: TitleProps) => {
   const Component = as;
 
   return (
-    <Component className={twMerge(titleVariants({ size, variant }))}>
+    <Component className={twMerge(titleVariants({ size, variant }))} {...props}>
       {highlightColor && <div className={`w-1 ${highlightColor}`}></div>}
       {children}
     </Component>

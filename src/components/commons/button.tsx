@@ -22,7 +22,10 @@ const buttonVariants = cva(
 );
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
-  VariantProps<typeof buttonVariants> & { children: React.ReactNode };
+  VariantProps<typeof buttonVariants> & {
+    children: React.ReactNode;
+    className?: never;
+  };
 
 /**
  * 버튼 공통 컴포넌트
