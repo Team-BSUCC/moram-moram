@@ -1,24 +1,26 @@
 'use server';
 
 import { getServerClient } from '@/shared/utils/supabase/server-client';
-import { SignInDTO, User } from '../types/auth-type';
+import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
+import { User } from '@supabase/supabase-js';
+import { SignInDTO, UpdatePasswordDTO, UserType } from '../types/auth-type';
 
 type PropsSignIn = SignInDTO;
-type PropsSignUp = User;
+type PropsSignUp = UserType;
 
 /**
- * @param {Object} params
+ * @param  params
  * 사용자의 정보를 받아 로그인을 하는 함수
- * @param {string} params.email 사용자 이메일
- * @param {string} params.password 사용자가 설정한 비밀번호
- * @throws {error} supabase 에러
+ * @param params.email 사용자 이메일
+ * @param params.password 사용자가 설정한 비밀번호
+ * @throws supabase 에러
  */
 
 export const signIn = async ({
   email,
   password,
 }: PropsSignIn): Promise<{ error: string | null }> => {
-  const supabase = getServerClient();
+  const supabase = getServerClientAction();
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -29,12 +31,12 @@ export const signIn = async ({
 };
 
 /**
- * @param {Object} params
+ * @param params
  * 사용자의 정보를 받아 회원가입을 하는 함수
- * @param {string} params.email 사용자 이메일
- * @param {string} params.password 사용자가 설정한 비밀번호
- * @param {string} params.nickname 사용자가 설정한 닉네임
- * @throws {error} supabase 에러
+ * @param params.email 사용자 이메일
+ * @param params.password 사용자가 설정한 비밀번호
+ * @param params.nickname 사용자가 설정한 닉네임
+ * @throws supabase 에러
  */
 
 export const signUp = async ({
@@ -42,7 +44,7 @@ export const signUp = async ({
   password,
   nickname,
 }: PropsSignUp): Promise<{ error?: string }> => {
-  const supabase = getServerClient();
+  const supabase = getServerClientAction();
   const { error } = await supabase.auth.signUp({
     email,
     password,
@@ -56,18 +58,18 @@ export const signUp = async ({
 
 /**
  * 로그아웃 함수자가 설정한 닉네임
- * @return {error} error 메세지 혹은 null
+ * @return error 메세지 혹은 null
  */
 export const signOut = async (): Promise<{ error: string | null }> => {
-  const supabase = getServerClient();
+  const supabase = getServerClientAction();
   const { error } = await supabase.auth.signOut();
   return { error: error?.message || null };
 };
 
 /**
  * 닉네임 중복 체크를 하는 함수
- * @param {string} nickname 사용자가 설정한 닉네임
- * @throws {error} supabase 에러
+ * @param nickname 사용자가 설정한 닉네임
+ * @throws supabase 에러
  */
 
 export const checkNicknameDuplicated = async (
@@ -88,10 +90,9 @@ export const checkNicknameDuplicated = async (
 
 /**
  * 이메일 중복 체크를 하는 함수
- * @param {string} email 사용자가 설정한 닉네임
- * @throws {error} supabase 에러
+ * @param email 사용자가 설정한 닉네임
+ * @throws supabase 에러
  */
-
 export const checkEmailDuplicated = async (email: string): Promise<boolean> => {
   const supabase = getServerClient();
   const { data } = await supabase
@@ -103,5 +104,65 @@ export const checkEmailDuplicated = async (email: string): Promise<boolean> => {
     return true;
   } else {
     return false;
+  }
+};
+
+/**
+ * 로그인된 유저의 정보를 가져오는 함수
+ *
+ */
+export const getUserInfo = async (): Promise<User | null> => {
+  const supabase = getServerClient();
+
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  if (error || !user) {
+    return null;
+  }
+  return user;
+};
+
+/**
+ * access token이 만료되면 refresh token으로 새로고침 해주는 함수
+ *
+ */
+export const refreshSession = async () => {
+  const supabase = getServerClientAction();
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
+
+  return {
+    user,
+    error: error?.message ?? null,
+  };
+};
+
+/**
+ * 비밀번호 재설정 링크를 메일로 전송하는 함수
+ * @param password 사용자 email
+ */
+export const updatePassword = async ({
+  email,
+  currentPassword,
+  newPassword,
+}: UpdatePasswordDTO): Promise<void> => {
+  const supabase = getServerClientAction();
+  const { error: signInError } = await supabase.auth.signInWithPassword({
+    email,
+    password: currentPassword,
+  });
+  if (signInError) {
+    throw new Error('현재 비밀번호가 올바르지 않습니다.');
+  }
+  const { error: updateError } = await supabase.auth.updateUser({
+    password: newPassword,
+  });
+  if (updateError) {
+    throw new Error(updateError.message);
   }
 };
