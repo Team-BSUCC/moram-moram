@@ -38,6 +38,7 @@ type LinearProgressProps = VariantProps<typeof wrapperVariants> &
   VariantProps<typeof barVariants> & {
     value: number;
   };
+
 /**
  * 직선 프로그래스바 공통 컴포넌트
  * @param value - 진행률 (%)
