@@ -1,0 +1,52 @@
+import { cva, VariantProps } from 'class-variance-authority';
+import { ReactNode } from 'react';
+import { twMerge } from 'tailwind-merge';
+
+export const titleVariants = cva('flex gap-2', {
+  variants: {
+    variant: {
+      default: '',
+    },
+    size: {
+      default: 'text-2xl',
+    },
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'default',
+  },
+});
+
+type TitleProps = {
+  children: ReactNode;
+  as: 'h1' | 'h2' | 'h3' | 'h4' | 'h5';
+  highlightColor?: 'bg-red-500' | 'bg-blue-500';
+  className?: never;
+} & VariantProps<typeof titleVariants>;
+
+/**
+ * 버튼 공통 컴포넌트
+ * @param variant - Title에 테마 종류
+ * @param size - Title 크기 종류
+ * @param children - Title 안에 들어가는 텍스트
+ * @returns - <Heading Tags>{children}</Heading Tags>
+ */
+const Title = ({
+  as,
+  size,
+  variant,
+  children,
+  highlightColor,
+  ...props
+}: TitleProps) => {
+  const Component = as;
+
+  return (
+    <Component className={twMerge(titleVariants({ size, variant }))} {...props}>
+      {highlightColor && <div className={`w-1 ${highlightColor}`}></div>}
+      {children}
+    </Component>
+  );
+};
+
+export default Title;
