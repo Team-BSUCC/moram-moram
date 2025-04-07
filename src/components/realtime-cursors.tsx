@@ -5,6 +5,13 @@ import { useRealtimeCursors } from '@/hooks/use-realtime-cursors';
 
 const THROTTLE_MS = 50;
 
+/**
+ * 실시간 마우스 커서 UI 컴포넌트
+ * @param roomName - 채널명
+ * @param username - 유저 닉네임
+ * @param userId - 유저 아이디 (중복 커서 방지용)
+ * @returns
+ */
 export const RealtimeCursors = ({
   roomName,
   username,

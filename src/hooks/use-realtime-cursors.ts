@@ -3,8 +3,8 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
 /**
- * Throttle a callback to a certain delay, It will only call the callback if the delay has passed, with the arguments
- * from the last call
+ * 콜백 함수를 일정 시간 간격으로 제한(throttle)합니다.
+ * 마지막 호출의 인자를 사용하여, 지정된 지연 시간(delay)이 지난 경우에만 콜백이 실행됩니다.
  */
 const useThrottleCallback = <Params extends unknown[], Return>(
   callback: (...args: Params) => Return,
@@ -153,10 +153,10 @@ export const useRealtimeCursors = ({
   }, []);
 
   useEffect(() => {
-    // Add event listener for mousemove
+    // 마우스가 움직일 때 실행될 이벤트 리스너를 추가합니다
     window.addEventListener('mousemove', handleMouseMove);
 
-    // Cleanup on unmount
+    // 클린업 함수
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
     };
