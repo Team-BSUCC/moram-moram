@@ -22,7 +22,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='ko_kr'>
+    <html lang='ko-KR'>
       <body className={`${pretendard.variable} antialiased`}>{children}</body>
     </html>
   );
