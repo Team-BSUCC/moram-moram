@@ -2,24 +2,20 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-export const titleVariants = cva(
-  `flex gap-2
-    `,
-  {
-    variants: {
-      variant: {
-        default: '',
-      },
-      size: {
-        default: 'text-2xl',
-      },
+export const titleVariants = cva('flex gap-2', {
+  variants: {
+    variant: {
+      default: '',
     },
-    defaultVariants: {
-      variant: 'default',
-      size: 'default',
+    size: {
+      default: 'text-2xl',
     },
-  }
-);
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'default',
+  },
+});
 
 type TitleProps = {
   children: ReactNode;
