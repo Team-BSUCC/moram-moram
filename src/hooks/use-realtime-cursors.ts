@@ -105,31 +105,47 @@ export const useRealtimeCursors = ({
   const handleMouseMove = useThrottleCallback(callback, throttleMs);
 
   useEffect(() => {
-    const channel = supabase.channel(roomName);
+    const channel = supabase.channel(roomName, {
+      config: {
+        presence: {
+          key: userId,
+        },
+      },
+    });
+
     channelRef.current = channel;
 
-    channel
-      .on(
-        'broadcast',
-        { event: EVENT_NAME },
-        (data: { payload: CursorEventPayload }) => {
-          const { user } = data.payload;
-          // Don't render your own cursor
-          if (user.id === userId) return;
+    channel.on(
+      'broadcast',
+      { event: EVENT_NAME },
+      (data: { payload: CursorEventPayload }) => {
+        const { user } = data.payload;
+        if (user.id === userId) return;
 
-          setCursors((prev) => {
-            if (prev[userId]) {
-              delete prev[userId];
-            }
+        setCursors((prev) => ({
+          ...prev,
+          [user.id]: data.payload,
+        }));
+      }
+    );
 
-            return {
-              ...prev,
-              [user.id]: data.payload,
-            };
-          });
-        }
-      )
-      .subscribe();
+    // 유저가 채널을 나가면 커서가 사라지도록 하는 로직
+    channel.on('presence', { event: 'leave' }, ({ key }) => {
+      setCursors((prev) => {
+        const updated = { ...prev };
+        delete updated[key];
+        return updated;
+      });
+    });
+
+    channel.subscribe((status) => {
+      if (status === 'SUBSCRIBED') {
+        channel.track({
+          name: username,
+          color,
+        });
+      }
+    });
 
     return () => {
       channel.unsubscribe();
