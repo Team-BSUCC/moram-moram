@@ -34,7 +34,6 @@ type TitleProps = {
  * @param children - Title 안에 들어가는 텍스트
  * @returns - <Heading Tags>{children}</Heading Tags>
  */
-
 const Title = ({ as, size, variant, children, highlightColor }: TitleProps) => {
   const Component = as;
 

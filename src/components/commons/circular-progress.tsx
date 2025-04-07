@@ -38,7 +38,6 @@ type CircularProgressProps = VariantProps<typeof wrapperVariants> & {
  * @param size - 원형 차트 래퍼의 크기
  * @returns - 원형 차트 컴포넌트
  */
-
 const CircularProgress = ({
   value,
   strokeWidth = 8,
