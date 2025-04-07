@@ -17,8 +17,8 @@ export default function RootLayout({
     <html lang='ko-kr' className='h-full w-full'>
       <body className='flex h-full w-full flex-col antialiased'>
         <header className='fixed left-0 right-0 top-0 z-50 h-[60px]'>
-          헤더
           {/* <Header /> 컴포넌트가 들어올 예정입니다. */}
+          <div className='flex h-full gap-20 border-2'>헤더</div>
         </header>
         <main className='mt-[60px] flex-grow'>
           <div className='flex h-full w-full items-center justify-center'>
