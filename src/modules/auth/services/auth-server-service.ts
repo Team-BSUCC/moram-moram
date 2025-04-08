@@ -1,8 +1,8 @@
 'use server';
 
+import { User } from '@supabase/supabase-js';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
-import { User } from '@supabase/supabase-js';
 import { SignInDTO, UpdatePasswordDTO, UserType } from '../types/auth-type';
 
 type PropsSignIn = SignInDTO;

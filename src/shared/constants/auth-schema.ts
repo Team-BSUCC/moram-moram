@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
-export const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,10}$/;
-export const passwordRegex =
+const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,10}$/;
+const passwordRegex =
   /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,16}$/;
 
 const FormSchema = {
