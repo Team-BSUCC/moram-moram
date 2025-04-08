@@ -3,6 +3,7 @@ import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '@/shared/constants/query-key';
+import MainBlock from '@/modules/mandalart/components/main-block';
 
 const MandalartPage = () => {
   const [data, setData] = useState<any>();
@@ -55,7 +56,19 @@ const MandalartPage = () => {
 
     fetchData();
   }, []);
-  return <div>page</div>;
+
+  if (!data) return <div>Loading...</div>;
+
+  return (
+    <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-xs'>
+      {/* 중앙 블록 */}
+      <MainBlock
+        title={data.title}
+        topics={data.mandalart_topics}
+        className='col-start-2 row-start-2 h-full'
+      />
+    </div>
+  );
 };
 
 export default MandalartPage;
