@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
+import SessionInit from '@/modules/auth/components/session-init';
 import TQProvider from '@/providers/tq-provider';
 
 export const metadata: Metadata = {
@@ -25,6 +26,7 @@ export default function RootLayout({
   return (
     <html lang='ko-KR'>
       <body className={`${pretendard.variable} antialiased`}>
+        <SessionInit />
         <TQProvider>{children}</TQProvider>
       </body>
     </html>
