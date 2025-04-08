@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import '@/styles/globals.css';
+import SessionInit from '@/modules/auth/components/session-init';
 
 export const metadata: Metadata = {
   title: '모람모람',
@@ -8,14 +10,24 @@ export const metadata: Metadata = {
   // openGraph:
 };
 
+const pretendard = localFont({
+  src: '../../public/fonts/pretendard-variable.woff2',
+  display: 'swap',
+  weight: '45 920',
+  variable: '--font-pretendard',
+});
+
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html lang='ko-kr'>
-      <body className='antialiased'>{children}</body>
+    <html lang='ko-KR'>
+      <body className={`${pretendard.variable} antialiased`}>
+        <SessionInit />
+        {children}
+      </body>
     </html>
   );
 }
