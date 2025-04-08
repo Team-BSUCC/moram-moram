@@ -27,7 +27,7 @@ const MainBlock = ({ title, topics, className }: Props) => {
           <Cell
             key={idx}
             value={cell?.topic || ''}
-            className={cell?.isCenter ? 'bg-blue-100' : ''}
+            className={cell?.isCenter ? 'border-2' : ''}
           />
         ))}
       </div>

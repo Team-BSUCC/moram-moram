@@ -35,7 +35,7 @@ const SubBlock = ({ title, subTopics }: Props) => {
         <Cell
           key={cell?.id || idx}
           value={cell?.content || ''}
-          className={cell?.isCenter ? 'bg-gray-100 font-bold' : ''}
+          className={cell?.isCenter ? 'bg-gray-100 border-2 font-bold' : ''}
         />
       ))}
     </div>
