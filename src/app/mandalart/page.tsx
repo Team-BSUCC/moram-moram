@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import MainBlock from '@/modules/mandalart/components/main-block';
+import SubBlock from '@/modules/mandalart/components/sub-block';
 
 const MandalartPage = () => {
   const [data, setData] = useState<any>();
@@ -60,13 +61,27 @@ const MandalartPage = () => {
   if (!data) return <div>Loading...</div>;
 
   return (
-    <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-xs'>
+    <div className='grid w-fit grid-cols-3 grid-rows-3 gap-5 text-xs'>
       {/* 중앙 블록 */}
       <MainBlock
         title={data.title}
         topics={data.mandalart_topics}
         className='col-start-2 row-start-2 h-full'
       />
+      {/* 나머지 블록 */}
+      {data.mandalart_topics.map((topic) => {
+        return (
+          <SubBlock
+            key={topic.id}
+            title={topic.topic}
+            subTopics={topic.mandalart_subtopics.map((subtopic) => ({
+              id: subtopic.id,
+              topic: subtopic.content,
+              todos: subtopic.cell_todos,
+            }))}
+          />
+        );
+      })}
     </div>
   );
 };

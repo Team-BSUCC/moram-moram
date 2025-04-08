@@ -14,7 +14,7 @@ const MainBlock = ({ title, topics, className }: Props) => {
   gridCells[4] = { topic: title, isCenter: true };
 
   // 나머지 셀에 토픽 배치 (최대 8개)
-  topics.forEach((topic, idx) => {
+  topics.forEach((topic: any, idx: number) => {
     // 중앙 위치는 건너뛰기
     const pos = idx >= 4 ? idx + 1 : idx;
     gridCells[pos] = { topic: topic.topic, isCenter: false };
