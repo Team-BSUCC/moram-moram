@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
+import SessionInit from '@/modules/auth/components/session-init';
 
 export const metadata: Metadata = {
   title: '모람모람',
@@ -23,7 +24,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang='ko-KR'>
-      <body className={`${pretendard.variable} antialiased`}>{children}</body>
+      <body className={`${pretendard.variable} antialiased`}>
+        <SessionInit />
+        {children}
+      </body>
     </html>
   );
 }
