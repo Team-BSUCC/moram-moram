@@ -22,7 +22,7 @@ const inputVariants = cva('outline-none', {
 });
 
 type InputProps = VariantProps<typeof inputVariants> &
-  React.InputHTMLAttributes<HTMLInputElement>;
+  React.InputHTMLAttributes<HTMLInputElement> & { className?: never };
 
 /**
  * 인풋 공통 컴포넌트
@@ -30,12 +30,9 @@ type InputProps = VariantProps<typeof inputVariants> &
  * @param sizes - Input의 크기 종류
  * @returns - <input />
  */
-const Input = ({ variant, sizes, ...inputProps }: InputProps) => {
+const Input = ({ variant, sizes, ...props }: InputProps) => {
   return (
-    <input
-      className={twMerge(inputVariants({ variant, sizes }))}
-      {...inputProps}
-    />
+    <input className={twMerge(inputVariants({ variant, sizes }))} {...props} />
   );
 };
 

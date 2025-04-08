@@ -22,7 +22,10 @@ const buttonVariants = cva(
 );
 
 type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
-  VariantProps<typeof buttonVariants> & { children: React.ReactNode };
+  VariantProps<typeof buttonVariants> & {
+    children: React.ReactNode;
+    className?: never;
+  };
 
 /**
  * 버튼 공통 컴포넌트
@@ -32,7 +35,6 @@ type ButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
  * @param props - 버튼의 기본 속성
  * @returns - 버튼 컴포넌트
  */
-
 const Button = ({ variant, size, children, ...props }: ButtonProps) => {
   return (
     <button className={twMerge(buttonVariants({ variant, size }))} {...props}>

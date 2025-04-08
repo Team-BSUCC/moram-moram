@@ -1,28 +1,23 @@
 import { cva, VariantProps } from 'class-variance-authority';
 import { twMerge } from 'tailwind-merge';
 
-export const spacerVariants = cva(
-  `
-    w-full
-  `,
-  {
-    variants: {
-      size: {
-        //예시로 넣어둠
-        xs: 'h-1', // 4px
-        sm: 'h-2', // 8px
-        md: 'h-4', // 16px
-        lg: 'h-8', // 32px
-        xl: 'h-12', // 48px
-        '2xl': 'h-16', // 64px
-        '3xl': 'h-20', // 80px
-      },
+export const spacerVariants = cva('w-full', {
+  variants: {
+    size: {
+      //예시로 넣어둠
+      xs: 'h-1', // 4px
+      sm: 'h-2', // 8px
+      md: 'h-4', // 16px
+      lg: 'h-8', // 32px
+      xl: 'h-12', // 48px
+      '2xl': 'h-16', // 64px
+      '3xl': 'h-20', // 80px
     },
-    defaultVariants: {
-      size: 'md',
-    },
-  }
-);
+  },
+  defaultVariants: {
+    size: 'md',
+  },
+});
 
 type SpacerProps = VariantProps<typeof spacerVariants>;
 

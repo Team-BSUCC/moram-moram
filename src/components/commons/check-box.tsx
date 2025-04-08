@@ -37,6 +37,7 @@ const svgSizes = {
 type CheckBoxProps = VariantProps<typeof checkBoxVariants> & {
   checked?: boolean;
   onChange?: () => void;
+  className?: never;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 /**
@@ -52,7 +53,7 @@ const CheckBox = ({
   sizes,
   checked,
   onChange,
-  ...checkBoxProps
+  ...props
 }: CheckBoxProps) => {
   const { width, height } =
     svgSizes[sizes as keyof typeof svgSizes] || svgSizes.md;
@@ -64,7 +65,7 @@ const CheckBox = ({
         className='peer hidden'
         checked={checked}
         onChange={onChange}
-        {...checkBoxProps}
+        {...props}
       />
       <div className={twMerge(checkBoxVariants({ color, sizes }))}>
         <svg
