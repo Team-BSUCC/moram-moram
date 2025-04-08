@@ -1,9 +1,15 @@
-const URL = {
+const URLS = {
   HOME: '/',
   SIGN_IN: '/sign-in',
   SIGN_UP: '/sign-up',
-  CHANGE_PASSWORD: '/change-password',
+  DASHBOARD: '/dashboard',
+  HUB: '/hub',
+  MANDALART: '/mandalart',
+  MY_PAGE: '/my-page',
+  STATUS: '/status',
+  STUDIO: '/studio',
   CALL_BACK: 'callback',
+  REFRESH: 'refresh',
 } as const;
 
-export default URL;
+export default URLS;
