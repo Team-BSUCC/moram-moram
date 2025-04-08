@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { cva, VariantProps } from 'class-variance-authority';
 import { twMerge } from 'tailwind-merge';
 
@@ -30,10 +30,18 @@ type InputProps = VariantProps<typeof inputVariants> &
  * @param sizes - Input의 크기 종류
  * @returns - <input />
  */
-const Input = ({ variant, sizes, ...props }: InputProps) => {
-  return (
-    <input className={twMerge(inputVariants({ variant, sizes }))} {...props} />
-  );
-};
 
+const Input = forwardRef<HTMLInputElement, InputProps>(
+  ({ variant, sizes, ...props }, ref) => {
+    return (
+      <input
+        ref={ref}
+        className={twMerge(inputVariants({ variant, sizes }))}
+        {...props}
+      />
+    );
+  }
+);
+
+Input.displayName = 'Input';
 export default Input;
