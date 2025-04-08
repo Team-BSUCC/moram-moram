@@ -1,5 +1,5 @@
-import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
 import { NextResponse } from 'next/server';
+import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
 
 // 서버 측 인증 지침에서 생성한 클라이언트
 export const GET = async (request: Request) => {

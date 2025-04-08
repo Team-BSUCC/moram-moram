@@ -1,6 +1,8 @@
-import { signOut } from '../services/auth-server-service';
 import { redirect } from 'next/navigation';
+import { signOut } from '../services/auth-server-service';
+import Button from '@/components/commons/button';
 import URL from '@/shared/constants/url-constants';
+
 const SignOutButton = () => {
   const handleSignOut = async () => {
     'use server'; // 서버 액션으로 실행
@@ -11,7 +13,9 @@ const SignOutButton = () => {
   };
   return (
     <form action={handleSignOut}>
-      <button type='submit'>로그아웃</button>
+      <Button variant='outline' size='default' type='submit'>
+        로그아웃
+      </Button>
     </form>
   );
 };

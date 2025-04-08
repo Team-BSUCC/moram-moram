@@ -1,9 +1,9 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
 import { useState, useTransition } from 'react';
 import { useForm } from 'react-hook-form';
-import FormSchema from '../../../shared/constants/auth-schema';
+import { useRouter } from 'next/navigation';
+import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
   checkEmailDuplicated,
@@ -11,7 +11,7 @@ import {
   signUp,
 } from '../services/auth-server-service';
 import { SignUpDTO } from '../types/auth-type';
-import { z } from 'zod';
+import FormSchema from '../../../shared/constants/auth-schema';
 
 const useSignUpForm = () => {
   const [isPending, startTransition] = useTransition();

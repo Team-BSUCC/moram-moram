@@ -1,5 +1,5 @@
-import { getServerClient } from '@/shared/utils/supabase/server-client';
 import { NextResponse } from 'next/server';
+import { getServerClient } from '@/shared/utils/supabase/server-client';
 
 export const POST = async () => {
   const supabase = getServerClient();
