@@ -10,6 +10,9 @@ const useAutoRefreshSession = () => {
       try {
         const res = await fetch(`/api/${URLS.REFRESH}`);
         if (!res.ok) {
+          if (res.statusText === 'Unauthorized') {
+            return;
+          }
           Swal.fire({
             icon: 'error',
             title: '세션 갱신 실패',

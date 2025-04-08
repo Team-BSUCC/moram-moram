@@ -5,9 +5,9 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useRouter } from 'next/navigation';
-import { signIn } from '../services/auth-server-service';
 import { SignInDTO } from '../types/auth-type';
 import FormSchema from '../../../shared/constants/auth-schema';
+import URLS from '@/shared/constants/url-constants';
 
 const signInDefaultValue: SignInDTO = {
   email: '',
@@ -34,11 +34,21 @@ const useSignInForm = () => {
 
   const onSubmit = (data: SignInDTO) => {
     startTransition(async () => {
-      const { error } = await signIn(data);
-      if (error) {
-        setError('root', { message: '아이디나 비밀번호가 일치하지 않습니다!' });
+      const res = await fetch(`/api/${URLS.SIGN_IN}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!res.ok) {
+        setError('root', {
+          message: '아이디나 비밀번호가 일치하지 않습니다!',
+        });
         return;
       }
+
       router.push('/');
     });
   };
