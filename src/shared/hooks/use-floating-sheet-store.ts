@@ -6,6 +6,7 @@ type FloatingSheetState = {
 
   show: () => void; // 시트 보이기
   hide: () => void; // 시트 숨기기
+  // eslint-disable-next-line no-unused-vars
   setPosition: (position: { x: number; y: number }) => void; // 위치 설정)
 };
 
