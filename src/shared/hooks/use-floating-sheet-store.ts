@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 
 type FloatingSheetState = {
-  // 상태 (데이터)
   isVisible: boolean; // 온오프 상태
   position: { x: number; y: number }; // 위치 좌표
 
@@ -10,10 +9,10 @@ type FloatingSheetState = {
   setPosition: (position: { x: number; y: number }) => void; // 위치 설정)
 };
 
-// Zustand 스토어 생성
 const useFloatingSheetStore = create<FloatingSheetState>((set) => ({
-  // 초기 상태
+  //화면의 on,off(마운트, 언마운트) 제어 state
   isVisible: false,
+  //floating sheet의 위치를 저장하는 state
   position: { x: 0, y: 0 },
 
   // 액션 구현
