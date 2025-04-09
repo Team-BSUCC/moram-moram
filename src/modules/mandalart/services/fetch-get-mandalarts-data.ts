@@ -1,6 +1,6 @@
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 
-export const fetchGetMandalartsData = async () => {
+export const fetchGetMandalartsData = async (id: string): Promise<any> => {
   const supabase = getBrowserClient();
   const { data, error } = await supabase
     .from('mandalarts')
@@ -20,7 +20,7 @@ export const fetchGetMandalartsData = async () => {
           )))
     `
     )
-    .eq('id', '6424de9b-7fbf-470a-9743-c9bb5e3cdad8');
+    .eq('id', id);
 
   if (error) {
     console.error(error);

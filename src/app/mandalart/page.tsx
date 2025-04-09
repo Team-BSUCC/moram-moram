@@ -1,38 +1,16 @@
 'use client';
-import { useEffect, useState } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
-import { QUERY_KEY } from '@/shared/constants/query-key';
 import MainBlock from '@/modules/mandalart/components/main-block';
 import SubBlock from '@/modules/mandalart/components/sub-block';
-import { fetchGetMandalartsData } from '@/modules/mandalart/services/fetch-get-Mandalarts-data';
+import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
+// '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
 
 const MandalartPage = () => {
-  const [data, setData] = useState<any>();
-  const queryClient = useQueryClient();
-  useEffect(() => {
-    const fetchData = async () => {
-      const mandalartData = await fetchGetMandalartsData();
-      setData(mandalartData);
+  const { data, isLoading, isError } = useMandalartDataQuery(
+    '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
+  );
 
-      mandalartData?.mandalart_topics.forEach((topic) => {
-        queryClient.setQueryData(QUERY_KEY.topic(topic.id), topic.topic);
-
-        topic.mandalart_subtopics.forEach((subtopic) => {
-          queryClient.setQueryData(
-            QUERY_KEY.subtopic(subtopic.id),
-            subtopic.content
-          );
-          subtopic.cell_todos.forEach((todo) => {
-            queryClient.setQueryData(QUERY_KEY.todo(todo.id), todo.title);
-          });
-        });
-      });
-    };
-
-    fetchData();
-  }, []);
-
-  if (!data) return <div>Loading...</div>;
+  if (isLoading) return <div>Loading...</div>;
+  if (isError) return <div>error</div>;
 
   return (
     <div className='grid w-fit grid-cols-3 grid-rows-3 gap-5 text-xs'>
