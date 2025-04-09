@@ -5,8 +5,9 @@ import {
   TodoPayloadType,
   TopicPayloadType,
 } from '../types/realtime-type';
+import { mandalartBatchUpdateSupabase } from '../services/mandalart-batch-update-supabase-service';
 
-type BroadcastStoreType = {
+export type BroadcastStoreType = {
   topic: Map<string, TopicPayloadType>;
   subTopic: Map<string, SubtopicPayloadType>;
   todo: Map<string, TodoPayloadType>;
@@ -36,10 +37,14 @@ export const useRealtimeBroadcastBatch = () => {
   };
 
   const batchUpdateSupabase = async () => {
-    //수파베이스 업데이트 일괄 업데이트 로직
-    broadcastStore.current.topic.clear();
-    broadcastStore.current.subTopic.clear();
-    broadcastStore.current.todo.clear();
+    try {
+      await mandalartBatchUpdateSupabase(broadcastStore);
+      broadcastStore.current.topic.clear();
+      broadcastStore.current.subTopic.clear();
+      broadcastStore.current.todo.clear();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return { addBroadcastStore, batchUpdateSupabase };
