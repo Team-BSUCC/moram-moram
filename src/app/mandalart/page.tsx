@@ -1,9 +1,14 @@
 'use client';
+
+import FloatingSheet from '@/components/commons/floating-sheet';
 import MainBlock from '@/modules/mandalart/components/main-block';
 import SubBlock from '@/modules/mandalart/components/sub-block';
 import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
 const MandalartPage = () => {
+  const isVisible = useFloatingSheetStore((state) => state.isVisible);
+  const id = useFloatingSheetStore((store) => store.id);
   const { data, isLoading, isError } = useMandalartDataQuery(
     '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
   );
@@ -31,6 +36,11 @@ const MandalartPage = () => {
           />
         );
       })}
+      {isVisible && (
+        <FloatingSheet>
+          <div>{id}</div>
+        </FloatingSheet>
+      )}
     </div>
   );
 };
