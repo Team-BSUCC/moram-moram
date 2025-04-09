@@ -1,32 +1,35 @@
+import { useMemo } from 'react';
 import Cell from './cell';
 
 type Props = {
   title: string;
   topics: any;
-  id: string;
+  info: any;
   className: string;
 };
 
-const MainBlock = ({ title, topics, id, className }: Props) => {
-  const gridCells = Array(9).fill(null);
+const MainBlock = ({ title, topics, info, className }: Props) => {
+  const memoizedCells = useMemo(() => {
+    const cells = Array(9).fill(null);
+    cells[4] = { ...info };
 
-  // 중앙(인덱스 4)에 타이틀 배치
-  gridCells[4] = { topic: title, isCenter: true, id: id };
+    topics.forEach((topic: any, idx: number) => {
+      const pos = idx >= 4 ? idx + 1 : idx;
+      cells[pos] = { isCenter: false, ...topic };
+    });
 
-  topics.forEach((topic: any, idx: number) => {
-    // 중앙 위치는 건너뛰기
-    const pos = idx >= 4 ? idx + 1 : idx;
-    gridCells[pos] = { isCenter: false, ...topic };
-  });
+    return cells;
+  }, [topics, title, info]);
 
   return (
     <div className={className}>
       <div className='grid grid-cols-3 grid-rows-3 gap-2'>
-        {gridCells.map((cell, idx) => (
+        {memoizedCells.map((cell, idx) => (
           <Cell
             key={idx}
             id={cell.id}
-            value={cell?.topic || ''}
+            info={cell}
+            value={cell?.topic || cell?.title || ''}
             className={cell?.isCenter ? 'border-2' : ''}
           />
         ))}
