@@ -61,8 +61,12 @@ export const mandalartBatchUpdateSupabase = async (
     );
     const todoDelete = todoTable.delete().in('id', deleteTodoId);
 
-    updates.push(todoUpdate);
-    updates.push(todoDelete);
+    if (todoData.length !== deleteTodoId.length) {
+      updates.push(todoUpdate);
+    }
+    if (deleteTodoId.length !== 0) {
+      updates.push(todoDelete);
+    }
   }
 
   if (updates.length > 0) {
