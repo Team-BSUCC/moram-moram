@@ -1,15 +1,15 @@
 import Button from '@/components/commons/button';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import React from 'react';
+import { CellInfo } from '../types/realtime-type';
 
 type Props = {
   value: string;
   className?: string;
-  id?: any;
-  info?: any;
+  info: CellInfo;
 };
 
-const Cell = ({ value, className, info, id }: Props) => {
+const Cell = ({ value, className, info }: Props) => {
   const setShowInfo = useFloatingSheetStore((state) => state.setShowInfo);
 
   const handleClick = () => {

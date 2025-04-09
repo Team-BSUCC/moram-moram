@@ -1,12 +1,15 @@
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { fetchGetMandalartsData } from '../services/fetch-get-Mandalarts-data';
 import { QUERY_KEY } from '@/shared/constants/query-key';
+import { MandalartType } from '../types/realtime-type';
 
 export const useMandalartDataQuery = (id: string) => {
   const queryClient = useQueryClient();
-  return useQuery({
+  return useQuery<MandalartType>({
     queryKey: ['mandalarts', id],
-    queryFn: () => fetchGetMandalartsData(id),
+    queryFn: () => fetchGetMandalartsData(id) as Promise<MandalartType>,
+    staleTime: Infinity,
+    gcTime: Infinity,
     select: (data) => {
       queryClient.setQueryData(QUERY_KEY.core(data.id), data.title);
       data.mandalart_topics.forEach((topic) => {

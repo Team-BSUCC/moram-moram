@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import Cell from './cell';
+import { MandalartType, TopicsType } from '../types/realtime-type';
 
 type Props = {
   title: string;
-  topics: any;
-  info: any;
+  topics: TopicsType;
+  info: MandalartType;
   className: string;
 };
 
@@ -27,7 +28,6 @@ const MainBlock = ({ title, topics, info, className }: Props) => {
         {memoizedCells.map((cell, idx) => (
           <Cell
             key={idx}
-            id={cell.id}
             info={cell}
             value={cell?.topic || cell?.title || ''}
             className={cell?.isCenter ? 'border-2' : ''}

@@ -8,13 +8,12 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
 const MandalartPage = () => {
   const showInfo = useFloatingSheetStore((state) => state.showInfo);
-  const { data, isLoading, isError } = useMandalartDataQuery(
+  const { data, isPending, isError } = useMandalartDataQuery(
     '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
   );
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isPending) return <div>Loading...</div>;
   if (isError) return <div>error</div>;
-
   return (
     <div className='grid w-fit grid-cols-3 grid-rows-3 gap-5 text-xs'>
       {/* 중앙 블록 */}

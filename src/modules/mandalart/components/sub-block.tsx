@@ -1,10 +1,11 @@
 import { useMemo } from 'react';
 import Cell from './cell';
+import { SubTopicType, TopicType } from '../types/realtime-type';
 
 type Props = {
   title: string;
-  topic: any;
-  subTopics: any;
+  topic: TopicType;
+  subTopics: SubTopicType[];
 };
 
 const SubBlock = ({ title, topic, subTopics }: Props) => {
@@ -37,7 +38,6 @@ const SubBlock = ({ title, topic, subTopics }: Props) => {
       {MemoizedCells.map((cell, idx) => (
         <Cell
           key={cell?.id || idx}
-          id={cell.id}
           info={cell}
           value={cell?.content || ''}
           className={cell?.isCenter ? 'bg-gray-100 border-2 font-bold' : ''}
