@@ -1,46 +1,20 @@
 'use client';
-import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import MainBlock from '@/modules/mandalart/components/main-block';
 import SubBlock from '@/modules/mandalart/components/sub-block';
+import { fetchGetMandalartsData } from '@/modules/mandalart/services/fetch-get-Mandalarts-data';
 
 const MandalartPage = () => {
   const [data, setData] = useState<any>();
-  const supabase = getBrowserClient();
   const queryClient = useQueryClient();
   useEffect(() => {
     const fetchData = async () => {
-      const { data: cell, error } = await supabase
-        .from('mandalarts')
-        .select(
-          `
-          id,
-          room_id,
-          title,
-          created_at,
-          private,
-          mandalart_topics (
-            id, mandalart_id, topic, created_at, topic_index,
-            mandalart_subtopics (
-              id, topic_id, content, is_done, created_at, cell_index,
-              cell_todos (
-                id, cell_id, created_at, is_done, title
-              )))
-        `
-        )
-        .eq('id', '6424de9b-7fbf-470a-9743-c9bb5e3cdad8');
-
-      if (error) {
-        console.error(error);
-        return;
-      }
-
-      const mandalartData = cell[0];
+      const mandalartData = await fetchGetMandalartsData();
       setData(mandalartData);
 
-      mandalartData.mandalart_topics.forEach((topic) => {
+      mandalartData?.mandalart_topics.forEach((topic) => {
         queryClient.setQueryData(QUERY_KEY.topic(topic.id), topic.topic);
 
         topic.mandalart_subtopics.forEach((subtopic) => {
@@ -66,6 +40,7 @@ const MandalartPage = () => {
       <MainBlock
         title={data.title}
         topics={data.mandalart_topics}
+        id={data.id}
         className='col-start-2 row-start-2 h-full'
       />
       {/* 나머지 블록 */}
@@ -74,11 +49,8 @@ const MandalartPage = () => {
           <SubBlock
             key={topic.id}
             title={topic.topic}
-            subTopics={topic.mandalart_subtopics.map((subtopic) => ({
-              id: subtopic.id,
-              topic: subtopic.content,
-              todos: subtopic.cell_todos,
-            }))}
+            topic={topic}
+            subTopics={topic.mandalart_subtopics}
           />
         );
       })}
