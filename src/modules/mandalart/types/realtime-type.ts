@@ -11,7 +11,7 @@ export type SubtopicPayloadType = Tables<'mandalart_subtopics'> & {
 };
 
 export type TodoPayloadType = Tables<'cell_todos'> & {
-  action: string;
+  action: 'CREATE' | 'UPDATE' | 'DELETE';
   value: string;
   category: 'TODO';
 };
