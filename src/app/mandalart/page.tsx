@@ -18,7 +18,6 @@ const MandalartPage = () => {
     <div className='grid w-fit grid-cols-3 grid-rows-3 gap-5 text-xs'>
       {/* 중앙 블록 */}
       <MainBlock
-        title={data.title}
         topics={data.mandalart_topics}
         info={data}
         className='col-start-2 row-start-2 h-full'

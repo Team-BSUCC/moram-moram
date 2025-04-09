@@ -12,6 +12,7 @@ const SubBlock = ({ title, topic, subTopics }: Props) => {
   const MemoizedCells = useMemo(() => {
     const gridCells = Array(9).fill(null);
 
+    // eslint-disable-next-line no-unused-vars
     const { mandalart_subtopics, ...topicWithoutSubtopics } = topic;
 
     gridCells[4] = {
@@ -21,7 +22,7 @@ const SubBlock = ({ title, topic, subTopics }: Props) => {
     };
 
     // 나머지 셀에 서브토픽 배치
-    subTopics.forEach((subTopic: any, idx: number) => {
+    subTopics.forEach((subTopic: SubTopicType, idx: number) => {
       // 중앙 위치는 건너뛰기
       const index = idx >= 4 ? idx + 1 : idx;
 

@@ -1,26 +1,25 @@
 import { useMemo } from 'react';
 import Cell from './cell';
-import { MandalartType, TopicsType } from '../types/realtime-type';
+import { MandalartType, TopicsType, TopicType } from '../types/realtime-type';
 
 type Props = {
-  title: string;
   topics: TopicsType;
   info: MandalartType;
   className: string;
 };
 
-const MainBlock = ({ title, topics, info, className }: Props) => {
+const MainBlock = ({ topics, info, className }: Props) => {
   const memoizedCells = useMemo(() => {
     const cells = Array(9).fill(null);
     cells[4] = { ...info };
 
-    topics.forEach((topic: any, idx: number) => {
+    topics.forEach((topic: TopicType, idx: number) => {
       const pos = idx >= 4 ? idx + 1 : idx;
       cells[pos] = { isCenter: false, ...topic };
     });
 
     return cells;
-  }, [topics, title, info]);
+  }, [topics, info]);
 
   return (
     <div className={className}>

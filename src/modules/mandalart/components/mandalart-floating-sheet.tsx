@@ -5,12 +5,12 @@ import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { useState } from 'react';
-import { StoreCellInfo, TodoType } from '../types/realtime-type';
+import { ExtendedCellInfo, TodoType } from '../types/realtime-type';
 
 const MandalartFloatingSheet = () => {
   const showInfo = useFloatingSheetStore(
     (state) => state.showInfo
-  ) as StoreCellInfo;
+  ) as ExtendedCellInfo;
   const [value, setValue] = useState<string>('');
 
   return (
