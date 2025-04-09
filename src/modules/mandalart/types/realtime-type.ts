@@ -44,9 +44,9 @@ export type CellInfo =
   | (Omit<TopicType, 'mandalart_subtopics'> & { isCenter: true })
   | (TopicType & { isCenter: false })
   | (SubTopicType & { isCenter: false })
-  | (TodoType & { isCenter: false });
+  | TodoType;
 
-export type StoreCellInfo = CellInfo & {
+export type ExtendedCellInfo = CellInfo & {
   cell_todos?: TodoType[];
   content?: string;
   title?: string;
