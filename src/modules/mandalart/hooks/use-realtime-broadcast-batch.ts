@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import {
   BroadcastPayloadType,
   SubtopicPayloadType,
@@ -47,6 +47,12 @@ export const useRealtimeBroadcastBatch = () => {
       console.log(e);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      batchUpdateSupabase();
+    };
+  }, []);
 
   return { addBroadcastStore, batchUpdateSupabase };
 };
