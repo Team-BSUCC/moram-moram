@@ -14,7 +14,7 @@ export const mandalartBatchUpdateSupabase = async (
     const topicData = Array.from(broadcastStore.current.topic.values());
     const topicUpdate = supabase.from('mandalart_topics').upsert(
       topicData.map((payloadTopic) => {
-        // eslint-disable-next-line no-unused-vars
+        //eslint-disable-next-line no-unused-vars
         const { category, value, ...topicRowInfo } = payloadTopic;
         return { ...topicRowInfo, topic: value };
       })
@@ -27,9 +27,9 @@ export const mandalartBatchUpdateSupabase = async (
     const subTopicData = Array.from(broadcastStore.current.subTopic.values());
     const subTopicUpdate = supabase.from('mandalart_subtopics').upsert(
       subTopicData.map((payloadSubtopic) => {
-        // eslint-disable-next-line no-unused-vars
+        //eslint-disable-next-line no-unused-vars
         const { category, value, ...subtopicRowInfo } = payloadSubtopic;
-        return { ...subtopicRowInfo, topic: value };
+        return { ...subtopicRowInfo, content: value };
       })
     );
     updates.push(subTopicUpdate);
@@ -39,19 +39,34 @@ export const mandalartBatchUpdateSupabase = async (
   if (broadcastStore.current.todo.size > 0) {
     const todoData = Array.from(broadcastStore.current.todo.values());
     const deleteTodoId: string[] = [];
-    const todoTable = supabase.from('cell_todos');
 
+    const todoTable = supabase.from('cell_todos');
     const todoUpdate = todoTable.upsert(
-      todoData.map((payloadTodo) => {
-        // if(payloadTodo.action === '')
-      })
+      todoData
+        .filter((payloadTodo) => {
+          //action이 "DELETE"면 삭제요청에 쓰일 배열에 id 삽입
+          if (payloadTodo.action === 'DELETE') {
+            deleteTodoId.push(payloadTodo.id);
+          }
+          //아닐 경우 upsert요청에 쓰일 객체만드는 map에 쓰일 배열로 리턴
+          return (
+            payloadTodo.action === 'CREATE' || payloadTodo.action === 'UPDATE'
+          );
+        })
+        .map((payloadTodo) => {
+          //eslint-disable-next-line no-unused-vars
+          const { category, value, ...todoRowInfo } = payloadTodo;
+          return { ...todoRowInfo, title: value };
+        })
     );
     const todoDelete = todoTable.delete().in('id', deleteTodoId);
+
     updates.push(todoUpdate);
     updates.push(todoDelete);
   }
 
   if (updates.length > 0) {
+    //수파베이스 쿼리문 병렬 실행
     const results = await Promise.allSettled(updates);
 
     // 에러 확인

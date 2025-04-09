@@ -39,6 +39,7 @@ export const useRealtimeBroadcastBatch = () => {
   const batchUpdateSupabase = async () => {
     try {
       await mandalartBatchUpdateSupabase(broadcastStore);
+      //위에서 실행한 수파베이스 요청 로직이 성공하면 broadcastStore초기화
       broadcastStore.current.topic.clear();
       broadcastStore.current.subTopic.clear();
       broadcastStore.current.todo.clear();
