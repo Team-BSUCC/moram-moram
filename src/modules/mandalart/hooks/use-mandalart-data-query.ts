@@ -8,7 +8,8 @@ export const useMandalartDataQuery = (id: string) => {
     queryKey: ['mandalarts', id],
     queryFn: () => fetchGetMandalartsData(id),
     select: (data) => {
-      data?.mandalart_topics.forEach((topic) => {
+      queryClient.setQueryData(QUERY_KEY.core(data.id), data.title);
+      data.mandalart_topics.forEach((topic) => {
         queryClient.setQueryData(QUERY_KEY.topic(topic.id), topic.topic);
 
         topic.mandalart_subtopics.forEach((subtopic) => {

@@ -2,7 +2,6 @@
 import MainBlock from '@/modules/mandalart/components/main-block';
 import SubBlock from '@/modules/mandalart/components/sub-block';
 import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
-// '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
 
 const MandalartPage = () => {
   const { data, isLoading, isError } = useMandalartDataQuery(
