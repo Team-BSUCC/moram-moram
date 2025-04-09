@@ -3,21 +3,20 @@ import Cell from './cell';
 type Props = {
   title: string;
   topics: any;
+  id: string;
   className: string;
 };
 
-const MainBlock = ({ title, topics, className }: Props) => {
-  // 3x3 그리드를 위한 9개의 셀 배열 생성
+const MainBlock = ({ title, topics, id, className }: Props) => {
   const gridCells = Array(9).fill(null);
 
   // 중앙(인덱스 4)에 타이틀 배치
-  gridCells[4] = { topic: title, isCenter: true };
+  gridCells[4] = { topic: title, isCenter: true, id: id };
 
-  // 나머지 셀에 토픽 배치 (최대 8개)
   topics.forEach((topic: any, idx: number) => {
     // 중앙 위치는 건너뛰기
     const pos = idx >= 4 ? idx + 1 : idx;
-    gridCells[pos] = { topic: topic.topic, isCenter: false };
+    gridCells[pos] = { isCenter: false, ...topic };
   });
 
   return (
@@ -26,6 +25,7 @@ const MainBlock = ({ title, topics, className }: Props) => {
         {gridCells.map((cell, idx) => (
           <Cell
             key={idx}
+            id={cell.id}
             value={cell?.topic || ''}
             className={cell?.isCenter ? 'border-2' : ''}
           />

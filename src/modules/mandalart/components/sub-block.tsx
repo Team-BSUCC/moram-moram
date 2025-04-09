@@ -2,31 +2,30 @@ import Cell from './cell';
 
 type Props = {
   title: string;
-  subTopics: Array<{
-    id: string;
-    topic: string;
-    todos?: any[];
-  }>;
+  topic: any;
+  subTopics: any;
 };
 
-const SubBlock = ({ title, subTopics }: Props) => {
+const SubBlock = ({ title, topic, subTopics }: Props) => {
   const gridCells = Array(9).fill(null);
 
-  // 중앙(인덱스 4)에 타이틀 배치
-  gridCells[4] = { content: title, isCenter: true };
+  const { mandalart_subtopics, ...topicWithoutSubtopics } = topic;
+
+  gridCells[4] = {
+    content: title,
+    isCenter: true,
+    ...topicWithoutSubtopics,
+  };
 
   // 나머지 셀에 서브토픽 배치
-  subTopics.forEach((subTopic, idx) => {
+  subTopics.forEach((subTopic: any, idx: number) => {
+    // 중앙 위치는 건너뛰기
     const index = idx >= 4 ? idx + 1 : idx;
 
-    // 중앙 위치는 건너뛰기
-    if (index !== 4) {
-      gridCells[index] = {
-        content: subTopic.topic,
-        isCenter: false,
-        id: subTopic.id,
-      };
-    }
+    gridCells[index] = {
+      isCenter: false,
+      ...subTopic,
+    };
   });
 
   return (
@@ -34,6 +33,7 @@ const SubBlock = ({ title, subTopics }: Props) => {
       {gridCells.map((cell, idx) => (
         <Cell
           key={cell?.id || idx}
+          id={cell.id}
           value={cell?.content || ''}
           className={cell?.isCenter ? 'bg-gray-100 border-2 font-bold' : ''}
         />
