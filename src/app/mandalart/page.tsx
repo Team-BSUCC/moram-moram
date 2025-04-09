@@ -7,7 +7,7 @@ import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-d
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
 const MandalartPage = () => {
-  const showId = useFloatingSheetStore((state) => state.showId);
+  const showInfo = useFloatingSheetStore((state) => state.showInfo);
   const { data, isLoading, isError } = useMandalartDataQuery(
     '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
   );
@@ -21,7 +21,7 @@ const MandalartPage = () => {
       <MainBlock
         title={data.title}
         topics={data.mandalart_topics}
-        id={data.id}
+        info={data}
         className='col-start-2 row-start-2 h-full'
       />
       {/* 나머지 블록 */}
@@ -35,7 +35,7 @@ const MandalartPage = () => {
           />
         );
       })}
-      {showId && <MandalartFloatingSheet />}
+      {showInfo && <MandalartFloatingSheet />}
     </div>
   );
 };

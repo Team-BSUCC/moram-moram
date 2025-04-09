@@ -6,13 +6,14 @@ type Props = {
   value: string;
   className?: string;
   id?: any;
+  info?: any;
 };
 
-const Cell = ({ value, className, id }: Props) => {
-  const setShowId = useFloatingSheetStore((state) => state.setShowId);
+const Cell = ({ value, className, info, id }: Props) => {
+  const setShowInfo = useFloatingSheetStore((state) => state.setShowInfo);
 
   const handleClick = () => {
-    setShowId(id);
+    setShowInfo(info);
   };
 
   return (
