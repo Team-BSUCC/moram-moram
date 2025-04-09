@@ -2,6 +2,7 @@ import Button from '@/components/commons/button';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import React from 'react';
 import { CellInfo } from '../types/realtime-type';
+import { useCellDataQuery } from '../hooks/use-mandalart-data-query';
 
 type Props = {
   value: string;
@@ -10,6 +11,7 @@ type Props = {
 };
 
 const Cell = ({ value, className, info }: Props) => {
+  useCellDataQuery(value, info);
   const setShowInfo = useFloatingSheetStore((state) => state.setShowInfo);
 
   const handleClick = () => {

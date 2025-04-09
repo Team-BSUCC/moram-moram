@@ -1,31 +1,35 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { fetchGetMandalartsData } from '../services/fetch-get-Mandalarts-data';
+import { CellInfo, MandalartType } from '../types/realtime-type';
 import { QUERY_KEY } from '@/shared/constants/query-key';
-import { MandalartType } from '../types/realtime-type';
 
 export const useMandalartDataQuery = (id: string) => {
-  const queryClient = useQueryClient();
   return useQuery<MandalartType>({
     queryKey: ['mandalarts', id],
     queryFn: () => fetchGetMandalartsData(id) as Promise<MandalartType>,
     staleTime: Infinity,
     gcTime: Infinity,
-    select: (data) => {
-      queryClient.setQueryData(QUERY_KEY.core(data.id), data.title);
-      data.mandalart_topics.forEach((topic) => {
-        queryClient.setQueryData(QUERY_KEY.topic(topic.id), topic.topic);
+  });
+};
 
-        topic.mandalart_subtopics.forEach((subtopic) => {
-          queryClient.setQueryData(
-            QUERY_KEY.subtopic(subtopic.id),
-            subtopic.content
-          );
-          subtopic.cell_todos.forEach((todo) => {
-            queryClient.setQueryData(QUERY_KEY.todo(todo.id), todo.title);
-          });
-        });
-      });
-      return data;
-    },
+const processQueryKey = (info: CellInfo) => {
+  if ('private' in info) {
+    return QUERY_KEY.core(info.id);
+  }
+  if ('topic' in info) {
+    return QUERY_KEY.topic(info.id);
+  }
+  if ('cell_index' in info) {
+    return QUERY_KEY.subtopic(info.id);
+  }
+  return ['알 수 없는 타입'];
+};
+
+export const useCellDataQuery = (value: string, info: CellInfo) => {
+  return useQuery({
+    queryKey: processQueryKey(info),
+    queryFn: () => Promise.resolve(value),
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };

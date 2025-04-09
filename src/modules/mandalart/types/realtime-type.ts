@@ -43,7 +43,8 @@ export type CellInfo =
   | (MandalartType & { isCenter: true; title: string })
   | (Omit<TopicType, 'mandalart_subtopics'> & { isCenter: true })
   | (TopicType & { isCenter: false })
-  | (SubTopicType & { isCenter: false });
+  | (SubTopicType & { isCenter: false })
+  | (TodoType & { isCenter: false });
 
 export type StoreCellInfo = CellInfo & {
   cell_todos?: TodoType[];
