@@ -48,7 +48,7 @@ export const mandalartBatchUpdateSupabase = async (
           if (payloadTodo.action === 'DELETE') {
             deleteTodoId.push(payloadTodo.id);
           }
-          //아닐 경우 upsert요청에 쓰일 객체만드는 map에 쓰일 배열로 리턴
+          //아닐 경우 upsert요청에 쓰일 객체만드는 배열로 변환
           return (
             payloadTodo.action === 'CREATE' || payloadTodo.action === 'UPDATE'
           );
