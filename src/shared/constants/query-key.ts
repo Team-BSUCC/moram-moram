@@ -1,6 +1,6 @@
 export const QUERY_KEY = {
-  core: (id: string) => ['core', id],
-  topic: (id: string) => ['topic', id],
-  subtopic: (id: string) => ['subtopic', id],
-  todo: (id: string) => ['todo', id],
+  core: (id: string) => ['CORE', id],
+  topic: (id: string) => ['TOPIC', id],
+  subtopic: (id: string) => ['SUBTOPIC', id],
+  todo: (id: string) => ['TODO', id],
 };
