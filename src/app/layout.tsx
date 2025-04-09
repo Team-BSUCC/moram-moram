@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
+import SessionInit from '@/modules/auth/components/session-init';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
@@ -27,6 +28,7 @@ export default function RootLayout({
       <body
         className={`${pretendard.variable} flex h-full w-full flex-col antialiased`}
       >
+        <SessionInit />
         <header className='fixed left-0 right-0 top-0 z-50 h-[60px]'>
           {/* <Header /> 컴포넌트가 들어올 예정입니다. */}
           <div className='flex h-full gap-3 border-2 bg-pink-pastel'>

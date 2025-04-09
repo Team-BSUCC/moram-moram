@@ -1,16 +1,23 @@
-import { getServerClient } from '@/shared/utils/supabase/server-client';
+import { getUserInfo } from '@/modules/auth/services/auth-server-service';
+import SignOutButton from '@/modules/auth/components/sign-out-button';
 
-export default async function HomePage() {
-  const supabase = getServerClient();
+const HomePage = async () => {
+  const user = await getUserInfo();
 
-  const {
-    data: { user },
-    error,
-  } = await supabase.auth.getUser();
-
-  if (error || !user) {
-    return <div>로그인이 필요합니다.</div>;
+  if (!user) {
+    return <div>로그아웃 상태입니다</div>;
   }
 
-  return <div>로그인된 유저의 이메일: {user.email}</div>;
-}
+  return (
+    <div>
+      로그인된 유저의 이메일: {user.user_metadata.email}
+      <div>
+        로그인된 유저의 닉네임:
+        {user.user_metadata.nickname ?? user.user_metadata.name}
+      </div>
+      <SignOutButton />
+    </div>
+  );
+};
+
+export default HomePage;
