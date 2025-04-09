@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchGetMandalartsData } from '../services/fetch-get-Mandalarts-data';
+import { fetchGetMandalartsData } from '../services/fetch-get-mandalarts-data';
 import { ExtendedCellInfo, MandalartType } from '../types/realtime-type';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 
