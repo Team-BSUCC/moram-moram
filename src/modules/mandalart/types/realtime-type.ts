@@ -69,3 +69,8 @@ type SubtopicInfo = ExtendedCellInfo & {
   category: 'SUBTOPIC';
   cell_todos?: TodoType[];
 };
+export type BroadcastStoreType = {
+  topic: Map<string, TopicPayloadType>;
+  subTopic: Map<string, SubtopicPayloadType>;
+  todo: Map<string, TodoPayloadType>;
+};
