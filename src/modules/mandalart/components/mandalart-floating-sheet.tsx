@@ -1,0 +1,84 @@
+import Button from '@/components/commons/button';
+import FloatingSheet from '@/components/commons/floating-sheet';
+import Input from '@/components/commons/input';
+import Text from '@/components/commons/text';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
+import { useState } from 'react';
+import { ExtendedCellInfo, TodoType } from '../types/realtime-type';
+import TodoItem from './todo-item';
+import { getDataCategory } from '../services/get-data-category';
+
+/**
+ * Todo floating sheet 컴포넌트
+ * @returns
+ */
+const MandalartFloatingSheet = () => {
+  // 클릭한 셀의 정보 받아오기
+  const [value, setValue] = useState<string>('');
+
+  const info = getDataCategory(
+    useFloatingSheetStore((state) => state.info) as ExtendedCellInfo
+  );
+
+  return (
+    <FloatingSheet>
+      <div className='space-y-4 p-4'>
+        <Input
+          type='text'
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+          placeholder={info.content || info.title || info.topic || ''}
+        />
+        {/* 핵심주제일 경우 */}
+        {info.category === 'CORE' && (
+          <div>
+            <Text>대주제</Text>
+            {info.mandalart_topics?.map((topic) => (
+              <div key={topic.id} className='pl-2'>
+                <div className='text-blue-700'>{topic.topic}</div>
+                <Text>소주제</Text>
+                {topic.mandalart_subtopics?.map((sub) => (
+                  <div key={sub.id} className='pl-4'>
+                    <div>{sub.content}</div>
+                    {sub.cell_todos?.map((todo: TodoType) => (
+                      <TodoItem key={todo.id} id={todo.id} />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+        {/* 대주제일 경우 */}
+        {info.category === 'TOPIC' && (
+          <div>
+            <Text>소주제</Text>
+            {info.mandalart_subtopics?.map((sub) => (
+              <div key={sub.id} className='pl-2'>
+                <div>{sub.content}</div>
+                {sub.cell_todos?.map((todo: TodoType) => (
+                  <TodoItem key={todo.id} id={todo.id} />
+                ))}
+              </div>
+            ))}
+          </div>
+        )}
+        {/* 소주제일 경우 */}
+        {info.category === 'SUBTOPIC' && (
+          <div>
+            <Text>할 일</Text>
+            {info.cell_todos?.map((todo: TodoType) => (
+              <TodoItem key={todo.id} id={todo.id} />
+            ))}
+          </div>
+        )}
+
+        <Text>새 투두 추가</Text>
+        <Input type='text' placeholder='할 일을 입력하세요' />
+        <Button>추가하기</Button>
+      </div>
+    </FloatingSheet>
+  );
+};
+
+export default MandalartFloatingSheet;
