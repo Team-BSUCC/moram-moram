@@ -1,22 +1,27 @@
 import { BroadcastPayloadType } from '../types/realtime-type';
 
+/**
+ *
+ * @param props 테이블 row값 그대로 보내면 됩니다.
+ * @returns 그러면 배열의 형태로 값을 줄거에요
+ * 'private'라는 값이 포함되어 있으면 그건 mandalarts 테이블의 row값,
+ * 'topic'이라는 값이 포함되어 있으면 그건 mandalarts_topics 테이블의 row값,
+ * 'cell_index'라는 값이 포함되어 있으면 그건 mandalarts_subtopics 테이블의 row값,
+ * 'cell_id'라는 값이 포함되어 있으면 그건 cell_todos 테이블의 row값입니다.
+ * 그리고 아무 것도 해당되지 않으면 알 수가 없어요
+ *
+ * TODO : 지은님이 만들어주신 상수 QueryKey로 리팩토링하기
+ */
 export const processQueryKey = (
   props: Partial<BroadcastPayloadType>
 ): (string | undefined)[] => {
-  // mandalarts 테이블인지 확인 (고유 속성 private으로 판단)
   if ('private' in props) {
     return ['core', props.id];
-  }
-  // mandalart_topics 테이블인지 확인 (고유 속성 topic으로 판단)
-  else if ('topic' in props) {
+  } else if ('topic' in props) {
     return ['topic', props.id];
-  }
-  // mandalart_subtopics 테이블인지 확인 (고유 속성 cell_index로 판단)
-  else if ('cell_index' in props) {
+  } else if ('cell_index' in props) {
     return ['subtopic', props.id];
-  }
-  // cell_todos 테이블인지 확인 (고유 속성 cell_id로 판단)
-  else if ('cell_id' in props) {
+  } else if ('cell_id' in props) {
     return ['todos', props.id];
   }
   return ['알 수 없는 데이터 타입'];

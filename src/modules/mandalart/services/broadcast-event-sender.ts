@@ -17,7 +17,7 @@ export const broadcastEventSender = ({
     try {
       const payload = {
         category: stateKey[0],
-        data: props,
+        ...props,
       };
 
       myChannel?.send({
