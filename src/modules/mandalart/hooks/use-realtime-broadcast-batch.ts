@@ -103,6 +103,7 @@ export const useRealtimeBroadcastBatch = () => {
     if (broadcastStore.current.todo.size !== 0) {
       broadcastStore.current.todo.forEach((todoPayload, todoId) => {
         if (todoPayload.action !== 'DELETE') {
+          //나중에 투두 찍어내는 로직 확실해지면 추가 작업예정
           //소주제를 구분할 수 있는 쿼리키가 추가되어야 할 듯
           queryClient.setQueryData(['todo', todoId], todoPayload.value);
         }
