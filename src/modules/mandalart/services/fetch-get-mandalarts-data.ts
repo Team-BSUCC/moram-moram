@@ -2,6 +2,11 @@ import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { MandalartType } from '../types/realtime-type';
 import { PostgrestError } from '@supabase/supabase-js';
 
+/**
+ * 만다라트 데이터를 불러오는 fetch 함수
+ * @param id - 만다라트 id
+ * @returns
+ */
 export const fetchGetMandalartsData = async (
   id: string
 ): Promise<MandalartType | PostgrestError> => {

@@ -8,7 +8,15 @@ type Props = {
   subTopics: SubTopicType[];
 };
 
+/**
+ * 중앙 블록을 제외한 서브 블록 컴포넌트
+ * @param title - 중앙 셀 제목
+ * @param topic - 대주제
+ * @param subTopics - 소주제 배열
+ * @returns
+ */
 const SubBlock = ({ title, topic, subTopics }: Props) => {
+  // props로 객체를 넘겨주기 위한 메모이제이션
   const MemoizedCells = useMemo(() => {
     const gridCells = Array(9).fill(null);
 

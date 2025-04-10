@@ -7,7 +7,12 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { useState } from 'react';
 import { ExtendedCellInfo, TodoType } from '../types/realtime-type';
 
+/**
+ * Todo floating sheet 컴포넌트
+ * @returns
+ */
 const MandalartFloatingSheet = () => {
+  // 클릭한 셀의 정보 받아오기
   const showInfo = useFloatingSheetStore(
     (state) => state.showInfo
   ) as ExtendedCellInfo;
@@ -29,6 +34,7 @@ const MandalartFloatingSheet = () => {
         <Text>투두</Text>
         <Input type='text' />
         <Button>추가하기</Button>
+        {/* 기존에 DB에 저장된 투두 */}
         {showInfo?.cell_todos?.map((todo: TodoType) => (
           <div className='flex' key={todo.id}>
             <CheckBox />
