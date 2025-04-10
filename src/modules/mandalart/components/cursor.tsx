@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { MousePointer2 } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 
 export const Cursor = ({
   className,
@@ -14,7 +14,7 @@ export const Cursor = ({
 }) => {
   return (
     <div className={cn('pointer-events-none', className)} style={style}>
-      <MousePointer2 color={color} fill={color} size={30} />
+      <Pencil color={color} fill={color} size={30} />
 
       <div
         className='mt-1 rounded px-2 py-1 text-center text-xs font-bold text-white'
