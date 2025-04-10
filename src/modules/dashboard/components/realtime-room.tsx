@@ -32,7 +32,7 @@ type BroadcastEventPayload = {
   payload: UserPresence;
 };
 
-export default function RealtimeRoom({ user }: Props) {
+const RealtimeRoom = ({ user }: Props) => {
   const supabase = getBrowserClient();
   const [channel, setChannel] = useState<RealtimeChannel | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
@@ -172,4 +172,6 @@ export default function RealtimeRoom({ user }: Props) {
       )}
     </div>
   );
-}
+};
+
+export default RealtimeRoom;
