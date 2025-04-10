@@ -35,11 +35,11 @@ const MandalartFloatingSheet = () => {
         {showInfo.category === 'CORE' && (
           <div>
             <Text>대주제</Text>
-            {showInfo.mandalart_topics?.map((topic: any) => (
+            {showInfo.mandalart_topics?.map((topic) => (
               <div key={topic.id} className='pl-2'>
                 <div className='text-blue-700'>{topic.topic}</div>
                 <Text>소주제</Text>
-                {topic.mandalart_subtopics?.map((sub: any) => (
+                {topic.mandalart_subtopics?.map((sub) => (
                   <div key={sub.id} className='pl-4'>
                     <div>{sub.content}</div>
                     {sub.cell_todos?.map((todo: TodoType) => (
@@ -55,7 +55,7 @@ const MandalartFloatingSheet = () => {
         {showInfo.category === 'TOPIC' && (
           <div>
             <Text>소주제</Text>
-            {showInfo.mandalart_subtopics?.map((sub: any) => (
+            {showInfo.mandalart_subtopics?.map((sub) => (
               <div key={sub.id} className='pl-2'>
                 <div>{sub.content}</div>
                 {sub.cell_todos?.map((todo: TodoType) => (
