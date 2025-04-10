@@ -9,7 +9,9 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 const MandalartPage = () => {
   // floating sheet가 열렸는지 닫혔는지 판별하는 변수
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
-  // Supabase에서 데이터 받아오기
+  /**
+   * Memo: 동적 값으로 수정 예정
+   */
   const { data, isPending, isError } = useMandalartDataQuery(
     '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
   );
