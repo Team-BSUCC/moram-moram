@@ -1,9 +1,10 @@
 import Button from '@/components/commons/button';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { useCellDataQuery } from '../hooks/use-mandalart-data-query';
+import { processQueryKey } from '../hooks/use-mandalart-data-query';
 import RegisterTodo from './register-todo';
 import { ExtendedCellInfo } from '../types/realtime-type';
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 type Props = {
   value: string;
@@ -19,8 +20,19 @@ type Props = {
  * @returns
  */
 const Cell = ({ value, className, info }: Props) => {
-  // tanstack query key에 셀 정보 저장하는 로직
-  useCellDataQuery(value, info);
+  const queryClient = useQueryClient();
+  useEffect(() => {
+    // tanstack query key에 셀 정보 저장하는 로직
+    queryClient.setQueryData(processQueryKey(info), value);
+  }, [queryClient, info, value]);
+
+  // 캐시된 데이터를 받아오는 로직
+  const { data } = useQuery({
+    queryKey: processQueryKey(info),
+    queryFn: () => Promise.resolve(null),
+    enabled: false,
+  });
+
   const setShowInfo = useFloatingSheetStore((state) => state.setShowInfo);
 
   // 플로팅 시트를 띄우는 이벤트 핸들러
@@ -35,7 +47,7 @@ const Cell = ({ value, className, info }: Props) => {
           className={`border-gray-200 flex h-20 w-20 items-center justify-center border text-center text-xs ${className || ''}`}
           style={{ borderRadius: '8px' }}
         >
-          {value}
+          {data}
         </div>
       </Button>
       {/* Todo key 등록을 위한 등록 컴포넌트 */}
