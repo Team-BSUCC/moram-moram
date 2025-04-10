@@ -20,13 +20,10 @@ const SubBlock = ({ title, topic, subTopics }: Props) => {
   const MemoizedCells = useMemo(() => {
     const gridCells = Array(9).fill(null);
 
-    // eslint-disable-next-line no-unused-vars
-    const { mandalart_subtopics, ...topicWithoutSubtopics } = topic;
-
     gridCells[4] = {
       content: title,
       isCenter: true,
-      ...topicWithoutSubtopics,
+      ...topic,
     };
 
     // 나머지 셀에 서브토픽 배치
