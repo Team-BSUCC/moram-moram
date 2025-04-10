@@ -22,3 +22,9 @@ export type BroadcastPayloadType =
   | TodoPayloadType;
 
 export type PartialBroadcastPayloadType = Partial<BroadcastPayloadType>;
+
+export type BroadcastStoreType = {
+  topic: Map<string, TopicPayloadType>;
+  subTopic: Map<string, SubtopicPayloadType>;
+  todo: Map<string, TodoPayloadType>;
+};
