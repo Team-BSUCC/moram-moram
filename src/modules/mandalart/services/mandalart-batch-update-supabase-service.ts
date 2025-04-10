@@ -1,6 +1,6 @@
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { MutableRefObject } from 'react';
-import { BroadcastStoreType } from '../hooks/use-realtime-broadcast-batch';
+import { BroadcastStoreType } from '../types/realtime-type';
 
 /**
  * 브로드캐스트 스토어의 데이터를 Supabase에 일괄 업데이트하는 함수
@@ -44,34 +44,28 @@ export const mandalartBatchUpdateSupabase = async (
   // Todo 업데이트(upsert와 delete 구분)
   if (broadcastStore.current.todo.size > 0) {
     const todoData = Array.from(broadcastStore.current.todo.values());
-    const deleteTodoId: string[] = [];
-
     const todoTable = supabase.from('cell_todos');
-    const todoUpdate = todoTable.upsert(
-      todoData
-        .filter((payloadTodo) => {
-          //action이 "DELETE"면 삭제요청에 쓰일 배열에 id 삽입
-          if (payloadTodo.action === 'DELETE') {
-            deleteTodoId.push(payloadTodo.id);
-          }
-          //action이 'CREATE', 'UPDATE'일 경우 upsert요청에 쓰일 객체만드는 배열로 변환
-          return (
-            payloadTodo.action === 'CREATE' || payloadTodo.action === 'UPDATE'
-          );
-        })
-        .map((payloadTodo) => {
-          //eslint-disable-next-line no-unused-vars
-          const { category, value, ...todoRowInfo } = payloadTodo;
-          return { ...todoRowInfo, title: value };
-        })
-    );
-    const todoDelete = todoTable.delete().in('id', deleteTodoId);
 
-    //upsert요청, delete요청이 있으면 updates에 추가
-    if (todoData.length !== deleteTodoId.length) {
-      updates.push(todoUpdate);
+    //todo upsert를 위한 객체 배열 생성
+    const upsertData = todoData
+      .filter((payloadTodo) => payloadTodo.action !== 'DELETE')
+      .map((payloadTodo) => {
+        //eslint-disable-next-line no-unused-vars
+        const { category, value, ...todoRowInfo } = payloadTodo;
+        return { ...todoRowInfo, title: value };
+      });
+
+    //todo delete를 위한 id 배열 생성
+    const deleteTodoId = todoData
+      .filter((payloadTodo) => payloadTodo.action === 'DELETE')
+      .map((payloadTodo) => payloadTodo.id);
+
+    if (upsertData.length !== 0) {
+      const todoUpsert = todoTable.upsert(upsertData);
+      updates.push(todoUpsert);
     }
     if (deleteTodoId.length !== 0) {
+      const todoDelete = todoTable.delete().in('id', deleteTodoId);
       updates.push(todoDelete);
     }
   }

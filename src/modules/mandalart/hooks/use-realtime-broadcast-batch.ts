@@ -1,18 +1,13 @@
 import { useEffect, useRef } from 'react';
 import {
   BroadcastPayloadType,
+  BroadcastStoreType,
   SubtopicPayloadType,
   TodoPayloadType,
   TopicPayloadType,
 } from '../types/realtime-type';
 import { mandalartBatchUpdateSupabase } from '../services/mandalart-batch-update-supabase-service';
 import { useQueryClient } from '@tanstack/react-query';
-
-export type BroadcastStoreType = {
-  topic: Map<string, TopicPayloadType>;
-  subTopic: Map<string, SubtopicPayloadType>;
-  todo: Map<string, TodoPayloadType>;
-};
 
 type FormatBroadcastStorePayloadType = {
   topic: {
