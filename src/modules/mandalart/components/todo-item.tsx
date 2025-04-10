@@ -1,13 +1,12 @@
 import CheckBox from '@/components/commons/check-box';
-import { useQuery } from '@tanstack/react-query';
+import { useTodoCacheQuery } from '../hooks/use-mandalart-data-query';
 
-const TodoItem = ({ id }: { id: string }) => {
-  const { data: todo } = useQuery({
-    queryKey: ['TODO', id],
-    queryFn: () => Promise.resolve(null),
-    enabled: false,
-  });
+type Props = {
+  id: string;
+};
 
+const TodoItem = ({ id }: Props) => {
+  const { data: todo } = useTodoCacheQuery(id);
   return (
     <div className='flex items-center'>
       <CheckBox />

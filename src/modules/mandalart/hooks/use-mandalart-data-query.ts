@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { fetchGetMandalartsData } from '../services/fetch-get-mandalarts-data';
 import { ExtendedCellInfo, MandalartType } from '../types/realtime-type';
 import { QUERY_KEY } from '@/shared/constants/query-key';
+import { getQueryKey } from '../services/get-data-category';
 
 /**
  * 만다라트 데이터를 불러오는 useQuery 커스텀 훅
@@ -17,23 +18,6 @@ export const useMandalartDataQuery = (id: string) => {
   });
 };
 
-// 카테고리 지정을 위한 임시 지정 함수
-export const processQueryKey = (info: ExtendedCellInfo) => {
-  if ('private' in info) {
-    return QUERY_KEY.core(info.id);
-  }
-  if ('topic' in info) {
-    return QUERY_KEY.topic(info.id);
-  }
-  if ('cell_index' in info) {
-    return QUERY_KEY.subtopic(info.id);
-  }
-  if ('cell_id' in info) {
-    return QUERY_KEY.todo(info.id);
-  }
-  return ['알 수 없는 타입'];
-};
-
 /**
  * 투두 데이터를 키에 저장하는 함수
  * @param value - 저장할 todo 값
@@ -46,5 +30,26 @@ export const useTodoDataQuery = (value: string, id: string) => {
     queryFn: () => Promise.resolve(value),
     staleTime: Infinity,
     gcTime: Infinity,
+  });
+};
+
+/**
+ * 캐시된 투두 데이터를 가져오는 useQuery 훅
+ * @param id - 가져올 todo id 값
+ * @returns
+ */
+export const useTodoCacheQuery = (id: string) => {
+  return useQuery({
+    queryKey: QUERY_KEY.todo(id),
+    queryFn: () => Promise.resolve(null),
+    enabled: false,
+  });
+};
+
+export const useCellCacheQuery = (info: ExtendedCellInfo) => {
+  return useQuery({
+    queryKey: getQueryKey(info),
+    queryFn: () => Promise.resolve(null),
+    enabled: false,
   });
 };

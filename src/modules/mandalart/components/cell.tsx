@@ -1,10 +1,11 @@
 import Button from '@/components/commons/button';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { processQueryKey } from '../hooks/use-mandalart-data-query';
 import RegisterTodo from './register-todo';
 import { ExtendedCellInfo } from '../types/realtime-type';
 import React, { useEffect } from 'react';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
+import { getQueryKey } from '../services/get-data-category';
+import { useCellCacheQuery } from '../hooks/use-mandalart-data-query';
 
 type Props = {
   value: string;
@@ -23,15 +24,11 @@ const Cell = ({ value, className, info }: Props) => {
   const queryClient = useQueryClient();
   useEffect(() => {
     // tanstack query key에 셀 정보 저장하는 로직
-    queryClient.setQueryData(processQueryKey(info), value);
+    queryClient.setQueryData(getQueryKey(info), value);
   }, [queryClient, info, value]);
 
   // 캐시된 데이터를 받아오는 로직
-  const { data } = useQuery({
-    queryKey: processQueryKey(info),
-    queryFn: () => Promise.resolve(null),
-    enabled: false,
-  });
+  const { data } = useCellCacheQuery(info);
 
   const setShowInfo = useFloatingSheetStore((state) => state.setShowInfo);
 
