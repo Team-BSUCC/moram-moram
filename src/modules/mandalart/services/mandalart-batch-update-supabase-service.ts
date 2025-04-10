@@ -2,11 +2,17 @@ import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { MutableRefObject } from 'react';
 import { BroadcastStoreType } from '../hooks/use-realtime-broadcast-batch';
 
+/**
+ * 브로드캐스트 스토어의 데이터를 Supabase에 일괄 업데이트하는 함수
+ * Topic, SubTopic, Todo 데이터를 각각 처리하여 병렬로 요청을 실행합니다
+ * @param broadcastStore - 업데이트할 데이터가 포함된 브로드캐스트 스토어
+ * @throws 하나 이상의 요청이 실패할 경우 에러를 발생시킵니다
+ */
 export const mandalartBatchUpdateSupabase = async (
   broadcastStore: MutableRefObject<BroadcastStoreType>
 ) => {
   const supabase = getBrowserClient();
-  //일괄요청을 위한 배열
+  //일괄요청을 위한 배열,
   const updates = [];
 
   // Topic 업데이트
@@ -35,7 +41,7 @@ export const mandalartBatchUpdateSupabase = async (
     updates.push(subTopicUpdate);
   }
 
-  // Todo 업데이트
+  // Todo 업데이트(upsert와 delete 구분)
   if (broadcastStore.current.todo.size > 0) {
     const todoData = Array.from(broadcastStore.current.todo.values());
     const deleteTodoId: string[] = [];
@@ -61,6 +67,7 @@ export const mandalartBatchUpdateSupabase = async (
     );
     const todoDelete = todoTable.delete().in('id', deleteTodoId);
 
+    //upsert요청, delete요청이 있으면 updates에 추가
     if (todoData.length !== deleteTodoId.length) {
       updates.push(todoUpdate);
     }
@@ -82,6 +89,7 @@ export const mandalartBatchUpdateSupabase = async (
       .map((result) => result.reason);
 
     //에러가 하나라도 있으면 리젝트
+    //리젝트시 브로드캐스트 스토어 초기화 안됨
     if (errors.length > 0) {
       throw new Error(`일부 업데이트 실패: ${errors.join(', ')}`);
     }
