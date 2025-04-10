@@ -30,11 +30,13 @@ const Cell = ({ value, className, info }: Props) => {
   // 캐시된 데이터를 받아오는 로직
   const { data } = useCellCacheQuery(info);
 
-  const setShowInfo = useFloatingSheetStore((state) => state.setShowInfo);
+  const show = useFloatingSheetStore((state) => state.show);
+  const setInfo = useFloatingSheetStore((state) => state.setInfo);
 
   // 플로팅 시트를 띄우는 이벤트 핸들러
   const handleClick = () => {
-    setShowInfo(info);
+    setInfo(info);
+    show();
   };
 
   return (

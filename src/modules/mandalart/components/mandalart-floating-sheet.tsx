@@ -16,8 +16,8 @@ const MandalartFloatingSheet = () => {
   // 클릭한 셀의 정보 받아오기
   const [value, setValue] = useState<string>('');
 
-  const showInfo = getDataCategory(
-    useFloatingSheetStore((state) => state.showInfo) as ExtendedCellInfo
+  const info = getDataCategory(
+    useFloatingSheetStore((state) => state.info) as ExtendedCellInfo
   );
 
   return (
@@ -27,15 +27,13 @@ const MandalartFloatingSheet = () => {
           type='text'
           value={value}
           onChange={(e) => setValue(e.target.value)}
-          placeholder={
-            showInfo.content || showInfo.title || showInfo.topic || ''
-          }
+          placeholder={info.content || info.title || info.topic || ''}
         />
         {/* 핵심주제일 경우 */}
-        {showInfo.category === 'CORE' && (
+        {info.category === 'CORE' && (
           <div>
             <Text>대주제</Text>
-            {showInfo.mandalart_topics?.map((topic) => (
+            {info.mandalart_topics?.map((topic) => (
               <div key={topic.id} className='pl-2'>
                 <div className='text-blue-700'>{topic.topic}</div>
                 <Text>소주제</Text>
@@ -52,10 +50,10 @@ const MandalartFloatingSheet = () => {
           </div>
         )}
         {/* 대주제일 경우 */}
-        {showInfo.category === 'TOPIC' && (
+        {info.category === 'TOPIC' && (
           <div>
             <Text>소주제</Text>
-            {showInfo.mandalart_subtopics?.map((sub) => (
+            {info.mandalart_subtopics?.map((sub) => (
               <div key={sub.id} className='pl-2'>
                 <div>{sub.content}</div>
                 {sub.cell_todos?.map((todo: TodoType) => (
@@ -66,10 +64,10 @@ const MandalartFloatingSheet = () => {
           </div>
         )}
         {/* 소주제일 경우 */}
-        {showInfo.category === 'SUBTOPIC' && (
+        {info.category === 'SUBTOPIC' && (
           <div>
             <Text>할 일</Text>
-            {showInfo.cell_todos?.map((todo: TodoType) => (
+            {info.cell_todos?.map((todo: TodoType) => (
               <TodoItem key={todo.id} id={todo.id} />
             ))}
           </div>

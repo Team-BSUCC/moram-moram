@@ -4,14 +4,14 @@ import { create } from 'zustand';
 type FloatingSheetState = {
   isVisible: boolean; // 온오프 상태
   position: { x: number; y: number }; // 위치 좌표
-  showInfo: CellInfo | null; // 셀 정보
+  info: CellInfo | null; // 셀 정보
 
   show: () => void; // 시트 보이기
   hide: () => void; // 시트 숨기기
   // eslint-disable-next-line no-unused-vars
   setPosition: (position: { x: number; y: number }) => void; // 위치 설정
   // eslint-disable-next-line no-unused-vars
-  setShowInfo: (info: CellInfo) => void;
+  setInfo: (info: CellInfo) => void;
 };
 
 const useFloatingSheetStore = create<FloatingSheetState>((set) => ({
@@ -19,13 +19,13 @@ const useFloatingSheetStore = create<FloatingSheetState>((set) => ({
   isVisible: false,
   //floating sheet의 위치를 저장하는 state
   position: { x: 0, y: 0 },
-  showInfo: null,
+  info: null,
 
   // 액션 구현
   show: () => set({ isVisible: true }),
-  hide: () => set({ showInfo: null }),
+  hide: () => set({ info: null, isVisible: false }),
   setPosition: (position) => set({ position }),
-  setShowInfo: (info) => set({ showInfo: info }),
+  setInfo: (info) => set({ info }),
 }));
 
 export default useFloatingSheetStore;
