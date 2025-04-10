@@ -1,20 +1,18 @@
 import { QUERY_KEY } from '@/shared/constants/query-key';
-import { ExtendedCellInfo } from '../types/realtime-type';
+import { ExtendedCellInfo, ShowInfoType } from '../types/realtime-type';
 
-export const getDataCategory = (info: ExtendedCellInfo) => {
+// 카테고리 지정을 위한 임시 지정 함수
+export const getDataCategory = (info: ExtendedCellInfo): ShowInfoType => {
   if ('private' in info) {
-    return { ...info, category: 'CORE' };
+    return { ...info, category: 'CORE' } as ShowInfoType;
   }
   if ('topic' in info) {
-    return { ...info, category: 'TOPIC' };
+    return { ...info, category: 'TOPIC' } as ShowInfoType;
   }
   if ('cell_index' in info) {
-    return { ...info, category: 'SUBTOPIC' };
+    return { ...info, category: 'SUBTOPIC' } as ShowInfoType;
   }
-  if ('cell_id' in info) {
-    return { ...info, category: 'TODO' };
-  }
-  return info;
+  return info as ShowInfoType;
 };
 
 // 카테고리 지정을 위한 임시 지정 함수

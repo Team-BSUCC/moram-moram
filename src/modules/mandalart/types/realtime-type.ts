@@ -52,3 +52,20 @@ export type ExtendedCellInfo = CellInfo & {
   title?: string;
   topic?: string;
 };
+
+export type ShowInfoType = CoreInfo | TopicInfo | SubtopicInfo;
+
+type CoreInfo = ExtendedCellInfo & {
+  category: 'CORE';
+  mandalart_topics: TopicType[];
+};
+
+type TopicInfo = ExtendedCellInfo & {
+  category: 'TOPIC';
+  mandalart_subtopics: SubTopicType[];
+};
+
+type SubtopicInfo = ExtendedCellInfo & {
+  category: 'SUBTOPIC';
+  cell_todos?: TodoType[];
+};

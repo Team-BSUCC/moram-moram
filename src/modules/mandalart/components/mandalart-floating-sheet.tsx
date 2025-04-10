@@ -6,6 +6,7 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { useState } from 'react';
 import { ExtendedCellInfo, TodoType } from '../types/realtime-type';
 import TodoItem from './todo-item';
+import { getDataCategory } from '../services/get-data-category';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -15,24 +16,8 @@ const MandalartFloatingSheet = () => {
   // 클릭한 셀의 정보 받아오기
   const [value, setValue] = useState<string>('');
 
-  const processQueryKey = (info: ExtendedCellInfo) => {
-    if ('private' in info) {
-      return { ...info, category: 'CORE' };
-    }
-    if ('topic' in info) {
-      return { ...info, category: 'TOPIC' };
-    }
-    if ('cell_index' in info) {
-      return { ...info, category: 'SUBTOPIC' };
-    }
-    if ('cell_id' in info) {
-      return { ...info, category: 'TODO' };
-    }
-    return info;
-  };
-
-  const showInfo = processQueryKey(
-    useFloatingSheetStore((state) => state.showInfo) as any
+  const showInfo = getDataCategory(
+    useFloatingSheetStore((state) => state.showInfo) as ExtendedCellInfo
   );
 
   return (
@@ -46,9 +31,9 @@ const MandalartFloatingSheet = () => {
             showInfo.content || showInfo.title || showInfo.topic || ''
           }
         />
-
+        {/* 핵심주제일 경우 */}
         {showInfo.category === 'CORE' && (
-          <>
+          <div>
             <Text>대주제</Text>
             {showInfo.mandalart_topics?.map((topic: any) => (
               <div key={topic.id} className='pl-2'>
@@ -64,11 +49,11 @@ const MandalartFloatingSheet = () => {
                 ))}
               </div>
             ))}
-          </>
+          </div>
         )}
-
+        {/* 대주제일 경우 */}
         {showInfo.category === 'TOPIC' && (
-          <>
+          <div>
             <Text>소주제</Text>
             {showInfo.mandalart_subtopics?.map((sub: any) => (
               <div key={sub.id} className='pl-2'>
@@ -78,16 +63,16 @@ const MandalartFloatingSheet = () => {
                 ))}
               </div>
             ))}
-          </>
+          </div>
         )}
-
+        {/* 소주제일 경우 */}
         {showInfo.category === 'SUBTOPIC' && (
-          <>
+          <div>
             <Text>할 일</Text>
             {showInfo.cell_todos?.map((todo: TodoType) => (
               <TodoItem key={todo.id} id={todo.id} />
             ))}
-          </>
+          </div>
         )}
 
         <Text>새 투두 추가</Text>
