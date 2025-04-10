@@ -1,6 +1,7 @@
-import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
+'use server';
 import { MandalartType } from '../types/realtime-type';
 import { PostgrestError } from '@supabase/supabase-js';
+import { getServerClient } from '@/shared/utils/supabase/server-client';
 
 /**
  * 만다라트 데이터를 불러오는 fetch 함수
@@ -10,7 +11,7 @@ import { PostgrestError } from '@supabase/supabase-js';
 export const fetchGetMandalartsData = async (
   id: string
 ): Promise<MandalartType | PostgrestError> => {
-  const supabase = getBrowserClient();
+  const supabase = getServerClient();
   const { data, error } = await supabase
     .from('mandalarts')
     .select(
@@ -32,7 +33,6 @@ export const fetchGetMandalartsData = async (
     .eq('id', id);
 
   if (error) {
-    console.error(error);
     throw error;
   }
 

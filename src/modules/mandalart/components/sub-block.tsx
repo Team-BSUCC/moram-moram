@@ -17,7 +17,7 @@ type Props = {
  */
 const SubBlock = ({ title, topic, subTopics }: Props) => {
   // props로 객체를 넘겨주기 위한 메모이제이션
-  const MemoizedCells = useMemo(() => {
+  const memoizedCells = useMemo(() => {
     const gridCells = Array(9).fill(null);
 
     gridCells[4] = {
@@ -41,7 +41,7 @@ const SubBlock = ({ title, topic, subTopics }: Props) => {
 
   return (
     <div className='grid grid-cols-3 grid-rows-3 gap-2'>
-      {MemoizedCells.map((cell, idx) => (
+      {memoizedCells.map((cell, idx) => (
         <Cell
           key={cell?.id || idx}
           info={cell}
