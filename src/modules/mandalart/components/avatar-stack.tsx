@@ -9,6 +9,9 @@ import {
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 
+/**
+ * 아바타 스택의 방향 결정 (가로 or 세로)
+ */
 const avatarStackVariants = cva('flex -space-x-4 -space-y-4', {
   variants: {
     orientation: {
@@ -28,6 +31,14 @@ export interface AvatarStackProps
   maxAvatarsAmount?: number;
 }
 
+/**
+ * 아바타 스택 컴포넌트
+ * @param className - 컨테이너 스타일
+ * @param orientation - 아바타 스택 방향 (가로 or 세로)
+ * @param avatars - 아바타 배열 ([{name: '', image: ''}, {}])
+ * @param maxAvatarsAmount - 최대 아바타 스택 개수
+ * @returns
+ */
 const AvatarStack = ({
   className,
   orientation,
@@ -35,7 +46,9 @@ const AvatarStack = ({
   maxAvatarsAmount = 3,
   ...props
 }: AvatarStackProps) => {
+  // 화면에 보여줄 아바타 컴포넌트
   const shownAvatars = avatars.slice(0, maxAvatarsAmount);
+  // 화면에 보여주지 않을 아바타 컴포넌트(최대 개수 이상 접속 시)
   const hiddenAvatars = avatars.slice(maxAvatarsAmount);
 
   return (
@@ -54,6 +67,7 @@ const AvatarStack = ({
               <Avatar className='hover:z-10'>
                 <AvatarImage src={image} />
                 <AvatarFallback>
+                  {/* 가장 첫글자를 이미지에 표시 ex) 테스트 -> 테 */}
                   {name
                     ?.split(' ')
                     ?.map((word) => word[0])
@@ -62,6 +76,7 @@ const AvatarStack = ({
                 </AvatarFallback>
               </Avatar>
             </TooltipTrigger>
+            {/* 아바타 스택 호버 시 보여지는 풀네임 */}
             <TooltipContent>
               <p>{name}</p>
             </TooltipContent>
@@ -73,11 +88,13 @@ const AvatarStack = ({
             <TooltipTrigger asChild>
               <Avatar>
                 <AvatarFallback>
-                  +{avatars.length - shownAvatars.length}
+                  {/* 3개 이상 시 +(개수)로 아바타 표시 */}+
+                  {avatars.length - shownAvatars.length}
                 </AvatarFallback>
               </Avatar>
             </TooltipTrigger>
             <TooltipContent>
+              {/* 툴팁에 숨겨진 모든 사용자 이름 목록 표시 */}
               {hiddenAvatars.map(({ name }, index) => (
                 <p key={`${name}-${index}`}>{name}</p>
               ))}
