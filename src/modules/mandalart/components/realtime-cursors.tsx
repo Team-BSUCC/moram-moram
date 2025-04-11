@@ -1,7 +1,7 @@
 'use client';
 
 import { Cursor } from '@/modules/mandalart/components/cursor';
-import { useRealtimeCursors } from '@/modules/mandalart/hooks/use-realtime-cursors';
+import { useRealtimeCursors } from '../hooks/use-realtime-cursors';
 
 const THROTTLE_MS = 50;
 
