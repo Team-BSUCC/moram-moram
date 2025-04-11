@@ -12,11 +12,19 @@ import { mandalartBatchUpdateSupabase } from '../services/mandalart-batch-update
 // 브로드캐스트 스토어 상태 타입
 type BroadcastStoreStateType = {
   broadcastStore: BroadcastStoreType;
+  // eslint-disable-next-line no-unused-vars
   addBroadcastStore: (payload: BroadcastPayloadType) => void;
   batchUpdateSupabase: () => Promise<void>;
   formatBroadcastStorePayload: () => FormatBroadcastStorePayloadType;
 };
 
+/**
+ * 배치업데이트를 위한 저장소(broadcastStore)를 조작하는 store
+ *   - broadcastStore : 배치업데이트를 위해 변경 정보를 저장하는 객체, 렌더링에는 영향 없음
+ *   - addBroadcastStore: 브로드캐스트 스토어에 데이터(payload) 추가 함수
+ *   - batchUpdateSupabase: Supabase에 일괄 업데이트를 수행하는 함수
+ *   - formatBroadcastStorePayload: 브로드캐스트 스토어 페이로드 형식화 함수
+ */
 export const useBroadcastStore = create<BroadcastStoreStateType>((_, get) => ({
   broadcastStore: {
     topic: new Map<string, TopicPayloadType>(),
