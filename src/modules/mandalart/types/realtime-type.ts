@@ -1,5 +1,10 @@
 import { Tables } from '@/shared/types/database.types';
 
+export type CorePayloadType = Tables<'mandalarts'> & {
+  category: 'CORE';
+  value: string;
+};
+
 export type TopicPayloadType = Tables<'mandalart_topics'> & {
   category: 'TOPIC';
   value: string;
@@ -17,6 +22,7 @@ export type TodoPayloadType = Tables<'cell_todos'> & {
 };
 
 export type BroadcastPayloadType =
+  | CorePayloadType
   | TopicPayloadType
   | SubtopicPayloadType
   | TodoPayloadType;
@@ -71,6 +77,7 @@ type SubtopicInfo = ExtendedCellInfo & {
 };
 
 export type BroadcastStoreType = {
+  core: Map<string, CorePayloadType>;
   topic: Map<string, TopicPayloadType>;
   subTopic: Map<string, SubtopicPayloadType>;
   todo: Map<string, TodoPayloadType>;

@@ -1,5 +1,4 @@
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
-import { MutableRefObject } from 'react';
 import { BroadcastStoreType } from '../types/realtime-type';
 
 /**
@@ -9,18 +8,28 @@ import { BroadcastStoreType } from '../types/realtime-type';
  * @throws 하나 이상의 요청이 실패할 경우 에러를 발생시킵니다
  */
 export const mandalartBatchUpdateSupabase = async (
-  broadcastStore: MutableRefObject<BroadcastStoreType>
+  broadcastStore: BroadcastStoreType
 ) => {
   const supabase = getBrowserClient();
   //일괄요청을 위한 배열,
   const updates = [];
 
-  // Topic 업데이트
-  if (broadcastStore.current.topic.size > 0) {
-    const topicData = Array.from(broadcastStore.current.topic.values());
+  //Core 업데이트(update)
+  if (broadcastStore.core.size > 0) {
+    const coreData = Array.from(broadcastStore.core.entries())[0];
+    const coreUpdate = supabase
+      .from('mandalarts')
+      .update({ title: coreData[1].title })
+      .eq('id', coreData[0]);
+    updates.push(coreUpdate);
+  }
+
+  // Topic 업데이트(upsert)
+  if (broadcastStore.topic.size > 0) {
+    const topicData = Array.from(broadcastStore.topic.values());
     const topicUpdate = supabase.from('mandalart_topics').upsert(
       topicData.map((payloadTopic) => {
-        //eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
         const { category, value, ...topicRowInfo } = payloadTopic;
         return { ...topicRowInfo, topic: value };
       })
@@ -28,12 +37,12 @@ export const mandalartBatchUpdateSupabase = async (
     updates.push(topicUpdate);
   }
 
-  // SubTopic 업데이트
-  if (broadcastStore.current.subTopic.size > 0) {
-    const subTopicData = Array.from(broadcastStore.current.subTopic.values());
+  // SubTopic 업데이트(upsert)
+  if (broadcastStore.subTopic.size > 0) {
+    const subTopicData = Array.from(broadcastStore.subTopic.values());
     const subTopicUpdate = supabase.from('mandalart_subtopics').upsert(
       subTopicData.map((payloadSubtopic) => {
-        //eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
         const { category, value, ...subtopicRowInfo } = payloadSubtopic;
         return { ...subtopicRowInfo, content: value };
       })
@@ -41,16 +50,16 @@ export const mandalartBatchUpdateSupabase = async (
     updates.push(subTopicUpdate);
   }
 
-  // Todo 업데이트(upsert와 delete 구분)
-  if (broadcastStore.current.todo.size > 0) {
-    const todoData = Array.from(broadcastStore.current.todo.values());
+  // Todo 업데이트(upsert,delete)
+  if (broadcastStore.todo.size > 0) {
+    const todoData = Array.from(broadcastStore.todo.values());
     const todoTable = supabase.from('cell_todos');
 
     //todo upsert를 위한 객체 배열 생성
     const upsertData = todoData
       .filter((payloadTodo) => payloadTodo.action !== 'DELETE')
       .map((payloadTodo) => {
-        //eslint-disable-next-line no-unused-vars
+        // eslint-disable-next-line no-unused-vars
         const { category, value, ...todoRowInfo } = payloadTodo;
         return { ...todoRowInfo, title: value };
       });
@@ -70,6 +79,7 @@ export const mandalartBatchUpdateSupabase = async (
     }
   }
 
+  //일괄요청
   if (updates.length > 0) {
     //수파베이스 쿼리문 병렬 실행
     const results = await Promise.allSettled(updates);

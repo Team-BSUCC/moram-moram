@@ -2,6 +2,7 @@ import { create } from 'zustand';
 import {
   BroadcastPayloadType,
   BroadcastStoreType,
+  CorePayloadType,
   FormatBroadcastStorePayloadType,
   SubtopicPayloadType,
   TodoPayloadType,
@@ -27,6 +28,7 @@ type BroadcastStoreStateType = {
  */
 export const useBroadcastStore = create<BroadcastStoreStateType>((_, get) => ({
   broadcastStore: {
+    core: new Map<string, CorePayloadType>(),
     topic: new Map<string, TopicPayloadType>(),
     subTopic: new Map<string, SubtopicPayloadType>(),
     todo: new Map<string, TodoPayloadType>(),
@@ -38,7 +40,9 @@ export const useBroadcastStore = create<BroadcastStoreStateType>((_, get) => ({
    */
   addBroadcastStore: (payload: BroadcastPayloadType) => {
     const currentStore = get().broadcastStore;
-    if (payload.category === 'TOPIC') {
+    if (payload.category === 'CORE') {
+      currentStore.core.set(payload.id, payload);
+    } else if (payload.category === 'TOPIC') {
       currentStore.topic.set(payload.id, payload);
     } else if (payload.category === 'SUBTOPIC') {
       currentStore.subTopic.set(payload.id, payload);
@@ -55,14 +59,16 @@ export const useBroadcastStore = create<BroadcastStoreStateType>((_, get) => ({
     try {
       const currentStore = get().broadcastStore;
       if (
+        currentStore.core.size === 0 &&
         currentStore.topic.size === 0 &&
         currentStore.subTopic.size === 0 &&
         currentStore.todo.size === 0
       ) {
         return;
       }
-      await mandalartBatchUpdateSupabase({ current: currentStore });
+      await mandalartBatchUpdateSupabase(currentStore);
       // 업데이트 후 스토어 초기화
+      currentStore.core.clear();
       currentStore.topic.clear();
       currentStore.subTopic.clear();
       currentStore.todo.clear();
@@ -79,6 +85,7 @@ export const useBroadcastStore = create<BroadcastStoreStateType>((_, get) => ({
   formatBroadcastStorePayload: () => {
     const currentStore = get().broadcastStore;
     return {
+      core: Object.fromEntries(currentStore.core),
       topic: Object.fromEntries(currentStore.topic),
       subTopic: Object.fromEntries(currentStore.subTopic),
       todo: Object.fromEntries(currentStore.todo),
