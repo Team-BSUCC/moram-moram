@@ -14,7 +14,6 @@ import Swal from 'sweetalert2';
 // 브로드캐스트 스토어 상태 타입
 type BroadcastStoreStateType = {
   broadcastStore: BroadcastStoreType;
-  // eslint-disable-next-line no-unused-vars
   addBroadcastStore: (payload: BroadcastPayloadType) => void;
   batchUpdateSupabase: () => Promise<void>;
   formatBroadcastStorePayload: () => FormatBroadcastStorePayloadType;

@@ -29,7 +29,7 @@ export const mandalartBatchUpdateSupabase = async (
     const topicData = Array.from(broadcastStore.topic.values());
     const topicUpdate = supabase.from('mandalart_topics').upsert(
       topicData.map((payloadTopic) => {
-        // eslint-disable-next-line no-unused-vars
+        //category 사용 X
         const { category, value, ...topicRowInfo } = payloadTopic;
         return { ...topicRowInfo, topic: value };
       })
@@ -42,7 +42,7 @@ export const mandalartBatchUpdateSupabase = async (
     const subTopicData = Array.from(broadcastStore.subTopic.values());
     const subTopicUpdate = supabase.from('mandalart_subtopics').upsert(
       subTopicData.map((payloadSubtopic) => {
-        // eslint-disable-next-line no-unused-vars
+        //category 사용 X
         const { category, value, ...subtopicRowInfo } = payloadSubtopic;
         return { ...subtopicRowInfo, content: value };
       })
@@ -59,7 +59,7 @@ export const mandalartBatchUpdateSupabase = async (
     const upsertData = todoData
       .filter((payloadTodo) => payloadTodo.action !== 'DELETE')
       .map((payloadTodo) => {
-        // eslint-disable-next-line no-unused-vars
+        //category 사용 X
         const { category, value, ...todoRowInfo } = payloadTodo;
         return { ...todoRowInfo, title: value };
       });

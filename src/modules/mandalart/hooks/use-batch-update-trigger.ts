@@ -19,6 +19,5 @@ export const useBatchUpdateTrigger = () => {
     return () => {
       batchUpdateSupabase();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 };

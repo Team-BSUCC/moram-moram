@@ -84,6 +84,9 @@ export type BroadcastStoreType = {
 };
 
 export type FormatBroadcastStorePayloadType = {
+  core: {
+    [k: string]: CorePayloadType;
+  };
   topic: {
     [k: string]: TopicPayloadType;
   };
