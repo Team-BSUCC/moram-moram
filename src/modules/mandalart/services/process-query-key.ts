@@ -1,3 +1,4 @@
+import { QUERY_KEY } from '@/shared/constants/query-key';
 import { BroadcastPayloadType } from '../types/realtime-type';
 
 /**
@@ -13,16 +14,16 @@ import { BroadcastPayloadType } from '../types/realtime-type';
  * TODO : 지은님이 만들어주신 상수 QueryKey로 리팩토링하기
  */
 export const processQueryKey = (
-  props: Partial<BroadcastPayloadType>
+  props: Omit<BroadcastPayloadType, 'category'>
 ): (string | undefined)[] => {
   if ('private' in props) {
-    return ['core', props.id];
+    return QUERY_KEY.core(props.id);
   } else if ('topic' in props) {
-    return ['topic', props.id];
+    return QUERY_KEY.topic(props.id);
   } else if ('cell_index' in props) {
-    return ['subtopic', props.id];
+    return QUERY_KEY.subtopic(props.id);
   } else if ('cell_id' in props) {
-    return ['todos', props.id];
+    return QUERY_KEY.todo(props.id);
   }
   return ['알 수 없는 데이터 타입'];
 };

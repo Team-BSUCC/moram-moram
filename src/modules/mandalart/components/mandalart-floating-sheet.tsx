@@ -3,18 +3,29 @@ import FloatingSheet from '@/components/commons/floating-sheet';
 import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { useState } from 'react';
-import { ExtendedCellInfo, TodoType } from '../types/realtime-type';
+import { useMemo, useState } from 'react';
+import {
+  BroadcastPayloadType,
+  ExtendedCellInfo,
+  TodoType,
+} from '../types/realtime-type';
 import TodoItem from './todo-item';
 import { getDataCategory } from '../services/get-data-category';
 import TopicGroup from './topic-group';
 import SubtopicGroup from './subtopic-group';
+import { RealtimeChannel } from '@supabase/supabase-js';
+import { useEditMutation } from '../hooks/use-edit-mutation';
+import { throttleMutate } from '../services/throttle-mutate';
 
 /**
  * Todo floating sheet 컴포넌트
  * @returns
  */
-const MandalartFloatingSheet = () => {
+
+type Props = {
+  channelReceiver: RealtimeChannel;
+};
+const MandalartFloatingSheet = ({ channelReceiver }: Props) => {
   // 클릭한 셀의 정보 받아오기
   const [value, setValue] = useState<string>('');
 
@@ -22,13 +33,24 @@ const MandalartFloatingSheet = () => {
     useFloatingSheetStore((state) => state.info) as ExtendedCellInfo
   );
 
+  const processedInfo: Omit<BroadcastPayloadType, 'category'> = {
+    ...info,
+    value: value,
+  };
+
+  const { mutate } = useEditMutation(channelReceiver, processedInfo);
+  const throttledMutate = useMemo(() => throttleMutate(mutate, 100), [mutate]);
+
   return (
     <FloatingSheet>
       <div className='space-y-4 p-4'>
         <Input
           type='text'
           value={value}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            setValue(e.target.value);
+            throttledMutate();
+          }}
           placeholder={info.content || info.title || info.topic || ''}
         />
         {/* 핵심주제일 경우 */}

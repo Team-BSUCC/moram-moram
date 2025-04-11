@@ -3,6 +3,7 @@ import { processQueryKey } from '../services/process-query-key';
 import { broadcastEventSender } from '../services/broadcast-event-sender';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { BroadcastPayloadType } from '../types/realtime-type';
+import { useBroadcastStore } from './use-broadcast-store';
 
 /**
  * 클라이언트 상태의 수정을 서버에 broadcast해주는 mutation
@@ -12,9 +13,12 @@ import { BroadcastPayloadType } from '../types/realtime-type';
  */
 export const useEditMutation = (
   myChannel: RealtimeChannel,
-  props: Partial<BroadcastPayloadType>
+  props: Omit<BroadcastPayloadType, 'category'>
 ) => {
   const queryClient = useQueryClient();
+  const addBroadcastStore = useBroadcastStore((state) => {
+    state.addBroadcastStore;
+  });
 
   const stateKey: readonly unknown[] = processQueryKey(props);
 
@@ -31,6 +35,7 @@ export const useEditMutation = (
        */
       console.error('broadcast에 오류가 발생했습니다.');
     },
+    onSuccess: () => {},
   });
 
   return { ...mutationUpdateCache };
