@@ -36,5 +36,15 @@ export const fetchGetMandalartsData = async (
     throw error;
   }
 
+  //만다라트 셀 정렬
+  if (data && data[0] && data[0].mandalart_topics) {
+    data[0].mandalart_topics.sort((a, b) => a.topic_index - b.topic_index);
+    data[0].mandalart_topics.forEach((topic) => {
+      if (topic.mandalart_subtopics) {
+        topic.mandalart_subtopics.sort((a, b) => a.cell_index - b.cell_index);
+      }
+    });
+  }
+
   return data[0];
 };
