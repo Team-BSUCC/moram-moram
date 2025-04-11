@@ -7,6 +7,8 @@ import { useState } from 'react';
 import { ExtendedCellInfo, TodoType } from '../types/realtime-type';
 import TodoItem from './todo-item';
 import { getDataCategory } from '../services/get-data-category';
+import TopicGroup from './topic-group';
+import SubtopicGroup from './subtopic-group';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -34,18 +36,7 @@ const MandalartFloatingSheet = () => {
           <div>
             <Text>대주제</Text>
             {info.mandalart_topics?.map((topic) => (
-              <div key={topic.id} className='pl-2'>
-                <div className='text-blue-700'>{topic.topic}</div>
-                <Text>소주제</Text>
-                {topic.mandalart_subtopics?.map((sub) => (
-                  <div key={sub.id} className='pl-4'>
-                    <div>{sub.content}</div>
-                    {sub.cell_todos?.map((todo: TodoType) => (
-                      <TodoItem key={todo.id} id={todo.id} />
-                    ))}
-                  </div>
-                ))}
-              </div>
+              <TopicGroup key={topic.id} topic={topic} />
             ))}
           </div>
         )}
@@ -54,12 +45,7 @@ const MandalartFloatingSheet = () => {
           <div>
             <Text>소주제</Text>
             {info.mandalart_subtopics?.map((sub) => (
-              <div key={sub.id} className='pl-2'>
-                <div>{sub.content}</div>
-                {sub.cell_todos?.map((todo: TodoType) => (
-                  <TodoItem key={todo.id} id={todo.id} />
-                ))}
-              </div>
+              <SubtopicGroup key={sub.id} sub={sub} />
             ))}
           </div>
         )}

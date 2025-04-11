@@ -53,3 +53,19 @@ export const useCellCacheQuery = (info: ExtendedCellInfo) => {
     enabled: false,
   });
 };
+
+export const useTopicCacheQuery = (id: string) => {
+  return useQuery({
+    queryKey: QUERY_KEY.topic(id),
+    queryFn: () => Promise.resolve(null),
+    enabled: false,
+  });
+};
+
+export const useSubtopicCacheQuery = (id: string) => {
+  return useQuery({
+    queryKey: QUERY_KEY.subtopic(id),
+    queryFn: () => Promise.resolve(null),
+    enabled: false,
+  });
+};
