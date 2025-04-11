@@ -39,16 +39,16 @@ const AvatarStack = ({
   const hiddenAvatars = avatars.slice(maxAvatarsAmount);
 
   return (
-    <div
-      className={cn(
-        avatarStackVariants({ orientation }),
-        className,
-        orientation === 'horizontal' ? '-space-x-0' : '-space-y-0'
-      )}
-      {...props}
-    >
-      {shownAvatars.map(({ name, image }, index) => (
-        <TooltipProvider>
+    <TooltipProvider>
+      <div
+        className={cn(
+          avatarStackVariants({ orientation }),
+          className,
+          orientation === 'horizontal' ? '-space-x-0' : '-space-y-0'
+        )}
+        {...props}
+      >
+        {shownAvatars.map(({ name, image }, index) => (
           <Tooltip key={`${name}-${image}-${index}`}>
             <TooltipTrigger asChild>
               <Avatar className='hover:z-10'>
@@ -66,11 +66,9 @@ const AvatarStack = ({
               <p>{name}</p>
             </TooltipContent>
           </Tooltip>
-        </TooltipProvider>
-      ))}
+        ))}
 
-      {hiddenAvatars.length ? (
-        <TooltipProvider>
+        {hiddenAvatars.length ? (
           <Tooltip key='hidden-avatars'>
             <TooltipTrigger asChild>
               <Avatar>
@@ -85,9 +83,9 @@ const AvatarStack = ({
               ))}
             </TooltipContent>
           </Tooltip>
-        </TooltipProvider>
-      ) : null}
-    </div>
+        ) : null}
+      </div>
+    </TooltipProvider>
   );
 };
 
