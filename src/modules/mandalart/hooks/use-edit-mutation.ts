@@ -2,8 +2,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { processQueryKey } from '../services/process-query-key';
 import { broadcastEventSender } from '../services/broadcast-event-sender';
 import { RealtimeChannel } from '@supabase/supabase-js';
-import { BroadcastPayloadType } from '../types/realtime-type';
+import {
+  BroadcastPayloadType,
+  CellInfoType,
+  ShowInfoType,
+} from '../types/realtime-type';
 import { useBroadcastStore } from './use-broadcast-store';
+import { getQueryKey } from '../services/get-data-category';
 
 /**
  * 클라이언트 상태의 수정을 서버에 broadcast해주는 mutation
@@ -13,21 +18,26 @@ import { useBroadcastStore } from './use-broadcast-store';
  */
 export const useEditMutation = (
   myChannel: RealtimeChannel,
-  props: Omit<BroadcastPayloadType, 'category'>
+  payload: BroadcastPayloadType
 ) => {
   const queryClient = useQueryClient();
-  const addBroadcastStore = useBroadcastStore((state) => {
-    state.addBroadcastStore;
-  });
-
-  const stateKey: readonly unknown[] = processQueryKey(props);
+  const addBroadcastStore = useBroadcastStore(
+    (state) => state.addBroadcastStore
+  );
 
   const mutationUpdateCache = useMutation({
     onMutate: async () => {
-      queryClient.setQueryData(stateKey, props.value);
+      queryClient.setQueryData(getQueryKey(payload), payload.value);
     },
+
     mutationFn: async () => {
-      broadcastEventSender({ myChannel, stateKey, props });
+      await myChannel.send({
+        type: 'broadcast',
+        event: 'shout',
+        payload,
+      });
+
+      addBroadcastStore(payload);
     },
     onError: () => {
       /**
@@ -35,7 +45,6 @@ export const useEditMutation = (
        */
       console.error('broadcast에 오류가 발생했습니다.');
     },
-    onSuccess: () => {},
   });
 
   return { ...mutationUpdateCache };

@@ -6,7 +6,7 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { useMemo, useState } from 'react';
 import {
   BroadcastPayloadType,
-  ExtendedCellInfo,
+  CellInfoType,
   TodoType,
 } from '../types/realtime-type';
 import TodoItem from './todo-item';
@@ -30,15 +30,10 @@ const MandalartFloatingSheet = ({ channelReceiver }: Props) => {
   const [value, setValue] = useState<string>('');
 
   const info = getDataCategory(
-    useFloatingSheetStore((state) => state.info) as ExtendedCellInfo
+    useFloatingSheetStore((state) => state.info) as CellInfoType
   );
 
-  const processedInfo: Omit<BroadcastPayloadType, 'category'> = {
-    ...info,
-    value: value,
-  };
-
-  const { mutate } = useEditMutation(channelReceiver, processedInfo);
+  const { mutate } = useEditMutation(channelReceiver, { ...info, value });
   const throttledMutate = useMemo(() => throttleMutate(mutate, 100), [mutate]);
 
   return (

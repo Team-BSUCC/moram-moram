@@ -25,5 +25,5 @@ export const processQueryKey = (
   } else if ('cell_id' in props) {
     return QUERY_KEY.todo(props.id);
   }
-  return ['알 수 없는 데이터 타입'];
+  throw new Error('Unknown props type');
 };
