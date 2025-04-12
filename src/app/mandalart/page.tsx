@@ -5,6 +5,7 @@ import MandalartFloatingSheet from '@/modules/mandalart/components/mandalart-flo
 import { RealtimeAvatarStack } from '@/modules/mandalart/components/realtime-avatar-stack';
 import { RealtimeCursors } from '@/modules/mandalart/components/realtime-cursors';
 import SubBlock from '@/modules/mandalart/components/sub-block';
+import { useCurrentUserName } from '@/modules/mandalart/hooks/use-current-user-name';
 import { useBatchUpdateTrigger } from '@/modules/mandalart/hooks/use-batch-update-trigger';
 import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
 import { useRealtimeUserSync } from '@/modules/mandalart/hooks/use-realtime-user-sync';
@@ -14,9 +15,15 @@ import { User } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
 
+/**
+ * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
+ * RealtimeAvatarStack과 RealtimeCursors에 props로 전달하면 됩니다.
+ */
 const MandalartPage = () => {
   // floating sheet가 열렸는지 닫혔는지 판별하는 변수
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
+  const username = useCurrentUserName();
+
   const [user, setUser] = useState<User | null>();
   const supabase = getBrowserClient();
   const queryClient = useQueryClient();
@@ -61,11 +68,15 @@ const MandalartPage = () => {
         />
       )}
       <div className='flex justify-end'>
-        <RealtimeAvatarStack roomName='avatar-room' />
+        <RealtimeAvatarStack roomName='avatar-room' username={username} />
       </div>
       <div className='grid w-fit grid-cols-3 grid-rows-3 gap-5 text-xs'>
         {/* 중앙 블록 */}
-        <MainBlock topics={data.mandalart_topics} info={data} />
+        <MainBlock
+          topics={data.mandalart_topics}
+          info={data}
+          className={'col-start-2 row-start-2 h-full'}
+        />
         {/* 나머지 블록 */}
         {data.mandalart_topics.map((topic) => {
           return (

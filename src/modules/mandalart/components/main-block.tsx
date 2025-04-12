@@ -5,6 +5,7 @@ import { MandalartType, TopicsType, TopicType } from '../types/realtime-type';
 type Props = {
   topics: TopicsType;
   info: MandalartType;
+  className: string;
 };
 
 /**
@@ -13,7 +14,7 @@ type Props = {
  * @param info - 처음 join된 상태의 모든 데이터
  * @returns
  */
-const MainBlock = ({ topics, info }: Props) => {
+const MainBlock = ({ topics, info, className }: Props) => {
   // props로 객체를 내려주기 위한 메모이제이션
   const memoizedCells = useMemo(() => {
     const cells = Array(9).fill(null);
@@ -30,7 +31,7 @@ const MainBlock = ({ topics, info }: Props) => {
   }, [topics, info]);
 
   return (
-    <div className='col-start-2 row-start-2 h-full'>
+    <div className={className}>
       <div className='grid grid-cols-3 grid-rows-3 gap-2'>
         {memoizedCells.map((cell, idx) => (
           <Cell
