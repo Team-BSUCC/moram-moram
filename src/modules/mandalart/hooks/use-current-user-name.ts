@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
  * @returns - 이름, 로그인이 안되어 있을 시 ?
  */
 export const useCurrentUserName = () => {
-  const [name, setName] = useState<string | null>(null);
+  const [name, setName] = useState<string>('');
 
   useEffect(() => {
     const fetchProfileName = async () => {

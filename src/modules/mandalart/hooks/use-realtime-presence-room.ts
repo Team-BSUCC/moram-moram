@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { useCurrentUserImage } from './use-current-user-image';
-import { useCurrentUserName } from './use-current-user-name';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 
 const supabase = getBrowserClient();
@@ -18,10 +17,10 @@ export type RealtimeUser = {
  * @param roomName - 채널명
  * @returns - 방에 있는 사용자들의 정보
  */
-export const useRealtimePresenceRoom = (roomName: string) => {
+export const useRealtimePresenceRoom = (roomName: string, nickname: string) => {
   // 현재 나의 이미지와 이름 받아오기
   const currentUserImage = useCurrentUserImage();
-  const currentUserName = useCurrentUserName();
+  const currentUserName = nickname;
 
   const [users, setUsers] = useState<Record<string, RealtimeUser>>({});
 

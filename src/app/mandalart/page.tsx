@@ -2,14 +2,20 @@
 
 import MainBlock from '@/modules/mandalart/components/main-block';
 import MandalartFloatingSheet from '@/modules/mandalart/components/mandalart-floating-sheet';
-import { RealtimeAvatarStack } from '@/modules/mandalart/components/realtime-avatar-stack';
 import SubBlock from '@/modules/mandalart/components/sub-block';
+import { useCurrentUserName } from '@/modules/mandalart/hooks/use-current-user-name';
 import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
+/**
+ * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
+ * RealtimeAvatarStack과 RealtimeCursors에 props로 전달하면 됩니다.
+ */
 const MandalartPage = () => {
   // floating sheet가 열렸는지 닫혔는지 판별하는 변수
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
+  const nickname = useCurrentUserName();
+
   /**
    * Memo: 동적 값으로 수정 예정
    */
