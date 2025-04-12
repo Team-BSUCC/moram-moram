@@ -10,8 +10,6 @@ import { BroadcastPayloadType } from '../types/realtime-type';
  * 'cell_index'라는 값이 포함되어 있으면 그건 mandalarts_subtopics 테이블의 row값,
  * 'cell_id'라는 값이 포함되어 있으면 그건 cell_todos 테이블의 row값입니다.
  * 그리고 아무 것도 해당되지 않으면 알 수가 없어요
- *
- * TODO : 지은님이 만들어주신 상수 QueryKey로 리팩토링하기
  */
 export const processQueryKey = (
   props: Omit<BroadcastPayloadType, 'category'>
