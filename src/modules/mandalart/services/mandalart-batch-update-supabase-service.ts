@@ -14,20 +14,6 @@ export const mandalartBatchUpdateSupabase = async (
   //일괄요청을 위한 배열,
   const updates = [];
 
-  // if (info.category === 'CORE') {
-  //   console.log(info);
-  //   const { mandalart_topics, ...res } = info;
-  //   payload = res;
-  // }
-  // if (info.category === 'TOPIC') {
-  //   const { mandalart_subtopics, content, isCenter, ...res } = info;
-  //   payload = res;
-  // }
-  // if (info.category === 'SUBTOPIC') {
-  //   const { cell_todos, isCenter, ...res } = info;
-  //   payload = res;
-  // }
-
   //Core 업데이트(update)
   if (broadcastStore.core.size > 0) {
     const coreData = Array.from(broadcastStore.core.entries())[0];

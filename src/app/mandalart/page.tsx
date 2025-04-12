@@ -34,9 +34,9 @@ const MandalartPage = () => {
     '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
   );
 
-  const testChannel = supabase.channel('testChannel');
+  const broadcastChannel = supabase.channel('broadcastChannel');
   useBatchUpdateTrigger();
-  testChannel
+  broadcastChannel
     .on('broadcast', { event: 'shout' }, (payload) => {
       queryClient.setQueryData(
         [payload.payload.category, payload.payload.id],
@@ -54,7 +54,7 @@ const MandalartPage = () => {
     };
     getUserData();
   }, []);
-  useRealtimeUserSync(testChannel);
+  useRealtimeUserSync(broadcastChannel);
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>error</div>;
 
@@ -75,7 +75,7 @@ const MandalartPage = () => {
         <MainBlock
           topics={data.mandalart_topics}
           info={data}
-          className={'col-start-2 row-start-2 h-full'}
+          className='col-start-2 row-start-2 h-full'
         />
         {/* 나머지 블록 */}
         {data.mandalart_topics.map((topic) => {
@@ -89,7 +89,9 @@ const MandalartPage = () => {
           );
         })}
         {/* 플로팅 시트 */}
-        {isVisible && <MandalartFloatingSheet channelReceiver={testChannel} />}
+        {isVisible && (
+          <MandalartFloatingSheet channelReceiver={broadcastChannel} />
+        )}
       </div>
     </div>
   );
