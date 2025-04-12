@@ -7,7 +7,7 @@ import { useRealtimePresenceRoom } from '../hooks/use-realtime-presence-room';
 
 type Props = {
   roomName: string;
-  nickname: string;
+  username: string;
 };
 
 /**
@@ -15,9 +15,9 @@ type Props = {
  * @param roomName - 연결할 방 이름
  * @param nickname - 사용자 닉네임
  */
-export const RealtimeAvatarStack = ({ roomName, nickname }: Props) => {
+export const RealtimeAvatarStack = ({ roomName, username }: Props) => {
   // 접속해있는 유저 정보 받아오기
-  const { users: usersMap } = useRealtimePresenceRoom(roomName, nickname);
+  const { users: usersMap } = useRealtimePresenceRoom(roomName, username);
 
   //[{name: 이름, image: 이미지 주소}, {} ...] 형태로 반환
   const avatars = useMemo(() => {

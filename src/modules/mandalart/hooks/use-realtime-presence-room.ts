@@ -17,10 +17,10 @@ export type RealtimeUser = {
  * @param roomName - 채널명
  * @returns - 방에 있는 사용자들의 정보
  */
-export const useRealtimePresenceRoom = (roomName: string, nickname: string) => {
+export const useRealtimePresenceRoom = (roomName: string, username: string) => {
   // 현재 나의 이미지와 이름 받아오기
   const currentUserImage = useCurrentUserImage();
-  const currentUserName = nickname;
+  const currentUserName = username;
 
   const [users, setUsers] = useState<Record<string, RealtimeUser>>({});
 
