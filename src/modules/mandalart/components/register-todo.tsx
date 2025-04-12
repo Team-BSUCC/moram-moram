@@ -11,7 +11,7 @@ type TodoProps = {
  * @returns
  */
 const RegisterTodo = ({ todo }: TodoProps) => {
-  useTodoDataQuery(todo.title ?? '', todo.id);
+  useTodoDataQuery(todo ?? '', todo.id);
   return null;
 };
 

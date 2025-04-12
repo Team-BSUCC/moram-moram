@@ -4,7 +4,11 @@ import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { useMemo, useState } from 'react';
-import { CellInfoType, TodoType } from '../types/realtime-type';
+import {
+  CellInfoType,
+  TodoPayloadType,
+  TodoType,
+} from '../types/realtime-type';
 import TodoItem from './todo-item';
 import { getDataCategory } from '../services/get-data-category';
 import TopicGroup from './topic-group';
@@ -12,6 +16,9 @@ import SubtopicGroup from './subtopic-group';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useBroadcastMutation } from '../hooks/use-broadcast-mutation';
 import { throttleMutate } from '../services/throttle-mutate';
+import { useTodoListCacheQuery } from '../hooks/use-mandalart-data-query';
+import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
+import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -27,6 +34,14 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
 
   const info = getDataCategory(
     useFloatingSheetStore((state) => state.info) as CellInfoType
+  );
+
+  const { data: todoList } = useTodoListCacheQuery(info.id);
+  const todoListCacheArray = (todoList ?? []) as TodoPayloadType[];
+
+  const { mutate: createTodo } = useTodoBroadcastMutation(
+    channelReceiver,
+    createNewTodoRowValue(info.id)
   );
 
   const { mutate } = useBroadcastMutation(channelReceiver, { ...info, value });
@@ -66,15 +81,24 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
         {info.category === 'SUBTOPIC' && (
           <div>
             <Text>할 일</Text>
-            {info.cell_todos?.map((todo: TodoType) => (
-              <TodoItem key={todo.id} id={todo.id} />
+            {todoListCacheArray.map((todo: TodoType) => (
+              <TodoItem
+                key={todo.id}
+                id={todo.id}
+                cellId={todo}
+                channelReceiver={channelReceiver}
+              />
             ))}
+
+            <Button
+              variant='outline'
+              size='default'
+              onClick={() => createTodo()}
+            >
+              투두 추가하기
+            </Button>
           </div>
         )}
-
-        <Text>새 투두 추가</Text>
-        <Input type='text' placeholder='할 일을 입력하세요' />
-        <Button>추가하기</Button>
       </div>
     </FloatingSheet>
   );
