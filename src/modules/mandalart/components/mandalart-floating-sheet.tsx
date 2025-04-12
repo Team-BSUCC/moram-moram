@@ -64,7 +64,11 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
           <div>
             <Text>대주제</Text>
             {info.mandalart_topics?.map((topic) => (
-              <TopicGroup key={topic.id} topic={topic} />
+              <TopicGroup
+                key={topic.id}
+                topic={topic}
+                channelReceiver={channelReceiver}
+              />
             ))}
           </div>
         )}
@@ -73,7 +77,11 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
           <div>
             <Text>소주제</Text>
             {info.mandalart_subtopics?.map((sub) => (
-              <SubtopicGroup key={sub.id} sub={sub} />
+              <SubtopicGroup
+                key={sub.id}
+                sub={sub}
+                channelReceiver={channelReceiver}
+              />
             ))}
           </div>
         )}
