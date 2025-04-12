@@ -29,34 +29,26 @@ const MandalartPage = () => {
   if (isError) return <div>error</div>;
 
   return (
-    <div>
-      <RealtimeAvatarStack roomName={'testChannel'} username={username} />
-      <RealtimeCursors
-        roomName='cursor'
-        username={username}
-        userId={crypto.randomUUID()}
+    <div className='grid w-fit grid-cols-3 grid-rows-3 gap-5 text-xs'>
+      {/* 중앙 블록 */}
+      <MainBlock
+        topics={data.mandalart_topics}
+        info={data}
+        className={'col-start-2 row-start-2 h-full'}
       />
-      <div className='grid w-fit grid-cols-3 grid-rows-3 gap-5 text-xs'>
-        {/* 중앙 블록 */}
-        <MainBlock
-          topics={data.mandalart_topics}
-          info={data}
-          className={'col-start-2 row-start-2 h-full'}
-        />
-        {/* 나머지 블록 */}
-        {data.mandalart_topics.map((topic) => {
-          return (
-            <SubBlock
-              key={topic.id}
-              title={topic.topic}
-              topic={topic}
-              subTopics={topic.mandalart_subtopics}
-            />
-          );
-        })}
-        {/* 플로팅 시트 */}
-        {isVisible && <MandalartFloatingSheet />}
-      </div>
+      {/* 나머지 블록 */}
+      {data.mandalart_topics.map((topic) => {
+        return (
+          <SubBlock
+            key={topic.id}
+            title={topic.topic}
+            topic={topic}
+            subTopics={topic.mandalart_subtopics}
+          />
+        );
+      })}
+      {/* 플로팅 시트 */}
+      {isVisible && <MandalartFloatingSheet />}
     </div>
   );
 };
