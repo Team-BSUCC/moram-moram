@@ -10,7 +10,7 @@ import { getDataCategory } from '../services/get-data-category';
 import TopicGroup from './topic-group';
 import SubtopicGroup from './subtopic-group';
 import { RealtimeChannel } from '@supabase/supabase-js';
-import { useEditMutation } from '../hooks/use-edit-mutation';
+import { useBroadcastMutation } from '../hooks/use-broadcast-mutation';
 import { throttleMutate } from '../services/throttle-mutate';
 
 /**
@@ -29,7 +29,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: Props) => {
     useFloatingSheetStore((state) => state.info) as CellInfoType
   );
 
-  const { mutate } = useEditMutation(channelReceiver, { ...info, value });
+  const { mutate } = useBroadcastMutation(channelReceiver, { ...info, value });
   const throttledMutate = useMemo(() => throttleMutate(mutate, 100), [mutate]);
 
   return (
