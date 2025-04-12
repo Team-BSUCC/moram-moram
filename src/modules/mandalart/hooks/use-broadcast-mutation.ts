@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { processQueryKey } from '../services/process-query-key';
-import { broadcastEventSender } from '../services/broadcast-event-sender';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { BroadcastPayloadType } from '../types/realtime-type';
+import { useBroadcastStore } from './use-broadcast-store';
+import { getQueryKey } from '../services/get-data-category';
 
 /**
  * 클라이언트 상태의 수정을 서버에 broadcast해주는 mutation
@@ -10,26 +10,38 @@ import { BroadcastPayloadType } from '../types/realtime-type';
  * @param props mutation이 일어날 객체의 row값 + 변화된 현재 값 value
  * @returns 사실 mutate만 뽑아서 쓰면 될 것 같다... 다른 요소들은 필요한가? 잘 모르겠음!
  */
-export const useEditMutation = (
+export const useBroadcastMutation = (
   myChannel: RealtimeChannel,
-  props: Partial<BroadcastPayloadType>
+  payload: BroadcastPayloadType
 ) => {
   const queryClient = useQueryClient();
-
-  const stateKey: readonly unknown[] = processQueryKey(props);
+  const addBroadcastStore = useBroadcastStore(
+    (state) => state.addBroadcastStore
+  );
 
   const mutationUpdateCache = useMutation({
     onMutate: async () => {
-      queryClient.setQueryData(stateKey, props.value);
+      queryClient.setQueryData(getQueryKey(payload), payload.value);
     },
+
     mutationFn: async () => {
-      broadcastEventSender({ myChannel, stateKey, props });
+      //소주제 cell_todos, isCenter 삭제
+      //대주제 mandalart_subtopics, content, isCenter
+      //핵심주제 mandalart_subtopics,
+      if (!myChannel) throw new Error('채널없음');
+      await myChannel.send({
+        type: 'broadcast',
+        event: 'shout',
+        payload,
+      });
+
+      addBroadcastStore(payload);
     },
-    onError: () => {
+    onError: (err) => {
       /**
        * TODO: error 핸들링 sentry 리팩토링
        */
-      console.error('broadcast에 오류가 발생했습니다.');
+      console.error('broadcast에 오류가 발생했습니다.', err);
     },
   });
 

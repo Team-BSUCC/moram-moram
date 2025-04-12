@@ -1,17 +1,77 @@
+export type MandalartType = Tables<'mandalarts'> & {
+  mandalart_topics: TopicsType;
+};
+
+export type TopicsType = (Tables<'mandalart_topics'> & {
+  mandalart_subtopics: (Tables<'mandalart_subtopics'> & {
+    cell_todos: TodoType[];
+  })[];
+})[];
+
+export type TodoType = Tables<'cell_todos'>;
+export type TopicType = TopicsType[number];
+export type SubTopicType = TopicType['mandalart_subtopics'][number];
+type BaseCellInfoType = {
+  content?: string;
+  title?: string;
+  topic?: string;
+  isCenter?: boolean;
+};
+
+// 핵심주제
+type CoreCellInfoType = MandalartType & BaseCellInfoType;
+
+// 중심 대주제
+type TopicCenterInfoType = Omit<TopicType, 'mandalart_subtopics'> &
+  BaseCellInfoType;
+
+// 중심이 아닌 대주제 (중간 블록)
+type TopicNotCenterInfoType = TopicType & BaseCellInfoType;
+
+// 소주제
+type SubTopicCellInfoType = SubTopicType & BaseCellInfoType;
+
+// CellInfo 통합 타입
+export type CellInfoType =
+  | CoreCellInfoType
+  | TopicCenterInfoType
+  | TopicNotCenterInfoType
+  | SubTopicCellInfoType
+  | (TodoType & BaseCellInfoType);
+
+// 카테고리가 있는 타입들
+type CellInfoWithCoreCategoryType = CoreCellInfoType & {
+  category: 'CORE';
+};
+
+type CellInfoWithTopicCategoryType = (
+  | TopicCenterInfoType
+  | TopicNotCenterInfoType
+) & {
+  category: 'TOPIC';
+  mandalart_subtopics: SubTopicType[];
+};
+
+type CellInfoWithSubtopicCategoryType = SubTopicCellInfoType & {
+  category: 'SUBTOPIC';
+  cell_todos?: TodoType[];
+};
+
+export type ShowInfoType =
+  | CellInfoWithCoreCategoryType
+  | CellInfoWithTopicCategoryType
+  | CellInfoWithSubtopicCategoryType;
 import { Tables } from '@/shared/types/database.types';
 
-export type CorePayloadType = Tables<'mandalarts'> & {
-  category: 'CORE';
+export type CorePayloadType = CellInfoWithCoreCategoryType & {
   value: string;
 };
 
-export type TopicPayloadType = Tables<'mandalart_topics'> & {
-  category: 'TOPIC';
+export type TopicPayloadType = CellInfoWithTopicCategoryType & {
   value: string;
 };
 
-export type SubtopicPayloadType = Tables<'mandalart_subtopics'> & {
-  category: 'SUBTOPIC';
+export type SubtopicPayloadType = CellInfoWithSubtopicCategoryType & {
   value: string;
 };
 
@@ -28,53 +88,6 @@ export type BroadcastPayloadType =
   | TodoPayloadType;
 
 export type PartialBroadcastPayloadType = Partial<BroadcastPayloadType>;
-
-export type MandalartType = Tables<'mandalarts'> & {
-  mandalart_topics: TopicsType;
-};
-
-export type TopicsType = (Tables<'mandalart_topics'> & {
-  mandalart_subtopics: (Tables<'mandalart_subtopics'> & {
-    cell_todos: TodoType[];
-  })[];
-})[];
-
-export type TodoType = Tables<'cell_todos'>;
-
-export type TopicType = TopicsType[number];
-
-export type SubTopicType = TopicType['mandalart_subtopics'][number];
-
-export type CellInfo =
-  | (MandalartType & { isCenter: true; title: string })
-  | (Omit<TopicType, 'mandalart_subtopics'> & { isCenter: true })
-  | (TopicType & { isCenter: false })
-  | (SubTopicType & { isCenter: false })
-  | TodoType;
-
-export type ExtendedCellInfo = CellInfo & {
-  cell_todos?: TodoType[];
-  content?: string;
-  title?: string;
-  topic?: string;
-};
-
-export type ShowInfoType = CoreInfo | TopicInfo | SubtopicInfo;
-
-type CoreInfo = ExtendedCellInfo & {
-  category: 'CORE';
-  mandalart_topics: TopicType[];
-};
-
-type TopicInfo = ExtendedCellInfo & {
-  category: 'TOPIC';
-  mandalart_subtopics: SubTopicType[];
-};
-
-type SubtopicInfo = ExtendedCellInfo & {
-  category: 'SUBTOPIC';
-  cell_todos?: TodoType[];
-};
 
 export type BroadcastStoreType = {
   core: Map<string, CorePayloadType>;

@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import Cell from './cell';
 import { MandalartType, TopicsType, TopicType } from '../types/realtime-type';
 
-type Props = {
+type MainBlockProps = {
   topics: TopicsType;
   info: MandalartType;
   className: string;
@@ -14,7 +14,7 @@ type Props = {
  * @param info - 처음 join된 상태의 모든 데이터
  * @returns
  */
-const MainBlock = ({ topics, info, className }: Props) => {
+const MainBlock = ({ topics, info, className }: MainBlockProps) => {
   // props로 객체를 내려주기 위한 메모이제이션
   const memoizedCells = useMemo(() => {
     const cells = Array(9).fill(null);

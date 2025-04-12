@@ -2,7 +2,7 @@ import { useMemo } from 'react';
 import Cell from './cell';
 import { SubTopicType, TopicType } from '../types/realtime-type';
 
-type Props = {
+type SubBlockProps = {
   title: string;
   topic: TopicType;
   subTopics: SubTopicType[];
@@ -15,7 +15,7 @@ type Props = {
  * @param subTopics - 소주제 배열
  * @returns
  */
-const SubBlock = ({ title, topic, subTopics }: Props) => {
+const SubBlock = ({ title, topic, subTopics }: SubBlockProps) => {
   // props로 객체를 넘겨주기 위한 메모이제이션
   const memoizedCells = useMemo(() => {
     const gridCells = Array(9).fill(null);
@@ -25,7 +25,6 @@ const SubBlock = ({ title, topic, subTopics }: Props) => {
       isCenter: true,
       ...topic,
     };
-
     // 나머지 셀에 서브토픽 배치
     subTopics.forEach((subTopic: SubTopicType, idx: number) => {
       // 중앙 위치는 건너뛰기

@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchGetMandalartsData } from '../services/fetch-get-mandalarts-data';
-import { ExtendedCellInfo, MandalartType } from '../types/realtime-type';
+import { CellInfoType, MandalartType } from '../types/realtime-type';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { getQueryKey } from '../services/get-data-category';
 
@@ -46,7 +46,7 @@ export const useTodoCacheQuery = (id: string) => {
   });
 };
 
-export const useCellCacheQuery = (info: ExtendedCellInfo) => {
+export const useCellCacheQuery = (info: CellInfoType) => {
   return useQuery({
     queryKey: getQueryKey(info),
     queryFn: () => Promise.resolve(null),

@@ -1,16 +1,16 @@
 import Button from '@/components/commons/button';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import RegisterTodo from './register-todo';
-import { ExtendedCellInfo } from '../types/realtime-type';
+import { CellInfoType } from '../types/realtime-type';
 import React, { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '../services/get-data-category';
 import { useCellCacheQuery } from '../hooks/use-mandalart-data-query';
 
-type Props = {
+type CellProps = {
   value: string;
   className?: string;
-  info: ExtendedCellInfo;
+  info: CellInfoType;
 };
 
 /**
@@ -20,7 +20,7 @@ type Props = {
  * @param info - 셀에 대한 모든 DB 컬럼 정보
  * @returns
  */
-const Cell = ({ value, className, info }: Props) => {
+const Cell = ({ value, className, info }: CellProps) => {
   const queryClient = useQueryClient();
   useEffect(() => {
     // tanstack query key에 셀 정보 저장하는 로직
@@ -50,9 +50,10 @@ const Cell = ({ value, className, info }: Props) => {
         </div>
       </Button>
       {/* Todo key 등록을 위한 등록 컴포넌트 */}
-      {info.cell_todos?.map((todo, idx) => {
-        return <RegisterTodo key={idx} todo={todo} />;
-      })}
+      {'cell_todos' in info &&
+        info.cell_todos?.map((todo, idx) => {
+          return <RegisterTodo key={idx} todo={todo} />;
+        })}
     </>
   );
 };
