@@ -25,7 +25,6 @@ const SubBlock = ({ title, topic, subTopics }: Props) => {
       isCenter: true,
       ...topic,
     };
-
     // 나머지 셀에 서브토픽 배치
     subTopics.forEach((subTopic: SubTopicType, idx: number) => {
       // 중앙 위치는 건너뛰기

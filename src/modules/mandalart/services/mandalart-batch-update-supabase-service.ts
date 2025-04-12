@@ -14,12 +14,26 @@ export const mandalartBatchUpdateSupabase = async (
   //일괄요청을 위한 배열,
   const updates = [];
 
+  // if (info.category === 'CORE') {
+  //   console.log(info);
+  //   const { mandalart_topics, ...res } = info;
+  //   payload = res;
+  // }
+  // if (info.category === 'TOPIC') {
+  //   const { mandalart_subtopics, content, isCenter, ...res } = info;
+  //   payload = res;
+  // }
+  // if (info.category === 'SUBTOPIC') {
+  //   const { cell_todos, isCenter, ...res } = info;
+  //   payload = res;
+  // }
+
   //Core 업데이트(update)
   if (broadcastStore.core.size > 0) {
     const coreData = Array.from(broadcastStore.core.entries())[0];
     const coreUpdate = supabase
       .from('mandalarts')
-      .update({ title: coreData[1].title })
+      .update({ title: coreData[1].value })
       .eq('id', coreData[0]);
     updates.push(coreUpdate);
   }
@@ -29,8 +43,14 @@ export const mandalartBatchUpdateSupabase = async (
     const topicData = Array.from(broadcastStore.topic.values());
     const topicUpdate = supabase.from('mandalart_topics').upsert(
       topicData.map((payloadTopic) => {
-        //category 사용 X
-        const { category, value, ...topicRowInfo } = payloadTopic;
+        const {
+          category,
+          mandalart_subtopics,
+          content,
+          isCenter,
+          value,
+          ...topicRowInfo
+        } = payloadTopic;
         return { ...topicRowInfo, topic: value };
       })
     );
@@ -42,8 +62,8 @@ export const mandalartBatchUpdateSupabase = async (
     const subTopicData = Array.from(broadcastStore.subTopic.values());
     const subTopicUpdate = supabase.from('mandalart_subtopics').upsert(
       subTopicData.map((payloadSubtopic) => {
-        //category 사용 X
-        const { category, value, ...subtopicRowInfo } = payloadSubtopic;
+        const { category, cell_todos, isCenter, value, ...subtopicRowInfo } =
+          payloadSubtopic;
         return { ...subtopicRowInfo, content: value };
       })
     );

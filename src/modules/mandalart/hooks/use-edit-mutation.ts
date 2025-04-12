@@ -1,12 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { processQueryKey } from '../services/process-query-key';
-import { broadcastEventSender } from '../services/broadcast-event-sender';
 import { RealtimeChannel } from '@supabase/supabase-js';
-import {
-  BroadcastPayloadType,
-  CellInfoType,
-  ShowInfoType,
-} from '../types/realtime-type';
+import { BroadcastPayloadType, ShowInfoType } from '../types/realtime-type';
 import { useBroadcastStore } from './use-broadcast-store';
 import { getQueryKey } from '../services/get-data-category';
 
@@ -31,6 +25,9 @@ export const useEditMutation = (
     },
 
     mutationFn: async () => {
+      //소주제 cell_todos, isCenter 삭제
+      //대주제 mandalart_subtopics, content, isCenter
+      //핵심주제 mandalart_subtopics,
       await myChannel.send({
         type: 'broadcast',
         event: 'shout',

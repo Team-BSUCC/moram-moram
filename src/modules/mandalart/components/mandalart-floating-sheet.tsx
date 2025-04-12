@@ -4,11 +4,7 @@ import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { useMemo, useState } from 'react';
-import {
-  BroadcastPayloadType,
-  CellInfoType,
-  TodoType,
-} from '../types/realtime-type';
+import { CellInfoType, TodoType } from '../types/realtime-type';
 import TodoItem from './todo-item';
 import { getDataCategory } from '../services/get-data-category';
 import TopicGroup from './topic-group';

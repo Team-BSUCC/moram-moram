@@ -5,6 +5,7 @@ import MandalartFloatingSheet from '@/modules/mandalart/components/mandalart-flo
 import { RealtimeAvatarStack } from '@/modules/mandalart/components/realtime-avatar-stack';
 import { RealtimeCursors } from '@/modules/mandalart/components/realtime-cursors';
 import SubBlock from '@/modules/mandalart/components/sub-block';
+import { useBatchUpdateTrigger } from '@/modules/mandalart/hooks/use-batch-update-trigger';
 import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
 import { useRealtimeUserSync } from '@/modules/mandalart/hooks/use-realtime-user-sync';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
@@ -27,7 +28,7 @@ const MandalartPage = () => {
   );
 
   const testChannel = supabase.channel('testChannel');
-
+  useBatchUpdateTrigger();
   testChannel
     .on('broadcast', { event: 'shout' }, (payload) => {
       queryClient.setQueryData(
@@ -44,7 +45,6 @@ const MandalartPage = () => {
       } = await supabase.auth.getUser();
       setUser(user);
     };
-
     getUserData();
   }, []);
   useRealtimeUserSync(testChannel);

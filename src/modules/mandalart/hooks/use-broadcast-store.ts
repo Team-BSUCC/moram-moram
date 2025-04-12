@@ -4,7 +4,6 @@ import {
   BroadcastStoreType,
   CorePayloadType,
   FormatBroadcastStorePayloadType,
-  PartialBroadcastPayloadType,
   SubtopicPayloadType,
   TodoPayloadType,
   TopicPayloadType,
