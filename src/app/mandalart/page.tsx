@@ -11,9 +11,8 @@ import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-d
 import { useRealtimeUserSync } from '@/modules/mandalart/hooks/use-realtime-user-sync';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
-import { User } from '@supabase/supabase-js';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useCurrentUserId } from '@/modules/mandalart/hooks/use-current-user-id';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -23,8 +22,9 @@ const MandalartPage = () => {
   // floating sheet가 열렸는지 닫혔는지 판별하는 변수
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const username = useCurrentUserName();
+  const { userId, isReady } = useCurrentUserId();
 
-  const [user, setUser] = useState<User | null>();
+  // const [user, setUser] = useState<User | null>();
   const supabase = getBrowserClient();
   const queryClient = useQueryClient();
   /**
@@ -45,28 +45,20 @@ const MandalartPage = () => {
     })
     .subscribe();
 
-  useEffect(() => {
-    const getUserData = async () => {
-      const {
-        data: { user },
-      } = await supabase.auth.getUser();
-      setUser(user);
-    };
-    getUserData();
-  }, []);
   useRealtimeUserSync(broadcastChannel);
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>error</div>;
 
   return (
     <div>
-      {user && (
+      {isReady && (
         <RealtimeCursors
           roomName='cursor-room'
           username={username}
-          userId={user.id}
+          userId={userId}
         />
       )}
+
       <div className='flex justify-end'>
         <RealtimeAvatarStack roomName='avatar-room' username={username} />
       </div>
