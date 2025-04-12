@@ -1,11 +1,11 @@
 import CheckBox from '@/components/commons/check-box';
 import { useTodoCacheQuery } from '../hooks/use-mandalart-data-query';
 
-type Props = {
+type TodoItemProps = {
   id: string;
 };
 
-const TodoItem = ({ id }: Props) => {
+const TodoItem = ({ id }: TodoItemProps) => {
   const { data: todo } = useTodoCacheQuery(id);
   return (
     <div className='flex items-center'>

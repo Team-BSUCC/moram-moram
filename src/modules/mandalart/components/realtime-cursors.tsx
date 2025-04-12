@@ -5,6 +5,12 @@ import { useRealtimeCursors } from '../hooks/use-realtime-cursors';
 
 const THROTTLE_MS = 50;
 
+type RealtimeCursorsProps = {
+  roomName: string;
+  username: string;
+  userId: string;
+};
+
 /**
  * 실시간 마우스 커서 UI 컴포넌트
  * @param roomName - 채널명
@@ -16,11 +22,7 @@ export const RealtimeCursors = ({
   roomName,
   username,
   userId,
-}: {
-  roomName: string;
-  username: string;
-  userId: string;
-}) => {
+}: RealtimeCursorsProps) => {
   const { cursors } = useRealtimeCursors({
     roomName,
     username,

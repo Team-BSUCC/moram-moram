@@ -1,7 +1,7 @@
 import { TodoType } from '../types/realtime-type';
 import { useTodoDataQuery } from '../hooks/use-mandalart-data-query';
 
-type Props = {
+type TodoProps = {
   todo: TodoType;
 };
 
@@ -10,7 +10,7 @@ type Props = {
  * @param todo - 개별 투두 데이터
  * @returns
  */
-const RegisterTodo = ({ todo }: Props) => {
+const RegisterTodo = ({ todo }: TodoProps) => {
   useTodoDataQuery(todo.title ?? '', todo.id);
   return null;
 };

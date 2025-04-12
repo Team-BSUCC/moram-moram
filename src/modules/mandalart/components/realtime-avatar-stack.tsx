@@ -5,7 +5,7 @@ import { AvatarStack } from '@/modules/mandalart/components/avatar-stack';
 import { useMemo } from 'react';
 import { useRealtimePresenceRoom } from '../hooks/use-realtime-presence-room';
 
-type Props = {
+type AvatarProps = {
   roomName: string;
   username: string;
 };
@@ -15,7 +15,7 @@ type Props = {
  * @param roomName - 연결할 방 이름
  * @param nickname - 사용자 닉네임
  */
-export const RealtimeAvatarStack = ({ roomName, username }: Props) => {
+export const RealtimeAvatarStack = ({ roomName, username }: AvatarProps) => {
   // 접속해있는 유저 정보 받아오기
   const { users: usersMap } = useRealtimePresenceRoom(roomName, username);
 

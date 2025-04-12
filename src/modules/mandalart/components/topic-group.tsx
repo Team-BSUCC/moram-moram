@@ -3,7 +3,11 @@ import { TopicType } from '../types/realtime-type';
 import SubtopicGroup from './subtopic-group';
 import { useTopicCacheQuery } from '../hooks/use-mandalart-data-query';
 
-const TopicGroup = ({ topic }: { topic: TopicType }) => {
+type TopicGroupProps = {
+  topic: TopicType;
+};
+
+const TopicGroup = ({ topic }: TopicGroupProps) => {
   const { data: topicName } = useTopicCacheQuery(topic.id);
   return (
     <div className='pl-2'>

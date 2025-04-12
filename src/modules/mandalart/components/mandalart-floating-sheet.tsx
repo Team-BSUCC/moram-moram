@@ -18,10 +18,10 @@ import { throttleMutate } from '../services/throttle-mutate';
  * @returns
  */
 
-type Props = {
+type FloatingSheetProps = {
   channelReceiver: RealtimeChannel;
 };
-const MandalartFloatingSheet = ({ channelReceiver }: Props) => {
+const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   // 클릭한 셀의 정보 받아오기
   const [value, setValue] = useState<string>('');
 

@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '../services/get-data-category';
 import { useCellCacheQuery } from '../hooks/use-mandalart-data-query';
 
-type Props = {
+type CellProps = {
   value: string;
   className?: string;
   info: CellInfoType;
@@ -20,7 +20,7 @@ type Props = {
  * @param info - 셀에 대한 모든 DB 컬럼 정보
  * @returns
  */
-const Cell = ({ value, className, info }: Props) => {
+const Cell = ({ value, className, info }: CellProps) => {
   const queryClient = useQueryClient();
   useEffect(() => {
     // tanstack query key에 셀 정보 저장하는 로직

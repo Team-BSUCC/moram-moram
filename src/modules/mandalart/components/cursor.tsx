@@ -1,17 +1,14 @@
 import { cn } from '@/lib/utils';
 import { Pencil } from 'lucide-react';
 
-export const Cursor = ({
-  className,
-  style,
-  color,
-  name,
-}: {
+type CursorProps = {
   className?: string;
   style?: React.CSSProperties;
   color: string;
   name: string;
-}) => {
+};
+
+export const Cursor = ({ className, style, color, name }: CursorProps) => {
   return (
     <div className={cn('pointer-events-none', className)} style={style}>
       <Pencil color={color} fill={color} size={30} />
