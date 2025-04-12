@@ -15,11 +15,15 @@ export const useCurrentUserName = () => {
         console.error(error);
       }
 
-      setName(data.session?.user.user_metadata.nickname ?? '?');
+      setName(
+        data.session?.user.user_metadata.nickname ??
+          data.session?.user.user_metadata.name ??
+          `게스트-${Math.floor(Math.random() * 1000)}`
+      );
     };
 
     fetchProfileName();
   }, []);
 
-  return name || '?';
+  return name;
 };
