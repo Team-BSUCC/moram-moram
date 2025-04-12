@@ -63,7 +63,7 @@ const MandalartPage = () => {
       {user && (
         <RealtimeCursors
           roomName='cursor-room'
-          username={user?.user_metadata.nickname}
+          username={username}
           userId={user.id}
         />
       )}
