@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
  * @returns - 이름, 로그인이 안되어 있을 시 ?
  */
 export const useCurrentUserName = () => {
-  const [name, setName] = useState<string | null>(null);
+  const [name, setName] = useState<string>('');
 
   useEffect(() => {
     const fetchProfileName = async () => {
@@ -15,11 +15,15 @@ export const useCurrentUserName = () => {
         console.error(error);
       }
 
-      setName(data.session?.user.user_metadata.nickname ?? '?');
+      setName(
+        data.session?.user.user_metadata.nickname ??
+          data.session?.user.user_metadata.name ??
+          `게스트-${Math.floor(Math.random() * 1000)}`
+      );
     };
 
     fetchProfileName();
   }, []);
 
-  return name || '?';
+  return name;
 };

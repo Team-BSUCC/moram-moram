@@ -2,13 +2,22 @@
 
 import MainBlock from '@/modules/mandalart/components/main-block';
 import MandalartFloatingSheet from '@/modules/mandalart/components/mandalart-floating-sheet';
+import { RealtimeAvatarStack } from '@/modules/mandalart/components/realtime-avatar-stack';
+import { RealtimeCursors } from '@/modules/mandalart/components/realtime-cursors';
 import SubBlock from '@/modules/mandalart/components/sub-block';
+import { useCurrentUserName } from '@/modules/mandalart/hooks/use-current-user-name';
 import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
+/**
+ * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
+ * RealtimeAvatarStack과 RealtimeCursors에 props로 전달하면 됩니다.
+ */
 const MandalartPage = () => {
   // floating sheet가 열렸는지 닫혔는지 판별하는 변수
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
+  const username = useCurrentUserName();
+
   /**
    * Memo: 동적 값으로 수정 예정
    */
@@ -22,7 +31,11 @@ const MandalartPage = () => {
   return (
     <div className='grid w-fit grid-cols-3 grid-rows-3 gap-5 text-xs'>
       {/* 중앙 블록 */}
-      <MainBlock topics={data.mandalart_topics} info={data} />
+      <MainBlock
+        topics={data.mandalart_topics}
+        info={data}
+        className={'col-start-2 row-start-2 h-full'}
+      />
       {/* 나머지 블록 */}
       {data.mandalart_topics.map((topic) => {
         return (
