@@ -18,23 +18,17 @@ export const useBroadcastMutation = (
   const addBroadcastStore = useBroadcastStore(
     (state) => state.addBroadcastStore
   );
+  queryClient.setQueryData(getQueryKey(payload), payload.value);
 
   const mutationUpdateCache = useMutation({
-    onMutate: async () => {
-      queryClient.setQueryData(getQueryKey(payload), payload.value);
-    },
-
+    onMutate: () => {},
     mutationFn: async () => {
-      //소주제 cell_todos, isCenter 삭제
-      //대주제 mandalart_subtopics, content, isCenter
-      //핵심주제 mandalart_subtopics,
       if (!myChannel) throw new Error('채널없음');
       await myChannel.send({
         type: 'broadcast',
         event: 'shout',
         payload,
       });
-
       addBroadcastStore(payload);
     },
     onError: (err) => {

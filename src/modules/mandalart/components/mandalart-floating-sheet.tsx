@@ -3,7 +3,7 @@ import FloatingSheet from '@/components/commons/floating-sheet';
 import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { CellInfoType, TodoType } from '../types/realtime-type';
 import TodoItem from './todo-item';
 import { getDataCategory } from '../services/get-data-category';
@@ -11,7 +11,7 @@ import TopicGroup from './topic-group';
 import SubtopicGroup from './subtopic-group';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useBroadcastMutation } from '../hooks/use-broadcast-mutation';
-import { throttleMutate } from '../services/throttle-mutate';
+import { useThrottleMutate } from '../hooks/use-throttle-mutate';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -30,7 +30,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   );
 
   const { mutate } = useBroadcastMutation(channelReceiver, { ...info, value });
-  const throttledMutate = useMemo(() => throttleMutate(mutate, 100), [mutate]);
+  const throttleMutate = useThrottleMutate(mutate, 5000);
 
   return (
     <FloatingSheet>
@@ -40,7 +40,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
           value={value}
           onChange={(e) => {
             setValue(e.target.value);
-            throttledMutate();
+            throttleMutate();
           }}
           placeholder={info.content || info.title || info.topic || ''}
         />
