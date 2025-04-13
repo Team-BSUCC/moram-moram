@@ -8,7 +8,7 @@ import Input from '@/components/commons/input';
 import RoundButton from '@/components/commons/round-button';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
-import { throttleMutate } from '../services/throttle-mutate';
+import { useThrottleMutate } from '../hooks/use-throttle-mutate';
 
 type TodoItemProps = {
   id: string;
@@ -40,8 +40,8 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
     channelReceiver,
     cellId as TodoPayloadType
   );
-  const throttledMutate = useMemo(() => throttleMutate(mutate, 300), [mutate]);
-  const deleteMutate = useMemo(() => throttleMutate(mutate, 50), [mutate]);
+  const throttledMutate = useThrottleMutate(mutate, 300);
+  const deleteMutate = useThrottleMutate(mutate, 50);
 
   return (
     <div className='flex items-center'>
