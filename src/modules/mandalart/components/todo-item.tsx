@@ -18,14 +18,23 @@ type TodoItemProps = {
 
 const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
   const queryClient = useQueryClient();
+  const [valuePayload, setValuePayload] = useState<string>('');
 
   const { data: todo } = useTodoCacheQuery(id);
   const todoRow = (todo ?? {}) as TodoPayloadType;
 
   const getInitialValue = () => todoRow.value || todoRow.title || '';
   const [value, setValue] = useState<string>(getInitialValue());
+  const memoValue = useMemo(
+    () => setValuePayload(todoRow.value),
+    [todoRow.value]
+  );
 
   const [done, setDone] = useState<boolean>(todoRow.is_done ?? false);
+  const memoIsDone = useMemo(
+    () => setDone(todoRow.is_done ?? false),
+    [todoRow.is_done]
+  );
 
   const { mutate } = useTodoBroadcastMutation(
     channelReceiver,
@@ -60,7 +69,7 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
         }}
       />
       <Input
-        value={value}
+        value={valuePayload || value}
         placeholder='TODO를 작성해주세요.'
         onChange={(e) => {
           const newValue = e.target.value;
