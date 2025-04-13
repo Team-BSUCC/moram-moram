@@ -52,7 +52,7 @@ export const useBroadcastStore = create<BroadcastStoreStateType>((_, get) => ({
   },
 
   /**
-   * @todo : 업데이트성공시 뜨는 알럿 토스트 창으로 수정할 것
+   * @todo : 업데이트성공시 뜨는 코솔 토스트 창으로 수정할 것
    * 브로드캐스트 스토어에 저장된 업데이트 내용을 Supabase에 일괄 적용하는 함수
    * 성공 시 브로드캐스트 스토어를 초기화함
    */
@@ -68,13 +68,7 @@ export const useBroadcastStore = create<BroadcastStoreStateType>((_, get) => ({
         return;
       }
       await mandalartBatchUpdateSupabase(currentStore);
-      Swal.fire({
-        position: 'top-end',
-        icon: 'success',
-        title: '저장완료',
-        showConfirmButton: false,
-        timer: 1500,
-      });
+      console.log('업데이트됨');
       // 업데이트 후 스토어 초기화
       currentStore.core.clear();
       currentStore.topic.clear();
