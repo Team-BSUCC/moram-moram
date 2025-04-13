@@ -30,7 +30,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   );
 
   const { mutate } = useBroadcastMutation(channelReceiver, { ...info, value });
-  const throttleMutate = useThrottleMutate(mutate, 5000);
+  const throttleMutate = useThrottleMutate(mutate, 0.5 * 1000);
 
   return (
     <FloatingSheet>
