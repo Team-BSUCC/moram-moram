@@ -28,7 +28,7 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
   };
 
   return (
-    <div className='fixed h-dvh w-dvw' onClick={hide}>
+    <div className='fixed z-[99999] h-dvh w-dvw' onClick={hide}>
       <Draggable
         handle='.handle' // 드래그 핸들 지정 (선택사항)
         position={position}

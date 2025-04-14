@@ -54,6 +54,9 @@
   width: 36px;
   height: 36px;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .fc .fc-prev-button:hover,
@@ -72,7 +75,7 @@
 
 /* 요일 헤더 */
 .fc .fc-col-header-cell {
-  padding: 12px 0;
+  padding: 0;
   background-color: white;
   border-bottom: 1px solid #e5e7eb;
 }
@@ -81,19 +84,22 @@
   font-weight: 500;
   color: #6b7280;
   font-size: 14px;
-  padding: 4px 0;
+  padding: 12px 0;
   text-transform: none;
 }
 
 /* 날짜 셀 */
 .fc .fc-daygrid-day {
-  height: 120px !important;
+  height: 150px !important;
   min-width: 120px !important;
+  cursor: pointer;
+  position: relative;
 }
 
 .fc .fc-daygrid-day-frame {
   min-height: 120px;
   position: relative;
+  padding: 8px;
 }
 
 .fc .fc-daygrid-day-top {
@@ -102,6 +108,7 @@
   position: absolute;
   left: 8px;
   top: 8px;
+  z-index: 5;
 }
 
 .fc .fc-daygrid-day-number {
@@ -148,6 +155,13 @@
   padding-top: 5px;
   max-height: 75px;
   overflow: hidden;
+  margin-bottom: 0 !important; /* 하단 마진 제거 */
+}
+
+/* 이벤트 컨테이너 마진 조정 */
+.fc-daygrid-event-harness {
+  margin-top: 3px;
+  margin-bottom: 0 !important; /* 하단 마진 완전 제거 */
 }
 
 /* 이벤트 선택 효과 제거 */
@@ -171,6 +185,8 @@
   padding: 2px 4px;
   margin: 2px 4px;
   display: inline-block;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
 }
 
 /* 오늘 날짜 스타일 제거 */
@@ -197,6 +213,67 @@
   z-index: -1;
 }
 
-.fc-daygrid-event-harness {
-  margin-top: 3px;
+/* 하단 여백 제거 */
+.fc-daygrid-day-bottom {
+  padding: 0 !important;
+  margin: 0 !important;
+  position: static !important;
+}
+
+/* 이벤트 영역 아래 빈 공간 조정 */
+.fc-daygrid-day-frame::after {
+  content: none !important;
+}
+
+/* 이벤트 하단 공간 정리 */
+.fc-daygrid-day-events:after {
+  content: none !important;
+  display: none !important;
+}
+
+/* 이벤트 요소의 ::after 가상 요소 제거 */
+.fc-event::after,
+.fc-daygrid-event::after,
+.fc-h-event::after,
+.fc-daygrid-block-event::after,
+.fc-daygrid-event::after,
+.custom-event::after {
+  display: none !important;
+  content: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* 이벤트 컨테이너의 ::after 제거 */
+.fc-daygrid-event-harness::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* a 태그 이벤트의 ::after 제거 */
+a.fc-event::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* 마지막 이벤트 특별 처리 */
+.fc-daygrid-event-harness:last-child a::after,
+.fc-daygrid-event-harness:last-of-type a::after {
+  display: none !important;
+  content: none !important;
+}
+
+.fc-daygrid-more-link {
+  color: #6b7280;
+  font-size: 12px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: 0 !important;
+  display: inline-block;
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  z-index: 5;
 }
