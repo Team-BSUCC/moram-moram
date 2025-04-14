@@ -16,9 +16,13 @@ import SubtopicGroup from './subtopic-group';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useBroadcastMutation } from '../hooks/use-broadcast-mutation';
 import { useThrottleMutate } from '../hooks/use-throttle-mutate';
-import { useTodoListCacheQuery } from '../hooks/use-mandalart-data-query';
+import {
+  useCellCacheQuery,
+  useTodoListCacheQuery,
+} from '../hooks/use-mandalart-data-query';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
+import RoundButton from '@/components/commons/round-button';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -30,11 +34,15 @@ type FloatingSheetProps = {
 };
 const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   // 클릭한 셀의 정보 받아오기
-  const [value, setValue] = useState<string>('');
-
   const info = getDataCategory(
     useFloatingSheetStore((state) => state.info) as CellInfoType
   );
+
+  const [disabled, setDisabled] = useState<boolean>(true);
+
+  const { data: initialValue } = useCellCacheQuery(info);
+
+  const [value, setValue] = useState<string>(initialValue ?? '');
 
   const { data: todoList } = useTodoListCacheQuery(info.id);
   const todoListCacheArray = (todoList ?? []) as TodoPayloadType[];
@@ -50,15 +58,22 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   return (
     <FloatingSheet>
       <div className='space-y-4 p-4'>
-        <Input
-          type='text'
-          value={value}
-          onChange={(e) => {
-            setValue(e.target.value);
-            throttleMutate();
-          }}
-          placeholder={info.content || info.title || info.topic || ''}
-        />
+        <div className='flex items-center gap-2'>
+          <Input
+            variant={disabled ? 'none' : 'default'}
+            type='text'
+            value={value}
+            placeholder={value}
+            onChange={(e) => {
+              setValue(e.target.value);
+              throttleMutate();
+            }}
+            disabled={disabled}
+          />
+          <RoundButton size='xs' onClick={() => setDisabled(!disabled)}>
+            편
+          </RoundButton>
+        </div>
         {/* 핵심주제일 경우 */}
         {info.category === 'CORE' && (
           <div>
