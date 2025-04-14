@@ -4,6 +4,7 @@ import '@/styles/globals.css';
 import SessionInit from '@/modules/auth/components/session-init';
 import Link from 'next/link';
 import URLS from '@/shared/constants/url-constants';
+import TQProvider from '@/providers/tq-provider';
 
 export const metadata: Metadata = {
   title: '모람모람',
@@ -61,7 +62,9 @@ export default function RootLayout({
         <main className='mt-[60px] flex-grow'>
           <div className='flex h-full w-full items-center justify-center'>
             {/* children에 메인 영역이 위치합니다. 중앙 70%의 영역만 차지합니다 */}
-            <div className='h-full w-[70%]'>{children}</div>
+            <div className='h-full w-[70%]'>
+              <TQProvider>{children}</TQProvider>
+            </div>
           </div>
         </main>
 

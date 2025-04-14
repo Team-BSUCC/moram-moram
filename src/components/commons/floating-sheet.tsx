@@ -1,7 +1,7 @@
 'use client';
 
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { ReactNode } from 'react';
+import { ReactNode, useRef } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
 type FloatingSheetProps = { children: ReactNode };
@@ -15,6 +15,8 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
   const position = useFloatingSheetStore((state) => state.position);
   const setPosition = useFloatingSheetStore((state) => state.setPosition);
   const hide = useFloatingSheetStore((state) => state.hide);
+
+  const nodeRef = useRef(null);
 
   // 드래그가 끝났을 때 위치 업데이트
   const handleDragStop = (e: DraggableEvent, data: DraggableData) => {
@@ -30,6 +32,7 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
       <Draggable
         handle='.handle' // 드래그 핸들 지정 (선택사항)
         position={position}
+        nodeRef={nodeRef}
         grid={[1, 1]}
         scale={1}
         onDrag={handleDrag}
@@ -37,6 +40,7 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
         bounds='parent' // 부모 요소 내부로 제한 (선택사항)
       >
         <div
+          ref={nodeRef}
           onClick={(e) => {
             e.stopPropagation();
           }}
