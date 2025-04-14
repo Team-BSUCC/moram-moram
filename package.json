@@ -10,6 +10,8 @@
     "supabase-type": "npx supabase gen types typescript --project-id lzzweahrurmyjhtpucpf --schema public > src/shared/types/database.types.ts"
   },
   "dependencies": {
+    "@fullcalendar/core": "^6.1.17",
+    "@fullcalendar/daygrid": "^6.1.17",
     "@fullcalendar/react": "^6.1.17",
     "@hookform/resolvers": "^5.0.1",
     "@supabase/ssr": "^0.6.1",
@@ -17,6 +19,7 @@
     "@tanstack/react-query": "^5.70.0",
     "@tanstack/react-query-devtools": "^5.70.0",
     "class-variance-authority": "^0.7.1",
+    "ko": "link:@fullcalendar/core/locales/ko",
     "next": "14.2.26",
     "react": "^18",
     "react-circular-progressbar": "^2.2.0",
