@@ -17,6 +17,7 @@ import { useEffect } from 'react';
 import { createTodoListkey } from '@/modules/mandalart/services/create-todo-list-key';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { TodoPayloadType } from '@/modules/mandalart/types/realtime-type';
+import { useBroadcastStore } from '@/modules/mandalart/hooks/use-broadcast-store';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -37,18 +38,20 @@ const MandalartPage = () => {
   const { data, isPending, isError } = useMandalartDataQuery(
     '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
   );
-
+  useBatchUpdateTrigger();
   useEffect(() => {
     if (isPending) return;
-
     createTodoListkey(queryClient, data);
   }, [isPending, data, queryClient]);
+  const addBroadcastStore = useBroadcastStore(
+    (state) => state.addBroadcastStore
+  );
 
   const broadcastChannel = supabase.channel('broadcastChannel');
 
-  useBatchUpdateTrigger();
   broadcastChannel
     .on('broadcast', { event: 'shout' }, (payload) => {
+      addBroadcastStore(payload.payload);
       if ('action' in payload.payload) {
         if (payload.payload.action === 'UPDATE') {
           queryClient.setQueryData(
@@ -87,6 +90,7 @@ const MandalartPage = () => {
           return;
         }
       }
+
       queryClient.setQueryData(
         [payload.payload.category, payload.payload.id],
         payload.payload.value
