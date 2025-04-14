@@ -2,7 +2,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
 
-export async function POST(req: NextRequest) {
+export const POST = async (req: NextRequest) => {
   const { email, password } = await req.json();
   const res = NextResponse.json({ ok: true });
   const supabase = getServerClientAction();
@@ -14,4 +14,4 @@ export async function POST(req: NextRequest) {
   }
 
   return res;
-}
+};

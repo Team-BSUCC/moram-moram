@@ -47,9 +47,10 @@ const useSignInForm = () => {
           message: '아이디나 비밀번호가 일치하지 않습니다!',
         });
         return;
+      } else if (res.ok) {
+        router.push('/');
+        router.refresh();
       }
-
-      router.push('/');
     });
   };
 

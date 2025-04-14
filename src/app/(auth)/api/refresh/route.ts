@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
 
-export async function GET() {
+export const GET = async () => {
   const supabase = getServerClientAction();
 
   const {
@@ -17,4 +17,4 @@ export async function GET() {
   }
 
   return NextResponse.json({ ok: true });
-}
+};
