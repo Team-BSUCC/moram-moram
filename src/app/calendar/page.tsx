@@ -7,13 +7,12 @@ import { useState } from 'react';
 import './calendar-custom.css';
 import interactionPlugin from '@fullcalendar/interaction';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import FloatingSheet from '@/components/commons/floating-sheet';
+import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floating-sheet';
 
-export default function CalendarPage() {
+const CalendarPage = () => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const show = useFloatingSheetStore((state) => state.show);
   const setInfo = useFloatingSheetStore((state) => state.setInfo);
-  const info = useFloatingSheetStore((state) => state.info as string);
 
   // 더미 데이터
   const [events] = useState([
@@ -89,11 +88,9 @@ export default function CalendarPage() {
         initialDate={new Date()}
         unselectAuto={true}
       />
-      {isVisible && (
-        <FloatingSheet>
-          <div>{info}</div>
-        </FloatingSheet>
-      )}
+      {isVisible && <CalendarFloatingSheet />}
     </div>
   );
-}
+};
+
+export default CalendarPage;
