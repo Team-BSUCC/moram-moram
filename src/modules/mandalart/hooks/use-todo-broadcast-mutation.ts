@@ -10,7 +10,7 @@ export const useTodoBroadcastMutation = (
 ) => {
   const queryClient = useQueryClient();
 
-  const todoListKey: readonly unknown[] = QUERY_KEY.todolist(
+  const todoListKey: readonly unknown[] = QUERY_KEY.todoList(
     todoRowData.cell_id
   );
 

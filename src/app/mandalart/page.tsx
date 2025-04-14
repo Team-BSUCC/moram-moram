@@ -52,7 +52,7 @@ const MandalartPage = () => {
       if ('action' in payload.payload) {
         if (payload.payload.action === 'UPDATE') {
           queryClient.setQueryData(
-            QUERY_KEY.todolist(payload.payload.cell_id),
+            QUERY_KEY.todoList(payload.payload.cell_id),
             (todoList: TodoPayloadType[]) => {
               return todoList.map((item) =>
                 item.id === payload.payload.id ? payload.payload : item
@@ -69,7 +69,7 @@ const MandalartPage = () => {
 
         if (payload.payload.action === 'CREATE') {
           queryClient.setQueryData(
-            QUERY_KEY.todolist(payload.payload.cell_id),
+            QUERY_KEY.todoList(payload.payload.cell_id),
             (todoList: TodoPayloadType[]) => {
               return [...todoList, payload.payload];
             }
@@ -79,7 +79,7 @@ const MandalartPage = () => {
 
         if (payload.payload.action === 'DELETE') {
           queryClient.setQueryData(
-            QUERY_KEY.todolist(payload.payload.cell_id),
+            QUERY_KEY.todoList(payload.payload.cell_id),
             (todoList: TodoPayloadType[]) => {
               return todoList.filter((item) => item.id !== payload.payload.id);
             }

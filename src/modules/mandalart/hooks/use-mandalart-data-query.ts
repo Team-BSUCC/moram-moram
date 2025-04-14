@@ -53,7 +53,7 @@ export const useTodoCacheQuery = (id: string) => {
  */
 export const useTodoListCacheQuery = (id: string) => {
   return useQuery({
-    queryKey: QUERY_KEY.todolist(id),
+    queryKey: QUERY_KEY.todoList(id),
     queryFn: () => Promise.resolve(null),
     enabled: false,
     staleTime: Infinity,

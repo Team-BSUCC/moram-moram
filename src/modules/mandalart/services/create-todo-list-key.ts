@@ -11,7 +11,7 @@ export const createTodoListkey = (
   return dbTableJoinData.mandalart_topics.map((topic) => {
     topic.mandalart_subtopics.map((subtopic) => {
       queryClient.setQueryData(
-        QUERY_KEY.todolist(subtopic.id),
+        QUERY_KEY.todoList(subtopic.id),
         subtopic.cell_todos
       );
     });

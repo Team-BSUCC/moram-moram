@@ -55,7 +55,7 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
             QUERY_KEY.todo(id),
             (entry: TodoPayloadType) => {
               queryClient.setQueryData(
-                QUERY_KEY.todolist(cellId.cell_id),
+                QUERY_KEY.todoList(cellId.cell_id),
                 (todoList: TodoPayloadType[]) =>
                   todoList.map((todo) =>
                     todo.id === id
@@ -80,7 +80,7 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
             QUERY_KEY.todo(id),
             (entry: TodoPayloadType) => {
               queryClient.setQueryData(
-                QUERY_KEY.todolist(cellId.cell_id),
+                QUERY_KEY.todoList(cellId.cell_id),
                 (todoList: TodoPayloadType[]) =>
                   todoList.map((todo) =>
                     todo.id === id
@@ -99,7 +99,7 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
         size='xs'
         onClick={() => {
           queryClient.setQueryData(
-            QUERY_KEY.todolist(cellId.cell_id),
+            QUERY_KEY.todoList(cellId.cell_id),
             (todoList: TodoPayloadType[]) =>
               todoList.map((todo) =>
                 todo.id === id ? { ...todo, action: 'DELETE' } : todo
