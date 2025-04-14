@@ -54,7 +54,6 @@ const MandalartPage = () => {
           queryClient.setQueryData(
             QUERY_KEY.todolist(payload.payload.cell_id),
             (todoList: TodoPayloadType[]) => {
-              console.log(todoList);
               return todoList.map((item) =>
                 item.id === payload.payload.id ? payload.payload : item
               );
