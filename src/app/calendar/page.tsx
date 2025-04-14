@@ -5,6 +5,7 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import koLocale from '@fullcalendar/core/locales/ko';
 import { useState } from 'react';
 import './calendar-custom.css';
+import interactionPlugin from '@fullcalendar/interaction';
 
 export default function CalendarPage() {
   const [events] = useState([
@@ -34,7 +35,7 @@ export default function CalendarPage() {
   return (
     <div className='min-h-screen p-8'>
       <FullCalendar
-        plugins={[dayGridPlugin]}
+        plugins={[dayGridPlugin, interactionPlugin]}
         initialView='dayGridMonth'
         locale={koLocale}
         events={events}
@@ -51,6 +52,7 @@ export default function CalendarPage() {
         eventContent={(arg) => (
           <div className='custom-event'>{arg.event.title}</div>
         )}
+        dateClick={(arg) => console.log(arg.dateStr)}
         dayHeaderFormat={{ weekday: 'narrow' }}
         titleFormat={{ year: 'numeric', month: 'long' }}
         dayCellContent={({ date }) => date.getDate()}
