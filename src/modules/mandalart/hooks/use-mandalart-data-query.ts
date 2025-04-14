@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { fetchGetMandalartsData } from '../services/fetch-get-mandalarts-data';
-import { CellInfoType, MandalartType } from '../types/realtime-type';
+import { CellInfoType, MandalartType, TodoType } from '../types/realtime-type';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { getQueryKey } from '../services/get-data-category';
 
@@ -24,7 +24,7 @@ export const useMandalartDataQuery = (id: string) => {
  * @param id - todo id
  * @returns
  */
-export const useTodoDataQuery = (value: string, id: string) => {
+export const useTodoDataQuery = (value: TodoType, id: string) => {
   return useQuery({
     queryKey: QUERY_KEY.todo(id),
     queryFn: () => Promise.resolve(value),
@@ -43,6 +43,21 @@ export const useTodoCacheQuery = (id: string) => {
     queryKey: QUERY_KEY.todo(id),
     queryFn: () => Promise.resolve(null),
     enabled: false,
+  });
+};
+
+/**
+ * 투두 리스트(cell_todos 컬럼)를 useQuery에 저장하는 훅
+ * @param id - 가져올 cell값
+ * @returns
+ */
+export const useTodoListCacheQuery = (id: string) => {
+  return useQuery({
+    queryKey: QUERY_KEY.todolist(id),
+    queryFn: () => Promise.resolve(null),
+    enabled: false,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };
 

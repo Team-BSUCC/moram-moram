@@ -1,11 +1,14 @@
 import Button from '@/components/commons/button';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import RegisterTodo from './register-todo';
-import { CellInfoType } from '../types/realtime-type';
+import { CellInfoType, TodoPayloadType } from '../types/realtime-type';
 import React, { useEffect } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { getQueryKey } from '../services/get-data-category';
-import { useCellCacheQuery } from '../hooks/use-mandalart-data-query';
+import {
+  useCellCacheQuery,
+  useTodoListCacheQuery,
+} from '../hooks/use-mandalart-data-query';
 
 type CellProps = {
   value: string;
@@ -22,6 +25,7 @@ type CellProps = {
  */
 const Cell = ({ value, className, info }: CellProps) => {
   const queryClient = useQueryClient();
+
   useEffect(() => {
     // tanstack query key에 셀 정보 저장하는 로직
     queryClient.setQueryData(getQueryKey(info), value);
@@ -32,6 +36,9 @@ const Cell = ({ value, className, info }: CellProps) => {
 
   const show = useFloatingSheetStore((state) => state.show);
   const setInfo = useFloatingSheetStore((state) => state.setInfo);
+
+  const { data: todoList } = useTodoListCacheQuery(info.id);
+  const todoListCacheArray = (todoList ?? []) as TodoPayloadType[];
 
   // 플로팅 시트를 띄우는 이벤트 핸들러
   const handleClick = () => {
@@ -51,7 +58,7 @@ const Cell = ({ value, className, info }: CellProps) => {
       </Button>
       {/* Todo key 등록을 위한 등록 컴포넌트 */}
       {'cell_todos' in info &&
-        info.cell_todos?.map((todo, idx) => {
+        todoListCacheArray.map((todo, idx) => {
           return <RegisterTodo key={idx} todo={todo} />;
         })}
     </>

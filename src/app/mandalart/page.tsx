@@ -13,6 +13,10 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCurrentUserId } from '@/modules/mandalart/hooks/use-current-user-id';
+import { useEffect } from 'react';
+import { createTodoListkey } from '@/modules/mandalart/services/create-todo-list-key';
+import { QUERY_KEY } from '@/shared/constants/query-key';
+import { TodoPayloadType } from '@/modules/mandalart/types/realtime-type';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -34,10 +38,55 @@ const MandalartPage = () => {
     '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
   );
 
+  useEffect(() => {
+    if (isPending) return;
+
+    createTodoListkey(queryClient, data);
+  }, [isPending, data, queryClient]);
+
   const broadcastChannel = supabase.channel('broadcastChannel');
+
   useBatchUpdateTrigger();
   broadcastChannel
     .on('broadcast', { event: 'shout' }, (payload) => {
+      if ('action' in payload.payload) {
+        if (payload.payload.action === 'UPDATE') {
+          queryClient.setQueryData(
+            QUERY_KEY.todolist(payload.payload.cell_id),
+            (todoList: TodoPayloadType[]) => {
+              return todoList.map((item) =>
+                item.id === payload.payload.id ? payload.payload : item
+              );
+            }
+          );
+
+          queryClient.setQueryData(
+            QUERY_KEY.todo(payload.payload.id),
+            payload.payload
+          );
+          return;
+        }
+
+        if (payload.payload.action === 'CREATE') {
+          queryClient.setQueryData(
+            QUERY_KEY.todolist(payload.payload.cell_id),
+            (todoList: TodoPayloadType[]) => {
+              return [...todoList, payload.payload];
+            }
+          );
+          return;
+        }
+
+        if (payload.payload.action === 'DELETE') {
+          queryClient.setQueryData(
+            QUERY_KEY.todolist(payload.payload.cell_id),
+            (todoList: TodoPayloadType[]) => {
+              return todoList.filter((item) => item.id !== payload.payload.id);
+            }
+          );
+          return;
+        }
+      }
       queryClient.setQueryData(
         [payload.payload.category, payload.payload.id],
         payload.payload.value
