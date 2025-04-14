@@ -12,7 +12,6 @@
   margin: 0 auto;
   border-radius: 10px;
   overflow: hidden;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   background-color: white;
 }
 
@@ -84,7 +83,7 @@
   font-weight: 500;
   color: #6b7280;
   font-size: 14px;
-  padding: 12px 0;
+  padding: 8px 0;
   text-transform: none;
 }
 
@@ -137,7 +136,6 @@
 /* 이벤트 스타일 */
 .custom-event {
   background-color: #f7d6d1;
-  color: #111;
   font-size: 12px;
   padding: 3px 6px;
   border-radius: 4px;
@@ -245,6 +243,10 @@
   padding: 0 !important;
 }
 
+.fc .fc-day-other {
+  background-color: #f9f9f9; /* 연한 회색 */
+}
+
 /* 이벤트 컨테이너의 ::after 제거 */
 .fc-daygrid-event-harness::after {
   display: none !important;
@@ -262,18 +264,4 @@ a.fc-event::after {
 .fc-daygrid-event-harness:last-of-type a::after {
   display: none !important;
   content: none !important;
-}
-
-.fc-daygrid-more-link {
-  color: #6b7280;
-  font-size: 12px;
-  background: #f3f4f6;
-  border-radius: 4px;
-  padding: 2px 4px;
-  margin: 0 !important;
-  display: inline-block;
-  position: absolute !important;
-  top: 8px !important;
-  right: 8px !important;
-  z-index: 5;
 }

@@ -53,6 +53,7 @@ const CalendarPage = () => {
 
   // 셀 클릭 핸들러
   const handleCellClick = (dateStr: string) => {
+    // console.log(dateStr);
     setInfo(dateStr);
     show();
   };
@@ -83,7 +84,10 @@ const CalendarPage = () => {
         dayCellDidMount={(info) => {
           // 셀 전체에 클릭 이벤트 리스너 추가
           info.el.addEventListener('click', () => {
-            const dateStr = info.date.toISOString().split('T')[0];
+            const year = info.date.getFullYear();
+            const month = String(info.date.getMonth() + 1).padStart(2, '0');
+            const day = String(info.date.getDate()).padStart(2, '0');
+            const dateStr = `${year}-${month}-${day}`;
             handleCellClick(dateStr);
           });
         }}
