@@ -153,7 +153,7 @@
 .fc-daygrid-day-events {
   margin-top: 30px !important;
   padding-top: 5px;
-  max-height: 75px;
+  max-height: 100px;
   overflow: hidden;
   margin-bottom: 0 !important; /* 하단 마진 제거 */
 }

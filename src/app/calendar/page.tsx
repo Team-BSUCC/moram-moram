@@ -93,7 +93,7 @@ const CalendarPage = () => {
         initialDate={new Date()}
         unselectAuto={true}
       />
-      {isVisible && <CalendarFloatingSheet />}
+      {isVisible && <CalendarFloatingSheet todos={events} />}
     </div>
   );
 };
