@@ -9,6 +9,11 @@ import interactionPlugin from '@fullcalendar/interaction';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floating-sheet';
 
+/**
+ *@todo : 캘린더 UI 추가 수정
+ *@todo : DB 데이터 연동
+ *@todo : 어떤식으로 데이터를 가져올지 고민하기
+ */
 const CalendarPage = () => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const show = useFloatingSheetStore((state) => state.show);
@@ -64,7 +69,7 @@ const CalendarPage = () => {
           center: 'title',
           end: '',
         }}
-        dayMaxEventRows={3}
+        dayMaxEventRows={5}
         fixedWeekCount={false}
         height='auto'
         aspectRatio={1.25}
