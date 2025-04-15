@@ -16,6 +16,9 @@ body {
   background-color: var(--color-white-light);
   color: var(--color-black);
 }
+textarea {
+  resize: none;
+}
 
 :root {
   --text-2xl: 1.75rem; /* 28px */
