@@ -98,7 +98,7 @@ const MandalartPage = () => {
     })
     .subscribe();
 
-  useRealtimeUserSync(broadcastChannel);
+  // useRealtimeUserSync(broadcastChannel);
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>error</div>;
 
