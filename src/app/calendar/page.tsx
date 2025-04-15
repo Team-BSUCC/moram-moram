@@ -11,19 +11,20 @@ import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 
 /**
  *@todo : 캘린더 UI 추가 수정
- *@todo : DB 데이터 연동
  *@todo : 어떤식으로 데이터를 가져올지 고민하기
  */
 const CalendarPage = () => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const show = useFloatingSheetStore((state) => state.show);
   const setInfo = useFloatingSheetStore((state) => state.setInfo);
+  const [data, setData] = useState<any>([]);
+  const [events, setEvents] = useState<any[]>([]);
 
   const supabase = getBrowserClient();
 
   useEffect(() => {
     const fetchTodos = async () => {
-      const { data, error } = await supabase
+      const { data, error }: { data: any; error: any } = await supabase
         .from('room_participants')
         .select(
           `role,
@@ -35,42 +36,63 @@ const CalendarPage = () => {
         )
         .eq('user_id', 'd2477fa0-d848-47df-a962-fdf0d46735c0');
 
-      console.log(data);
+      if (error) throw new Error(error.message);
+      if (!data || !Array.isArray(data)) return;
+
+      const parsed: {
+        title: string;
+        subtopics: {
+          title: string;
+          isDone: boolean;
+          todos: { title: string; isDone: boolean; createdAt: string }[];
+        }[];
+      }[] = [];
+
+      data.forEach((participant) => {
+        participant.rooms.mandalarts.map((mandalart) => {
+          // 핵심주제 저장
+          const core = {
+            title: mandalart.title,
+            subtopics: [],
+          };
+
+          mandalart.mandalart_topics?.forEach((topic) => {
+            topic.mandalart_subtopics?.forEach((sub) => {
+              // 소주제, todo 저장
+              const subtopic = {
+                title: sub.content,
+                isDone: sub.is_done,
+                todos:
+                  sub.cell_todos?.map((todo) => ({
+                    title: todo.title,
+                    isDone: todo.is_done,
+                    createdAt: todo.created_at,
+                  })) ?? [],
+              };
+
+              (core.subtopics as any[]).push(subtopic);
+            });
+          });
+
+          parsed.push(core);
+        });
+      });
+
+      const allTodos = parsed.flatMap((core) =>
+        core.subtopics.flatMap((sub) => sub.todos)
+      );
+      const processedTodos = allTodos.map((todo) => ({
+        title: todo.title,
+        date: todo.createdAt,
+        isDone: todo.isDone,
+      }));
+
+      setEvents(processedTodos);
+      setData(parsed);
     };
+
     fetchTodos();
   }, []);
-
-  // 더미 데이터
-  const [events] = useState([
-    {
-      title: '3시에 양서윤님과 유저 테스트',
-      date: '2025-04-14',
-      backgroundColor: '#f7d6d1',
-      borderColor: '#f7d6d1',
-      textColor: '#111',
-    },
-    {
-      title: '역행자 P128까지 읽기',
-      date: '2025-04-14',
-      backgroundColor: '#f7d6d1',
-      borderColor: '#f7d6d1',
-      textColor: '#111',
-    },
-    {
-      title: '우리집에서 학교까지 걷기',
-      date: '2025-04-14',
-      backgroundColor: '#f7d6d1',
-      borderColor: '#f7d6d1',
-      textColor: '#111',
-    },
-    {
-      title: '우리집에서 학교까지 걷기',
-      date: '2025-04-14',
-      backgroundColor: '#f7d6d1',
-      borderColor: '#f7d6d1',
-      textColor: '#111',
-    },
-  ]);
 
   // 셀 클릭 핸들러
   const handleCellClick = (dateStr: string) => {
@@ -116,7 +138,7 @@ const CalendarPage = () => {
         initialDate={new Date()}
         unselectAuto={true}
       />
-      {isVisible && <CalendarFloatingSheet todos={events} />}
+      {isVisible && <CalendarFloatingSheet todos={data} />}
     </div>
   );
 };
