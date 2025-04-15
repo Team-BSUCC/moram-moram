@@ -2,108 +2,33 @@
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { useEffect, useState } from 'react';
 import './calendar-custom.css';
 import interactionPlugin from '@fullcalendar/interaction';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floating-sheet';
-import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
+import { useFetchCalendarQuery } from '@/modules/calendar/hooks/use-fetch-calendar-query';
 
 /**
  *@todo : 캘린더 UI 추가 수정
- *@todo : 어떤식으로 데이터를 가져올지 고민하기
  */
 const CalendarPage = () => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const show = useFloatingSheetStore((state) => state.show);
   const setInfo = useFloatingSheetStore((state) => state.setInfo);
-  const [data, setData] = useState<any>([]);
-  const [events, setEvents] = useState<any[]>([]);
 
-  const supabase = getBrowserClient();
+  const { data: date, isPending } = useFetchCalendarQuery();
 
-  useEffect(() => {
-    const fetchTodos = async () => {
-      const { data, error }: { data: any; error: any } = await supabase
-        .from('room_participants')
-        .select(
-          `role,
-          rooms (id, 
-          mandalarts (id, title, created_at, private,
-          mandalart_topics (id, topic, topic_index, created_at,
-          mandalart_subtopics (id, content, cell_index, is_done, created_at,
-          cell_todos (id, title, is_done, created_at)))))`
-        )
-        .eq('user_id', 'd2477fa0-d848-47df-a962-fdf0d46735c0');
+  if (isPending) return <div>Loading...</div>;
 
-      if (error) throw new Error(error.message);
-      if (!data || !Array.isArray(data)) return;
+  const allTodos = date?.flatMap((core) =>
+    core.topics.flatMap((topic) => topic.subtopics.flatMap((sub) => sub.todos))
+  );
 
-      const parsed: {
-        title: string;
-        topics: {
-          title: string;
-          subtopics: {
-            title: string;
-            isDone: boolean;
-            todos: { title: string; isDone: boolean; createdAt: string }[];
-          }[];
-        }[];
-      }[] = [];
-
-      data.forEach((participant) => {
-        participant.rooms?.mandalarts?.forEach((mandalart) => {
-          const core = {
-            title: mandalart.title,
-            topics: [],
-          };
-
-          mandalart.mandalart_topics?.forEach((topic) => {
-            const topicGroup = {
-              title: topic.topic,
-              subtopics: [],
-            };
-
-            topic.mandalart_subtopics?.forEach((sub) => {
-              const subtopic = {
-                title: sub.content,
-                isDone: sub.is_done,
-                todos:
-                  sub.cell_todos?.map((todo) => ({
-                    title: todo.title,
-                    isDone: todo.is_done,
-                    createdAt: todo.created_at,
-                  })) ?? [],
-              };
-
-              (topicGroup.subtopics as any[]).push(subtopic);
-            });
-
-            (core.topics as any[]).push(topicGroup);
-          });
-
-          parsed.push(core);
-        });
-      });
-
-      const allTodos = parsed.flatMap((core) =>
-        core.topics.flatMap((topic) =>
-          topic.subtopics.flatMap((sub) => sub.todos)
-        )
-      );
-
-      const processedTodos = allTodos.map((todo) => ({
-        title: todo.title,
-        date: todo.createdAt,
-        isDone: todo.isDone,
-      }));
-
-      setEvents(processedTodos);
-      setData(parsed);
-    };
-
-    fetchTodos();
-  }, []);
+  const events = allTodos?.map((todo) => ({
+    title: todo.title,
+    date: todo.createdAt,
+    isDone: todo.isDone,
+  }));
 
   // 셀 클릭 핸들러
   const handleCellClick = (dateStr: string) => {
@@ -149,7 +74,7 @@ const CalendarPage = () => {
         initialDate={new Date()}
         unselectAuto={true}
       />
-      {isVisible && <CalendarFloatingSheet todos={data} events={events} />}
+      {isVisible && <CalendarFloatingSheet todos={date} events={events} />}
     </div>
   );
 };
