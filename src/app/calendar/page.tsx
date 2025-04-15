@@ -41,24 +41,30 @@ const CalendarPage = () => {
 
       const parsed: {
         title: string;
-        subtopics: {
+        topics: {
           title: string;
-          isDone: boolean;
-          todos: { title: string; isDone: boolean; createdAt: string }[];
+          subtopics: {
+            title: string;
+            isDone: boolean;
+            todos: { title: string; isDone: boolean; createdAt: string }[];
+          }[];
         }[];
       }[] = [];
 
       data.forEach((participant) => {
-        participant.rooms.mandalarts.map((mandalart) => {
-          // 핵심주제 저장
+        participant.rooms?.mandalarts?.forEach((mandalart) => {
           const core = {
             title: mandalart.title,
-            subtopics: [],
+            topics: [],
           };
 
           mandalart.mandalart_topics?.forEach((topic) => {
+            const topicGroup = {
+              title: topic.topic,
+              subtopics: [],
+            };
+
             topic.mandalart_subtopics?.forEach((sub) => {
-              // 소주제, todo 저장
               const subtopic = {
                 title: sub.content,
                 isDone: sub.is_done,
@@ -70,8 +76,10 @@ const CalendarPage = () => {
                   })) ?? [],
               };
 
-              (core.subtopics as any[]).push(subtopic);
+              (topicGroup.subtopics as any[]).push(subtopic);
             });
+
+            (core.topics as any[]).push(topicGroup);
           });
 
           parsed.push(core);
@@ -79,8 +87,11 @@ const CalendarPage = () => {
       });
 
       const allTodos = parsed.flatMap((core) =>
-        core.subtopics.flatMap((sub) => sub.todos)
+        core.topics.flatMap((topic) =>
+          topic.subtopics.flatMap((sub) => sub.todos)
+        )
       );
+
       const processedTodos = allTodos.map((todo) => ({
         title: todo.title,
         date: todo.createdAt,
@@ -138,7 +149,7 @@ const CalendarPage = () => {
         initialDate={new Date()}
         unselectAuto={true}
       />
-      {isVisible && <CalendarFloatingSheet todos={data} />}
+      {isVisible && <CalendarFloatingSheet todos={data} events={events} />}
     </div>
   );
 };

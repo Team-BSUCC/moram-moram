@@ -2,31 +2,45 @@ import FloatingSheet from '@/components/commons/floating-sheet';
 import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { TodoListType } from '../type/todo-type';
 
-/**
- * @todo : floating sheet UI 수정
- * @todo : 들어갈 내용 추가하기
- * @todo : DB 데이터 연동
- * @todo : 어떤식으로 데이터를 가져올지 고민하기
- */
 type CalendarProps = {
   todos: any;
+  events: any;
 };
-const CalendarFloatingSheet = ({ data }: CalendarProps) => {
-  const info = useFloatingSheetStore((state) => state.info as string);
 
-  // event 중 클릭한 날짜에 해당하는 todo만 필터링
-  // const todayTodo = todos.filter((todo) => todo.date === info);
+const CalendarFloatingSheet = ({ todos: data, events }: CalendarProps) => {
+  const info = useFloatingSheetStore((state) => state.info as string);
+  const isSatisfied =
+    events.filter((event) => event.date.slice(0, 10) === info).length > 0;
+
   return (
     <FloatingSheet>
       <Text>{info}</Text>
       <Title as='h1'>TO DO LIST</Title>
-      <div>
-        {/* {todayTodo.map((todo, idx) => (
-          <div key={idx}>{todo.title}</div>
-        ))} */}
-      </div>
+
+      {isSatisfied ? (
+        data.map((core) => (
+          <div key={core.title}>
+            <Title as='h2'>{core.title}</Title> {/* 핵심주제 */}
+            {core.topics.map((topic) =>
+              topic.subtopics.map((sub) =>
+                sub.todos
+                  .filter((todo) => todo.createdAt.slice(0, 10) === info)
+                  .map((todo, idx) => (
+                    <div key={idx}>
+                      <div>{todo.title}</div>
+                      <div className='text-gray-500 text-sm'>
+                        {topic.title} &gt; {sub.title}
+                      </div>
+                    </div>
+                  ))
+              )
+            )}
+          </div>
+        ))
+      ) : (
+        <div className='text-gray-400 mt-2'>할 일이 없습니다...</div>
+      )}
     </FloatingSheet>
   );
 };
