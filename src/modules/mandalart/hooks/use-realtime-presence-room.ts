@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { useCurrentUserImage } from './use-current-user-image';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
+import { useBroadcastStore } from './use-broadcast-store';
+import { useReceiveBroadcastStore } from './use-receive-broadcast-store';
 
 const supabase = getBrowserClient();
 
@@ -23,6 +25,10 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
   const currentUserName = username;
   const [users, setUsers] = useState<Record<string, RealtimeUser>>({});
   const myJoinTime = useRef<number>(Date.now());
+  const { receiveBroadcastStore } = useReceiveBroadcastStore();
+  const formatBroadcastStorePayload = useBroadcastStore(
+    (state) => state.formatBroadcastStorePayload
+  );
   useEffect(() => {
     const room = supabase.channel(roomName);
 
@@ -54,9 +60,6 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
       const firstUserJoinTime = Math.min(...usersJoinTimeArr);
       const newUserJoinTime = Math.max(...usersJoinTimeArr);
 
-      console.log(firstUserJoinTime, newUserJoinTime);
-      console.log(usersJoinTimeArr);
-
       //방금 들어온 사람이면 다른 유저한테 브로드캐스트스토어 보내달라고 요청보내기
       if (
         usersJoinTimeArr.length !== 1 &&
@@ -81,8 +84,7 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
           event: 'response_broadcasts_store',
           payload: {
             newUserJoinTime: payload.payload.newUserJoinTime,
-            broadCastStore:
-              '자 여기 브로드 캐스트 스토어 받아라, formatting브로드캐스트 넣기',
+            broadCastStore: formatBroadcastStorePayload(),
           },
         });
       }
@@ -96,6 +98,7 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
           '++ 브로드 캐스트 받아서 처리하는 receiver함수실행'
         );
       }
+      receiveBroadcastStore(payload.payload.broadCastStore);
     });
 
     room.subscribe(async (status) => {
