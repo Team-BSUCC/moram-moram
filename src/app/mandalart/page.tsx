@@ -52,6 +52,7 @@ const MandalartPage = () => {
   broadcastChannel
     .on('broadcast', { event: 'shout' }, (payload) => {
       addBroadcastStore(payload.payload);
+      //투두일때
       if ('action' in payload.payload) {
         if (payload.payload.action === 'UPDATE') {
           queryClient.setQueryData(

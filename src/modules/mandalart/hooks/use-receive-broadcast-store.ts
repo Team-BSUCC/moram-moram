@@ -1,5 +1,8 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { FormatBroadcastStorePayloadType } from '../types/realtime-type';
+import {
+  FormatBroadcastStorePayloadType,
+  TodoPayloadType,
+} from '../types/realtime-type';
 import { useBroadcastStore } from './use-broadcast-store';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 
@@ -29,17 +32,21 @@ export const useReceiveBroadcastStore = () => {
       Object.entries(payloadBroadcastStore.todo || {})
     );
 
-    // 쿼리 캐시 업데이트
+    //핵심주세UI업데이트
     if (broadcastStore.core.size !== 0) {
       broadcastStore.topic.forEach((corePayload, coreId) => {
         queryClient.setQueryData(QUERY_KEY.core(coreId), corePayload.value);
       });
     }
+
+    //대주제UI업데이트
     if (broadcastStore.topic.size !== 0) {
       broadcastStore.topic.forEach((topicPayload, topicId) => {
         queryClient.setQueryData(QUERY_KEY.topic(topicId), topicPayload.value);
       });
     }
+
+    //소주제UI업데이트
     if (broadcastStore.subTopic.size !== 0) {
       broadcastStore.subTopic.forEach((subtopicPayload, subtopicId) => {
         queryClient.setQueryData(
@@ -48,10 +55,40 @@ export const useReceiveBroadcastStore = () => {
         );
       });
     }
+
+    //투두UI업데이트
     if (broadcastStore.todo.size !== 0) {
-      broadcastStore.todo.forEach((todoPayload, todoId) => {
-        if (todoPayload.action !== 'DELETE') {
-          queryClient.setQueryData(QUERY_KEY.todo(todoId), todoPayload.value);
+      broadcastStore.todo.forEach((todoPayload) => {
+        if (todoPayload.action === 'UPDATE') {
+          queryClient.setQueryData(
+            QUERY_KEY.todolist(todoPayload.cell_id),
+            (todoList: TodoPayloadType[]) => {
+              return todoList.map((item) => {
+                return item.id === todoPayload.id ? todoPayload : item;
+              });
+            }
+          );
+
+          queryClient.setQueryData(QUERY_KEY.todo(todoPayload.id), todoPayload);
+          return;
+        }
+        if (todoPayload.action === 'CREATE') {
+          queryClient.setQueryData(
+            QUERY_KEY.todolist(todoPayload.cell_id),
+            (todoList: TodoPayloadType[]) => {
+              return [...todoList, todoPayload];
+            }
+          );
+          return;
+        }
+        if (todoPayload.action === 'DELETE') {
+          queryClient.setQueryData(
+            QUERY_KEY.todolist(todoPayload.cell_id),
+            (todoList: TodoPayloadType[]) => {
+              return todoList.filter((item) => item.id !== todoPayload.id);
+            }
+          );
+          return;
         }
       });
     }

@@ -65,7 +65,6 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
         usersJoinTimeArr.length !== 1 &&
         newUserJoinTime === myJoinTime.current
       ) {
-        console.log('나 마지막에 들어온 사람임 데이터 보내줘');
         room.send({
           type: 'broadcast',
           event: 'request_broadcasts_store',
@@ -78,7 +77,6 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
     //가장 먼저 들어온 유저면 브로드캐스트스토어 보내주기(request_broadcasts_store에 대한 응답을 보내줌)
     room.on('broadcast', { event: 'request_broadcasts_store' }, (payload) => {
       if (payload.payload.firstUserJoinTime === myJoinTime.current) {
-        console.log('내가 첫번째유저다 데이터보내줄게');
         room.send({
           type: 'broadcast',
           event: 'response_broadcasts_store',
@@ -93,12 +91,8 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
     //브로드캐스트스토어 요청보낸 유저면 브로드캐스트응답받아서 변경상태동기화(request_broadcasts_store 받아서 처리)
     room.on('broadcast', { event: 'response_broadcasts_store' }, (payload) => {
       if (payload.payload.newUserJoinTime === myJoinTime.current) {
-        console.log(
-          payload.payload.broadCastStore,
-          '++ 브로드 캐스트 받아서 처리하는 receiver함수실행'
-        );
+        receiveBroadcastStore(payload.payload.broadCastStore);
       }
-      receiveBroadcastStore(payload.payload.broadCastStore);
     });
 
     room.subscribe(async (status) => {
