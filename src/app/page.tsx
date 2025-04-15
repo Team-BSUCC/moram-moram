@@ -1,22 +1,24 @@
-import { getUserInfo } from '@/modules/auth/services/auth-server-service';
-import SignOutButton from '@/modules/auth/components/sign-out-button';
+import HeroSection from '@/components/landing/hero-section';
+import IntroSection from '@/components/landing/intro-sercion';
+import MandalartExplainSection from '@/components/landing/mandalart-explain-section';
+import TodoEditorSection from '@/components/landing/todo-editor-section';
+import ProgressSection from '@/components/landing/progress-section';
+import CalendarSection from '@/components/landing/calendar-section';
+import TeamPlanningSection from '@/components/landing/team-planning-section';
+import CTASection from '@/components/landing/cta-section';
 
 const HomePage = async () => {
-  const user = await getUserInfo();
-
-  if (!user) {
-    return <div>로그아웃 상태입니다</div>;
-  }
-
   return (
-    <div>
-      로그인된 유저의 이메일: {user.user_metadata.email}
-      <div>
-        로그인된 유저의 닉네임:
-        {user.user_metadata.nickname ?? user.user_metadata.name}
-      </div>
-      <SignOutButton />
-    </div>
+    <>
+      <HeroSection />
+      <IntroSection />
+      <MandalartExplainSection />
+      <TodoEditorSection />
+      <ProgressSection />
+      <CalendarSection />
+      <TeamPlanningSection />
+      <CTASection />
+    </>
   );
 };
 
