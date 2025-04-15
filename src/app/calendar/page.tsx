@@ -2,11 +2,12 @@
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './calendar-custom.css';
 import interactionPlugin from '@fullcalendar/interaction';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floating-sheet';
+import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 
 /**
  *@todo : 캘린더 UI 추가 수정
@@ -17,6 +18,27 @@ const CalendarPage = () => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const show = useFloatingSheetStore((state) => state.show);
   const setInfo = useFloatingSheetStore((state) => state.setInfo);
+
+  const supabase = getBrowserClient();
+
+  useEffect(() => {
+    const fetchTodos = async () => {
+      const { data, error } = await supabase
+        .from('room_participants')
+        .select(
+          `role,
+          rooms (id, 
+          mandalarts (id, title, created_at, private,
+          mandalart_topics (id, topic, topic_index, created_at,
+          mandalart_subtopics (id, content, cell_index, is_done, created_at,
+          cell_todos (id, title, is_done, created_at)))))`
+        )
+        .eq('user_id', 'd2477fa0-d848-47df-a962-fdf0d46735c0');
+
+      console.log(data);
+    };
+    fetchTodos();
+  }, []);
 
   // 더미 데이터
   const [events] = useState([
