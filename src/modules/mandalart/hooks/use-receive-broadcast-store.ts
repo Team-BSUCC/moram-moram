@@ -34,7 +34,7 @@ export const useReceiveBroadcastStore = () => {
 
     //핵심주세UI업데이트
     if (broadcastStore.core.size !== 0) {
-      broadcastStore.topic.forEach((corePayload, coreId) => {
+      broadcastStore.core.forEach((corePayload, coreId) => {
         queryClient.setQueryData(QUERY_KEY.core(coreId), corePayload.value);
       });
     }
