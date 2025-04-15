@@ -16,6 +16,7 @@
     "@tanstack/react-query": "^5.70.0",
     "@tanstack/react-query-devtools": "^5.70.0",
     "class-variance-authority": "^0.7.1",
+    "html-to-image": "^1.11.13",
     "next": "14.2.26",
     "react": "^18",
     "react-circular-progressbar": "^2.2.0",
