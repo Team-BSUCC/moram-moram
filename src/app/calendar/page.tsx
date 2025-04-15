@@ -2,7 +2,6 @@
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import koLocale from '@fullcalendar/core/locales/ko';
 import { useState } from 'react';
 import './calendar-custom.css';
 import interactionPlugin from '@fullcalendar/interaction';
@@ -53,7 +52,6 @@ const CalendarPage = () => {
 
   // 셀 클릭 핸들러
   const handleCellClick = (dateStr: string) => {
-    // console.log(dateStr);
     setInfo(dateStr);
     show();
   };
@@ -63,7 +61,6 @@ const CalendarPage = () => {
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView='dayGridMonth'
-        locale={koLocale}
         events={events}
         headerToolbar={{
           start: 'today prev,next',
@@ -92,7 +89,7 @@ const CalendarPage = () => {
           });
         }}
         dayHeaderFormat={{ weekday: 'narrow' }}
-        titleFormat={{ year: 'numeric', month: 'long' }}
+        titleFormat={{ year: 'numeric', month: 'short' }}
         dayCellContent={({ date }) => date.getDate()}
         initialDate={new Date()}
         unselectAuto={true}
