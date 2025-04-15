@@ -3,9 +3,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useCurrentUserImage } from './use-current-user-image';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
-import { useFieldArray } from 'react-hook-form';
-import { getUserInfo } from '@/modules/auth/services/auth-server-service';
-import { useCurrentUserId } from './use-current-user-id';
 
 const supabase = getBrowserClient();
 
@@ -25,7 +22,7 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
   const currentUserImage = useCurrentUserImage();
   const currentUserName = username;
   const [users, setUsers] = useState<Record<string, RealtimeUser>>({});
-  const joinTime = useRef<number>(Date.now());
+  const myJoinTime = useRef<number>(Date.now());
   useEffect(() => {
     const room = supabase.channel(roomName);
 
@@ -46,10 +43,10 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
           { name: values[0].name, image: values[0].image },
         ])
       ) as Record<string, RealtimeUser>;
-      console.log('내참여시간', joinTime.current);
+      console.log('내참여시간', myJoinTime.current);
 
       //가장 먼저 들어온 유저의 접속시간 찾기
-      let firstUserJoinTime = joinTime.current;
+      let firstUserJoinTime = myJoinTime.current;
       Object.values(allUsersInfo).forEach((userInfo) => {
         firstUserJoinTime =
           userInfo[0].joinTime < firstUserJoinTime
@@ -58,23 +55,39 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
       });
 
       //내가 가장 먼저 들어온 사람이 아니면 다른 유저한테 브로드캐스트스토어 보내달라고 요청보내기
-      if (firstUserJoinTime !== joinTime.current)
+      if (firstUserJoinTime !== myJoinTime.current)
         room.send({
           type: 'broadcast',
           event: 'request_broadcasts_store',
-          payload: { firstUserJoinTime, newUserJoinTime: joinTime.current },
+          payload: { firstUserJoinTime, newUserJoinTime: myJoinTime.current },
         });
       setUsers(formattingAllUsersInfo);
     });
 
-    //가장 먼저 들어온 유저면 브로드캐스트스토어 보내주기
+    //가장 먼저 들어온 유저면 브로드캐스트스토어 보내주기(request_broadcasts_store에 대한 응답을 보내줌)
     room.on('broadcast', { event: 'request_broadcasts_store' }, (payload) => {
-      console.log('페이로드', payload);
+      if (payload.payload.firstUserJoinTime === myJoinTime.current) {
+        console.log('내가 첫번째유저다');
+        room.send({
+          type: 'broadcast',
+          event: 'response_broadcasts_store',
+          payload: {
+            newUserJoinTime: payload.payload.newUserJoinTime,
+            broadCastStore:
+              '자 여기 브로드 캐스트 스토어 받아라 formatting브로드캐스트 넣기',
+          },
+        });
+      }
     });
 
-    //브로드캐스트스토어 요청보낸 유저면 브로드캐스트응답받아서 변경상태동기화
+    //브로드캐스트스토어 요청보낸 유저면 브로드캐스트응답받아서 변경상태동기화(request_broadcasts_store 받아서 처리)
     room.on('broadcast', { event: 'response_broadcasts_store' }, (payload) => {
-      console.log('브로드캐스트동기화완료');
+      if (payload.payload.newUserJoinTime === myJoinTime.current) {
+        console.log(
+          payload.payload.broadCastStore,
+          '++ 브로드 캐스트 받아서 처리하는 receiver함수실행'
+        );
+      }
     });
 
     room.subscribe(async (status) => {
@@ -83,7 +96,7 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
       }
       // 내 정보를 등록
       await room.track({
-        joinTime: joinTime.current,
+        joinTime: myJoinTime.current,
         name: currentUserName,
         image: currentUserImage,
       });
