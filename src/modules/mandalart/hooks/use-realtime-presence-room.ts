@@ -43,38 +43,46 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
           { name: values[0].name, image: values[0].image },
         ])
       ) as Record<string, RealtimeUser>;
-      console.log('내참여시간', myJoinTime.current);
 
       //가장 먼저 들어온 유저의 접속시간 찾기
-      let firstUserJoinTime = myJoinTime.current;
-      Object.values(allUsersInfo).forEach((userInfo) => {
-        firstUserJoinTime =
-          userInfo[0].joinTime < firstUserJoinTime
-            ? userInfo[0].joinTime
-            : firstUserJoinTime;
-      });
 
-      //내가 가장 먼저 들어온 사람이 아니면 다른 유저한테 브로드캐스트스토어 보내달라고 요청보내기
-      if (firstUserJoinTime !== myJoinTime.current)
+      const usersJoinTimeArr = Object.values(allUsersInfo)
+        .filter((userInfo) => userInfo[0].joinTime)
+        .map((userInfo) => {
+          return userInfo[0].joinTime;
+        });
+      const firstUserJoinTime = Math.min(...usersJoinTimeArr);
+      const newUserJoinTime = Math.max(...usersJoinTimeArr);
+
+      console.log(firstUserJoinTime, newUserJoinTime);
+      console.log(usersJoinTimeArr);
+
+      //방금 들어온 사람이면 다른 유저한테 브로드캐스트스토어 보내달라고 요청보내기
+      if (
+        usersJoinTimeArr.length !== 1 &&
+        newUserJoinTime === myJoinTime.current
+      ) {
+        console.log('나 마지막에 들어온 사람임 데이터 보내줘');
         room.send({
           type: 'broadcast',
           event: 'request_broadcasts_store',
-          payload: { firstUserJoinTime, newUserJoinTime: myJoinTime.current },
+          payload: { firstUserJoinTime, newUserJoinTime },
         });
+      }
       setUsers(formattingAllUsersInfo);
     });
 
     //가장 먼저 들어온 유저면 브로드캐스트스토어 보내주기(request_broadcasts_store에 대한 응답을 보내줌)
     room.on('broadcast', { event: 'request_broadcasts_store' }, (payload) => {
       if (payload.payload.firstUserJoinTime === myJoinTime.current) {
-        console.log('내가 첫번째유저다');
+        console.log('내가 첫번째유저다 데이터보내줄게');
         room.send({
           type: 'broadcast',
           event: 'response_broadcasts_store',
           payload: {
             newUserJoinTime: payload.payload.newUserJoinTime,
             broadCastStore:
-              '자 여기 브로드 캐스트 스토어 받아라 formatting브로드캐스트 넣기',
+              '자 여기 브로드 캐스트 스토어 받아라, formatting브로드캐스트 넣기',
           },
         });
       }
@@ -109,78 +117,3 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
 
   return { users };
 };
-
-// import { useEffect, useRef, useState } from 'react';
-// import { RealtimeChannel } from '@supabase/supabase-js';
-// import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
-
-// type UserPresence = {
-//   presence_ref: string;
-//   userId: string;
-//   username: string;
-// };
-
-// export const useRealtimeUserSync = (channel: RealtimeChannel) => {
-//   const [userId, setUserId] = useState<string | null>(null);
-//   const [username, setUsername] = useState<string | null>(null);
-//   const hasSyncedRef = useRef(false);
-//   // 1. 유저 정보 세팅
-//   useEffect(() => {
-//     const fetchUser = async () => {
-//       const supabase = getBrowserClient();
-//       const {
-//         data: { user },
-//       } = await supabase.auth.getUser();
-//       if (user) {
-//         setUserId(user.id);
-//         setUsername(
-//           user.user_metadata?.nickname ||
-//             user.user_metadata?.name ||
-//             '이름없는 유저'
-//         );
-//       } else {
-//         const id = localStorage.getItem('guestId') ?? crypto.randomUUID();
-//         const name =
-//           localStorage.getItem('guestName') ??
-//           `게스트-${Math.floor(Math.random() * 1000)}`;
-
-//         localStorage.setItem('guestId', id);
-//         localStorage.setItem('guestName', name);
-
-//         setUserId(id);
-//         setUsername(name);
-//       }
-//     };
-//     fetchUser();
-//   }, []);
-//   useEffect(() => {
-//     console.log(channel);
-//     if (!channel) return;
-
-//     channel
-//       .on('presence', { event: 'sync' }, () => {
-//         hasSyncedRef.current = true;
-//       })
-//       .on('presence', { event: 'join' }, ({ newPresences }) => {
-//         console.log(hasSyncedRef.current);
-//         if (!hasSyncedRef.current) return;
-//         newPresences.forEach((p) => {
-//           if (p.userId !== userId) {
-//             alert(`${p.username}님이 입장하셨습니다.`);
-//           }
-//         });
-//       })
-//       .on('presence', { event: 'leave' }, ({ leftPresences }) => {
-//         leftPresences.forEach((p) => {
-//           setTimeout(() => {
-//             const state = channel.presenceState();
-//             const users = Object.values(state).flat() as UserPresence[];
-//             const gone = !users.some((u) => u.userId === p.userId);
-//             if (gone) {
-//               alert(`${p.username}님이 퇴장하셨습니다.`);
-//             }
-//           }, 2000);
-//         });
-//       });
-//   }, [channel, userId, username]);
-// };
