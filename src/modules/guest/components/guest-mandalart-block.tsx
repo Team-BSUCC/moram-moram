@@ -32,7 +32,7 @@ const GuestMandalartBlock = ({
       </div>
       {Array.from({ length: 8 }).map((_, index) => (
         <div key={index} className={cellBaseStyle}>
-          <GuestMandalartCell key={index} textBg='bg-transparent' />
+          <GuestMandalartCell key={index} />
         </div>
       ))}
     </div>

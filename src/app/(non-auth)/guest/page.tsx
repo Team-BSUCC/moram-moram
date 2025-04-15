@@ -36,7 +36,10 @@ const GuestPage = () => {
       link.href = dataUrl;
       link.click();
     } catch (error) {
-      console.error('이미지 변환 실패:', error);
+      /**
+       * TODO : 에러 sentry로 핸들링하기
+       */
+      // console.error('이미지 변환 실패:', error);
     }
   };
 
