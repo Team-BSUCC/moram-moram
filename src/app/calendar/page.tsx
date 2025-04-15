@@ -9,7 +9,7 @@ import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floati
 import { useFetchCalendarQuery } from '@/modules/calendar/hooks/use-fetch-calendar-query';
 
 /**
- *@todo : 캘린더 UI 추가 수정
+ * @todo : 캘린더 UI 추가 수정
  */
 const CalendarPage = () => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
