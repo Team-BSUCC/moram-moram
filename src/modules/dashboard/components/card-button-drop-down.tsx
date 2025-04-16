@@ -21,7 +21,16 @@ const CardButtonDropDown = () => {
 
   return (
     <div className='relative inline-block' ref={dropdownRef}>
-      <Button onClick={() => setIsOpen((prev) => !prev)}>...</Button>
+      <div
+        className='px-3'
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
+          setIsOpen((prev) => !prev);
+        }}
+      >
+        <Button>...</Button>
+      </div>
 
       {isOpen && (
         <div className='absolute right-0 z-10 mt-2 w-32 space-y-2 rounded-lg border border-lightgray bg-white p-2 shadow-md'>
@@ -29,7 +38,9 @@ const CardButtonDropDown = () => {
             <div className='p-1'>
               <button
                 className='w-full text-left'
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
                   console.log('설정 클릭');
                   setIsOpen(false);
                 }}
@@ -40,7 +51,9 @@ const CardButtonDropDown = () => {
             <div className='p-1'>
               <button
                 className='w-full text-left'
-                onClick={() => {
+                onClick={(e) => {
+                  e.stopPropagation();
+                  e.preventDefault();
                   console.log('삭제하기 클릭');
                   setIsOpen(false);
                 }}
