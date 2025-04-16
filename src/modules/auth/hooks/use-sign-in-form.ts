@@ -49,7 +49,8 @@ const useSignInForm = () => {
         return;
       }
 
-      router.push('/');
+      router.push(URLS.HOME);
+      router.refresh();
     });
   };
 
