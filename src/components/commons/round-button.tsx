@@ -40,7 +40,7 @@ type RoundButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement> &
 /**
  * 라운드버튼 공통 컴포넌트
  * @param size - 라운드버튼의 크기 종류
- * @param borderColor - 외곽선 색상
+ * @param borderColor - 라운드 버튼 외곽선 색상
  * @param children - 텍스트, 아이콘, 이미지 등 컨텐츠
  * @param props - 기본 버튼 속성
  */
