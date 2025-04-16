@@ -3,15 +3,19 @@ import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const buttonVariants = cva(
-  '', // 기본 스타일
+  'inline-flex items-center w-full justify-center rounded-lg font-semibold transition-colors outline-none disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        default: '',
-        outline: '',
+        default: 'bg-primary text-black ',
+        secondary: 'bg-beige-light text-black',
+        outline: 'bg-white-light text-black border-beige border',
       },
       size: {
-        default: '',
+        default:
+          'text-16-regular sm:text-20-bold md:text-24-semibold h-8 sm:h-10 md:h-12 px-3 sm:px-4 md:px-6',
+        sm: 'text-14 sm:text-16-regular md:text-20-medium h-6 sm:h-9 md:h-10 px-3 sm:px-4',
+        lg: 'text-20-bold sm:text-24-semibold md:text-28-regular h-10 sm:h-12 md:h-14 px-4 sm:px-5 md:px-6',
       },
     },
     defaultVariants: {
