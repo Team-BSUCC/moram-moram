@@ -4,6 +4,7 @@ import Title from '@/components/commons/title';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { CoreType, EventType } from '../type/todo-type';
 import CheckBox from '@/components/commons/check-box';
+import Spacer from '@/components/commons/spacer';
 
 type CalendarFloatingSheetProps = {
   todos: CoreType[] | undefined;
@@ -29,33 +30,44 @@ const CalendarFloatingSheet = ({
 
   return (
     <FloatingSheet>
-      <Text>{info}</Text>
+      <div className='flex justify-start'>
+        <Text>{info}</Text>
+      </div>
       <Title as='h1'>TO DO LIST</Title>
       {isSatisfied && data ? (
-        data.map((core) => (
-          <div key={core.title} className='flex flex-col gap-3'>
-            <Title as='h2' highlightColor='bg-blue-500'>
-              {core.title}
-            </Title>
-            {core.topics.map((topic) =>
-              topic.subtopics.map((sub) =>
-                sub.todos
-                  .filter((todo) => todo.createdAt.slice(0, 10) === info)
-                  .map((todo, idx) => (
-                    <div key={idx}>
-                      <div className='flex gap-3'>
-                        <CheckBox />
-                        <div>{todo.title}</div>
-                      </div>
-                      <div className='text-gray-500 text-sm'>
-                        {topic.title} &gt; {sub.title}
-                      </div>
-                    </div>
-                  ))
+        data
+          .filter((core) =>
+            core.topics.some((topic) =>
+              topic.subtopics.some((sub) =>
+                sub.todos.some((todo) => todo.createdAt.slice(0, 10) === info)
               )
-            )}
-          </div>
-        ))
+            )
+          )
+          .map((core) => (
+            <div key={core.title} className='flex flex-col gap-5'>
+              <Spacer size={'sm'} />
+              <Title as='h2' highlightColor='bg-blue-500'>
+                {core.title}
+              </Title>
+              {core.topics.map((topic) =>
+                topic.subtopics.map((sub) =>
+                  sub.todos
+                    .filter((todo) => todo.createdAt.slice(0, 10) === info)
+                    .map((todo, idx) => (
+                      <div key={idx}>
+                        <div className='flex gap-3'>
+                          <CheckBox />
+                          <div>{todo.title}</div>
+                        </div>
+                        <div className='text-gray-500 ml-9 text-sm'>
+                          {topic.title} &gt; {sub.title}
+                        </div>
+                      </div>
+                    ))
+                )
+              )}
+            </div>
+          ))
       ) : (
         <div className='text-gray-400 mt-2'>할 일이 없습니다...</div>
       )}
