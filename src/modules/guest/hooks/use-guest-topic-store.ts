@@ -1,12 +1,9 @@
-// stores/useGuestTopicStore.ts
 import { create } from 'zustand';
 
 interface TopicState {
   core: string;
   topics: string[];
-  // eslint-disable-next-line no-unused-vars
   setTopic: (index: number, value: string) => void;
-  // eslint-disable-next-line no-unused-vars
   setCore: (value: string) => void;
 }
 

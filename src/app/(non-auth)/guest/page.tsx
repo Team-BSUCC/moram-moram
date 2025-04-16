@@ -10,18 +10,6 @@ import { toPng } from 'html-to-image';
 import React, { useRef } from 'react';
 
 const GuestPage = () => {
-  const topicColorList = [
-    'bg-pink-pastel',
-    'bg-red-pastel',
-    'bg-orange-pastel',
-    'bg-purple-pastel',
-    'bg-yellow-pastel',
-    'bg-blue-pastel',
-    'bg-sky-pastel',
-    'bg-green-pastel',
-    'bg-transparent',
-  ];
-
   const title = useGuestTopicStore((state) => state.core);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -44,9 +32,9 @@ const GuestPage = () => {
   };
 
   return (
-    <div className='flex-col'>
+    <div className='flex-col place-items-center'>
       <Spacer size='3xl' />
-      <div className='bg-white-light p-2 md:p-5' ref={ref}>
+      <div className='bg-white-light p-2 md:w-[1024px] md:p-5' ref={ref}>
         <div className='w-full flex-col justify-items-center'>
           <Title variant='default' as='h1' highlightColor='bg-red-500'>
             {title || '나만의 만다라트 작성하기'}
@@ -60,14 +48,11 @@ const GuestPage = () => {
         </div>
         <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
           <div className='col-start-2 row-start-2 aspect-square h-full'>
-            <GuestMandalartMainBlock
-              coreColor='bg-violet-pigment'
-              topicColor={topicColorList}
-            />
+            <GuestMandalartMainBlock coreColor='bg-violet-pigment' />
           </div>
           {Array.from({ length: 8 }).map((_, index) => (
             <div key={`block${index}`}>
-              <GuestMandalartBlock index={index} topicColor={topicColorList} />
+              <GuestMandalartBlock index={index} />
             </div>
           ))}
         </div>
