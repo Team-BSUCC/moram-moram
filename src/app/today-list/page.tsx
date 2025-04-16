@@ -4,11 +4,11 @@ import Button from '@/components/commons/button';
 import Spacer from '@/components/commons/spacer';
 import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
-import { useFetchCalendarQuery } from '@/modules/calendar/hooks/use-fetch-calendar-query';
+import { useGetMyMandalartsQuery } from '@/shared/hooks/use-get-my-mandalarts-query';
 import { useEffect, useState } from 'react';
 
 const TodayListPage = () => {
-  const { data, isPending } = useFetchCalendarQuery();
+  const { data, isPending } = useGetMyMandalartsQuery();
   const [clickedTitle, setClickedTitle] = useState<string>('');
   const [selectedOption, setSelectedOption] = useState<string>('all');
 
