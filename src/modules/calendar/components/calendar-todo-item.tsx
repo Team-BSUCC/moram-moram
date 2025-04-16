@@ -17,6 +17,7 @@ const CalendarTodoItem = ({ todo, topic, sub }: CalendarTodoItemProps) => {
         </div>
         <button className='text-gray-500 px-2 text-xl leading-none'>⋮</button>
       </div>
+      <div className='border-gray-200 mx-9 my-1 border-b'></div>
       <div className='text-gray-500 ml-9 mt-1 text-sm'>
         {topic.title} &gt; {sub.title}
       </div>
