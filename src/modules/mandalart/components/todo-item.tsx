@@ -45,6 +45,7 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
   const deleteMutate = useThrottleMutate(mutate, 50);
 
   return (
+    /* eslint-disable indent */ //삼항연산자오류때문에 작성했습니다 해당 규칙에대해 논의 필요합니다.
     <div className='flex items-center'>
       <CheckBox
         checked={done}
@@ -59,7 +60,12 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
                 (todoList: TodoPayloadType[]) =>
                   todoList.map((todo) =>
                     todo.id === id
-                      ? { ...todo, is_done: !newDone, action: 'UPDATE' }
+                      ? {
+                          ...todo,
+                          is_done: !newDone,
+                          action: 'UPDATE',
+                          category: 'TODO',
+                        }
                       : todo
                   )
               );
@@ -84,7 +90,12 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
                 (todoList: TodoPayloadType[]) =>
                   todoList.map((todo) =>
                     todo.id === id
-                      ? { ...todo, action: 'UPDATE', value: newValue }
+                      ? {
+                          ...todo,
+                          action: 'UPDATE',
+                          category: 'TODO',
+                          value: newValue,
+                        }
                       : todo
                   )
               );
@@ -102,7 +113,9 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
             QUERY_KEY.todolist(cellId.cell_id),
             (todoList: TodoPayloadType[]) =>
               todoList.map((todo) =>
-                todo.id === id ? { ...todo, action: 'DELETE' } : todo
+                todo.id === id
+                  ? { ...todo, action: 'DELETE', category: 'TODO' }
+                  : todo
               )
           );
           deleteMutate();
