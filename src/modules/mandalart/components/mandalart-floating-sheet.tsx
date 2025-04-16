@@ -38,8 +38,6 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
     useFloatingSheetStore((state) => state.info) as CellInfoType
   );
 
-  const [disabled, setDisabled] = useState<boolean>(true);
-
   const { data: initialValue } = useCellCacheQuery(info);
 
   const [value, setValue] = useState<string>(initialValue ?? '');
@@ -57,10 +55,9 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
 
   return (
     <FloatingSheet>
-      <div className='space-y-4 p-4'>
+      <div className='w-[300px] space-y-4 bg-red-pastel p-4'>
         <div className='flex items-center gap-2'>
           <Input
-            variant={disabled ? 'none' : 'default'}
             type='text'
             value={value}
             placeholder={value}
@@ -68,11 +65,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
               setValue(e.target.value);
               throttleMutate();
             }}
-            disabled={disabled}
           />
-          <RoundButton size='xs' onClick={() => setDisabled(!disabled)}>
-            편
-          </RoundButton>
         </div>
         {/* 핵심주제일 경우 */}
         {info.category === 'CORE' && (
