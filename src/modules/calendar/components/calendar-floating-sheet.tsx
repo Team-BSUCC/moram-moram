@@ -34,6 +34,8 @@ const CalendarFloatingSheet = ({
         <Text>{info}</Text>
       </div>
       <Title as='h1'>TO DO LIST</Title>
+      <Spacer size={'sm'} />
+      <hr className='mb-5' />
       {isSatisfied && data ? (
         data
           .filter((core) =>
@@ -45,7 +47,6 @@ const CalendarFloatingSheet = ({
           )
           .map((core) => (
             <div key={core.title} className='flex flex-col gap-5'>
-              <Spacer size={'sm'} />
               <Title as='h2' highlightColor='bg-blue-500'>
                 {core.title}
               </Title>
