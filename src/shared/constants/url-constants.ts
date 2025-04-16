@@ -9,6 +9,7 @@ const URLS = {
   STATUS: '/status',
   STUDIO: '/studio',
   CALENDAR: '/calendar',
+  GUEST: '/guest',
   CALL_BACK: 'callback',
   REFRESH: 'refresh',
 } as const;

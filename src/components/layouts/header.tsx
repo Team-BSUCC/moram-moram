@@ -3,17 +3,21 @@ import { User } from '@supabase/supabase-js';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
+import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
+import Text from '../commons/text';
 
 type HeaderProps = {
   user: User | null;
 };
 
 const Header = ({ user }: HeaderProps) => {
-  console.log(user);
+  const linkStyle =
+    'flex items-center justify-center gap-2.5 rounded-lg px-6 py-3 text-md';
+
   return (
     <div className='h-full w-full'>
       {/* <Header /> 컴포넌트가 들어올 예정입니다. */}
-      <div className='flex h-full items-center justify-between bg-pink-pastel'>
+      <div className='flex h-full items-center justify-between'>
         <div className='p-8'>
           <Image
             src='images/manda-log-text-.svg'
@@ -22,23 +26,44 @@ const Header = ({ user }: HeaderProps) => {
             height='48'
           ></Image>
         </div>
-        <div>
+        <div className='flex gap-4 pr-8'>
           {user ? (
             <>
-              <Link href={URLS.DASHBOARD} className='border bg-purple-pastel'>
+              <Link
+                href={URLS.DASHBOARD}
+                className={`${linkStyle} bg-[#F0E9E5]`}
+              >
                 내 만다라트
               </Link>
-              <Link href={URLS.CALENDAR} className='border bg-purple-pastel'>
-                허브
+              <Link
+                href={URLS.CALENDAR}
+                className={`${linkStyle} bg-[#F0E9E5]`}
+              >
+                캘린더
               </Link>
+              <div className='flex gap-2 pl-2'>
+                <Avatar className='border border-black hover:z-10'>
+                  <AvatarImage src={'유저이미지 추가해야함'} />
+                  <AvatarFallback>
+                    {user.user_metadata.nickname.slice(0, 1)}
+                  </AvatarFallback>
+                </Avatar>
+                <p className='text-xl'>{user.user_metadata.nickname}</p>
+              </div>
             </>
           ) : (
             <>
-              <Link href={URLS.SIGN_IN} className='border bg-purple-pastel'>
+              <Link href={URLS.SIGN_IN} className={`${linkStyle} bg-[#F0E9E5]`}>
                 로그인
               </Link>
-              <Link href={URLS.SIGN_UP} className='border bg-purple-pastel'>
+              <Link href={URLS.SIGN_UP} className={`${linkStyle} bg-[#F0E9E5]`}>
                 회원가입
+              </Link>
+              <Link
+                href={URLS.GUEST}
+                className={`${linkStyle} border-2 border-[#F0E9E5]`}
+              >
+                비회원으로 체험하기
               </Link>
             </>
           )}
