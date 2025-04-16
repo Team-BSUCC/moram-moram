@@ -22,7 +22,7 @@ import {
 } from '../hooks/use-mandalart-data-query';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
-import RoundButton from '@/components/commons/round-button';
+import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -53,24 +53,36 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   const { mutate } = useBroadcastMutation(channelReceiver, { ...info, value });
   const throttleMutate = useThrottleMutate(mutate, 0.5 * 1000);
 
+  console.log(info);
+
+  let headerColor = '';
+  if (info.topic_index) {
+    headerColor = getColorWithNumber(info.topic_index);
+  }
+  if (info.category === 'CORE') {
+    headerColor = 'bg-violet-pigment';
+  }
   return (
     <FloatingSheet>
-      <div className='w-[300px] space-y-4 bg-red-pastel p-4'>
-        <div className='flex items-center gap-2'>
-          <Input
-            type='text'
-            value={value}
-            placeholder={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-              throttleMutate();
-            }}
-          />
+      <div className='h-[700px] w-[500px] space-y-4 overflow-y-auto p-4'>
+        <div className={headerColor}>
+          <div className='flex flex-col items-start gap-0'>
+            <Text>TO DO LIST</Text>
+            <Input
+              type='text'
+              sizes='xl'
+              value={value}
+              placeholder={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+                throttleMutate();
+              }}
+            />
+          </div>
         </div>
         {/* 핵심주제일 경우 */}
         {info.category === 'CORE' && (
           <div>
-            <Text>대주제</Text>
             {info.mandalart_topics?.map((topic) => (
               <TopicGroup
                 key={topic.id}
@@ -83,7 +95,6 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
         {/* 대주제일 경우 */}
         {info.category === 'TOPIC' && (
           <div>
-            <Text>소주제</Text>
             {info.mandalart_subtopics?.map((sub) => (
               <SubtopicGroup
                 key={sub.id}
@@ -96,7 +107,6 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
         {/* 소주제일 경우 */}
         {info.category === 'SUBTOPIC' && (
           <div>
-            <Text>할 일</Text>
             {todoListCacheArray.map((todo: TodoType) => (
               <TodoItem
                 key={todo.id}
