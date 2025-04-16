@@ -3,32 +3,9 @@
 import { User } from '@supabase/supabase-js';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
-import { SignInDTO, UpdatePasswordDTO, UserType } from '../types/auth-type';
+import { UpdatePasswordDTO, UserType } from '../types/auth-type';
 
-type PropsSignIn = SignInDTO;
 type PropsSignUp = UserType;
-
-/**
- * @param  params
- * 사용자의 정보를 받아 로그인을 하는 함수
- * @param params.email 사용자 이메일
- * @param params.password 사용자가 설정한 비밀번호
- * @throws supabase 에러
- */
-
-export const signIn = async ({
-  email,
-  password,
-}: PropsSignIn): Promise<{ error: string | null }> => {
-  const supabase = getServerClientAction();
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  return {
-    error: error?.message || null,
-  };
-};
 
 /**
  * @param params
