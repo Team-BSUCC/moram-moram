@@ -7,10 +7,13 @@ import ProgressSection from '@/components/landing/progress-section';
 import CalendarSection from '@/components/landing/calendar-section';
 import TeamPlanningSection from '@/components/landing/team-planning-section';
 import CTASection from '@/components/landing/cta-section';
+import ScrollTop from '@/components/landing/scroll-top';
 
 const HomePage = async () => {
   return (
-    <div className='scroll-snap-y h-screen w-[100dvw] snap-mandatory scroll-smooth'>
+    <div className='min-h-screen w-full self-stretch'>
+      <ScrollTop />
+
       <AnimatedSection>
         <HeroSection />
       </AnimatedSection>
