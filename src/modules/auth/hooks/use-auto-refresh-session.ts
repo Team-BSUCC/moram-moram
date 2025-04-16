@@ -9,7 +9,7 @@ const useAutoRefreshSession = () => {
     const refresh = async () => {
       try {
         const res = await fetch(`/api/${URLS.REFRESH}`);
-        if (!res.ok) {
+        if (!res.ok && res.status !== 401) {
           if (res.statusText === 'Unauthorized') {
             return;
           }
@@ -26,7 +26,9 @@ const useAutoRefreshSession = () => {
       }
     };
 
-    refresh();
+    if (document.cookie.includes('sb-access-token')) {
+      refresh();
+    }
   }, []);
 };
 
