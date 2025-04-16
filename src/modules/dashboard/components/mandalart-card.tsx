@@ -15,11 +15,14 @@ type MandalartCardProps = {
 };
 
 const MandalartCard = ({ info, bandColor }: MandalartCardProps) => {
+  /**
+   * TODO : Link 태그 href 내부 링크 수정 (room/uuid)
+   */
   return (
     <div
       className={`${bandColor} grid w-full rounded-br-lg rounded-tr-lg shadow-md`}
     >
-      <Link href={`/room/${info.id}`}>
+      <Link href={`/mandaldart`}>
         <div className='ml-3 rounded-br-lg rounded-tr-lg bg-white-light'>
           <div className='w-full flex-col p-3'>
             <div className='flex justify-between'>
