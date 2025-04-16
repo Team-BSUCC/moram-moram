@@ -22,7 +22,7 @@ const MandalartCard = ({ info, bandColor }: MandalartCardProps) => {
     <div
       className={`${bandColor} grid w-full rounded-br-lg rounded-tr-lg shadow-md`}
     >
-      <Link href={`/mandaldart`}>
+      <Link href='/mandalart'>
         <div className='ml-3 rounded-br-lg rounded-tr-lg bg-white-light'>
           <div className='w-full flex-col p-3'>
             <div className='flex justify-between'>
