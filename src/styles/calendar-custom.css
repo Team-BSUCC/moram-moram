@@ -89,16 +89,16 @@
 
 /* 날짜 셀 */
 .fc .fc-daygrid-day {
-  height: 150px !important;
   min-width: 120px !important;
   cursor: pointer;
   position: relative;
+  overflow: hidden;
 }
 
 .fc .fc-daygrid-day-frame {
   min-height: 120px;
   position: relative;
-  padding: 8px;
+  padding: 2px;
 }
 
 .fc .fc-daygrid-day-top {
@@ -137,14 +137,15 @@
 .custom-event {
   background-color: #f7d6d1;
   font-size: 12px;
-  padding: 3px 6px;
-  border-radius: 4px;
-  margin: 2px 4px;
+  padding: 2px 4px;
+  margin: 0px 4px;
   white-space: nowrap;
+  border-radius: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   border: none !important;
   max-width: calc(100% - 8px);
+  align-items: center;
 }
 
 /* 이벤트 영역 조정 */
@@ -171,6 +172,7 @@
 
 /* 이벤트 호버 효과 제거 */
 .fc-event:hover {
+  background: transparent;
   cursor: default;
 }
 
@@ -264,4 +266,9 @@ a.fc-event::after {
 .fc-daygrid-event-harness:last-of-type a::after {
   display: none !important;
   content: none !important;
+}
+
+.fc-day.fc-day-tue.fc-day-past.fc-daygrid-day {
+  aspect-ratio: 1 / 1;
+  height: auto;
 }
