@@ -192,14 +192,14 @@
   background-color: transparent !important;
 }
 
-/* 14일 날짜에 초록색 원 스타일 */
-.fc .fc-daygrid-day[data-date='2025-04-14'] .fc-daygrid-day-number {
+/* 오늘 날짜에 초록색 원 스타일 */
+.fc .fc-day-today .fc-daygrid-day-number {
   position: relative;
   color: white;
   z-index: 1;
 }
 
-.fc .fc-daygrid-day[data-date='2025-04-14'] .fc-daygrid-day-number::before {
+.fc .fc-day-today .fc-daygrid-day-number::before {
   content: '';
   position: absolute;
   left: 0;

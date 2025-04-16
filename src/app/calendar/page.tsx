@@ -2,53 +2,33 @@
 
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import { useState } from 'react';
 import '../../styles/calendar-custom.css';
 import interactionPlugin from '@fullcalendar/interaction';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floating-sheet';
+import { useFetchCalendarQuery } from '@/modules/calendar/hooks/use-fetch-calendar-query';
 
 /**
- *@todo : 캘린더 UI 추가 수정
- *@todo : DB 데이터 연동
- *@todo : 어떤식으로 데이터를 가져올지 고민하기
+ * @todo : 캘린더 UI 추가 수정
  */
 const CalendarPage = () => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const show = useFloatingSheetStore((state) => state.show);
   const setInfo = useFloatingSheetStore((state) => state.setInfo);
 
-  // 더미 데이터
-  const [events] = useState([
-    {
-      title: '3시에 양서윤님과 유저 테스트',
-      date: '2025-04-14',
-      backgroundColor: '#f7d6d1',
-      borderColor: '#f7d6d1',
-      textColor: '#111',
-    },
-    {
-      title: '역행자 P128까지 읽기',
-      date: '2025-04-14',
-      backgroundColor: '#f7d6d1',
-      borderColor: '#f7d6d1',
-      textColor: '#111',
-    },
-    {
-      title: '우리집에서 학교까지 걷기',
-      date: '2025-04-14',
-      backgroundColor: '#f7d6d1',
-      borderColor: '#f7d6d1',
-      textColor: '#111',
-    },
-    {
-      title: '우리집에서 학교까지 걷기',
-      date: '2025-04-14',
-      backgroundColor: '#f7d6d1',
-      borderColor: '#f7d6d1',
-      textColor: '#111',
-    },
-  ]);
+  const { data: date, isPending } = useFetchCalendarQuery();
+
+  if (isPending) return <div>Loading...</div>;
+
+  const allTodos = date?.flatMap((core) =>
+    core.topics.flatMap((topic) => topic.subtopics.flatMap((sub) => sub.todos))
+  );
+
+  const events = allTodos?.map((todo) => ({
+    title: todo.title,
+    date: todo.createdAt,
+    isDone: todo.isDone,
+  }));
 
   // 셀 클릭 핸들러
   const handleCellClick = (dateStr: string) => {
@@ -94,7 +74,7 @@ const CalendarPage = () => {
         initialDate={new Date()}
         unselectAuto={true}
       />
-      {isVisible && <CalendarFloatingSheet todos={events} />}
+      {isVisible && <CalendarFloatingSheet todos={date} events={events} />}
     </div>
   );
 };
