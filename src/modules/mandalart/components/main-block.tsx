@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import Cell from './cell';
 import { MandalartType, TopicsType, TopicType } from '../types/realtime-type';
+import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 
 type MainBlockProps = {
   topics: TopicsType;
@@ -33,14 +34,19 @@ const MainBlock = ({ topics, info, className }: MainBlockProps) => {
   return (
     <div className={className}>
       <div className='grid grid-cols-3 grid-rows-3 gap-2'>
-        {memoizedCells.map((cell, idx) => (
-          <Cell
-            key={idx}
-            info={cell}
-            value={cell?.topic || cell?.title || ''}
-            className={cell?.isCenter ? 'border-2' : ''}
-          />
-        ))}
+        {memoizedCells.map((cell, idx) => {
+          let cellColor =
+            idx < 4 ? getColorWithNumber(idx) : getColorWithNumber(idx - 1);
+          if (idx === 4) cellColor = 'bg-violet-pigment';
+          return (
+            <Cell
+              key={idx}
+              info={cell}
+              value={cell?.topic || cell?.title || ''}
+              className={cellColor}
+            />
+          );
+        })}
       </div>
     </div>
   );

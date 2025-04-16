@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import Cell from './cell';
 import { SubTopicType, TopicType } from '../types/realtime-type';
+import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 
 type SubBlockProps = {
   title: string;
@@ -40,14 +41,22 @@ const SubBlock = ({ title, topic, subTopics }: SubBlockProps) => {
 
   return (
     <div className='grid grid-cols-3 grid-rows-3 gap-2'>
-      {memoizedCells.map((cell, idx) => (
-        <Cell
-          key={cell?.id || idx}
-          info={cell}
-          value={cell?.content || ''}
-          className={cell?.isCenter ? 'bg-gray-100 border-2 font-bold' : ''}
-        />
-      ))}
+      {memoizedCells.map((cell, idx) => {
+        let cellColor = '';
+        if (idx === 4) cellColor = getColorWithNumber(cell.topic_index);
+        return (
+          <Cell
+            key={cell?.id || idx}
+            info={cell}
+            value={cell?.content || ''}
+            className={
+              cell?.isCenter
+                ? `bg-gray-100 border-2 font-bold ${cellColor}`
+                : ''
+            }
+          />
+        );
+      })}
     </div>
   );
 };

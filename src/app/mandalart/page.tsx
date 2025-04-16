@@ -116,7 +116,7 @@ const MandalartPage = () => {
       <div className='flex justify-end'>
         <RealtimeAvatarStack roomName='avatar-room' username={username} />
       </div>
-      <div className='grid w-fit grid-cols-3 grid-rows-3 gap-5 text-xs'>
+      <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
         {/* 중앙 블록 */}
         <MainBlock
           topics={data.mandalart_topics}

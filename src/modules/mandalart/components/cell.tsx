@@ -50,7 +50,7 @@ const Cell = ({ value, className, info }: CellProps) => {
     <>
       <Button onClick={handleClick}>
         <div
-          className={`border-gray-200 flex h-20 w-20 items-center justify-center border text-center text-xs ${className || ''}`}
+          className={`border-gray-200 flex h-20 w-20 items-center justify-center border text-center text-xs ${className}`}
           style={{ borderRadius: '8px' }}
         >
           {data}
