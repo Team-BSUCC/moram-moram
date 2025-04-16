@@ -50,10 +50,6 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
           <div className='flex justify-end'>
             <button onClick={hide}>...X...</button>
           </div>
-          <div className='handle mb-2 flex h-6 cursor-pointer items-center justify-center rounded bg-gray'>
-            <div className='bg-gray-300 h-1 w-10 rounded-full'></div>
-          </div>
-
           {/* 시트 안에 들어갈 내용 드래그 중 텍스트 선택 방지 */}
           <div className='select-none'>
             <div>{children}</div>
