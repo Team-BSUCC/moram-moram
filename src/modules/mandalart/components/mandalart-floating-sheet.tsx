@@ -53,15 +53,14 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   const { mutate } = useBroadcastMutation(channelReceiver, { ...info, value });
   const throttleMutate = useThrottleMutate(mutate, 0.5 * 1000);
 
-  console.log(info);
-
   let headerColor = '';
-  if (info.topic_index) {
+  if (info.category === 'TOPIC') {
     headerColor = getColorWithNumber(info.topic_index);
   }
   if (info.category === 'CORE') {
     headerColor = 'bg-violet-pigment';
   }
+
   return (
     <FloatingSheet>
       <div className='h-[700px] w-[500px] space-y-4 overflow-y-auto p-4'>
@@ -107,6 +106,13 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
         {/* 소주제일 경우 */}
         {info.category === 'SUBTOPIC' && (
           <div>
+            <Button
+              variant='outline'
+              size='default'
+              onClick={() => createTodo()}
+            >
+              투두 추가하기
+            </Button>
             {todoListCacheArray.map((todo: TodoType) => (
               <TodoItem
                 key={todo.id}
@@ -115,14 +121,6 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
                 channelReceiver={channelReceiver}
               />
             ))}
-
-            <Button
-              variant='outline'
-              size='default'
-              onClick={() => createTodo()}
-            >
-              투두 추가하기
-            </Button>
           </div>
         )}
       </div>
