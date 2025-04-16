@@ -6,7 +6,7 @@ import '../../styles/calendar-custom.css';
 import interactionPlugin from '@fullcalendar/interaction';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floating-sheet';
-import { useFetchCalendarQuery } from '@/modules/calendar/hooks/use-fetch-calendar-query';
+import { useGetMyMandalartsQuery } from '@/shared/hooks/use-get-my-mandalarts-query';
 
 /**
  * @todo : 캘린더 UI 추가 수정
@@ -16,7 +16,7 @@ const CalendarPage = () => {
   const show = useFloatingSheetStore((state) => state.show);
   const setInfo = useFloatingSheetStore((state) => state.setInfo);
 
-  const { data: date, isPending } = useFetchCalendarQuery();
+  const { data: date, isPending } = useGetMyMandalartsQuery();
 
   if (isPending) return <div>Loading...</div>;
 
