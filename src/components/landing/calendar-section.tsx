@@ -1,23 +1,22 @@
+import Image from 'next/image';
+import Spacer from '../commons/spacer';
+
 const CalendarSection = () => {
   return (
-    <section className='w-full bg-white px-4 py-24 sm:px-8 md:px-12 lg:px-16'>
-      <div className='mx-auto max-w-screen-xl text-center'>
-        <h3 className='mb-4 text-xl font-semibold'>
-          📅 캘린더에서 오늘 할 일을 한눈에 확인
-        </h3>
-        <div className='mt-10 flex flex-col items-center justify-center gap-8 lg:flex-row'>
-          <img
-            src=''
-            alt='캘린더 예시'
-            className='w-full max-w-md rounded-lg shadow'
-          />
-          <img
-            src=''
-            alt='할일 목록'
-            className='w-full max-w-md rounded-lg shadow'
-          />
-        </div>
+    <section className='flex min-h-screen w-full flex-col items-center justify-center'>
+      {/* 텍스트 영역 */}
+      <div className='flex w-full flex-col items-center justify-center'>
+        <h1 className='text-[36px] font-bold'>캘린더에서</h1>
+        <p className='text-[32px]'>오늘 할 일을 한눈에 확인</p>
       </div>
+      <Spacer size='xl' />
+      {/* 사진 영역 */}
+      <Image
+        src='/images/calendar/calendar.png'
+        width={1200}
+        height={600}
+        alt='calendar'
+      />
     </section>
   );
 };

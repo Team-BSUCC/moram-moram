@@ -1,19 +1,22 @@
+import Image from 'next/image';
+import Spacer from '../commons/spacer';
+
 const TeamPlanningSection = () => {
   return (
-    <section className='w-full bg-[#F7F6FF] px-4 py-24 sm:px-8 md:px-12 lg:px-16'>
-      <div className='mx-auto max-w-screen-xl text-center'>
-        <h3 className='mb-2 text-xl font-semibold'>실시간 협업</h3>
-        <p className='text-gray-700 text-base'>
-          친구/팀원과 함께 작성하고 실시간으로 반영
-        </p>
-        <div className='mt-10'>
-          <img
-            src=''
-            alt='협업 보드 예시'
-            className='mx-auto w-full max-w-4xl rounded-lg shadow'
-          />
-        </div>
+    <section className='flex min-h-screen w-full flex-col items-center justify-center'>
+      {/* 텍스트 영역 */}
+      <div className='flex w-full flex-col items-center justify-center'>
+        <h1 className='text-[36px] font-bold'>실시간 협업</h1>
+        <p className='text-[32px]'>친구/팀원과 함께 작성하고 실행</p>
       </div>
+      <Spacer size='xl' />
+      {/* 사진 영역 */}
+      <Image
+        src='/images/team/team-explain.png'
+        width={1200}
+        height={600}
+        alt='explain'
+      />
     </section>
   );
 };

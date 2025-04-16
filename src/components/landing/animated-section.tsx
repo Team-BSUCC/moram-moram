@@ -17,7 +17,7 @@ const AnimatedSection = ({ children, delay = 0 }: Props) => {
       ref={ref}
       initial={{ opacity: 0, y: 0 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.8, delay }}
+      transition={{ duration: 0.4, delay }}
     >
       {children}
     </motion.section>

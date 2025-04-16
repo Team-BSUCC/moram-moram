@@ -10,8 +10,8 @@ export const spacerVariants = cva('w-full', {
       md: 'h-4', // 16px
       lg: 'h-8', // 32px
       xl: 'h-12', // 48px
-      '2xl': 'h-16', // 64px
-      '3xl': 'h-20', // 80px
+      xxl: 'h-16', // 64px
+      xxxl: 'h-20', // 80px
     },
   },
   defaultVariants: {

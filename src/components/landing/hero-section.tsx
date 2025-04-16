@@ -1,24 +1,23 @@
 import React from 'react';
 import Text from '../commons/text';
-import Title from '../commons/title';
 import Spacer from '../commons/spacer';
 import Button from '../commons/button';
 
 const HeroSection = () => {
   return (
-    <div className="relative min-h-screen w-full bg-[url('/images/landing-img-hero.png')] bg-cover bg-center bg-no-repeat">
+    <div className="relative min-h-screen w-full bg-[url('/images/hero/landing-img-hero.png')] bg-cover bg-center bg-no-repeat">
       {/* 반투명 그라디언트 배경 */}
       <div className='pointer-events-none absolute left-0 top-0 h-full w-1/2 bg-[linear-gradient(to_right,_white_0%,_white_50px,_rgba(255,255,255,0)_100%)]' />
 
       {/* 텍스트 콘텐츠 */}
       <div className='relative h-full w-full items-center'>
-        <div className='mx-auto w-full max-w-screen-xl px-6 sm:px-8 sm:py-12 md:px-12 md:py-24 lg:px-16 lg:py-40'>
+        <div className='w-full sm:px-6 sm:py-12 md:px-8 md:py-24 lg:px-24 lg:py-40'>
           <div className='flex flex-col items-start'>
-            <Title as='h1'>
+            <h1 className='text-[32px] font-bold'>
               목표를 구체적으로,
               <br />
               계획을 실행 가능하게
-            </Title>
+            </h1>
             {/* 제목 ↔ 본문 간격 */}
             <div className='mt-6 text-base leading-relaxed sm:text-lg'>
               <Text size='default' align='left'>
@@ -29,7 +28,7 @@ const HeroSection = () => {
               </Text>
             </div>
             <Spacer size='xl' />
-            <Button>지금 시작하기</Button>
+            <Button size='landing'>지금 시작하기</Button>
           </div>
         </div>
       </div>
