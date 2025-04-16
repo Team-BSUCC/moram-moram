@@ -22,6 +22,8 @@ import Spacer from '@/components/commons/spacer';
 import Title from '@/components/commons/title';
 import Text from '@/components/commons/text';
 import { BicepsFlexed, CalendarDays } from 'lucide-react';
+import LinearProgress from '@/components/commons/progress-bar';
+import { calculatorProgress } from '@/shared/utils/calculator-progress';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -136,29 +138,42 @@ const MandalartPage = () => {
           </div>
         </div>
       </div>
+      <Spacer />
+      <div className='flex flex-col md:w-[1024px]'>
+        <div className='float-start flex'>
+          <Title as='h2'>
+            총 <span>{calculatorProgress(data.done_count)}%</span> 완료!
+          </Title>
+        </div>
 
-      <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:w-[1024px] md:gap-5 md:text-md'>
-        {/* 중앙 블록 */}
-        <MainBlock
-          topics={data.mandalart_topics}
-          info={data}
-          className='col-start-2 row-start-2 h-full'
-        />
-        {/* 나머지 블록 */}
-        {data.mandalart_topics.map((topic) => {
-          return (
-            <SubBlock
-              key={topic.id}
-              title={topic.topic}
-              topic={topic}
-              subTopics={topic.mandalart_subtopics}
-            />
-          );
-        })}
-        {/* 플로팅 시트 */}
-        {isVisible && (
-          <MandalartFloatingSheet channelReceiver={broadcastChannel} />
-        )}
+        <LinearProgress
+          value={calculatorProgress(data.done_count)}
+        ></LinearProgress>
+
+        <Spacer />
+        <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
+          {/* 중앙 블록 */}
+          <MainBlock
+            topics={data.mandalart_topics}
+            info={data}
+            className='col-start-2 row-start-2 h-full'
+          />
+          {/* 나머지 블록 */}
+          {data.mandalart_topics.map((topic) => {
+            return (
+              <SubBlock
+                key={topic.id}
+                title={topic.topic}
+                topic={topic}
+                subTopics={topic.mandalart_subtopics}
+              />
+            );
+          })}
+          {/* 플로팅 시트 */}
+          {isVisible && (
+            <MandalartFloatingSheet channelReceiver={broadcastChannel} />
+          )}
+        </div>
       </div>
     </div>
   );

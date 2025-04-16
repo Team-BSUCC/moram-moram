@@ -21,6 +21,7 @@ export const fetchGetMandalartsData = async (
       title,
       created_at,
       private,
+      done_count,
       mandalart_topics (
         id, mandalart_id, topic, created_at, topic_index,
         mandalart_subtopics (
