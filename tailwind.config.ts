@@ -7,6 +7,7 @@ const config: Config = {
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
     './src/modules/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/shared/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -14,6 +15,19 @@ const config: Config = {
         pretendard: ['var(--font-pretendard)'],
       },
       fontSize: {
+        '48-semibold': ['48px', '150%'],
+        '40-semibold': ['40px', '150%'],
+        '36-semibold': ['36px', '150%'],
+        '36-regular': ['36px', '150%'],
+        '32-semibold': ['32px', '150%'],
+        '32-regular': ['32px', '150%'],
+        '28-regular': ['28px', '150%'],
+        '24-semibold': ['24px', '135%'],
+        '20-bold': ['20px', '150%'],
+        '20-medium': ['20px', '150%'],
+        '20-regular': ['20px', '150%'],
+        '16-semibold': ['16px', '125%'],
+        '16-regular': ['16px', '125%'],
         ss: 'var(--text-ss)', // 10px
         sm: 'var(--text-sm)', // 12px
         md: 'var(--text-md)', // 13px
@@ -22,11 +36,19 @@ const config: Config = {
         xl: 'var(--text-xl)', // 24px
         '2xl': 'var(--text-2xl)', // 28px
       },
+      fontWeight: {
+        regular: '400',
+        medium: '500',
+        semibold: '600',
+        bold: '700',
+      },
       colors: {
         // 기존 정의
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         // 추가 색상 정의
+        primary: 'var(--color-primary)',
+        secondary: 'var(--color-secondary)',
         black: 'var(--color-black)',
         gray: 'var(--color-gray)',
         lightgray: 'var(--color-lightgray)',
@@ -71,33 +93,9 @@ const config: Config = {
           pastel: 'var(--color-violet-pastel)',
           pigment: 'var(--color-violet-pigment)',
         },
-        card: {
-          DEFAULT: 'hsl(var(--card))',
-          foreground: 'hsl(var(--card-foreground))',
-        },
-        popover: {
-          DEFAULT: 'hsl(var(--popover))',
-          foreground: 'hsl(var(--popover-foreground))',
-        },
-        primary: {
-          DEFAULT: 'hsl(var(--primary))',
-          foreground: 'hsl(var(--primary-foreground))',
-        },
-        secondary: {
-          DEFAULT: 'hsl(var(--secondary))',
-          foreground: 'hsl(var(--secondary-foreground))',
-        },
-        muted: {
-          DEFAULT: 'hsl(var(--muted))',
-          foreground: 'hsl(var(--muted-foreground))',
-        },
-        accent: {
-          DEFAULT: 'hsl(var(--accent))',
-          foreground: 'hsl(var(--accent-foreground))',
-        },
-        destructive: {
-          DEFAULT: 'hsl(var(--destructive))',
-          foreground: 'hsl(var(--destructive-foreground))',
+        beige: {
+          DEFAULT: 'var(--color-beige)',
+          light: 'var(--color-beige-light)',
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',
