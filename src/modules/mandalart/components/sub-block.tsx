@@ -40,7 +40,8 @@ const SubBlock = ({ title, topic, subTopics }: SubBlockProps) => {
   }, [title, topic, subTopics]);
 
   return (
-    <div className='grid grid-cols-3 grid-rows-3 gap-2'>
+    // 서브블럭 스타일 지정
+    <div className='grid aspect-square grid-cols-3 grid-rows-3 gap-2'>
       {memoizedCells.map((cell, idx) => {
         let cellColor = '';
         if (idx === 4) cellColor = getColorWithNumber(cell.topic_index);

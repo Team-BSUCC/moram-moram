@@ -32,22 +32,20 @@ const MainBlock = ({ topics, info, className }: MainBlockProps) => {
   }, [topics, info]);
 
   return (
-    <div className={className}>
-      <div className='grid grid-cols-3 grid-rows-3 gap-2'>
-        {memoizedCells.map((cell, idx) => {
-          let cellColor =
-            idx < 4 ? getColorWithNumber(idx) : getColorWithNumber(idx - 1);
-          if (idx === 4) cellColor = 'bg-violet-pigment';
-          return (
-            <Cell
-              key={idx}
-              info={cell}
-              value={cell?.topic || cell?.title || ''}
-              className={cellColor}
-            />
-          );
-        })}
-      </div>
+    <div className={`grid grid-cols-3 grid-rows-3 gap-2 ${className}`}>
+      {memoizedCells.map((cell, idx) => {
+        let cellColor =
+          idx < 4 ? getColorWithNumber(idx) : getColorWithNumber(idx - 1);
+        if (idx === 4) cellColor = 'bg-violet-pigment';
+        return (
+          <Cell
+            key={idx}
+            info={cell}
+            value={cell?.topic || cell?.title || ''}
+            className={cellColor}
+          />
+        );
+      })}
     </div>
   );
 };

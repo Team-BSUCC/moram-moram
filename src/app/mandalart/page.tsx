@@ -116,28 +116,30 @@ const MandalartPage = () => {
       <div className='flex justify-end'>
         <RealtimeAvatarStack roomName='avatar-room' username={username} />
       </div>
-      <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
-        {/* 중앙 블록 */}
-        <MainBlock
-          topics={data.mandalart_topics}
-          info={data}
-          className='col-start-2 row-start-2 h-full'
-        />
-        {/* 나머지 블록 */}
-        {data.mandalart_topics.map((topic) => {
-          return (
-            <SubBlock
-              key={topic.id}
-              title={topic.topic}
-              topic={topic}
-              subTopics={topic.mandalart_subtopics}
-            />
-          );
-        })}
-        {/* 플로팅 시트 */}
-        {isVisible && (
-          <MandalartFloatingSheet channelReceiver={broadcastChannel} />
-        )}
+      <div className='flex justify-center'>
+        <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:w-[1024px] md:gap-5 md:text-md'>
+          {/* 중앙 블록 */}
+          <MainBlock
+            topics={data.mandalart_topics}
+            info={data}
+            className='col-start-2 row-start-2 h-full'
+          />
+          {/* 나머지 블록 */}
+          {data.mandalart_topics.map((topic) => {
+            return (
+              <SubBlock
+                key={topic.id}
+                title={topic.topic}
+                topic={topic}
+                subTopics={topic.mandalart_subtopics}
+              />
+            );
+          })}
+          {/* 플로팅 시트 */}
+          {isVisible && (
+            <MandalartFloatingSheet channelReceiver={broadcastChannel} />
+          )}
+        </div>
       </div>
     </div>
   );
