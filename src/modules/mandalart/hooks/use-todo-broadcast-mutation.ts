@@ -3,13 +3,16 @@ import { TodoPayloadType } from '../types/realtime-type';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { judgingAction } from '../services/judging-action';
+import { useBroadcastStore } from './use-broadcast-store';
 
 export const useTodoBroadcastMutation = (
   myChannel: RealtimeChannel,
   todoRowData: TodoPayloadType
 ) => {
   const queryClient = useQueryClient();
-
+  const addBroadcastStore = useBroadcastStore(
+    (state) => state.addBroadcastStore
+  );
   const todoListKey: readonly unknown[] = QUERY_KEY.todolist(
     todoRowData.cell_id
   );
@@ -23,6 +26,7 @@ export const useTodoBroadcastMutation = (
         event: 'shout',
         payload: todoRowData,
       });
+      addBroadcastStore(todoRowData);
     },
     onError: () => {
       /**

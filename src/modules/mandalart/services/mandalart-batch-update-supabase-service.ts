@@ -66,7 +66,7 @@ export const mandalartBatchUpdateSupabase = async (
       .filter((payloadTodo) => payloadTodo.action !== 'DELETE')
       .map((payloadTodo) => {
         //category 사용 X
-        const { category, value, ...todoRowInfo } = payloadTodo;
+        const { category, value, action, ...todoRowInfo } = payloadTodo;
         return { ...todoRowInfo, title: value };
       });
 
