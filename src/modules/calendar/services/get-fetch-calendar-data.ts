@@ -33,7 +33,7 @@ export const getFetchCalendarData = async () => {
   const processedData: ProcessedDataType = [];
 
   // 타입 가드 함수
-  function isValidRoom(room: unknown): room is RoomFetchType {
+  const isValidRoom = (room: unknown): room is RoomFetchType => {
     return (
       typeof room === 'object' &&
       room !== null &&
@@ -41,7 +41,7 @@ export const getFetchCalendarData = async () => {
       'mandalarts' in room &&
       Array.isArray((room as RoomFetchType).mandalarts)
     );
-  }
+  };
 
   // 데이터 가공 과정
   // 핵심주제 > 대주제 > 소주제 > 투두 순의 배열 안 객체를 생성
