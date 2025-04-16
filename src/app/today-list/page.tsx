@@ -5,23 +5,25 @@ import Spacer from '@/components/commons/spacer';
 import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
 import { useFetchCalendarQuery } from '@/modules/calendar/hooks/use-fetch-calendar-query';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
-/**
- * @todo: 처음 들어갔을 때 배열의 맨 앞 만다라트의 투두가 보이도록 수정하기
- * @todo: 필터링 기능 추가(셀렉트 박스)
- */
 const TodayListPage = () => {
   const { data, isPending } = useFetchCalendarQuery();
   const [clickedTitle, setClickedTitle] = useState<string>('');
+  const [selectedOption, setSelectedOption] = useState<string>('all');
 
-  if (isPending) {
-    return <div>Loading...</div>;
-  }
+  // 초기 클릭된 제목 설정
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setClickedTitle(data[0].title);
+    }
+  }, [data]);
 
   const handleClick = (title: string) => {
     setClickedTitle(title);
   };
+
+  if (isPending) return <div>Loading...</div>;
 
   return (
     <div className='flex w-full flex-col items-start'>
@@ -29,8 +31,9 @@ const TodayListPage = () => {
       <Title as='h1'>투두 모아보기</Title>
       <Text>내 만다라트 별 TO DO LIST를 한번에 확인하세요.</Text>
       <Spacer size={'lg'} />
-      {/* 투두 목록을 표시할 만다라트 선택창 */}
-      <div className='mb-5 flex gap-2'>
+
+      {/* 만다라트 제목 탭 */}
+      <div className='mb-5 flex gap-4'>
         {data?.map((topic, idx) => (
           <Button key={idx} onClick={() => handleClick(topic.title)}>
             <div
@@ -45,47 +48,77 @@ const TodayListPage = () => {
           </Button>
         ))}
       </div>
-      {/* 셀렉트 박스 (기능 추가 예정) */}
+
+      {/* 셀렉트 박스 */}
       <div>
-        <select name='' id=''>
-          <option value=''>남은 할 일</option>
-          <option value=''>완료한 일</option>
-          <option value=''>전체 보기</option>
+        <select
+          name='todoListView'
+          value={selectedOption}
+          onChange={(e) => setSelectedOption(e.target.value)}
+        >
+          <option value='left'>남은 할 일</option>
+          <option value='done'>완료한 일</option>
+          <option value='all'>전체 보기</option>
         </select>
       </div>
-      {/* 할 일 목록 */}
+
+      {/* 투두 출력 */}
       <div className='w-full'>
         <div className='mt-6 w-full space-y-4'>
-          <div className='mt-6 w-full space-y-6'>
-            {data
-              ?.find((mandalart) => mandalart.title === clickedTitle)
-              ?.topics.filter((topic) =>
-                topic.subtopics.some((sub) => sub.todos.length > 0)
+          {data
+            ?.find((mandalart) => mandalart.title === clickedTitle)
+            ?.topics.filter((topic) =>
+              topic.subtopics.some((sub) =>
+                sub.todos.some((todo) => {
+                  if (selectedOption === 'left') return !todo.isDone;
+                  if (selectedOption === 'done') return todo.isDone;
+                  return true;
+                })
               )
-              .map((topic, topicIdx) => (
-                <div
-                  key={topicIdx}
-                  className='bg-gray-50 w-full border-l-8 border-yellow-400 p-6'
-                >
-                  <Title as='h3'>{topic.title}</Title>
-                  <Spacer size={'md'} />
-                  <div className='space-y-4'>
-                    {topic.subtopics.map((sub, subIdx) =>
-                      sub.todos.map((todo, todoIdx) => (
-                        <div key={`${subIdx}-${todoIdx}`} className='space-y-1'>
-                          <div className='w-full border-b-[1px] border-[#D2D2D2] pb-2 text-lg font-semibold'>
-                            {todo.title}
-                          </div>
-                          <div className='text-sm text-[#5E5E5E]'>
-                            {sub.title} / {todo.createdAt.slice(0, 10)}
-                          </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
+            )
+            .map((topic, topicIdx) => (
+              <div
+                key={topicIdx}
+                className='bg-gray-50 w-full border-l-8 border-yellow-400 p-6'
+              >
+                <Title as='h3'>{topic.title}</Title>
+                <Spacer size={'md'} />
+                <div className='space-y-6'>
+                  {topic.subtopics
+                    .filter((sub) =>
+                      sub.todos.some((todo) => {
+                        if (selectedOption === 'left') return !todo.isDone;
+                        if (selectedOption === 'done') return todo.isDone;
+                        return true;
+                      })
+                    )
+                    .map((sub, subIdx) => (
+                      <div key={subIdx}>
+                        <Title as='h4' highlightColor='bg-red-500'>
+                          {sub.title}
+                        </Title>
+                        <Spacer size={'md'} />
+                        {sub.todos
+                          .filter((todo) => {
+                            if (selectedOption === 'left') return !todo.isDone;
+                            if (selectedOption === 'done') return todo.isDone;
+                            return true;
+                          })
+                          .map((todo, todoIdx) => (
+                            <div key={todoIdx} className='ml-1 mt-3 space-y-1'>
+                              <div className='w-full border-b border-[#D2D2D2] pb-1 text-[16px] font-medium'>
+                                {todo.title}
+                              </div>
+                              <div className='text-sm text-[#5E5E5E]'>
+                                {todo.createdAt.slice(0, 10)}
+                              </div>
+                            </div>
+                          ))}
+                      </div>
+                    ))}
                 </div>
-              ))}
-          </div>
+              </div>
+            ))}
         </div>
       </div>
     </div>
