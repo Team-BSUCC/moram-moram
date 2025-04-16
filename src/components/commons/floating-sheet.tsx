@@ -28,7 +28,7 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
   };
 
   return (
-    <div className='fixed z-[99999] h-dvh w-dvw' onClick={hide}>
+    <div className='fixed z-[99999] m-3 h-dvh w-dvw' onClick={hide}>
       <Draggable
         handle='.handle' // 드래그 핸들 지정 (선택사항)
         position={position}
@@ -44,12 +44,13 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className='fixed z-50 rounded-lg border bg-white p-4 shadow-lg'
+          className='fixed z-50 rounded-lg bg-white'
         >
           {/* 드래그 핸들 */}
-          <div className='flex justify-end'>
-            <button onClick={hide}>...X...</button>
+          <div className='handle flex justify-end'>
+            <button onClick={hide}>X</button>
           </div>
+
           {/* 시트 안에 들어갈 내용 드래그 중 텍스트 선택 방지 */}
           <div className='select-none'>
             <div>{children}</div>
