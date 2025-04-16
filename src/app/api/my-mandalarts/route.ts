@@ -18,7 +18,7 @@ export async function GET() {
     .select(
       `role,
       rooms (id, 
-      mandalarts (id, title, created_at, private,
+      mandalarts (id, title, created_at, done_count, private,
       mandalart_topics (id, topic, topic_index, created_at,
       mandalart_subtopics (id, content, cell_index, is_done, created_at,
       cell_todos (id, title, is_done, created_at)))))`
@@ -52,6 +52,7 @@ export async function GET() {
       room.mandalarts.forEach((mandalart) => {
         const core: CoreTempType = {
           title: mandalart.title,
+          done_count: mandalart.done_count,
           topics: [],
         };
 

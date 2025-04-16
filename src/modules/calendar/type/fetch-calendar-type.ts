@@ -28,6 +28,7 @@ export type MandalartFetchType = {
   mandalart_topics: TopicFetchType[];
   private: boolean;
   title: string;
+  done_count: number;
 };
 
 export type RoomFetchType = {
@@ -41,6 +42,7 @@ export type ParticipantsType = {
 };
 
 export type ProcessedDataType = {
+  done_count: number;
   title: string;
   topics: {
     title: string;
@@ -72,5 +74,6 @@ export type TopicTempType = {
 
 export type CoreTempType = {
   title: string;
+  done_count: number;
   topics: TopicTempType[];
 };
