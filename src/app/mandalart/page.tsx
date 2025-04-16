@@ -18,6 +18,12 @@ import { createTodoListkey } from '@/modules/mandalart/services/create-todo-list
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { TodoPayloadType } from '@/modules/mandalart/types/realtime-type';
 import { useBroadcastStore } from '@/modules/mandalart/hooks/use-broadcast-store';
+import Spacer from '@/components/commons/spacer';
+import Title from '@/components/commons/title';
+import Text from '@/components/commons/text';
+import { BicepsFlexed, CalendarDays } from 'lucide-react';
+import LinearProgress from '@/components/commons/progress-bar';
+import { calculatorProgress } from '@/shared/utils/calculator-progress';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -104,7 +110,9 @@ const MandalartPage = () => {
   if (isError) return <div>error</div>;
 
   return (
-    <div>
+    <div className='flex flex-col items-center'>
+      <Spacer size='2xl' />
+
       {isReady && (
         <RealtimeCursors
           roomName='cursor-room'
@@ -112,32 +120,60 @@ const MandalartPage = () => {
           userId={userId}
         />
       )}
-
-      <div className='flex justify-end'>
-        <RealtimeAvatarStack roomName='avatar-room' username={username} />
+      <div className='w-full max-w-[1440px] px-4'>
+        <div className='flex flex-col'>
+          <div className='flex justify-between'>
+            <Title as='h1'>2025년 성장의 해로 만들기</Title>
+            <RealtimeAvatarStack roomName='avatar-room' username={username} />
+          </div>
+          <Spacer size='sm' />
+          <div className='flex'>
+            <CalendarDays />
+            <Text>365일 남음</Text>
+          </div>
+          <Spacer size='sm' />
+          <div className='flex'>
+            <BicepsFlexed />
+            <Text>이번년도 반드시 이루고 말거야 !</Text>
+          </div>
+        </div>
       </div>
-      <div className='grid w-fit grid-cols-3 grid-rows-3 gap-5 text-xs'>
-        {/* 중앙 블록 */}
-        <MainBlock
-          topics={data.mandalart_topics}
-          info={data}
-          className='col-start-2 row-start-2 h-full'
-        />
-        {/* 나머지 블록 */}
-        {data.mandalart_topics.map((topic) => {
-          return (
-            <SubBlock
-              key={topic.id}
-              title={topic.topic}
-              topic={topic}
-              subTopics={topic.mandalart_subtopics}
-            />
-          );
-        })}
-        {/* 플로팅 시트 */}
-        {isVisible && (
-          <MandalartFloatingSheet channelReceiver={broadcastChannel} />
-        )}
+      <Spacer />
+      <div className='flex flex-col md:w-[1024px]'>
+        <div className='float-start flex'>
+          <Title as='h2'>
+            총 <span>{calculatorProgress(data.done_count)}%</span> 완료!
+          </Title>
+        </div>
+
+        <LinearProgress
+          value={calculatorProgress(data.done_count)}
+        ></LinearProgress>
+
+        <Spacer />
+        <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
+          {/* 중앙 블록 */}
+          <MainBlock
+            topics={data.mandalart_topics}
+            info={data}
+            className='col-start-2 row-start-2 h-full'
+          />
+          {/* 나머지 블록 */}
+          {data.mandalart_topics.map((topic) => {
+            return (
+              <SubBlock
+                key={topic.id}
+                title={topic.topic}
+                topic={topic}
+                subTopics={topic.mandalart_subtopics}
+              />
+            );
+          })}
+          {/* 플로팅 시트 */}
+          {isVisible && (
+            <MandalartFloatingSheet channelReceiver={broadcastChannel} />
+          )}
+        </div>
       </div>
     </div>
   );
