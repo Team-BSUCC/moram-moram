@@ -8,6 +8,7 @@ const URLS = {
   MY_PAGE: '/my-page',
   STATUS: '/status',
   STUDIO: '/studio',
+  CALENDAR: '/calendar',
   CALL_BACK: 'callback',
   REFRESH: 'refresh',
 } as const;
