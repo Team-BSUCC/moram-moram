@@ -1,0 +1,267 @@
+:root {
+  --fc-border-color: #e5e7eb;
+  --fc-today-bg-color: transparent; /* 오늘 날짜 배경색 제거 */
+}
+
+/* 전체 캘린더 스타일 */
+.fc {
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
+    Arial, sans-serif;
+  max-width: 800px;
+  margin: 0 auto;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white;
+}
+
+/* 헤더 스타일 */
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 15px;
+  padding: 15px 20px;
+}
+
+.fc .fc-toolbar-title {
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+}
+
+/* Today 버튼 */
+.fc .fc-today-button {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  padding: 6px 14px !important;
+  font-weight: 500 !important;
+  font-size: 14px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.fc .fc-today-button:hover {
+  background-color: #f9fafb !important;
+}
+
+/* 이전/다음 버튼 */
+.fc .fc-prev-button,
+.fc .fc-next-button {
+  background-color: white !important;
+  color: #333 !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  width: 36px;
+  height: 36px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fc .fc-prev-button:hover,
+.fc .fc-next-button:hover {
+  background-color: #f9fafb !important;
+}
+
+/* 버튼 간격 */
+.fc .fc-button-group > .fc-button {
+  margin-right: 8px;
+}
+
+.fc .fc-button-group > .fc-button:last-child {
+  margin-right: 0;
+}
+
+/* 요일 헤더 */
+.fc .fc-col-header-cell {
+  padding: 0;
+  background-color: white;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.fc .fc-col-header-cell-cushion {
+  font-weight: 500;
+  color: #6b7280;
+  font-size: 14px;
+  padding: 8px 0;
+  text-transform: none;
+}
+
+/* 날짜 셀 */
+.fc .fc-daygrid-day {
+  height: 150px !important;
+  min-width: 120px !important;
+  cursor: pointer;
+  position: relative;
+}
+
+.fc .fc-daygrid-day-frame {
+  min-height: 120px;
+  position: relative;
+  padding: 8px;
+}
+
+.fc .fc-daygrid-day-top {
+  padding: 0;
+  justify-content: flex-start;
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  z-index: 5;
+}
+
+.fc .fc-daygrid-day-number {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+  padding: 0;
+  margin: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 날짜에서 '일' 제거 - 날짜 숫자만 표시 */
+.fc .fc-daygrid-day-number:after {
+  content: none !important;
+}
+
+/* 비활성 날짜 스타일 */
+.fc .fc-day-other .fc-daygrid-day-top {
+  opacity: 0.4;
+}
+
+/* 이벤트 스타일 */
+.custom-event {
+  background-color: #f7d6d1;
+  font-size: 12px;
+  padding: 3px 6px;
+  border-radius: 4px;
+  margin: 2px 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border: none !important;
+  max-width: calc(100% - 8px);
+}
+
+/* 이벤트 영역 조정 */
+.fc-daygrid-day-events {
+  margin-top: 30px !important;
+  padding-top: 5px;
+  max-height: 100px;
+  overflow: hidden;
+  margin-bottom: 0 !important; /* 하단 마진 제거 */
+}
+
+/* 이벤트 컨테이너 마진 조정 */
+.fc-daygrid-event-harness {
+  margin-top: 3px;
+  margin-bottom: 0 !important; /* 하단 마진 완전 제거 */
+}
+
+/* 이벤트 선택 효과 제거 */
+.fc-event.fc-event-selected {
+  outline: none !important;
+  box-shadow: none !important;
+  border: none !important;
+}
+
+/* 이벤트 호버 효과 제거 */
+.fc-event:hover {
+  cursor: default;
+}
+
+/* 더보기 버튼 스타일 */
+.fc-daygrid-more-link {
+  color: #6b7280;
+  font-size: 12px;
+  background: #f3f4f6;
+  border-radius: 4px;
+  padding: 2px 4px;
+  margin: 2px 4px;
+  display: inline-block;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}
+
+/* 오늘 날짜 스타일 제거 */
+.fc .fc-day-today {
+  background-color: transparent !important;
+}
+
+/* 오늘 날짜에 초록색 원 스타일 */
+.fc .fc-day-today .fc-daygrid-day-number {
+  position: relative;
+  color: white;
+  z-index: 1;
+}
+
+.fc .fc-day-today .fc-daygrid-day-number::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 28px;
+  height: 28px;
+  background-color: #4caf50;
+  border-radius: 50%;
+  z-index: -1;
+}
+
+/* 하단 여백 제거 */
+.fc-daygrid-day-bottom {
+  padding: 0 !important;
+  margin: 0 !important;
+  position: static !important;
+}
+
+/* 이벤트 영역 아래 빈 공간 조정 */
+.fc-daygrid-day-frame::after {
+  content: none !important;
+}
+
+/* 이벤트 하단 공간 정리 */
+.fc-daygrid-day-events:after {
+  content: none !important;
+  display: none !important;
+}
+
+/* 이벤트 요소의 ::after 가상 요소 제거 */
+.fc-event::after,
+.fc-daygrid-event::after,
+.fc-h-event::after,
+.fc-daygrid-block-event::after,
+.fc-daygrid-event::after,
+.custom-event::after {
+  display: none !important;
+  content: none !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.fc .fc-day-other {
+  background-color: #f9f9f9; /* 연한 회색 */
+}
+
+/* 이벤트 컨테이너의 ::after 제거 */
+.fc-daygrid-event-harness::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* a 태그 이벤트의 ::after 제거 */
+a.fc-event::after {
+  display: none !important;
+  content: none !important;
+}
+
+/* 마지막 이벤트 특별 처리 */
+.fc-daygrid-event-harness:last-child a::after,
+.fc-daygrid-event-harness:last-of-type a::after {
+  display: none !important;
+  content: none !important;
+}

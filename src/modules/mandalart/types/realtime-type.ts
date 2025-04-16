@@ -1,4 +1,5 @@
 export type MandalartType = Tables<'mandalarts'> & {
+  done_count: number;
   mandalart_topics: TopicsType;
 };
 

@@ -49,8 +49,9 @@ const Cell = ({ value, className, info }: CellProps) => {
   return (
     <>
       <Button onClick={handleClick}>
+        {/* 셀의 스타일 지정 */}
         <div
-          className={`border-gray-200 flex h-20 w-20 items-center justify-center border text-center text-xs ${className || ''}`}
+          className={`relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border p-2 ${className}`}
           style={{ borderRadius: '8px' }}
         >
           {data}
