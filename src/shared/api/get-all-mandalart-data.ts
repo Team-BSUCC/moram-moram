@@ -6,14 +6,14 @@ import {
   SubtopicTempType,
   TodoTempType,
   TopicTempType,
-} from '../type/fetch-calendar-type';
+} from '../../modules/calendar/type/fetch-calendar-type';
 
 /**
  * @todo 투두 모아보기 페이지에서도 사용가능하게 수정
  * 캘린더 페이지에 사용될 투두 목록을 받아오는 함수
  * @returns 가공된 데이터
  */
-export const getFetchCalendarData = async () => {
+export const getAllMandalartData = async () => {
   const supabase = getBrowserClient();
   const { data, error } = await supabase
     .from('room_participants')

@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
-import { getFetchCalendarData } from '../services/get-fetch-calendar-data';
+import { getAllMandalartData } from '../../../shared/api/get-all-mandalart-data';
 
 export const useFetchCalendarQuery = () => {
   return useQuery({
     queryKey: ['my-mandalarts'],
-    queryFn: async () => await getFetchCalendarData(),
+    queryFn: async () => await getAllMandalartData(),
   });
 };
