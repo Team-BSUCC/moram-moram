@@ -5,16 +5,16 @@ import 'react-circular-progressbar/dist/styles.css';
 import { cva, VariantProps } from 'class-variance-authority';
 import { twMerge } from 'tailwind-merge';
 
-const wrapperVariants = cva('', {
+const wrapperVariants = cva('transition-all select-none', {
   variants: {
     size: {
-      sm: 'w-20 h-20',
-      md: 'w-28 h-28',
-      lg: 'w-36 h-36',
+      sm: 'w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20',
+      default: 'w-24 h-24 sm:w-26 sm:h-26 md:w-28 md:h-28',
+      lg: 'w-32 h-32 sm:w-34 sm:h-34 md:w-36 md:h-36',
     },
   },
   defaultVariants: {
-    size: 'md',
+    size: 'default',
   },
 });
 
@@ -40,7 +40,7 @@ type CircularProgressProps = VariantProps<typeof wrapperVariants> & {
  */
 const CircularProgress = ({
   value,
-  strokeWidth = 8,
+  strokeWidth = 9,
   pathColor = '#111827',
   trailColor = '#e5e7eb',
   textColor = '#111827',
