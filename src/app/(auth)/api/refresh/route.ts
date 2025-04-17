@@ -1,17 +1,20 @@
+// app/api/auth/refresh/route.ts
 import { NextResponse } from 'next/server';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
 
 export const GET = async () => {
-  const supabase = getServerClientAction();
+  const res = NextResponse.next();
+
+  const supabase = getServerClientAction(res);
 
   const {
-    data: { user },
+    data: { session },
     error,
-  } = await supabase.auth.getUser();
+  } = await supabase.auth.refreshSession();
 
-  if (!user || error) {
+  if (error || !session) {
     return NextResponse.json(
-      { ok: false, error: error?.message ?? 'unauthorized' },
+      { ok: false, error: error?.message ?? 'Unauthorized' },
       { status: 401 }
     );
   }

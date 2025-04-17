@@ -37,7 +37,7 @@ const CalendarPage = () => {
   };
 
   return (
-    <div className='min-h-screen p-8'>
+    <div className='right-0 min-h-screen w-full bg-white-dark p-8'>
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView='dayGridMonth'

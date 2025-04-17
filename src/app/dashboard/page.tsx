@@ -22,20 +22,16 @@ const DashBoardPage = async () => {
    * TODO : absolute 리팩토링하기
    */
   return (
-    <div className='absolute right-0 flex h-full w-full justify-center bg-white-dark'>
+    <div className='right-0 flex h-full w-full justify-center bg-white-dark'>
       <div className='w-full max-w-[1440px] p-6'>
         <Spacer size='3xl' />
         <div className='flex justify-between'>
           <div>
-            <Title as='h1' variant='default'>
-              내 만다라트
-            </Title>
-            <Text variant='default'>
-              진행 중인 목표와 완성한 목표를 한 눈에 확인해보세요.
-            </Text>
+            <Title as='h1'>내 만다라트</Title>
+            <Text>진행 중인 목표와 완성한 목표를 한 눈에 확인해보세요.</Text>
           </div>
           <div className='h-fit self-center'>
-            <Button variant='default'>+ 새 만다라트</Button>
+            <Button variant='outline'>+ 새 만다라트</Button>
           </div>
         </div>
         <Spacer size='xl' />

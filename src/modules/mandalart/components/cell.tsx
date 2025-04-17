@@ -48,7 +48,7 @@ const Cell = ({ value, className, info }: CellProps) => {
 
   return (
     <>
-      <Button onClick={handleClick}>
+      <Button onClick={handleClick} variant='outline'>
         {/* 셀의 스타일 지정 */}
         <div
           className={`relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border p-2 ${className}`}
@@ -57,6 +57,7 @@ const Cell = ({ value, className, info }: CellProps) => {
           {data}
         </div>
       </Button>
+
       {/* Todo key 등록을 위한 등록 컴포넌트 */}
       {'cell_todos' in info &&
         todoListCacheArray.map((todo, idx) => {

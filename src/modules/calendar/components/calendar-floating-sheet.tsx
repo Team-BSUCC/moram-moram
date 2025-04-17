@@ -3,8 +3,9 @@ import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { CoreType, EventType } from '../type/todo-type';
-import CheckBox from '@/components/commons/check-box';
 import Spacer from '@/components/commons/spacer';
+import { getProcessedDate } from '../services/get-processed-date';
+import CalendarTodoItem from './calendar-todo-item';
 
 type CalendarFloatingSheetProps = {
   todos: CoreType[] | undefined;
@@ -30,48 +31,53 @@ const CalendarFloatingSheet = ({
 
   return (
     <FloatingSheet>
-      <div className='flex justify-start'>
-        <Text>{info}</Text>
-      </div>
-      <Title as='h1'>TO DO LIST</Title>
-      <Spacer size={'sm'} />
-      <hr className='mb-5' />
-      {isSatisfied && data ? (
-        data
-          .filter((core) =>
-            core.topics.some((topic) =>
-              topic.subtopics.some((sub) =>
-                sub.todos.some((todo) => todo.createdAt.slice(0, 10) === info)
+      <div className='h-[500px] w-[400px] p-5'>
+        <div className='flex justify-start'>
+          {/* 폰트 크기, 볼드 수정 */}
+          <Text>{getProcessedDate(info)}</Text>
+        </div>
+        {/* 텍스트 볼드체로 변경하기 */}
+        <Title as='h1'>TO DO LIST</Title>
+        <Spacer size={'md'} />
+        <hr className='mb-5' />
+        {isSatisfied && data ? (
+          data
+            .filter((core) =>
+              core.topics.some((topic) =>
+                topic.subtopics.some((sub) =>
+                  sub.todos.some((todo) => todo.createdAt.slice(0, 10) === info)
+                )
               )
             )
-          )
-          .map((core) => (
-            <div key={core.title} className='flex flex-col gap-5'>
-              <Title as='h2' highlightColor='bg-blue-500'>
-                {core.title}
-              </Title>
-              {core.topics.map((topic) =>
-                topic.subtopics.map((sub) =>
-                  sub.todos
-                    .filter((todo) => todo.createdAt.slice(0, 10) === info)
-                    .map((todo, idx) => (
-                      <div key={idx}>
-                        <div className='flex gap-3'>
-                          <CheckBox />
-                          <div>{todo.title}</div>
-                        </div>
-                        <div className='text-gray-500 ml-9 text-sm'>
-                          {topic.title} &gt; {sub.title}
-                        </div>
-                      </div>
-                    ))
-                )
-              )}
+            .map((core) => (
+              <div key={core.title} className='flex flex-col gap-5'>
+                {/* 하이라이트 색상 수정 및 폰트 크기 수정 */}
+                <Title as='h2'>{core.title}</Title>
+                {core.topics.map((topic) =>
+                  topic.subtopics.map((sub) =>
+                    sub.todos
+                      .filter((todo) => todo.createdAt.slice(0, 10) === info)
+                      .map((todo, idx) => (
+                        <CalendarTodoItem
+                          key={idx}
+                          todo={todo}
+                          sub={sub}
+                          topic={topic}
+                        />
+                      ))
+                  )
+                )}
+              </div>
+            ))
+        ) : (
+          <div className='h- flex flex-col items-center justify-center'>
+            <Spacer size={'lg'} />
+            <div className='mt-2 font-[16px] text-[#A6A6A6]'>
+              오늘은 여유로운 하루네요.
             </div>
-          ))
-      ) : (
-        <div className='text-gray-400 mt-2'>할 일이 없습니다...</div>
-      )}
+          </div>
+        )}
+      </div>
     </FloatingSheet>
   );
 };
