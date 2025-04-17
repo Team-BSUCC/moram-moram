@@ -4,6 +4,7 @@ import { User } from '@supabase/supabase-js';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
 import { UpdatePasswordDTO, UserType } from '../types/auth-type';
+import { cookies } from 'next/headers';
 
 type PropsSignUp = UserType;
 
@@ -40,6 +41,24 @@ export const signUp = async ({
 export const signOut = async (): Promise<{ error: string | null }> => {
   const supabase = getServerClientAction();
   const { error } = await supabase.auth.signOut();
+  // 2) 동적 이름의 Auth 토큰 쿠키 모두 삭제
+  cookies()
+    .getAll()
+    .filter((c) => c.name.startsWith('sb-') && c.name.includes('-auth-token'))
+    .forEach((c) => {
+      cookies().delete(c.name);
+    });
+
+  // 3) 필요한 경우 리프레시 토큰도 지우기
+  cookies()
+    .getAll()
+    .filter(
+      (c) => c.name.startsWith('sb-') && c.name.includes('-refresh-token')
+    )
+    .forEach((c) => {
+      cookies().delete(c.name);
+    });
+
   return { error: error?.message || null };
 };
 

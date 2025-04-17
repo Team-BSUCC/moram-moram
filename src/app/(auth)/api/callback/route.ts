@@ -1,20 +1,27 @@
-import { NextResponse } from 'next/server';
+import { NextResponse, NextRequest } from 'next/server';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
 
-export const GET = async (request: Request) => {
-  const { searchParams } = new URL(request.url);
-  const code = searchParams.get('code');
-  const nextPath = searchParams.get('next') ?? '/';
+export const GET = async (request: NextRequest) => {
+  const url = new URL(request.url);
+  const code = url.searchParams.get('code');
+  const next = url.searchParams.get('next') ?? '/';
 
-  // 환경변수를 통해 절대 URL을 구성 (예: production에서는 https://moram-moram.vercel.app)
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
-
-  if (code) {
-    const supabase = getServerClientAction();
-    const { error } = await supabase.auth.exchangeCodeForSession(code);
-    if (!error) {
-      return NextResponse.redirect(`${siteUrl}${nextPath}`);
-    }
+  if (!code) {
+    return NextResponse.redirect(new URL('/auth/auth-code-error', request.url));
   }
-  return NextResponse.redirect(`${siteUrl}/auth/auth-code-error`);
+
+  // 1) Response 객체를 먼저 만들고
+  const redirectUrl = new URL(next, request.url);
+  const res = NextResponse.redirect(redirectUrl);
+
+  // 2) 그걸 넘겨줘야 setAll()이 동작
+  const supabase = getServerClientAction(res);
+
+  const { error } = await supabase.auth.exchangeCodeForSession(code);
+  if (error) {
+    console.error('세션 교환 실패', error.message);
+    return NextResponse.redirect(new URL('/auth/auth-code-error', request.url));
+  }
+
+  return res;
 };

@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
 import { signOut } from '../services/auth-server-service';
-import Button from '@/components/commons/button';
 import URL from '@/shared/constants/url-constants';
 
 const SignOutButton = () => {
@@ -13,9 +12,12 @@ const SignOutButton = () => {
   };
   return (
     <form action={handleSignOut}>
-      <Button variant='outline' size='default' type='submit'>
+      <button
+        className='flex items-center justify-center gap-2.5 rounded-lg bg-[#F0E9E5] px-6 py-3 text-md'
+        type='submit'
+      >
         로그아웃
-      </Button>
+      </button>
     </form>
   );
 };
