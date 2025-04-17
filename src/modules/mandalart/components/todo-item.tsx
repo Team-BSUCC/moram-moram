@@ -19,7 +19,6 @@ type TodoItemProps = {
 const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
   const queryClient = useQueryClient();
   const [valuePayload, setValuePayload] = useState<string>('');
-  const [disabled, setDisabled] = useState<boolean>(true);
 
   const { data: todo } = useTodoCacheQuery(id);
   const todoRow = (todo ?? {}) as TodoPayloadType;
@@ -76,7 +75,7 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
         }}
       />
       <Input
-        variant={disabled ? 'none' : 'default'}
+        variant='gray'
         value={valuePayload || value}
         placeholder='TODO를 작성해주세요.'
         onChange={(e) => {
@@ -104,7 +103,6 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
           );
           throttledMutate();
         }}
-        disabled={disabled}
       />
       <RoundButton
         size='xs'
@@ -122,9 +120,6 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
         }}
       >
         X
-      </RoundButton>
-      <RoundButton size='xs' onClick={() => setDisabled(!disabled)}>
-        편
       </RoundButton>
     </div>
   );

@@ -22,7 +22,7 @@ import {
 } from '../hooks/use-mandalart-data-query';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
-import RoundButton from '@/components/commons/round-button';
+import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -37,8 +37,6 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   const info = getDataCategory(
     useFloatingSheetStore((state) => state.info) as CellInfoType
   );
-
-  const [disabled, setDisabled] = useState<boolean>(true);
 
   const { data: initialValue } = useCellCacheQuery(info);
 
@@ -55,29 +53,35 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   const { mutate } = useBroadcastMutation(channelReceiver, { ...info, value });
   const throttleMutate = useThrottleMutate(mutate, 0.5 * 1000);
 
+  let headerColor = '';
+  if (info.category === 'TOPIC') {
+    headerColor = getColorWithNumber(info.topic_index);
+  }
+  if (info.category === 'CORE') {
+    headerColor = 'bg-violet-pigment';
+  }
+
   return (
     <FloatingSheet>
-      <div className='space-y-4 p-4'>
-        <div className='flex items-center gap-2'>
-          <Input
-            variant={disabled ? 'none' : 'default'}
-            type='text'
-            value={value}
-            placeholder={value}
-            onChange={(e) => {
-              setValue(e.target.value);
-              throttleMutate();
-            }}
-            disabled={disabled}
-          />
-          <RoundButton size='xs' onClick={() => setDisabled(!disabled)}>
-            편
-          </RoundButton>
+      <div className='h-[700px] w-[500px] space-y-4 overflow-y-auto p-4'>
+        <div className={headerColor}>
+          <div className='flex flex-col items-start gap-0'>
+            <Text>TO DO LIST</Text>
+            <Input
+              type='text'
+              sizes='xl'
+              value={value}
+              placeholder={value}
+              onChange={(e) => {
+                setValue(e.target.value);
+                throttleMutate();
+              }}
+            />
+          </div>
         </div>
         {/* 핵심주제일 경우 */}
         {info.category === 'CORE' && (
           <div>
-            <Text>대주제</Text>
             {info.mandalart_topics?.map((topic) => (
               <TopicGroup
                 key={topic.id}
@@ -90,7 +94,6 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
         {/* 대주제일 경우 */}
         {info.category === 'TOPIC' && (
           <div>
-            <Text>소주제</Text>
             {info.mandalart_subtopics?.map((sub) => (
               <SubtopicGroup
                 key={sub.id}
@@ -103,7 +106,13 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
         {/* 소주제일 경우 */}
         {info.category === 'SUBTOPIC' && (
           <div>
-            <Text>할 일</Text>
+            <Button
+              variant='outline'
+              size='default'
+              onClick={() => createTodo()}
+            >
+              투두 추가하기
+            </Button>
             {todoListCacheArray.map((todo: TodoType) => (
               <TodoItem
                 key={todo.id}
@@ -112,14 +121,6 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
                 channelReceiver={channelReceiver}
               />
             ))}
-
-            <Button
-              variant='outline'
-              size='default'
-              onClick={() => createTodo()}
-            >
-              투두 추가하기
-            </Button>
           </div>
         )}
       </div>

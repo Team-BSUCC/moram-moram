@@ -17,6 +17,7 @@ type BaseCellInfoType = {
   title?: string;
   topic?: string;
   isCenter?: boolean;
+  topic_index?: number;
 };
 
 // 핵심주제

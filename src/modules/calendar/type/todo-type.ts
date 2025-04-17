@@ -1,17 +1,17 @@
 // 달력에 표시하기 위한 데이터 타입들
-type TodoType = {
+export type TodoType = {
   title: string;
   isDone: boolean;
   createdAt: string;
 };
 
-type SubtopicType = {
+export type SubtopicType = {
   title: string;
   isDone: boolean;
   todos: TodoType[];
 };
 
-type TopicType = {
+export type TopicType = {
   title: string;
   subtopics: SubtopicType[];
 };

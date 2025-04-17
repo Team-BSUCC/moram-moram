@@ -3,6 +3,7 @@ import localFont from 'next/font/local';
 import '@/styles/globals.css';
 import SessionInit from '@/modules/auth/components/session-init';
 import TQProvider from '@/providers/tq-provider';
+import Footer from '@/components/layouts/footer';
 import Header from '@/components/layouts/header';
 import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 
@@ -40,15 +41,13 @@ export default async function RootLayout({
         <main className='mt-[100px] flex-grow'>
           <div className='flex h-full w-full items-center justify-center'>
             {/* children에 메인 영역이 위치합니다. 중앙 70%의 영역만 차지합니다 */}
-            <div className='h-full w-[70%]'>
+            <div className='h-full w-full'>
               <TQProvider>{children}</TQProvider>
             </div>
           </div>
         </main>
-
-        <footer>
-          푸터
-          {/* <Footer /> 컴포넌트가 들어올 예정입니다. */}
+        <footer className='mt-10 w-full border-t border-lightgray bg-white-light py-8'>
+          <Footer />
         </footer>
       </body>
     </html>

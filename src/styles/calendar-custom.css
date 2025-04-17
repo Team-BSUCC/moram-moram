@@ -8,7 +8,7 @@
   font-family:
     -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
     Arial, sans-serif;
-  max-width: 800px;
+  max-width: 55%;
   margin: 0 auto;
   border-radius: 10px;
   overflow: hidden;
@@ -17,14 +17,16 @@
 
 /* 헤더 스타일 */
 .fc .fc-toolbar.fc-header-toolbar {
-  margin-bottom: 15px;
-  padding: 15px 20px;
+  padding: 30px 20px;
+  background: #f8f8f8;
+  margin-bottom: 0px !important;
 }
 
 .fc .fc-toolbar-title {
   font-size: 28px;
   font-weight: 700;
   text-align: center;
+  padding-right: 30px;
 }
 
 /* Today 버튼 */
@@ -89,16 +91,17 @@
 
 /* 날짜 셀 */
 .fc .fc-daygrid-day {
-  height: 150px !important;
   min-width: 120px !important;
   cursor: pointer;
   position: relative;
+  overflow: hidden;
 }
 
 .fc .fc-daygrid-day-frame {
-  min-height: 120px;
+  height: auto;
+  aspect-ratio: 1 / 1;
   position: relative;
-  padding: 8px;
+  padding: 2px;
 }
 
 .fc .fc-daygrid-day-top {
@@ -137,14 +140,15 @@
 .custom-event {
   background-color: #f7d6d1;
   font-size: 12px;
-  padding: 3px 6px;
-  border-radius: 4px;
-  margin: 2px 4px;
+  padding: 2px 4px;
+  margin: 0px 4px;
   white-space: nowrap;
+  border-radius: 2px;
   overflow: hidden;
   text-overflow: ellipsis;
   border: none !important;
   max-width: calc(100% - 8px);
+  align-items: center;
 }
 
 /* 이벤트 영역 조정 */
@@ -171,6 +175,7 @@
 
 /* 이벤트 호버 효과 제거 */
 .fc-event:hover {
+  background: transparent;
   cursor: default;
 }
 
@@ -190,6 +195,7 @@
 /* 오늘 날짜 스타일 제거 */
 .fc .fc-day-today {
   background-color: transparent !important;
+  border: 3px solid #4cb446;
 }
 
 /* 오늘 날짜에 초록색 원 스타일 */

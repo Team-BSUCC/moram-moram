@@ -1,6 +1,7 @@
 'use client';
 
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
+import { X } from 'lucide-react';
 import { ReactNode, useRef } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
@@ -44,11 +45,13 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className='fixed z-50 rounded-lg bg-white'
+          className='fixed z-50 rounded-[8px] bg-[#fff] shadow-lg'
         >
           {/* 드래그 핸들 */}
-          <div className='handle flex justify-end'>
-            <button onClick={hide}>X</button>
+          <div className='handle flex h-[50px] justify-end'>
+            <button onClick={hide} className='mr-5 mt-2 bg-transparent'>
+              <X />
+            </button>
           </div>
 
           {/* 시트 안에 들어갈 내용 드래그 중 텍스트 선택 방지 */}
