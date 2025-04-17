@@ -52,10 +52,14 @@ const Header = ({ user }: HeaderProps) => {
                 <Avatar className='border border-black hover:z-10'>
                   <AvatarImage src={'유저이미지 추가해야함'} />
                   <AvatarFallback>
-                    {user.user_metadata.nickname.slice(0, 1)}
+                    {user.user_metadata.nickname
+                      ? user.user_metadata.nickname.slice(0, 1)
+                      : user.user_metadata.name.slice(0, 1)}
                   </AvatarFallback>
                 </Avatar>
-                <p className='text-xl'>{user.user_metadata.nickname}</p>
+                <p className='text-xl'>
+                  {user.user_metadata.nickname ?? user.user_metadata.name}
+                </p>
               </div>
             </>
           ) : (
