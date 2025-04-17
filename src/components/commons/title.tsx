@@ -78,7 +78,7 @@ const Title = ({
       className={twMerge(titleVariants({ size, lean, line, weight }))}
       {...props}
     >
-      {highlightColor && (
+      {highlightColor !== undefined && (
         <div className={`w-1 ${titleVariants({ highlightColor })}`}></div>
       )}
       {children}

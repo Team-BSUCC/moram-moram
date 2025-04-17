@@ -45,7 +45,7 @@ const textVariants = cva('transition-all', {
   },
   defaultVariants: {
     size: 'default',
-    align: 'center',
+    align: 'left',
     weight: 'default',
     lean: 'default',
     line: 'default',
