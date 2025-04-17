@@ -11,8 +11,8 @@ const URLS = {
   CALENDAR: '/calendar',
   GUEST: '/guest',
   TODAY_LIST: '/today-list',
-  CALL_BACK: 'callback',
-  REFRESH: 'refresh',
+  CALL_BACK: '/callback',
+  REFRESH: '/refresh',
 } as const;
 
 export default URLS;
