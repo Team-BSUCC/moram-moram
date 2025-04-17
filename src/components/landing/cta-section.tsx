@@ -17,7 +17,7 @@ const CTASection = () => {
           정리해보세요.
         </h3>
         <Spacer size='xl' />
-        <Button size='landing'>지금 시작하기</Button>
+        <Button size='default'>지금 시작하기</Button>
       </div>
     </section>
   );

@@ -8,13 +8,13 @@ const inputVariants = cva(
     variants: {
       variant: {
         default: '',
-        gray: 'border-gray-400',
+        outline: 'border-gray-400',
       },
       sizes: {
-        sm: 'text-sm',
-        md: 'text-md',
-        lg: 'text-lg',
-        xl: 'text-xl',
+        sm: 'text-ss md:text-sm',
+        md: 'test-sm md:text-md',
+        lg: 'text-mlg md:text-lg',
+        xl: 'text-lg md:text-xl',
       },
     },
     defaultVariants: {

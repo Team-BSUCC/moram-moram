@@ -75,7 +75,7 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
         }}
       />
       <Input
-        variant='gray'
+        variant='outline'
         value={valuePayload || value}
         placeholder='TODO를 작성해주세요.'
         onChange={(e) => {
