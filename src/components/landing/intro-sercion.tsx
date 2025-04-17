@@ -6,7 +6,7 @@ const IntroSection = () => {
     <section className="relative min-h-screen w-full bg-[url('/images/intro/background.png')] bg-cover bg-center bg-no-repeat">
       {/* 텍스트 콘텐츠 */}
       <div className='mx-auto flex flex-col items-center justify-center text-center'>
-        <Spacer size='xxxl' />
+        <Spacer size='3xl' />
         <h2 className='mb-4 text-2xl font-semibold sm:text-3xl'>
           막연한 목표, 어디서부터 시작해야 할지 막막하셨나요?
         </h2>
