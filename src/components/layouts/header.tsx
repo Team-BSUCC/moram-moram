@@ -4,7 +4,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import Text from '../commons/text';
 import SignOutButton from '@/modules/auth/components/sign-out-button';
 
 type HeaderProps = {
@@ -16,7 +15,7 @@ const Header = ({ user }: HeaderProps) => {
     'flex items-center justify-center gap-2.5 rounded-lg px-6 py-3 text-md';
 
   return (
-    <div className='h-full w-full'>
+    <div className='h-full w-full border-b bg-white-light'>
       {/* <Header /> 컴포넌트가 들어올 예정입니다. */}
       <div className='flex h-full items-center justify-between'>
         <div className='p-8'>
