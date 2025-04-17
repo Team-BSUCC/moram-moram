@@ -27,7 +27,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getUserInfo();
-
   return (
     <html lang='ko-KR' className='h-full w-full'>
       <body
