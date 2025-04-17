@@ -52,9 +52,7 @@ const CalendarFloatingSheet = ({
             .map((core) => (
               <div key={core.title} className='flex flex-col gap-5'>
                 {/* 하이라이트 색상 수정 및 폰트 크기 수정 */}
-                <Title as='h2' highlightColor='bg-blue-500'>
-                  {core.title}
-                </Title>
+                <Title as='h2'>{core.title}</Title>
                 {core.topics.map((topic) =>
                   topic.subtopics.map((sub) =>
                     sub.todos

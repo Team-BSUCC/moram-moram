@@ -36,11 +36,11 @@ const GuestPage = () => {
       <Spacer size='3xl' />
       <div className='bg-white-light p-2 md:w-[1024px] md:p-5' ref={ref}>
         <div className='w-full flex-col justify-items-center'>
-          <Title variant='default' as='h1' highlightColor='bg-red-500'>
+          <Title as='h1' highlightColor={2}>
             {title || '나만의 만다라트 작성하기'}
           </Title>
           <Spacer size='lg' />
-          <Text variant='default' size='default' align='center'>
+          <Text size='default' align='center'>
             지금 당신의 목표를 81칸에 정리해보세요. 작은 계획들이 큰 변화를
             만듭니다.
           </Text>

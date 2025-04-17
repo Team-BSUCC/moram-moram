@@ -28,7 +28,7 @@ const HeroSection = () => {
               </Text>
             </div>
             <Spacer size='xl' />
-            <Button size='landing'>지금 시작하기</Button>
+            <Button size='default'>지금 시작하기</Button>
           </div>
         </div>
       </div>

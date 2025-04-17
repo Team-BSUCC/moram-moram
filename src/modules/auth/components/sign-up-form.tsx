@@ -24,7 +24,7 @@ const SignUpForm = () => {
     >
       {/* 에러 메시지 */}
       {errors.root?.message && (
-        <Text variant='default' size='sm' align='center'>
+        <Text size='sm' align='center'>
           {errors.root.message}
         </Text>
       )}

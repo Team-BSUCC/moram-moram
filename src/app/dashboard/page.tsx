@@ -27,12 +27,8 @@ const DashBoardPage = async () => {
         <Spacer size='3xl' />
         <div className='flex justify-between'>
           <div>
-            <Title as='h1' variant='default'>
-              내 만다라트
-            </Title>
-            <Text variant='default'>
-              진행 중인 목표와 완성한 목표를 한 눈에 확인해보세요.
-            </Text>
+            <Title as='h1'>내 만다라트</Title>
+            <Text>진행 중인 목표와 완성한 목표를 한 눈에 확인해보세요.</Text>
           </div>
           <div className='h-fit self-center'>
             <Button variant='outline'>+ 새 만다라트</Button>
