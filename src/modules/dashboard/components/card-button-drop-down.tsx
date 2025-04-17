@@ -29,7 +29,7 @@ const CardButtonDropDown = () => {
           setIsOpen((prev) => !prev);
         }}
       >
-        <Button>...</Button>
+        <Button variant='outline'>⋮</Button>
       </div>
 
       {isOpen && (

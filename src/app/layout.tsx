@@ -46,7 +46,7 @@ export default async function RootLayout({
             </div>
           </div>
         </main>
-        <footer className='mt-10 w-full border-t border-lightgray bg-white-light py-8'>
+        <footer className='w-full border-t border-lightgray bg-white-light py-8'>
           <Footer />
         </footer>
       </body>

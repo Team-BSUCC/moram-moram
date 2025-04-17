@@ -22,7 +22,7 @@ const DashBoardPage = async () => {
    * TODO : absolute 리팩토링하기
    */
   return (
-    <div className='absolute right-0 flex h-full w-full justify-center bg-white-dark'>
+    <div className='right-0 flex h-full w-full justify-center bg-white-dark'>
       <div className='w-full max-w-[1440px] p-6'>
         <Spacer size='3xl' />
         <div className='flex justify-between'>
@@ -35,7 +35,7 @@ const DashBoardPage = async () => {
             </Text>
           </div>
           <div className='h-fit self-center'>
-            <Button variant='default'>+ 새 만다라트</Button>
+            <Button variant='outline'>+ 새 만다라트</Button>
           </div>
         </div>
         <Spacer size='xl' />

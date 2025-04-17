@@ -5,6 +5,7 @@ import Link from 'next/link';
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import Text from '../commons/text';
+import SignOutButton from '@/modules/auth/components/sign-out-button';
 
 type HeaderProps = {
   user: User | null;
@@ -20,7 +21,7 @@ const Header = ({ user }: HeaderProps) => {
       <div className='flex h-full items-center justify-between'>
         <div className='p-8'>
           <Image
-            src='images/manda-log-text-.svg'
+            src='images/manda-logo-text.svg'
             alt='만다로고'
             width='166'
             height='48'
@@ -41,6 +42,13 @@ const Header = ({ user }: HeaderProps) => {
               >
                 캘린더
               </Link>
+              <Link
+                href={URLS.TODAY_LIST}
+                className={`${linkStyle} bg-[#F0E9E5]`}
+              >
+                투두리스트
+              </Link>
+              <SignOutButton />
               <div className='flex gap-2 pl-2'>
                 <Avatar className='border border-black hover:z-10'>
                   <AvatarImage src={'유저이미지 추가해야함'} />

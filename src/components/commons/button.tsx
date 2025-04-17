@@ -8,7 +8,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default: 'bg-sky-pigment text-black hover:bg-sky-pastel duration-300',
-        outline: '',
+        outline: 'hover:bg-white-dark',
       },
       size: {
         default: '',
