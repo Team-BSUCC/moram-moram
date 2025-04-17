@@ -9,6 +9,7 @@ import {
   useTodoListCacheQuery,
 } from '../hooks/use-mandalart-data-query';
 import { RealtimeChannel } from '@supabase/supabase-js';
+import Title from '@/components/commons/title';
 
 type SubtopicGroupProps = {
   sub: SubTopicType;
@@ -21,8 +22,12 @@ const SubtopicGroup = ({ sub, channelReceiver }: SubtopicGroupProps) => {
   const { data: todoList } = useTodoListCacheQuery(sub.id);
   const todoListCacheArray = (todoList ?? []) as TodoPayloadType[];
   return (
-    <div className='pl-4'>
-      <div>{subtopicName}</div>
+    <div className='pb-1 pl-4'>
+      <div className='flex gap-2'>
+        <div className='h-fll w-1 bg-black' />
+        <Title as='h1'>{subtopicName}</Title>
+      </div>
+
       {todoListCacheArray.map((todo: TodoType) => (
         <TodoItem
           key={todo.id}
