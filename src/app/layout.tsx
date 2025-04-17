@@ -2,10 +2,10 @@ import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 import '@/styles/globals.css';
 import SessionInit from '@/modules/auth/components/session-init';
-import Link from 'next/link';
-import URLS from '@/shared/constants/url-constants';
 import TQProvider from '@/providers/tq-provider';
 import Footer from '@/components/layouts/footer';
+import Header from '@/components/layouts/header';
+import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 
 export const metadata: Metadata = {
   title: '모람모람',
@@ -21,11 +21,13 @@ const pretendard = localFont({
   variable: '--font-pretendard',
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getUserInfo();
+
   return (
     <html lang='ko-KR' className='h-full w-full'>
       <body
@@ -33,31 +35,7 @@ export default function RootLayout({
       >
         <SessionInit />
         <header className='fixed left-0 right-0 top-0 z-50 h-[100px]'>
-          {/* <Header /> 컴포넌트가 들어올 예정입니다. */}
-          <div className='flex h-full gap-3 border-2 bg-pink-pastel'>
-            임시헤더
-            <Link href={URLS.SIGN_IN} className='border bg-purple-pastel'>
-              로그인
-            </Link>
-            <Link href={URLS.SIGN_UP} className='border bg-purple-pastel'>
-              회원가입
-            </Link>
-            <Link href={URLS.DASHBOARD} className='border bg-purple-pastel'>
-              대쉬보드
-            </Link>
-            <Link href={URLS.HUB} className='border bg-purple-pastel'>
-              허브
-            </Link>
-            <Link href={URLS.MANDALART} className='border bg-purple-pastel'>
-              만다라트
-            </Link>
-            <Link href={URLS.STATUS} className='border bg-purple-pastel'>
-              스테이터스
-            </Link>
-            <Link href={URLS.STUDIO} className='border bg-purple-pastel'>
-              스튜디오
-            </Link>
-          </div>
+          <Header user={user} />
         </header>
 
         <main className='mt-[100px] flex-grow'>
@@ -68,7 +46,7 @@ export default function RootLayout({
             </div>
           </div>
         </main>
-        <footer className='mt-10 w-full border-t border-lightgray bg-white-light py-8'>
+        <footer className='w-full border-t border-lightgray bg-white-light py-8'>
           <Footer />
         </footer>
       </body>
