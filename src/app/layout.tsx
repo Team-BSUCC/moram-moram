@@ -5,6 +5,7 @@ import SessionInit from '@/modules/auth/components/session-init';
 import Link from 'next/link';
 import URLS from '@/shared/constants/url-constants';
 import TQProvider from '@/providers/tq-provider';
+import Footer from '@/components/layouts/footer';
 
 export const metadata: Metadata = {
   title: '모람모람',
@@ -67,10 +68,8 @@ export default function RootLayout({
             </div>
           </div>
         </main>
-
-        <footer>
-          푸터
-          {/* <Footer /> 컴포넌트가 들어올 예정입니다. */}
+        <footer className='mt-10 w-full border-t border-lightgray bg-white-light py-8'>
+          <Footer />
         </footer>
       </body>
     </html>
