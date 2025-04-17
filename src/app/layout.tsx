@@ -31,7 +31,7 @@ export default function RootLayout({
         className={`${pretendard.variable} flex h-full w-full flex-col antialiased`}
       >
         <SessionInit />
-        <header className='fixed left-0 right-0 top-0 z-50 h-[60px]'>
+        <header className='fixed left-0 right-0 top-0 z-50 h-[100px]'>
           {/* <Header /> 컴포넌트가 들어올 예정입니다. */}
           <div className='flex h-full gap-3 border-2 bg-pink-pastel'>
             임시헤더
@@ -59,10 +59,10 @@ export default function RootLayout({
           </div>
         </header>
 
-        <main className='mt-[60px] flex-grow'>
+        <main className='mt-[100px] flex-grow'>
           <div className='flex h-full w-full items-center justify-center'>
             {/* children에 메인 영역이 위치합니다. 중앙 70%의 영역만 차지합니다 */}
-            <div className='h-full w-[70%]'>
+            <div className='h-full w-full'>
               <TQProvider>{children}</TQProvider>
             </div>
           </div>

@@ -7,16 +7,21 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: '',
+        default: 'bg-sky-pigment text-black hover:bg-sky-pastel duration-300',
         outline: '',
       },
       size: {
         default: '',
+        landing: 'w-[200px] h-[64px] px-[24px] py-[12px] text-[24px]',
+      },
+      border: {
+        default: 'rounded-lg',
       },
     },
     defaultVariants: {
       variant: 'default',
       size: 'default',
+      border: 'default',
     },
   }
 );
