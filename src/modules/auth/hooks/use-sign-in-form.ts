@@ -34,7 +34,7 @@ const useSignInForm = () => {
 
   const onSubmit = (data: SignInDTO) => {
     startTransition(async () => {
-      const res = await fetch(`/api/${URLS.SIGN_IN}`, {
+      const res = await fetch(`/api${URLS.SIGN_IN}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
