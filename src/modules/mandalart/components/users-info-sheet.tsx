@@ -28,7 +28,6 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
         setPasswordButtonText('변경하기');
         setPasswordInputValue(roomData.passcode);
       }
-      console.log(roomData);
     }
   }, [roomData]);
 
