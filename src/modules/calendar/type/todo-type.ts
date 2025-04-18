@@ -4,6 +4,7 @@ export type TodoType = {
   title: string;
   isDone: boolean;
   createdAt: string;
+  scheduledDate: string;
 };
 
 export type SubtopicType = {

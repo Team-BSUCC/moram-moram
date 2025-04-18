@@ -7,6 +7,7 @@ import interactionPlugin from '@fullcalendar/interaction';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floating-sheet';
 import { useGetMyMandalartsQuery } from '@/shared/hooks/use-get-my-mandalarts-query';
+import { scheduler } from 'timers/promises';
 
 /**
  * @todo : 캘린더 UI 추가 수정
@@ -27,9 +28,11 @@ const CalendarPage = () => {
   const events = allTodos?.map((todo) => ({
     id: todo.id,
     title: todo.title,
-    date: todo.createdAt,
+    date: new Date(todo.scheduledDate).toISOString(),
     isDone: todo.isDone,
   }));
+
+  console.log(events);
 
   // 셀 클릭 핸들러
   const handleCellClick = (dateStr: string) => {
@@ -82,10 +85,10 @@ const CalendarPage = () => {
           };
         }}
         // 더보기 링크에서 이벤트 리스너 제거
-        // moreLinkDidMount={(info) => {
-        //   const linkEl = info.el;
-        //   // linkEl.style.pointerEvents = 'none';
-        // }}
+        moreLinkDidMount={(info) => {
+          const linkEl = info.el;
+          linkEl.style.pointerEvents = 'none';
+        }}
       />
       {isVisible && <CalendarFloatingSheet todos={date} events={events} />}
     </div>

@@ -3,6 +3,7 @@ export type TodoFetchType = {
   id: string;
   is_done: boolean;
   title: string;
+  scheduled_date: string;
 };
 
 export type SubFetchType = {
@@ -54,6 +55,7 @@ export type ProcessedDataType = {
         title: string;
         isDone: boolean;
         createdAt: string;
+        scheduledDate: string;
       }[];
     }[];
   }[];
@@ -65,6 +67,7 @@ export type TodoTempType = {
   title: string;
   isDone: boolean;
   createdAt: string;
+  scheduledDate: string;
 };
 
 export type SubtopicTempType = {

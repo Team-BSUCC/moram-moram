@@ -4,7 +4,7 @@ import Title from '@/components/commons/title';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { CoreType, EventType } from '../type/todo-type';
 import Spacer from '@/components/commons/spacer';
-import { getProcessedDate } from '../services/get-processed-date';
+import { getProcessedDate } from '../utils/get-processed-date';
 import CalendarTodoItem from './calendar-todo-item';
 
 type CalendarFloatingSheetProps = {
@@ -47,7 +47,7 @@ const CalendarFloatingSheet = ({
             .filter((core) =>
               core.topics.some((topic) =>
                 topic.subtopics.some((sub) =>
-                  sub.todos.some((todo) => todo.createdAt.slice(0, 10) === info)
+                  sub.todos.some((todo) => todo.scheduledDate === info)
                 )
               )
             )
@@ -65,7 +65,7 @@ const CalendarFloatingSheet = ({
                 {core.topics.map((topic) =>
                   topic.subtopics.map((sub) =>
                     sub.todos
-                      .filter((todo) => todo.createdAt.slice(0, 10) === info)
+                      .filter((todo) => todo.scheduledDate === info)
                       .map((todo, idx) => (
                         <CalendarTodoItem
                           key={idx}

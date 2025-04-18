@@ -21,7 +21,7 @@ export async function GET() {
       mandalarts (id, title, created_at, done_count, private,
       mandalart_topics (id, topic, topic_index, created_at,
       mandalart_subtopics (id, content, cell_index, is_done, created_at,
-      cell_todos (id, title, is_done, created_at)))))`
+      cell_todos (id, title, is_done, created_at, scheduled_date)))))`
     )
     .eq('user_id', 'd2477fa0-d848-47df-a962-fdf0d46735c0');
 
@@ -72,6 +72,7 @@ export async function GET() {
                   title: todo.title,
                   isDone: todo.is_done,
                   createdAt: todo.created_at,
+                  scheduledDate: todo.scheduled_date,
                 })
               ),
             };
