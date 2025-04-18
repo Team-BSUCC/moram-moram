@@ -27,9 +27,7 @@ const MandalartCard = ({ info, bandColor }: MandalartCardProps) => {
           <div className='w-full flex-col p-3'>
             <div className='flex justify-between'>
               <div className='flex gap-2'>
-                <Text size='default' align='left'>
-                  365일 남음
-                </Text>
+                <Text align='left'>365일 남음</Text>
                 <span className='mb-[1px] self-end text-ss text-gray'>
                   {formatDate(info.created_at)}
                 </span>
@@ -37,9 +35,7 @@ const MandalartCard = ({ info, bandColor }: MandalartCardProps) => {
               <CardButtonDropDown />
             </div>
             <div className='flex-col'>
-              <Title as='h4' size='default'>
-                {info.title}
-              </Title>
+              <Title as='h4'>{info.title}</Title>
               <p>완수한다!</p>
               <Avatar />
             </div>

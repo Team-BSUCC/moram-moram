@@ -40,7 +40,7 @@ const GuestPage = () => {
             {title || '나만의 만다라트 작성하기'}
           </Title>
           <Spacer size='lg' />
-          <Text size='default' align='center'>
+          <Text align='center'>
             지금 당신의 목표를 81칸에 정리해보세요. 작은 계획들이 큰 변화를
             만듭니다.
           </Text>
@@ -59,7 +59,7 @@ const GuestPage = () => {
       </div>
       <Spacer size='3xl' />
       <div className='flex w-full justify-center'>
-        <Button variant='outline' size='default' onClick={handleDownload}>
+        <Button variant='outline' onClick={handleDownload}>
           이미지 저장하기
         </Button>
       </div>
