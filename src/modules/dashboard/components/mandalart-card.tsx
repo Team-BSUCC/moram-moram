@@ -44,10 +44,7 @@ const MandalartCard = ({ info, bandColor }: MandalartCardProps) => {
             <Spacer size='sm' />
             <div className='flex gap-3'>
               <div>
-                <CircularProgress
-                  value={calculatorProgress(info.done_count)}
-                  size='sm'
-                />
+                <CircularProgress value={calculatorProgress(info.done_count)} />
               </div>
               <div className='flex-col place-content-center'>
                 <p>지금까지</p>
