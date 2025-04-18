@@ -2,14 +2,18 @@
 
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
+import { Tables } from '@/shared/types/database.types';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
+import { User } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
 
-const UsersInfoSheet = () => {
+type UsersInfoSheetType = { user: User | null };
+
+const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
   const [passwordInputValue, setPasswordInputValue] = useState<string>('');
   const [roomPasswordSettingButtonText, setRoomPasswordSettingButtonText] =
     useState<string>('');
-  const [isRoomOwner, setIsRoomOwer] = useState<boolean>(false);
+  const [isRoomOwner, setIsRoomOwner] = useState<boolean>(false);
   const handleSubmitPasswordSetting = () => {
     if (passwordInputValue === '') return;
   };
@@ -23,11 +27,17 @@ const UsersInfoSheet = () => {
       const { data, error } = await supabase
         .from('rooms')
         .select('*')
-        .eq('id', 'e5a689a9-0f5f-4cdb-935e-9250ca71f60f');
-      console.log(data);
+        .eq('id', 'e5a689a9-0f5f-4cdb-935e-9250ca71f60f')
+        .single();
+      if (user?.id === data.owner) {
+        setIsRoomOwner(true);
+      }
+      if (error) {
+        //TODO 센트리로 처리하기
+      }
     };
 
-    fetchGetRoomPassword();
+    if (user) fetchGetRoomPassword();
   }, []);
 
   return (

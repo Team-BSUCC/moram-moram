@@ -140,7 +140,7 @@ const MandalartMainContent = ({ user }: MandalartMainContentProps) => {
             <div onClick={handleClickAvatarStack}>
               <RealtimeAvatarStack roomName='avatar-room' username={username} />
             </div>
-            {isVisibleUsersInfoSheet && <UsersInfoSheet />}
+            {isVisibleUsersInfoSheet && <UsersInfoSheet user={user} />}
           </div>
           <Spacer size='sm' />
           <div className='flex'>
