@@ -48,13 +48,15 @@ const CalendarPage = () => {
           center: 'title',
           end: '',
         }}
-        dayMaxEventRows={5}
+        dayMaxEvents={3}
         fixedWeekCount={false}
         height='auto'
         aspectRatio={1.25}
         showNonCurrentDates={true}
         eventContent={(arg) => (
-          <div className='custom-event'>{arg.event.title}</div>
+          <div className='custom-event'>
+            <span>{arg.event.title}</span>
+          </div>
         )}
         dateClick={(arg) => {
           handleCellClick(arg.dateStr);
@@ -74,6 +76,16 @@ const CalendarPage = () => {
         dayCellContent={({ date }) => date.getDate()}
         initialDate={new Date()}
         unselectAuto={true}
+        moreLinkContent={(args) => {
+          return {
+            html: `<span class="custom-more-link">+${args.num}</span>`,
+          };
+        }}
+        // 더보기 링크에서 이벤트 리스너 제거
+        // moreLinkDidMount={(info) => {
+        //   const linkEl = info.el;
+        //   // linkEl.style.pointerEvents = 'none';
+        // }}
       />
       {isVisible && <CalendarFloatingSheet todos={date} events={events} />}
     </div>

@@ -45,7 +45,7 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className='fixed z-50 rounded-md bg-[#fff] shadow-lg'
+          className='fixed z-50 overflow-scroll rounded-md bg-[#fff] shadow-lg'
         >
           {/* 드래그 핸들 */}
           <div className='handle flex h-[50px] cursor-grab justify-end active:cursor-grabbing'>

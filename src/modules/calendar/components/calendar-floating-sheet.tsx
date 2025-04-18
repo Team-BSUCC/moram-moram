@@ -31,7 +31,7 @@ const CalendarFloatingSheet = ({
 
   return (
     <FloatingSheet>
-      <div className='h-[500px] w-[400px] p-5'>
+      <div className='handle h-[500px] w-[400px] p-5'>
         <div className='flex justify-start'>
           <Text size='18px-semibold' textColor='sub'>
             {getProcessedDate(info)}
@@ -41,7 +41,7 @@ const CalendarFloatingSheet = ({
           TO DO LIST
         </Title>
         <Spacer size={'md'} />
-        <hr className='mb-5' />
+        <hr className='mb-6' />
         {isSatisfied && data ? (
           data
             .filter((core) =>
@@ -52,7 +52,7 @@ const CalendarFloatingSheet = ({
               )
             )
             .map((core) => (
-              <div key={core.title} className='flex flex-col gap-5'>
+              <div key={core.title} className='mb-5 flex flex-col gap-2'>
                 {/* 하이라이트 컬러 DB에서 받아와서 수정 예정 */}
                 <Title
                   as='h2'
@@ -80,12 +80,10 @@ const CalendarFloatingSheet = ({
             ))
         ) : (
           <div className='h- flex flex-col items-center justify-center'>
-            <Spacer size='lg' />
-            <div className='mt-2'>
-              <Text size='16px-regular' textColor='caption'>
-                오늘은 여유로운 하루네요.
-              </Text>
-            </div>
+            <Spacer size='4xl' />
+            <Text size='16px-regular' textColor='caption'>
+              오늘은 여유로운 하루네요.
+            </Text>
           </div>
         )}
       </div>

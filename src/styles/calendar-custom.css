@@ -29,7 +29,7 @@
 /* Today 버튼 */
 .fc .fc-today-button {
   background-color: white !important;
-  color: #333 !important;
+  color: #202020 !important;
   border: 1px solid #e5e7eb !important;
   border-radius: 8px !important;
   padding: 6px 14px !important;
@@ -46,7 +46,7 @@
 .fc .fc-prev-button,
 .fc .fc-next-button {
   background-color: white !important;
-  color: #333 !important;
+  color: #202020 !important;
   border: 1px solid #e5e7eb !important;
   border-radius: 8px !important;
   width: 36px;
@@ -107,7 +107,6 @@
   position: absolute;
   left: 8px;
   top: 8px;
-  z-index: 5;
 }
 
 .fc .fc-daygrid-day-number {
@@ -135,8 +134,10 @@
 
 /* 이벤트 스타일 */
 .custom-event {
+  height: 20px;
+  display: flex;
   background-color: #f7d6d1;
-  font-size: 12px;
+  font-size: 13px;
   padding: 2px 4px;
   margin: 0px 4px;
   white-space: nowrap;
@@ -146,15 +147,26 @@
   border: none !important;
   max-width: calc(100% - 8px);
   align-items: center;
+  text-align: center;
+}
+
+.custom-event span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-size: 13px;
+  line-height: 1;
+  width: 100%;
 }
 
 /* 이벤트 영역 조정 */
 .fc-daygrid-day-events {
-  margin-top: 30px !important;
-  padding-top: 5px;
+  margin-top: 43px !important;
   max-height: 100px;
   overflow: hidden;
   margin-bottom: 0 !important; /* 하단 마진 제거 */
+  position: relative;
 }
 
 /* 이벤트 컨테이너 마진 조정 */
@@ -178,28 +190,30 @@
 
 /* 더보기 버튼 스타일 */
 .fc-daygrid-more-link {
-  color: #6b7280;
-  font-size: 12px;
-  background: #f3f4f6;
-  border-radius: 4px;
-  padding: 2px 4px;
-  margin: 2px 4px;
-  display: inline-block;
-  margin-top: 0 !important;
-  margin-bottom: 0 !important;
+  position: absolute;
+  top: -34px;
+  right: 0;
+  font-size: 14px;
+  background-color: white;
+  margin-right: 8px;
+  color: #aaaaaa;
+  border: none;
+  padding: 2px 6px;
+  z-index: 10;
+  overflow: visible !important;
 }
 
 /* 오늘 날짜 스타일 제거 */
 .fc .fc-day-today {
   background-color: transparent !important;
-  border: 3px solid #4cb446;
+  box-shadow: inset 0 0 0 3px #4cb446 !important;
 }
 
 /* 오늘 날짜에 초록색 원 스타일 */
 .fc .fc-day-today .fc-daygrid-day-number {
   position: relative;
   color: white;
-  z-index: 1;
+  z-index: 10;
 }
 
 .fc .fc-day-today .fc-daygrid-day-number::before {
@@ -214,11 +228,14 @@
   z-index: -1;
 }
 
-/* 하단 여백 제거 */
 .fc-daygrid-day-bottom {
-  padding: 0 !important;
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: auto;
+  height: auto;
   margin: 0 !important;
-  position: static !important;
+  padding: 0;
 }
 
 /* 이벤트 영역 아래 빈 공간 조정 */
@@ -247,7 +264,7 @@
 }
 
 .fc .fc-day-other {
-  background-color: #f9f9f9; /* 연한 회색 */
+  background-color: #f9f9f9;
 }
 
 /* 이벤트 컨테이너의 ::after 제거 */
@@ -267,4 +284,8 @@ a.fc-event::after {
 .fc-daygrid-event-harness:last-of-type a::after {
   display: none !important;
   content: none !important;
+}
+
+.fc-daygrid-day-events {
+  overflow: visible !important;
 }

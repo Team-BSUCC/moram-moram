@@ -30,24 +30,33 @@ const CalendarTodoItem = ({ todo, topic, sub }: CalendarTodoItemProps) => {
   };
 
   return (
-    <div>
-      <div className='flex items-start justify-between'>
-        <div className='flex gap-3'>
-          <CheckBox checked={checked} onChange={handleCheckToggle} />
-          <Text size='20px-medium' line={checked ? 'cancelLine' : 'default'}>
-            {todo.title}
-          </Text>
-        </div>
-        <Dropdown>
-          <div>
-            <Button variant='none' size='none' onClick={handleDelete}>
-              삭제하기
-            </Button>
+    <div className='w-full'>
+      <div className='flex w-full items-start justify-between'>
+        <div className='flex w-full items-center gap-3'>
+          <div className='py-2'>
+            <CheckBox checked={checked} onChange={handleCheckToggle} />
           </div>
-        </Dropdown>
+          <div className='flex w-full items-center justify-between border-b pb-[7px] pl-1 pt-2'>
+            <div>
+              <Text
+                size='20px-medium'
+                line={checked ? 'cancelLine' : 'default'}
+              >
+                {todo.title}
+              </Text>
+            </div>
+            <Dropdown>
+              <div>
+                <Button variant='none' size='none' onClick={handleDelete}>
+                  삭제하기
+                </Button>
+              </div>
+            </Dropdown>
+          </div>
+        </div>
       </div>
-      <div className='border-gray-200 mx-9 my-1 border-b'></div>
-      <div className='ml-9 mt-1'>
+      <div className='mx-9'></div>
+      <div className='ml-10 mt-[5px]'>
         <Text size='16px-medium' textColor='sub'>
           {topic.title} &gt; {sub.title}
         </Text>
