@@ -68,6 +68,7 @@ export async function GET() {
               isDone: sub.is_done,
               todos: sub.cell_todos.map(
                 (todo): TodoTempType => ({
+                  id: todo.id,
                   title: todo.title,
                   isDone: todo.is_done,
                   createdAt: todo.created_at,

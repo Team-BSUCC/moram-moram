@@ -49,13 +49,19 @@ export type ProcessedDataType = {
     subtopics: {
       title: string;
       isDone: boolean;
-      todos: { title: string; isDone: boolean; createdAt: string }[];
+      todos: {
+        id: string;
+        title: string;
+        isDone: boolean;
+        createdAt: string;
+      }[];
     }[];
   }[];
 }[];
 
 // 원하는 데이터 형태로 가공하기 위한 임시 배열 타입들
 export type TodoTempType = {
+  id: string;
   title: string;
   isDone: boolean;
   createdAt: string;

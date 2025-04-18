@@ -73,7 +73,7 @@ const CalendarFloatingSheet = ({
           <div className='h- flex flex-col items-center justify-center'>
             <Spacer size={'lg'} />
             <div className='mt-2 font-[16px] text-[#A6A6A6]'>
-              오늘은 여유로운 하루네요.
+              <Text>오늘은 여유로운 하루네요.</Text>
             </div>
           </div>
         )}

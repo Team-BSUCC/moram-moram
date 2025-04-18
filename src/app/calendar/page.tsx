@@ -25,6 +25,7 @@ const CalendarPage = () => {
   );
 
   const events = allTodos?.map((todo) => ({
+    id: todo.id,
     title: todo.title,
     date: todo.createdAt,
     isDone: todo.isDone,
