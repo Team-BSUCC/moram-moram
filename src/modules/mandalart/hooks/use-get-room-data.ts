@@ -11,10 +11,9 @@ import { useEffect, useState } from 'react';
  */
 export const useGetRoomData = (user: User | null, roomId: string) => {
   const [roomData, setRoomData] = useState<Tables<'rooms'> | null>(null);
-
+  const supabase = getBrowserClient();
   useEffect(() => {
     const fetchGetRoomPassword = async () => {
-      const supabase = getBrowserClient();
       const { data, error } = await supabase
         .from('rooms')
         .select('*')

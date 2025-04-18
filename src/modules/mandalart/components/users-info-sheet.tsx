@@ -2,22 +2,22 @@
 
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
-import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { User } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
 import { useGetRoomData } from '../hooks/use-get-room-data';
+import { fetchUpdateRoomPassword } from '../services/fetch-update-room-password';
 
 type UsersInfoSheetType = { user: User | null };
 
 const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
   const [passwordInputValue, setPasswordInputValue] = useState<string>('');
-  const [roomPasswordSettingButtonText, setRoomPasswordSettingButtonText] =
+  const [passwordButtonText, setPasswordButtonText] =
     useState<string>('생성하기');
   const [isRoomOwner, setIsRoomOwner] = useState<boolean>(false);
-  const { roomData } = useGetRoomData(
-    user,
-    'e5a689a9-0f5f-4cdb-935e-9250ca71f60f'
-  );
+
+  //나중에 페스파라미터 가져오는 훅으로 리펙터링
+  const pathParamRoomId = 'e5a689a9-0f5f-4cdb-935e-9250ca71f60f';
+  const { roomData } = useGetRoomData(user, pathParamRoomId);
 
   useEffect(() => {
     if (roomData) {
@@ -25,16 +25,24 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
         setIsRoomOwner(true);
       }
       if (roomData.passcode) {
-        setRoomPasswordSettingButtonText('변경하기');
-        setPasswordInputValue(passwordInputValue);
+        setPasswordButtonText('변경하기');
+        setPasswordInputValue(roomData.passcode);
       }
       console.log(roomData);
     }
   }, [roomData]);
 
-  const handleSubmitPasswordSetting = () => {
+  const handleSubmitPasswordSetting = async () => {
     if (passwordInputValue === '') return;
+    try {
+      fetchUpdateRoomPassword(pathParamRoomId, passwordInputValue);
+      alert('변경성공');
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+  const isRoomPasswordButtonDisabled = true;
 
   return (
     <>
@@ -59,9 +67,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
                   setPasswordInputValue(e.target.value);
                 }}
               ></Input>
-              <Button onClick={handleSubmitPasswordSetting}>
-                {roomPasswordSettingButtonText}
-              </Button>
+              <Button disabled={true}>{passwordButtonText}</Button>
             </form>
             <Button>초대하기</Button>
           </>
