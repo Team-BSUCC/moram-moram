@@ -76,9 +76,10 @@ const CalendarFloatingSheet = ({
                   topic.subtopics.map((sub) =>
                     sub.todos
                       .filter((todo) => todo.scheduledDate === info)
+                      .sort((a, b) => Number(a.isDone) - Number(b.isDone))
                       .map((todo, idx) => (
                         <CalendarTodoItem
-                          key={idx}
+                          key={todo.id}
                           todo={todo}
                           sub={sub}
                           topic={topic}
