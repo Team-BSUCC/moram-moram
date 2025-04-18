@@ -1,3 +1,4 @@
+'use client';
 import { signWithGoogle } from '../services/auth-client-service';
 
 const GoogleLoginButton = () => {

@@ -3,9 +3,7 @@ import { NextResponse } from 'next/server';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
 
 export const GET = async () => {
-  const res = NextResponse.next();
-
-  const supabase = getServerClientAction(res);
+  const supabase = getServerClientAction();
 
   const {
     data: { session },
