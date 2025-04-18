@@ -17,7 +17,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
 
   //나중에 페스파라미터 가져오는 훅으로 리펙터링
   const pathParamRoomId = 'e5a689a9-0f5f-4cdb-935e-9250ca71f60f';
-  const { roomData } = useGetRoomData(user, pathParamRoomId);
+  const { roomData, updateRoomData } = useGetRoomData(user, pathParamRoomId);
 
   useEffect(() => {
     if (roomData) {
@@ -32,17 +32,35 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
     }
   }, [roomData]);
 
-  const handleSubmitPasswordSetting = async () => {
-    if (passwordInputValue === '') return;
+  //변경된 비밀번호가 없거나 비어있으면 변경하기 비활성화
+  const isRoomPasswordButtonDisabled =
+    passwordInputValue === '' || passwordInputValue === roomData?.passcode;
+
+  const handleSetPasswordSubmit = async () => {
     try {
-      fetchUpdateRoomPassword(pathParamRoomId, passwordInputValue);
+      await fetchUpdateRoomPassword(pathParamRoomId, passwordInputValue);
       alert('변경성공');
+      updateRoomData();
     } catch (err) {
+      //TODO 센트리로 리펙터링
       console.log(err);
+      alert('변경실패');
     }
   };
 
-  const isRoomPasswordButtonDisabled = true;
+  const handleInviteClick = async () => {
+    try {
+      const inviteText = `초대링크 : ${window.location.href}
+      비밀번호 : ${passwordInputValue}
+      `;
+      await navigator.clipboard.writeText(inviteText);
+      alert('클립보드에 복사되었습니다!');
+    } catch (err) {
+      //TODO 센트리로 리펙터링
+      console.log(err);
+      alert('복사실패');
+    }
+  };
 
   return (
     <>
@@ -57,7 +75,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
             <form
               onSubmit={(e) => {
                 e.preventDefault();
-                handleSubmitPasswordSetting();
+                handleSetPasswordSubmit();
               }}
               className='flex'
             >
@@ -67,9 +85,11 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
                   setPasswordInputValue(e.target.value);
                 }}
               ></Input>
-              <Button disabled={true}>{passwordButtonText}</Button>
+              <Button disabled={isRoomPasswordButtonDisabled}>
+                {passwordButtonText}
+              </Button>
             </form>
-            <Button>초대하기</Button>
+            <Button onClick={handleInviteClick}>초대하기</Button>
           </>
         )}
       </div>
