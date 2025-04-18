@@ -9,6 +9,7 @@ import {
   useCellCacheQuery,
   useTodoListCacheQuery,
 } from '../hooks/use-mandalart-data-query';
+import Text from '@/components/commons/text';
 
 type CellProps = {
   value: string;
@@ -48,16 +49,22 @@ const Cell = ({ value, className, info }: CellProps) => {
 
   return (
     <>
-      <Button onClick={handleClick} variant='outline'>
-        {/* 셀의 스타일 지정 */}
-        <div
-          className={`relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border p-2 ${className}`}
-          style={{ borderRadius: '8px' }}
-        >
-          {data}
-        </div>
-      </Button>
-
+      {/* 셀의 스타일 지정 */}
+      <div
+        onClick={handleClick}
+        className={`relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-2 p-2 hover:cursor-pointer ${className}`}
+      >
+        {/* 소주제인지 아닌지 판단 */}
+        {'topic_id' in info ? (
+          <Text align='center' size='mlg'>
+            {data}
+          </Text>
+        ) : (
+          <Text align='center' weight='bold' size='mlg'>
+            {data}
+          </Text>
+        )}
+      </div>
       {/* Todo key 등록을 위한 등록 컴포넌트 */}
       {'cell_todos' in info &&
         todoListCacheArray.map((todo, idx) => {
