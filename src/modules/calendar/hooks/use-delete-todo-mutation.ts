@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteTodoData } from '../services/delete-todo-data';
+import { deleteTodoData } from '../services/edit-todo-data';
 
 export const useDeleteTodoMutation = () => {
   const queryClient = useQueryClient();

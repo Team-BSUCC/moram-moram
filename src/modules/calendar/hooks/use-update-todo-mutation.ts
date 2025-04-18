@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateTodoToggleData } from '../services/update-todo-toggle-data';
+import { updateTodoToggleData } from '../services/edit-todo-data';
 
 export const useUpdateTodoMutation = () => {
   const queryClient = useQueryClient();
