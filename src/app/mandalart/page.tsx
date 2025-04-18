@@ -13,7 +13,7 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCurrentUserId } from '@/modules/mandalart/hooks/use-current-user-id';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { createTodoListkey } from '@/modules/mandalart/services/create-todo-list-key';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { TodoPayloadType } from '@/modules/mandalart/types/realtime-type';
@@ -24,6 +24,7 @@ import Text from '@/components/commons/text';
 import { BicepsFlexed, CalendarDays } from 'lucide-react';
 import LinearProgress from '@/components/commons/progress-bar';
 import { calculatorProgress } from '@/shared/utils/calculator-progress';
+import UsersInfoSheet from '@/modules/mandalart/components/users-info-sheet';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -34,7 +35,6 @@ const MandalartPage = () => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const username = useCurrentUserName();
   const { userId, isReady } = useCurrentUserId();
-
   // const [user, setUser] = useState<User | null>();
   const supabase = getBrowserClient();
   const queryClient = useQueryClient();
@@ -52,6 +52,9 @@ const MandalartPage = () => {
   const addBroadcastStore = useBroadcastStore(
     (state) => state.addBroadcastStore
   );
+
+  const [isVisibleUsersInfoSheet, setIsVisibleUsersInfoSheet] =
+    useState<boolean>(false);
 
   const broadcastChannel = supabase.channel('broadcastChannel');
 
@@ -109,6 +112,10 @@ const MandalartPage = () => {
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>error</div>;
 
+  const handleClickAvatarStack = () => {
+    setIsVisibleUsersInfoSheet(true);
+  };
+
   return (
     <div className='flex flex-col items-center'>
       <Spacer size='2xl' />
@@ -124,7 +131,10 @@ const MandalartPage = () => {
         <div className='flex flex-col'>
           <div className='flex justify-between'>
             <Title as='h1'>2025년 성장의 해로 만들기</Title>
-            <RealtimeAvatarStack roomName='avatar-room' username={username} />
+            <div onClick={handleClickAvatarStack}>
+              <RealtimeAvatarStack roomName='avatar-room' username={username} />
+            </div>
+            {isVisibleUsersInfoSheet && <UsersInfoSheet />}
           </div>
           <Spacer size='sm' />
           <div className='flex'>
