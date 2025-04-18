@@ -5,9 +5,6 @@
 
 /* 전체 캘린더 스타일 */
 .fc {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue',
-    Arial, sans-serif;
   max-width: 55%;
   margin: 0 auto;
   border-radius: 10px;
@@ -26,7 +23,7 @@
   font-size: 28px;
   font-weight: 700;
   text-align: center;
-  padding-right: 30px;
+  padding-right: 160px;
 }
 
 /* Today 버튼 */

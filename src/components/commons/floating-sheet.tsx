@@ -48,7 +48,7 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
           className='fixed z-50 rounded-[8px] bg-[#fff] shadow-lg'
         >
           {/* 드래그 핸들 */}
-          <div className='handle flex h-[50px] justify-end'>
+          <div className='handle flex h-[50px] cursor-grab justify-end active:cursor-grabbing'>
             <button onClick={hide} className='mr-5 mt-2 bg-transparent'>
               <X />
             </button>
