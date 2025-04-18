@@ -5,18 +5,19 @@ import 'react-circular-progressbar/dist/styles.css';
 import { cva, VariantProps } from 'class-variance-authority';
 import { twMerge } from 'tailwind-merge';
 
-const wrapperVariants = cva('transition-all select-none', {
-  variants: {
-    size: {
-      sm: 'w-16 h-16 sm:w-18 sm:h-18 md:w-20 md:h-20',
-      default: 'w-24 h-24 sm:w-26 sm:h-26 md:w-28 md:h-28',
-      lg: 'w-32 h-32 sm:w-34 sm:h-34 md:w-36 md:h-36',
+const wrapperVariants = cva(
+  'transition-all select-none text-sub text-[14px] leading-[20px] font-medium',
+  {
+    variants: {
+      size: {
+        default: 'h-[80px] w-[80px]',
+      },
     },
-  },
-  defaultVariants: {
-    size: 'default',
-  },
-});
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
 
 type CircularProgressProps = VariantProps<typeof wrapperVariants> & {
   value: number;
@@ -40,26 +41,25 @@ type CircularProgressProps = VariantProps<typeof wrapperVariants> & {
  */
 const CircularProgress = ({
   value,
-  strokeWidth = 9,
+  strokeWidth = 12,
   pathColor = '#111827',
   trailColor = '#e5e7eb',
   textColor = '#111827',
-  textSize = '15px',
   size,
 }: CircularProgressProps) => {
   return (
     <div className={twMerge(wrapperVariants({ size }))}>
       <CircularProgressbar
         value={value}
-        text={`${value}%`}
+        text={'성장중'}
         minValue={0}
         maxValue={100}
         strokeWidth={strokeWidth}
         styles={buildStyles({
+          strokeLinecap: 'butt',
           pathColor,
           trailColor,
           textColor,
-          textSize,
         })}
       />
     </div>
