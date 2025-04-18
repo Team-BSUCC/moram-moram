@@ -2,43 +2,39 @@
 
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
-import { Tables } from '@/shared/types/database.types';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { User } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
+import { useGetRoomData } from '../hooks/use-get-room-data';
 
 type UsersInfoSheetType = { user: User | null };
 
 const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
   const [passwordInputValue, setPasswordInputValue] = useState<string>('');
   const [roomPasswordSettingButtonText, setRoomPasswordSettingButtonText] =
-    useState<string>('');
+    useState<string>('생성하기');
   const [isRoomOwner, setIsRoomOwner] = useState<boolean>(false);
+  const { roomData } = useGetRoomData(
+    user,
+    'e5a689a9-0f5f-4cdb-935e-9250ca71f60f'
+  );
+
+  useEffect(() => {
+    if (roomData) {
+      if (user?.id === roomData.owner) {
+        setIsRoomOwner(true);
+      }
+      if (roomData.passcode) {
+        setRoomPasswordSettingButtonText('변경하기');
+        setPasswordInputValue(passwordInputValue);
+      }
+      console.log(roomData);
+    }
+  }, [roomData]);
+
   const handleSubmitPasswordSetting = () => {
     if (passwordInputValue === '') return;
   };
-
-  /**
-   *  TODO : 나중에 룸 ID로 만다라트 페이지 접근하는걸로 바뀌면 eq 부분 url에서 가져오늘걸로 수정
-   */
-  useEffect(() => {
-    const fetchGetRoomPassword = async () => {
-      const supabase = getBrowserClient();
-      const { data, error } = await supabase
-        .from('rooms')
-        .select('*')
-        .eq('id', 'e5a689a9-0f5f-4cdb-935e-9250ca71f60f')
-        .single();
-      if (user?.id === data.owner) {
-        setIsRoomOwner(true);
-      }
-      if (error) {
-        //TODO 센트리로 처리하기
-      }
-    };
-
-    if (user) fetchGetRoomPassword();
-  }, []);
 
   return (
     <>
@@ -50,7 +46,13 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
 
         {isRoomOwner && (
           <>
-            <form onSubmit={handleSubmitPasswordSetting} className='flex'>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleSubmitPasswordSetting();
+              }}
+              className='flex'
+            >
               <Input
                 value={passwordInputValue}
                 onChange={(e) => {
