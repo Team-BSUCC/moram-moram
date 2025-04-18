@@ -7,7 +7,6 @@ import interactionPlugin from '@fullcalendar/interaction';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floating-sheet';
 import { useGetMyMandalartsQuery } from '@/shared/hooks/use-get-my-mandalarts-query';
-import { scheduler } from 'timers/promises';
 
 /**
  * @todo : 캘린더 UI 추가 수정
@@ -31,8 +30,6 @@ const CalendarPage = () => {
     date: new Date(todo.scheduledDate).toISOString(),
     isDone: todo.isDone,
   }));
-
-  console.log(events);
 
   // 셀 클릭 핸들러
   const handleCellClick = (dateStr: string) => {
