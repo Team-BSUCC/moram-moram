@@ -1,6 +1,6 @@
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 
-export const fetchUpdateRoomPassword = async (
+export const fetchUpdateRoomPasscode = async (
   roomId: string,
   passcode: string
 ) => {

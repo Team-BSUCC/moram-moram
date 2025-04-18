@@ -1,6 +1,7 @@
 import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 import MandalartMainContent from '@/modules/mandalart/components/mandalart-main-content';
-import MandalartPasswordGate from '@/modules/mandalart/components/mandalart-password-gate';
+import MandalartPasscodeGate from '@/modules/mandalart/components/mandalart-passcode-gate';
+
 import { Tables } from '@/shared/types/database.types';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
 
@@ -24,7 +25,7 @@ const MandalartPage = async () => {
       {isAuthenticated ? (
         <MandalartMainContent user={user} />
       ) : (
-        <MandalartPasswordGate user={user} roomInfo={roomInfo} />
+        <MandalartPasscodeGate user={user} roomId={pathParamRoomId} />
       )}
     </>
   );

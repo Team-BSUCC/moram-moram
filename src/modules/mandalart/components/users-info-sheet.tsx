@@ -5,7 +5,7 @@ import Input from '@/components/commons/input';
 import { User } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
 import { useGetRoomData } from '../hooks/use-get-room-data';
-import { fetchUpdateRoomPassword } from '../services/fetch-update-room-password';
+import { fetchUpdateRoomPasscode } from '../services/fetch-update-room-passcode';
 
 type UsersInfoSheetType = { user: User | null };
 
@@ -36,7 +36,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
 
   const handleSetPasswordSubmit = async () => {
     try {
-      await fetchUpdateRoomPassword(pathParamRoomId, passwordInputValue);
+      await fetchUpdateRoomPasscode(pathParamRoomId, passwordInputValue);
       alert('변경성공');
       updateRoomData();
     } catch (err) {
