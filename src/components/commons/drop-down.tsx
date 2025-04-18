@@ -49,7 +49,7 @@ const Dropdown = ({ children, selection = false }: DropdownProps) => {
         /**
          * @todo 색상 코드 하드코딩 수정하기
          */
-        <div className='absolute right-0 z-10 mt-2 w-32 rounded-lg border-[1px] border-[#e6e6e6] bg-white-light p-2 shadow-md'>
+        <div className='absolute right-0 z-10 w-40 rounded-[8px] border-[1px] border-[#e6e6e6] bg-white-light shadow-md'>
           {children}
         </div>
       )}

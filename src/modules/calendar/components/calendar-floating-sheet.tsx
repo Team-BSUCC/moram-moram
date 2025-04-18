@@ -13,7 +13,7 @@ type CalendarFloatingSheetProps = {
 };
 
 /**
- * @todo: 체크박스 클릭한게 DB에 반영되게 수정
+ * 달력에서 선택한 날짜에 해당하는 투두 목록을 보여주는 플로팅 시트
  * @param todos - 플로팅 시트에 표시할 투두 목록
  * @param events - 달력에 표시된 이벤트 목록
  * @returns
@@ -33,11 +33,13 @@ const CalendarFloatingSheet = ({
     <FloatingSheet>
       <div className='h-[500px] w-[400px] p-5'>
         <div className='flex justify-start'>
-          {/* 폰트 크기, 볼드 수정 */}
-          <Text>{getProcessedDate(info)}</Text>
+          <Text size='18px-semibold' textColor='sub'>
+            {getProcessedDate(info)}
+          </Text>
         </div>
-        {/* 텍스트 볼드체로 변경하기 */}
-        <Title as='h1'>TO DO LIST</Title>
+        <Title as='h1' size='28px-semibold'>
+          TO DO LIST
+        </Title>
         <Spacer size={'md'} />
         <hr className='mb-5' />
         {isSatisfied && data ? (
@@ -51,8 +53,15 @@ const CalendarFloatingSheet = ({
             )
             .map((core) => (
               <div key={core.title} className='flex flex-col gap-5'>
-                {/* 하이라이트 색상 수정 및 폰트 크기 수정 */}
-                <Title as='h2'>{core.title}</Title>
+                {/* 하이라이트 컬러 DB에서 받아와서 수정 예정 */}
+                <Title
+                  as='h2'
+                  highlightColor={0}
+                  textColor='sub'
+                  size='18px-semibold'
+                >
+                  {core.title}
+                </Title>
                 {core.topics.map((topic) =>
                   topic.subtopics.map((sub) =>
                     sub.todos
@@ -71,9 +80,11 @@ const CalendarFloatingSheet = ({
             ))
         ) : (
           <div className='h- flex flex-col items-center justify-center'>
-            <Spacer size={'lg'} />
-            <div className='mt-2 font-[16px] text-[#A6A6A6]'>
-              <Text>오늘은 여유로운 하루네요.</Text>
+            <Spacer size='lg' />
+            <div className='mt-2'>
+              <Text size='16px-regular' textColor='caption'>
+                오늘은 여유로운 하루네요.
+              </Text>
             </div>
           </div>
         )}
