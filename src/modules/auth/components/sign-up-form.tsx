@@ -24,9 +24,7 @@ const SignUpForm = () => {
     >
       {/* 에러 메시지 */}
       {errors.root?.message && (
-        <Text size='sm' align='center'>
-          {errors.root.message}
-        </Text>
+        <Text align='center'>{errors.root.message}</Text>
       )}
 
       {/* 이메일 */}
@@ -41,7 +39,6 @@ const SignUpForm = () => {
           <Input id='email' type='email' {...register('email')} />
           <Button
             variant='outline'
-            size='default'
             type='button'
             onClick={handleCheckEmail}
             disabled={checkingEmail}
@@ -63,14 +60,12 @@ const SignUpForm = () => {
         <div className='flex gap-2'>
           <Input
             variant='default'
-            sizes='md'
             id='nickname'
             type='text'
             {...register('nickname')}
           />
           <Button
             variant='outline'
-            size='default'
             type='button'
             onClick={handleCheckNickname}
             disabled={checkingNickname}
@@ -91,7 +86,6 @@ const SignUpForm = () => {
         </label>
         <Input
           variant='default'
-          sizes='md'
           id='password'
           type='password'
           {...register('password')}
@@ -109,7 +103,6 @@ const SignUpForm = () => {
         </label>
         <Input
           variant='default'
-          sizes='md'
           id='confirmPassword'
           type='password'
           {...register('confirmPassword')}
@@ -120,12 +113,7 @@ const SignUpForm = () => {
       </div>
 
       {/* 제출 버튼 */}
-      <Button
-        variant='outline'
-        size='default'
-        type='submit'
-        disabled={isPending}
-      >
+      <Button variant='outline' type='submit' disabled={isPending}>
         {isPending ? '가입 중...' : '회원가입'}
       </Button>
     </form>

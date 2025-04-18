@@ -69,7 +69,6 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
             <Text>TO DO LIST</Text>
             <Input
               type='text'
-              sizes='xl'
               value={value}
               placeholder={value}
               onChange={(e) => {
@@ -106,11 +105,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
         {/* 소주제일 경우 */}
         {info.category === 'SUBTOPIC' && (
           <div>
-            <Button
-              variant='outline'
-              size='default'
-              onClick={() => createTodo()}
-            >
+            <Button variant='outline' onClick={() => createTodo()}>
               투두 추가하기
             </Button>
             {todoListCacheArray.map((todo: TodoType) => (

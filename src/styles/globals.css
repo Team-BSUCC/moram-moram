@@ -43,6 +43,13 @@ textarea {
   --text-sm: 0.75rem; /* 12px */
   --text-ss: 0.625rem; /* 10px */
 
+  --color-main: #202020;
+  --color-sub: #5e5e5e;
+  --color-caption: #767676;
+  --color-assist: #aaaaaa;
+  --color-background: #f4f4f2;
+  --color-error: #ff6a6a;
+  --color-focus: #649bff;
   --color-primary: #d6baec;
   --color-secondary: #4cb446;
   --color-beige: #d9cabf;
