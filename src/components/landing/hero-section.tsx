@@ -20,15 +20,15 @@ const HeroSection = () => {
             </h1>
             {/* 제목 ↔ 본문 간격 */}
             <div className='mt-6 text-base leading-relaxed sm:text-lg'>
-              <Text size='default' align='left'>
+              <Text align='left'>
                 막연했던 목표도 차근차근, 구체적인 계획으로.
               </Text>
-              <Text size='default' align='left'>
+              <Text align='left'>
                 한 칸씩 채우며 나아가는 여정에 Manda가 함께할게요.
               </Text>
             </div>
             <Spacer size='xl' />
-            <Button size='default'>지금 시작하기</Button>
+            <Button>지금 시작하기</Button>
           </div>
         </div>
       </div>
