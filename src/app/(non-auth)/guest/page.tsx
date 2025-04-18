@@ -1,4 +1,5 @@
 'use client';
+
 import Button from '@/components/commons/button';
 import Spacer from '@/components/commons/spacer';
 import Text from '@/components/commons/text';
@@ -20,33 +21,37 @@ const GuestPage = () => {
     try {
       const dataUrl = await toPng(ref.current);
       const link = document.createElement('a');
-      link.download = 'exported-image.png';
+      link.download = `${title}.png`;
       link.href = dataUrl;
       link.click();
     } catch (error) {
-      /**
-       * TODO : 에러 sentry로 핸들링하기
-       */
-      // console.error('이미지 변환 실패:', error);
+      // TODO: sentry
     }
   };
 
+  // TODO : 모달 기능 추가하기
   return (
-    <div className='flex-col place-items-center'>
-      <Spacer size='3xl' />
-      <div className='bg-white-light p-2 md:w-[1024px] md:p-5' ref={ref}>
+    <div className='flex flex-col place-items-center'>
+      <Spacer size='top' />
+      <div className='bg-white-light p-2 md:p-5'>
         <div className='w-full flex-col justify-items-center'>
-          <Title as='h1' highlightColor={2}>
+          <Title as='h1' size='32px-semibold'>
             {title || '나만의 만다라트 작성하기'}
           </Title>
-          <Spacer size='lg' />
-          <Text align='center'>
-            지금 당신의 목표를 81칸에 정리해보세요. 작은 계획들이 큰 변화를
-            만듭니다.
+          <Spacer size='sm' />
+          <Text size='24px-regular' textColor='sub' align='center'>
+            <span className='flex flex-col md:flex-row'>
+              <span>지금 당신의 목표를 81칸에 정리해보세요.</span>
+              <span>작은 계획들이 큰 변화를 만듭니다.</span>
+            </span>
           </Text>
           <Spacer size='xl' />
         </div>
-        <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
+
+        <div
+          ref={ref}
+          className='grid w-[888px] grid-cols-3 grid-rows-3 gap-5 bg-white-light p-3 text-md'
+        >
           <div className='col-start-2 row-start-2 aspect-square h-full'>
             <GuestMandalartMainBlock coreColor='bg-violet-pigment' />
           </div>
@@ -57,9 +62,13 @@ const GuestPage = () => {
           ))}
         </div>
       </div>
-      <Spacer size='3xl' />
-      <div className='flex w-full justify-center'>
-        <Button variant='outline' onClick={handleDownload}>
+
+      <Spacer size='xl' />
+      <div className='flex w-full justify-center gap-[12px] sm:gap-[14px] md:gap-[16px]'>
+        <Button variant='default' size='medium'>
+          작성법 보기
+        </Button>
+        <Button variant='secondary' size='medium' onClick={handleDownload}>
           이미지 저장하기
         </Button>
       </div>
