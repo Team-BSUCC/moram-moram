@@ -13,17 +13,16 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
   const [passwordInputValue, setPasswordInputValue] = useState<string>('');
   const [passwordButtonText, setPasswordButtonText] =
     useState<string>('생성하기');
-  const [isRoomOwner, setIsRoomOwner] = useState<boolean>(false);
 
   //나중에 페스파라미터 가져오는 훅으로 리펙터링
   const pathParamRoomId = 'e5a689a9-0f5f-4cdb-935e-9250ca71f60f';
-  const { roomData, updateRoomData } = useGetRoomData(user, pathParamRoomId);
+  const { roomData, updateRoomData, isOwner } = useGetRoomData(
+    user,
+    pathParamRoomId
+  );
 
   useEffect(() => {
     if (roomData) {
-      if (user?.id === roomData.owner) {
-        setIsRoomOwner(true);
-      }
       if (roomData.passcode) {
         setPasswordButtonText('변경하기');
         setPasswordInputValue(roomData.passcode);
@@ -69,7 +68,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
         <div>전에 접속했던 사람들</div>
         {/* 이 밑에 부터는 오너만 볼 수 있는 내용 */}
 
-        {isRoomOwner && (
+        {isOwner && (
           <>
             <form
               onSubmit={(e) => {
