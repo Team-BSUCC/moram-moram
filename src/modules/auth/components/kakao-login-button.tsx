@@ -1,3 +1,4 @@
+'use client';
 import { signWithKaKao } from '../services/auth-client-service';
 
 const KaKaoLoginButton = () => {

@@ -15,11 +15,10 @@ export const GET = async (request: NextRequest) => {
   const res = NextResponse.redirect(redirectUrl);
 
   // 2) 그걸 넘겨줘야 setAll()이 동작
-  const supabase = getServerClientAction(res);
+  const supabase = getServerClientAction();
 
   const { error } = await supabase.auth.exchangeCodeForSession(code);
   if (error) {
-    console.error('세션 교환 실패', error.message);
     return NextResponse.redirect(new URL('/auth/auth-code-error', request.url));
   }
 
