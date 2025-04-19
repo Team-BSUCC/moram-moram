@@ -6,6 +6,8 @@ import { User } from '@supabase/supabase-js';
 import React, { useEffect, useState } from 'react';
 import { useGetRoomData } from '../hooks/use-get-room-data';
 import { fetchUpdateRoomPasscode } from '../services/fetch-update-room-passcode';
+import { useUsersStore } from '../hooks/use-users-store';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 type UsersInfoSheetType = { user: User | null };
 
@@ -20,6 +22,9 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
     user,
     pathParamRoomId
   );
+
+  const currentUsers = useUsersStore((store) => store.currentUsers);
+  const leftUsers = useUsersStore((store) => store.leftUsers);
 
   useEffect(() => {
     if (roomData) {
@@ -66,9 +71,21 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
         {/* 여기 두개는 아바타룸에 정보를 전역으로 관리해서 사용해야지 */}
         <div>
           <div>현재 접속중인 사람들</div>
+          {currentUsers.map((user) => (
+            <Avatar key={user.name} className='border border-black hover:z-10'>
+              <AvatarImage src={'유저이미지 추가해야함'} />
+              <AvatarFallback>{user.name.slice(0, 1)}</AvatarFallback>
+            </Avatar>
+          ))}
         </div>
         <div>
           <div>전에 접속했던 사람들</div>
+          {leftUsers.map((user) => (
+            <Avatar key={user.name} className='border border-black hover:z-10'>
+              <AvatarImage src={'유저이미지 추가해야함'} />
+              <AvatarFallback>{user.name.slice(0, 1)}</AvatarFallback>
+            </Avatar>
+          ))}
         </div>
         {/* 이 밑에 부터는 오너만 볼 수 있는 내용 */}
 
