@@ -26,6 +26,7 @@ import LinearProgress from '@/components/commons/progress-bar';
 import { calculatorProgress } from '@/shared/utils/calculator-progress';
 import UsersInfoSheet from '@/modules/mandalart/components/users-info-sheet';
 import { User } from '@supabase/supabase-js';
+import { useRealtimePresenceRoom } from '../hooks/use-realtime-presence-room';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -38,11 +39,11 @@ type MandalartMainContentProps = {
 
 const MandalartMainContent = ({ user }: MandalartMainContentProps) => {
   // floating sheet가 열렸는지 닫혔는지 판별하는 변수
-  const isVisible = useFloatingSheetStore((state) => state.isVisible);
+  const supabase = getBrowserClient();
   const username = getCurrentUserName(user);
   const { userId, isReady } = useCurrentUserId();
-  // const [user, setUser] = useState<User | null>();
-  const supabase = getBrowserClient();
+  useRealtimePresenceRoom('avatar-room', username);
+  const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const queryClient = useQueryClient();
   /**
    * Memo: 동적 값으로 수정 예정
@@ -138,7 +139,7 @@ const MandalartMainContent = ({ user }: MandalartMainContentProps) => {
           <div className='flex justify-between'>
             <Title as='h1'>2025년 성장의 해로 만들기</Title>
             <div onClick={handleClickAvatarStack}>
-              <RealtimeAvatarStack roomName='avatar-room' username={username} />
+              <RealtimeAvatarStack />
             </div>
             {isVisibleUsersInfoSheet && <UsersInfoSheet user={user} />}
           </div>
