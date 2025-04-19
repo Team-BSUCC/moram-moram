@@ -3,6 +3,7 @@ import Dropdown from '@/components/commons/drop-down';
 import Text from '@/components/commons/text';
 import { useDeleteTodoMutation } from '@/modules/calendar/hooks/use-delete-todo-mutation';
 import { TodoType } from '@/modules/calendar/type/todo-type';
+import { changeDateSeparator } from '@/modules/calendar/utils/get-processed-date';
 
 type TodoItemProps = {
   todo: TodoType;
@@ -31,7 +32,7 @@ const TodoItem = ({ todo }: TodoItemProps) => {
       </div>
       <div className='mt-1 pl-1'>
         <Text size='16px-medium' textColor='sub'>
-          {todo.createdAt.slice(0, 10)}
+          {changeDateSeparator(todo.scheduledDate)}
         </Text>
       </div>
     </div>

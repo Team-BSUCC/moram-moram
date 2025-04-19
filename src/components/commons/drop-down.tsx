@@ -50,10 +50,7 @@ const Dropdown = ({ children, selection = false, text }: DropdownProps) => {
       </div>
 
       {isOpen && (
-        /**
-         * @todo 색상 코드 하드코딩 수정하기
-         */
-        <div className='absolute right-0 z-10 w-40 rounded-[8px] border-[1px] border-[#e6e6e6] bg-white-light shadow-md'>
+        <div className='absolute right-0 z-10 w-40 rounded-[8px] border-[1px] border-stroke bg-white-light shadow-md'>
           {children}
         </div>
       )}
