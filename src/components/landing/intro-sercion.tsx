@@ -35,7 +35,7 @@ const IntroSection = () => {
               </Text>
             </div>
           </div>
-          <Spacer size='xxxl' />
+          <Spacer size='3xl' />
           {/* 이미지 콘텐츠 */}
           <div className='flex items-center justify-evenly'>
             <Image

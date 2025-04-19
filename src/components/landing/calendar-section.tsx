@@ -13,7 +13,7 @@ const CalendarSection = () => {
         </Title>
         <Text size='32px-regular'>오늘 할 일을 한눈에 확인</Text>
       </div>
-      <Spacer size='xxl' />
+      <Spacer size='2xl' />
       {/* 사진 영역 */}
       <Image
         src='/images/calendar/calendar.png'
