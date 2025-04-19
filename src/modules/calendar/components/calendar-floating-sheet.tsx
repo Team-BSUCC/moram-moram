@@ -4,8 +4,9 @@ import Title from '@/components/commons/title';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { CoreType, EventType } from '../type/todo-type';
 import Spacer from '@/components/commons/spacer';
-import { getProcessedDate } from '../services/get-processed-date';
+import { getProcessedDate } from '../utils/get-processed-date';
 import CalendarTodoItem from './calendar-todo-item';
+import { X } from 'lucide-react';
 
 type CalendarFloatingSheetProps = {
   todos: CoreType[] | undefined;
@@ -13,7 +14,7 @@ type CalendarFloatingSheetProps = {
 };
 
 /**
- * @todo: 체크박스 클릭한게 DB에 반영되게 수정
+ * 달력에서 선택한 날짜에 해당하는 투두 목록을 보여주는 플로팅 시트
  * @param todos - 플로팅 시트에 표시할 투두 목록
  * @param events - 달력에 표시된 이벤트 목록
  * @returns
@@ -24,6 +25,7 @@ const CalendarFloatingSheet = ({
 }: CalendarFloatingSheetProps) => {
   // 달력에서 선택한 날짜
   const info = useFloatingSheetStore((state) => state.info as string);
+  const hide = useFloatingSheetStore((state) => state.hide);
   // 클릭한 날짜에 해당하는 투두 목록을 가져오기 위한 필터링
   const isSatisfied =
     events &&
@@ -31,35 +33,53 @@ const CalendarFloatingSheet = ({
 
   return (
     <FloatingSheet>
-      <div className='h-[500px] w-[400px] p-5'>
-        <div className='flex justify-start'>
-          {/* 폰트 크기, 볼드 수정 */}
-          <Text>{getProcessedDate(info)}</Text>
+      <div className='h-[800px] w-[500px]'>
+        <div className='handle cursor-grab px-5 active:cursor-grabbing'>
+          <div className='fixed right-4 top-4 w-fit' onClick={hide}>
+            <button className='bg-transparent'>
+              <X />
+            </button>
+          </div>
+          <Spacer size='lg' />
+          <div className='flex justify-start'>
+            <Text size='18px-semibold' textColor='sub'>
+              {getProcessedDate(info)}
+            </Text>
+          </div>
+          <Title as='h1' size='28px-semibold'>
+            TO DO LIST
+          </Title>
+          <Spacer size={'xl'} />
         </div>
-        {/* 텍스트 볼드체로 변경하기 */}
-        <Title as='h1'>TO DO LIST</Title>
-        <Spacer size={'md'} />
-        <hr className='mb-5' />
+        <hr className='mb-6' />
         {isSatisfied && data ? (
           data
             .filter((core) =>
               core.topics.some((topic) =>
                 topic.subtopics.some((sub) =>
-                  sub.todos.some((todo) => todo.createdAt.slice(0, 10) === info)
+                  sub.todos.some((todo) => todo.scheduledDate === info)
                 )
               )
             )
             .map((core) => (
-              <div key={core.title} className='flex flex-col gap-5'>
-                {/* 하이라이트 색상 수정 및 폰트 크기 수정 */}
-                <Title as='h2'>{core.title}</Title>
+              <div key={core.title} className='mb-5 flex flex-col gap-2 px-5'>
+                {/* 하이라이트 컬러 DB에서 받아와서 수정 예정 */}
+                <Title
+                  as='h2'
+                  highlightColor={0}
+                  textColor='sub'
+                  size='18px-semibold'
+                >
+                  {core.title}
+                </Title>
                 {core.topics.map((topic) =>
                   topic.subtopics.map((sub) =>
                     sub.todos
-                      .filter((todo) => todo.createdAt.slice(0, 10) === info)
+                      .filter((todo) => todo.scheduledDate === info)
+                      .sort((a, b) => Number(a.isDone) - Number(b.isDone))
                       .map((todo, idx) => (
                         <CalendarTodoItem
-                          key={idx}
+                          key={todo.id}
                           todo={todo}
                           sub={sub}
                           topic={topic}
@@ -71,10 +91,10 @@ const CalendarFloatingSheet = ({
             ))
         ) : (
           <div className='h- flex flex-col items-center justify-center'>
-            <Spacer size={'lg'} />
-            <div className='mt-2 font-[16px] text-[#A6A6A6]'>
+            <Spacer size='4xl' />
+            <Text size='16px-regular' textColor='caption'>
               오늘은 여유로운 하루네요.
-            </div>
+            </Text>
           </div>
         )}
       </div>
