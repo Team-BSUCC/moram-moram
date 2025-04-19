@@ -6,13 +6,20 @@ import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useBroadcastStore } from './use-broadcast-store';
 import { useReceiveBroadcastStore } from './use-receive-broadcast-store';
 import { checkUserJoinTime } from '../utils/check-user-join-time';
+import { isRegisteredUser } from '../utils/is-registered-user';
 
 const supabase = getBrowserClient();
 
 export type RealtimeUser = {
-  id: string;
   name: string;
   image: string;
+};
+
+export type UserInfoType = {
+  image: string;
+  name: string;
+  joinTime: number;
+  presence_ref: string;
 };
 
 /**
@@ -36,29 +43,45 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
 
     room.on('presence', { event: 'sync' }, () => {
       // 현재 방의 상태 가져오기
-      const allUsersInfo = room.presenceState<{
-        image: string;
-        name: string;
-        joinTime: number;
-      }>();
-
+      const currentUsersInfo = room.presenceState<UserInfoType>();
+      console.log(currentUsersInfo);
       // { userId(랜덤UUID): { name: '이름', image: 'URL' } } 형태로 변환
       const formattingAllUsersInfo = Object.fromEntries(
-        Object.entries(allUsersInfo).map(([key, values]) => [
+        Object.entries(currentUsersInfo).map(([key, values]) => [
           key,
           { name: values[0].name, image: values[0].image },
         ])
-      ) as Record<string, RealtimeUser>;
+      );
+      console.log(formattingAllUsersInfo);
       setUsers(formattingAllUsersInfo);
 
       const { firstUserJoinTime, newUserJoinTime, isNewUser } =
-        checkUserJoinTime(allUsersInfo, myJoinTime.current);
+        checkUserJoinTime(currentUsersInfo, myJoinTime.current);
       if (isNewUser) {
         room.send({
           type: 'broadcast',
           event: 'request_broadcasts_store',
           payload: { firstUserJoinTime, newUserJoinTime },
         });
+      }
+    });
+
+    room.on('presence', { event: 'join' }, (payload) => {
+      // 새 사용자 처리
+      const newUser: UserInfoType = payload
+        .newPresences[0] as unknown as UserInfoType;
+      console.log('입장:', payload);
+      if (isRegisteredUser(newUser.name)) {
+        console.log('입장:', newUser);
+      }
+    });
+
+    room.on('presence', { event: 'leave' }, (payload) => {
+      // 떠난 사용자 처리
+      const leftUser = payload.leftPresences[0];
+
+      if (isRegisteredUser(leftUser.name)) {
+        console.log('사용자 퇴장:', leftUser);
       }
     });
 
