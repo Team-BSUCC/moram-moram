@@ -8,6 +8,7 @@ import Spacer from '@/components/commons/spacer';
 import TodoItem from '@/modules/today-list/components/todo-item';
 import { filterByCompletionStatus } from '@/modules/calendar/utils/filter-by-completion-status';
 import { ProcessedDataType } from '@/modules/calendar/type/fetch-calendar-type';
+import { getBorderColorWithNumber } from '@/shared/utils/get-color-with-number';
 
 type TodayTodoListProps = {
   initialMandalarts: ProcessedDataType;
@@ -63,7 +64,7 @@ const TodayTodoList = ({ initialMandalarts }: TodayTodoListProps) => {
             .map((topic, topicIdx) => (
               <div
                 key={topicIdx}
-                className='w-full border-l-8 border-yellow-pigment bg-white-light p-6'
+                className={`w-full border-l-8 ${getBorderColorWithNumber(topicIdx)} bg-white-light p-6`}
               >
                 <Title as='h2' size='24px-semibold'>
                   {topic.title}

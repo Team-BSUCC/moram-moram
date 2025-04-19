@@ -13,3 +13,19 @@ export const getColorWithNumber = (index: number): string => {
 
   return color[idx];
 };
+
+export const getBorderColorWithNumber = (index: number): string => {
+  const idx = index % 8;
+  const color: Record<number, string> = {
+    0: 'border-pink-pastel',
+    1: 'border-red-pastel',
+    2: 'border-orange-pastel',
+    3: 'border-purple-pastel',
+    4: 'border-yellow-pastel',
+    5: 'border-blue-pastel',
+    6: 'border-sky-pastel',
+    7: 'border-green-pastel',
+  };
+
+  return color[idx];
+};
