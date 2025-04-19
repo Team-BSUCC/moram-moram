@@ -62,7 +62,7 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className='pointer-events-auto fixed z-50 overflow-scroll rounded-md bg-white-light shadow-lg'
+          className='pointer-events-auto fixed z-50 rounded-md bg-white-light shadow-lg'
         >
           {/* 시트 안에 들어갈 내용 드래그 중 텍스트 선택 방지 */}
           <div className='select-none'>

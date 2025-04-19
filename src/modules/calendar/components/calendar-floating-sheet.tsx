@@ -33,7 +33,7 @@ const CalendarFloatingSheet = ({
 
   return (
     <FloatingSheet>
-      <div className='h-[800px] w-[500px]'>
+      <div className='mx-auto h-[50vh] w-[60vw] md:h-[60vh] md:w-[50vw] lg:h-[800px] lg:w-[500px]'>
         <div className='handle cursor-grab px-5 active:cursor-grabbing'>
           <div className='fixed right-4 top-4 w-fit' onClick={hide}>
             <button className='bg-transparent'>
