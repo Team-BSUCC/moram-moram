@@ -1,15 +1,20 @@
 import Image from 'next/image';
 import Spacer from '../commons/spacer';
+import Text from '../commons/text';
+import Title from '../commons/title';
 
 const TeamPlanningSection = () => {
   return (
-    <section className='flex min-h-screen w-full flex-col items-center justify-center'>
+    <div className='mx-auto flex h-screen max-h-[1080px] w-full max-w-[1440px] flex-col items-center justify-center'>
       {/* 텍스트 영역 */}
       <div className='flex w-full flex-col items-center justify-center'>
-        <h1 className='text-[36px] font-bold'>실시간 협업</h1>
-        <p className='text-[32px]'>친구/팀원과 함께 작성하고 실행</p>
+        <Title as='h2' size='32px-semibold'>
+          실시간 협업
+        </Title>
+        <Spacer size='md' />
+        <Text size='32px-regular'>친구/팀원과 함께 작성하고 실행</Text>
       </div>
-      <Spacer size='xl' />
+
       {/* 사진 영역 */}
       <Image
         src='/images/team/team-explain.png'
@@ -17,7 +22,7 @@ const TeamPlanningSection = () => {
         height={600}
         alt='explain'
       />
-    </section>
+    </div>
   );
 };
 

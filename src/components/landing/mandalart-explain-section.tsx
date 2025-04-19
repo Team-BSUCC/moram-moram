@@ -1,8 +1,10 @@
 import Image from 'next/image';
+import Text from '../commons/text';
+import Title from '../commons/title';
 
 const MandalartExplainSection = () => {
   return (
-    <section className='flex min-h-screen w-full flex-col justify-center'>
+    <div className='mx-auto flex h-screen max-h-[1080px] w-full max-w-[1440px] flex-col justify-center'>
       <div className='flex items-center justify-evenly'>
         {/* 왼쪽: 만다라트 3x3 */}
         <div className='relative grid h-[600px] w-[600px] grid-cols-3 grid-rows-3 gap-2 text-[28px]'>
@@ -12,10 +14,10 @@ const MandalartExplainSection = () => {
               className={`rounded-md ${i === 4 ? 'flex items-center justify-center border-2 border-black bg-purple-400 px-2 text-center font-bold text-black' : 'bg-red-100'} `}
             >
               {i === 4 && (
-                <span>
+                <Text>
                   2025년 <br />
                   성장의 해로 <br /> 만들기
-                </span>
+                </Text>
               )}
             </div>
           ))}
@@ -44,17 +46,17 @@ const MandalartExplainSection = () => {
 
         {/* 오른쪽 텍스트 */}
         <div className='ml-8'>
-          <h1 className='mb-2 text-[36px] font-bold'>
+          <Title as='h2' size='32px-semibold'>
             AI와 함께 완성하는 나만의 만다라트
-          </h1>
-          <p className='text-[32px] leading-relaxed'>
+          </Title>
+          <Text size='32px-regular'>
             막연한 생각을 구체적인 계획으로 세분화하고,
             <br />
             막힐 땐 AI와 함께 설계해봐요.
-          </p>
+          </Text>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 

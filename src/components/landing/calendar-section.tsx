@@ -1,15 +1,19 @@
 import Image from 'next/image';
 import Spacer from '../commons/spacer';
+import Title from '../commons/title';
+import Text from '../commons/text';
 
 const CalendarSection = () => {
   return (
-    <section className='flex min-h-screen w-full flex-col items-center justify-center'>
+    <section className='mx-auto flex h-screen max-h-[1080px] w-full max-w-[1440px] flex-col items-center justify-center'>
       {/* 텍스트 영역 */}
       <div className='flex w-full flex-col items-center justify-center'>
-        <h1 className='text-[36px] font-bold'>캘린더에서</h1>
-        <p className='text-[32px]'>오늘 할 일을 한눈에 확인</p>
+        <Title as='h2' size='32px-semibold'>
+          캘린더에서
+        </Title>
+        <Text size='32px-regular'>오늘 할 일을 한눈에 확인</Text>
       </div>
-      <Spacer size='xl' />
+      <Spacer size='xxl' />
       {/* 사진 영역 */}
       <Image
         src='/images/calendar/calendar.png'

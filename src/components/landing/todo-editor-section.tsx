@@ -1,19 +1,21 @@
 import Image from 'next/image';
 import Spacer from '../commons/spacer';
+import Title from '../commons/title';
+import Text from '../commons/text';
 
 const TodoEditorSection = () => {
   return (
-    <section className='flex min-h-screen w-full flex-col justify-center'>
+    <div className='mx-auto flex max-h-[1080px] min-h-screen w-full max-w-[1440px] flex-col justify-center'>
       {/*텍스트 영역*/}
-      <div className='mx-auto flex w-full max-w-screen-xl items-center justify-evenly gap-10 lg:flex-row'>
+      <div className='flex w-full items-center justify-evenly'>
         <div className='w-full max-w-md text-left'>
-          <h2 className='mb-2 text-[32px] font-bold'>
+          <Title as='h2' size='32px-semibold'>
             각 칸을 클릭하면 투두리스트로 연결
-          </h2>
+          </Title>
           <Spacer size='xl' />
-          <p className='text-[28px]'>
+          <Text size='32px-regular'>
             중심 목표부터 세부 계획까지 보기 쉽게 시각적으로 정리해요.
-          </p>
+          </Text>
         </div>
         {/*이미지 영역*/}
         <div className='w-full max-w-lg'>
@@ -25,7 +27,7 @@ const TodoEditorSection = () => {
           />
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
