@@ -6,6 +6,7 @@ import { useRef, useState, useEffect, ReactNode } from 'react';
 type DropdownProps = {
   children: ReactNode;
   selection?: boolean;
+  text?: ReactNode;
 };
 
 /**
@@ -14,7 +15,7 @@ type DropdownProps = {
  * @param selection - v, ^ 형식으로 UI가 필요한 경우 selection을 추가로 기재해주면 됩니다.
  * @returns
  */
-const Dropdown = ({ children, selection = false }: DropdownProps) => {
+const Dropdown = ({ children, selection = false, text }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
@@ -40,9 +41,12 @@ const Dropdown = ({ children, selection = false }: DropdownProps) => {
           setIsOpen((prev) => !prev);
         }}
       >
-        <button>
-          {selection ? isOpen ? <ChevronUp /> : <ChevronDown /> : '⋮'}
-        </button>
+        <div className='flex'>
+          {text}
+          <button>
+            {selection ? isOpen ? <ChevronUp /> : <ChevronDown /> : '⋮'}
+          </button>
+        </div>
       </div>
 
       {isOpen && (

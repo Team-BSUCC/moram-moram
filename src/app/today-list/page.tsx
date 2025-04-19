@@ -1,18 +1,34 @@
 'use client';
+/* eslint-disable indent */
 
+import { useEffect, useState } from 'react';
+import { getSelectedLabel } from '@/modules/today-list/utils/get-selected-label';
+import { useGetMyMandalartsQuery } from '@/shared/hooks/use-get-my-mandalarts-query';
 import Button from '@/components/commons/button';
 import Dropdown from '@/components/commons/drop-down';
 import Spacer from '@/components/commons/spacer';
 import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
-import { useGetMyMandalartsQuery } from '@/shared/hooks/use-get-my-mandalarts-query';
+import TodoItem from '@/modules/today-list/components/todo-item';
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
 
 const TodayListPage = () => {
   const { data, isPending } = useGetMyMandalartsQuery();
   const [clickedTitle, setClickedTitle] = useState<string>('');
   const [selectedOption, setSelectedOption] = useState<string>('all');
+  const handleSelectOption = (label: string) => {
+    switch (label) {
+      case 'left':
+        setSelectedOption('left');
+        break;
+      case 'done':
+        setSelectedOption('done');
+        break;
+      case 'all':
+        setSelectedOption('all');
+        break;
+    }
+  };
 
   // 초기 클릭된 제목 설정
   useEffect(() => {
@@ -62,14 +78,19 @@ const TodayListPage = () => {
 
         {/* 셀렉트 박스 */}
         <div className='flex w-full items-center justify-end'>
-          <Text>남은 할 일</Text>
-          <Dropdown selection>
-            <Button variant='none'>남은 할 일</Button>
-            <Button variant='none'>완료한 일</Button>
-            <Button variant='none'>전체 보기</Button>
-            {/* <option value='left'>남은 할 일</option>
-            <option value='done'>완료한 일</option>
-            <option value='all'>전체 보기</option> */}
+          <Dropdown
+            selection
+            text={<Text>{getSelectedLabel(selectedOption)}</Text>}
+          >
+            <Button variant='none' onClick={() => handleSelectOption('left')}>
+              남은 할 일
+            </Button>
+            <Button variant='none' onClick={() => handleSelectOption('done')}>
+              완료한 일
+            </Button>
+            <Button variant='none' onClick={() => handleSelectOption('all')}>
+              전체 보기
+            </Button>
           </Dropdown>
         </div>
 
@@ -125,18 +146,11 @@ const TodayListPage = () => {
                                   return todo.isDone;
                                 return true;
                               })
-                              .map((todo, todoIdx) => (
-                                <div key={todoIdx} className='space-y-1'>
-                                  <div className='flex w-full items-center justify-between border-b border-stroke px-1 py-2'>
-                                    <Text size='20px-medium'>{todo.title}</Text>
-                                    <div>⋮</div>
-                                  </div>
-                                  <div className='mt-1 pl-1'>
-                                    <Text size='16px-medium' textColor='sub'>
-                                      {todo.createdAt.slice(0, 10)}
-                                    </Text>
-                                  </div>
-                                </div>
+                              .map((todo) => (
+                                <TodoItem
+                                  todo={todo}
+                                  key={crypto.randomUUID()}
+                                />
                               ))}
                           </div>
                         </div>
