@@ -1,13 +1,14 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
-import { useCurrentUserImage } from './use-current-user-image';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useBroadcastStore } from './use-broadcast-store';
 import { useReceiveBroadcastStore } from './use-receive-broadcast-store';
 import { checkUserJoinTime } from '../utils/check-user-join-time';
 import { isRegisteredUser } from '../utils/is-registered-user';
 import { useUsersStore } from './use-users-store';
+import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
+import { User } from '@supabase/supabase-js';
 
 const supabase = getBrowserClient();
 
@@ -28,7 +29,10 @@ export type UserInfoType = {
  * @param roomName - 채널명
  * @returns - 방에 있는 사용자들의 정보
  */
-export const useRealtimePresenceRoom = (roomName: string, username: string) => {
+export const useRealtimePresenceRoom = (
+  roomName: string,
+  user: User | null
+) => {
   // 현재 나의 이미지와 이름 받아오기
 
   const myJoinTime = useRef<number>(Date.now());
@@ -37,11 +41,12 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
   const formatBroadcastStorePayload = useBroadcastStore(
     (state) => state.formatBroadcastStorePayload
   );
+
   const setCurrentUsers = useUsersStore((store) => store.setCurrentUsers);
   const setLeftUsers = useUsersStore((store) => store.setLeftUsers);
-  const currentUserImage = useCurrentUserImage();
 
-  const currentUserName = username;
+  const currentUserImage = user?.user_metadata.avatar_url ?? null;
+  const currentUserName = getCurrentUserName(user);
 
   useEffect(() => {
     const room = supabase.channel(roomName);
@@ -106,5 +111,5 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
     return () => {
       room.unsubscribe();
     };
-  }, [roomName, currentUserName, currentUserImage]);
+  }, []);
 };

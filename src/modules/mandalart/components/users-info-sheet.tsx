@@ -64,8 +64,12 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
     <>
       <div>
         {/* 여기 두개는 아바타룸에 정보를 전역으로 관리해서 사용해야지 */}
-        <div>현재 접속중인 사람들</div>
-        <div>전에 접속했던 사람들</div>
+        <div>
+          <div>현재 접속중인 사람들</div>
+        </div>
+        <div>
+          <div>전에 접속했던 사람들</div>
+        </div>
         {/* 이 밑에 부터는 오너만 볼 수 있는 내용 */}
 
         {isOwner && (

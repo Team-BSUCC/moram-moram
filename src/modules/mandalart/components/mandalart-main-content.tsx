@@ -2,17 +2,14 @@
 
 import MainBlock from '@/modules/mandalart/components/main-block';
 import MandalartFloatingSheet from '@/modules/mandalart/components/mandalart-floating-sheet';
-import { RealtimeAvatarStack } from '@/modules/mandalart/components/realtime-avatar-stack';
 import { RealtimeCursors } from '@/modules/mandalart/components/realtime-cursors';
 import SubBlock from '@/modules/mandalart/components/sub-block';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import { useBatchUpdateTrigger } from '@/modules/mandalart/hooks/use-batch-update-trigger';
 import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
-import { useRealtimeUserSync } from '@/modules/mandalart/hooks/use-realtime-user-sync';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useQueryClient } from '@tanstack/react-query';
-import { useCurrentUserId } from '@/modules/mandalart/hooks/use-current-user-id';
 import { useEffect, useState } from 'react';
 import { createTodoListkey } from '@/modules/mandalart/services/create-todo-list-key';
 import { QUERY_KEY } from '@/shared/constants/query-key';
@@ -27,6 +24,9 @@ import { calculatorProgress } from '@/shared/utils/calculator-progress';
 import UsersInfoSheet from '@/modules/mandalart/components/users-info-sheet';
 import { User } from '@supabase/supabase-js';
 import { useRealtimePresenceRoom } from '../hooks/use-realtime-presence-room';
+import { AvatarStack } from './avatar-stack';
+import { useUsersStore } from '../hooks/use-users-store';
+import { getCurrentUserId } from '@/shared/utils/get-current-user-id';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -40,18 +40,20 @@ type MandalartMainContentProps = {
 const MandalartMainContent = ({ user }: MandalartMainContentProps) => {
   // floating sheet가 열렸는지 닫혔는지 판별하는 변수
   const supabase = getBrowserClient();
-  const username = getCurrentUserName(user);
-  const { userId, isReady } = useCurrentUserId();
-  useRealtimePresenceRoom('avatar-room', username);
-  const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const queryClient = useQueryClient();
-  /**
-   * Memo: 동적 값으로 수정 예정
-   */
+
+  useBatchUpdateTrigger();
+  useRealtimePresenceRoom('avatar-room', user);
+
+  const [isVisibleUsersInfoSheet, setIsVisibleUsersInfoSheet] =
+    useState<boolean>(false);
+  const isVisible = useFloatingSheetStore((state) => state.isVisible);
+  const currentUsers = useUsersStore((state) => state.currentUsers);
+
+  //TODO: 동적 값으로 수정 예정
   const { data, isPending, isError } = useMandalartDataQuery(
     '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
   );
-  useBatchUpdateTrigger();
   useEffect(() => {
     if (isPending) return;
     createTodoListkey(queryClient, data);
@@ -60,11 +62,11 @@ const MandalartMainContent = ({ user }: MandalartMainContentProps) => {
     (state) => state.addBroadcastStore
   );
 
-  const [isVisibleUsersInfoSheet, setIsVisibleUsersInfoSheet] =
-    useState<boolean>(false);
+  const username = getCurrentUserName(user);
+  const userId = getCurrentUserId(user);
 
+  //TODO 룸네임받는 훅으로 수정
   const broadcastChannel = supabase.channel('broadcastChannel');
-
   broadcastChannel
     .on('broadcast', { event: 'shout' }, (payload) => {
       addBroadcastStore(payload.payload);
@@ -127,19 +129,18 @@ const MandalartMainContent = ({ user }: MandalartMainContentProps) => {
     <div className='flex flex-col items-center'>
       <Spacer size='2xl' />
 
-      {isReady && (
-        <RealtimeCursors
-          roomName='cursor-room'
-          username={username}
-          userId={userId}
-        />
-      )}
+      <RealtimeCursors
+        roomName='cursor-room'
+        username={username}
+        userId={userId}
+      />
+
       <div className='w-full max-w-[1440px] px-4'>
         <div className='flex flex-col'>
           <div className='flex justify-between'>
             <Title as='h1'>2025년 성장의 해로 만들기</Title>
             <div onClick={handleClickAvatarStack}>
-              <RealtimeAvatarStack />
+              <AvatarStack avatars={currentUsers} />
             </div>
             {isVisibleUsersInfoSheet && <UsersInfoSheet user={user} />}
           </div>
