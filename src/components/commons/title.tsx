@@ -19,6 +19,8 @@ export const titleVariants = cva('flex gap-2 transition-all', {
         'text-[24px] leading-[36px] font-normal sm:text-[28px] sm:leading-[42px] md:text-[32px] md:leading-[48px]',
       '32px-medium':
         'text-[24px] leading-[36px] font-medium sm:text-[28px] sm:leading-[42px] md:text-[32px] md:leading-[48px]',
+      '28px-semibold':
+        'text-[20px] leading-[30px] font-semibold sm:text-[24px] sm:leading-[36px] md:text-[28px] md:leading-[42px]',
       '28px-regular':
         'text-[20px] leading-[30px] font-normal sm:text-[24px] sm:leading-[36px] md:text-[28px] md:leading-[42px]',
       '24px-semibold':
@@ -29,6 +31,8 @@ export const titleVariants = cva('flex gap-2 transition-all', {
         'text-[16px] leading-[24px] font-medium sm:text-[18px] sm:leading-[27px] md:text-[20px] md:leading-[30px]',
       '20px-regular':
         'text-[16px] leading-[24px] font-normal sm:text-[18px] sm:leading-[27px] md:text-[20px] md:leading-[30px]',
+      '18px-semibold':
+        'text-[14px] leading-[20px] font-semibold sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px]',
       '18px-medium':
         'text-[14px] leading-[20px] font-medium sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px]',
       '16px-semibold':
