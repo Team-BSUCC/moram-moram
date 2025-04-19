@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import { useCurrentUserImage } from './use-current-user-image';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useBroadcastStore } from './use-broadcast-store';
