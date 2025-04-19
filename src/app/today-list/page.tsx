@@ -1,10 +1,12 @@
 'use client';
 
 import Button from '@/components/commons/button';
+import Dropdown from '@/components/commons/drop-down';
 import Spacer from '@/components/commons/spacer';
 import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
 import { useGetMyMandalartsQuery } from '@/shared/hooks/use-get-my-mandalarts-query';
+import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 
 const TodayListPage = () => {
@@ -26,51 +28,54 @@ const TodayListPage = () => {
   if (isPending) return <div>Loading...</div>;
 
   return (
-    <div className='h-full w-full bg-white-dark'>
+    <div className='mb-[72px] h-full w-full bg-white-dark'>
       <div className='mx-auto flex w-2/3 flex-col items-start'>
-        <Spacer size={'2xl'} />
-        <Title as='h1'>투두 모아보기</Title>
-        <Text>내 만다라트 별 TO DO LIST를 한번에 확인하세요.</Text>
-        <Spacer size={'lg'} />
+        <Spacer size='top' />
+        <Title as='h1' size='32px-semibold'>
+          투두 모아보기
+        </Title>
+        <Text size='20px-regular' textColor='sub'>
+          내 만다라트 별 TO DO LIST를 한번에 확인하세요.
+        </Text>
+        <Spacer size='lg' />
 
         {/* 만다라트 제목 탭 */}
         <div className='mb-5 flex gap-4'>
-          {data?.map((topic, idx) => (
-            <Button
-              key={idx}
-              variant={'outline'}
+          {data?.map((topic) => (
+            <button
+              key={crypto.randomUUID()}
               onClick={() => handleClick(topic.title)}
             >
               <div
-                className={
+                className={clsx(
+                  'border-b-[2px] px-[2px] py-[10px]',
                   topic.title === clickedTitle
-                    ? 'border-b-[2px] border-[#000]'
-                    : 'border-b-[2px] border-[#fff]'
-                }
+                    ? 'border-main'
+                    : 'border-white-dark'
+                )}
               >
-                <Title as='h2'>{topic.title}</Title>
+                <Text size='24px-semibold'>{topic.title}</Text>
               </div>
-            </Button>
+            </button>
           ))}
         </div>
 
         {/* 셀렉트 박스 */}
-        <div className='flex w-full justify-end'>
-          <select
-            name='todoListView'
-            value={selectedOption}
-            onChange={(e) => setSelectedOption(e.target.value)}
-            className='bg-transparent'
-          >
-            <option value='left'>남은 할 일</option>
+        <div className='flex w-full items-center justify-end'>
+          <Text>남은 할 일</Text>
+          <Dropdown selection>
+            <Button variant='none'>남은 할 일</Button>
+            <Button variant='none'>완료한 일</Button>
+            <Button variant='none'>전체 보기</Button>
+            {/* <option value='left'>남은 할 일</option>
             <option value='done'>완료한 일</option>
-            <option value='all'>전체 보기</option>
-          </select>
+            <option value='all'>전체 보기</option> */}
+          </Dropdown>
         </div>
 
         {/* 투두 출력 */}
         <div className='w-full'>
-          <div className='mt-6 w-full space-y-4'>
+          <div className='mt-2 flex w-full flex-col gap-11'>
             {data
               ?.find((mandalart) => mandalart.title === clickedTitle)
               ?.topics.filter((topic) =>
@@ -87,7 +92,9 @@ const TodayListPage = () => {
                   key={topicIdx}
                   className='w-full border-l-8 border-yellow-pigment bg-white-light p-6'
                 >
-                  <p className='text-[24px] font-semibold'>{topic.title}</p>
+                  <Title as='h2' size='24px-semibold'>
+                    {topic.title}
+                  </Title>
                   <Spacer size={'md'} />
                   <div className='space-y-6'>
                     {topic.subtopics
@@ -100,11 +107,16 @@ const TodayListPage = () => {
                       )
                       .map((sub, subIdx) => (
                         <div key={subIdx}>
-                          <p className='border-l-4 border-[#666666] px-3 text-[18px]'>
+                          <Title
+                            as='h3'
+                            size='18px-semibold'
+                            textColor='sub'
+                            highlightColor={8}
+                          >
                             {sub.title}
-                          </p>
-                          <Spacer size={'md'} />
-                          <div className='flex flex-col gap-[20px]'>
+                          </Title>
+                          <Spacer size='sm' />
+                          <div className='flex flex-col gap-5'>
                             {sub.todos
                               .filter((todo) => {
                                 if (selectedOption === 'left')
@@ -114,16 +126,15 @@ const TodayListPage = () => {
                                 return true;
                               })
                               .map((todo, todoIdx) => (
-                                <div
-                                  key={todoIdx}
-                                  className='ml-1 mt-3 space-y-1'
-                                >
-                                  <div className='flex w-full items-center justify-between border-b border-[#D2D2D2] pb-1 text-[20px] font-medium'>
-                                    {todo.title}
+                                <div key={todoIdx} className='space-y-1'>
+                                  <div className='flex w-full items-center justify-between border-b border-stroke px-1 py-2'>
+                                    <Text size='20px-medium'>{todo.title}</Text>
                                     <div>⋮</div>
                                   </div>
-                                  <div className='text-[16px] text-[#5E5E5E]'>
-                                    {todo.createdAt.slice(0, 10)}
+                                  <div className='mt-1 pl-1'>
+                                    <Text size='16px-medium' textColor='sub'>
+                                      {todo.createdAt.slice(0, 10)}
+                                    </Text>
                                   </div>
                                 </div>
                               ))}
