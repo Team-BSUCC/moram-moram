@@ -6,13 +6,21 @@ import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useBroadcastStore } from './use-broadcast-store';
 import { useReceiveBroadcastStore } from './use-receive-broadcast-store';
 import { checkUserJoinTime } from '../utils/check-user-join-time';
+import { isRegisteredUser } from '../utils/is-registered-user';
+import { useUsersStore } from './use-users-store';
 
 const supabase = getBrowserClient();
 
 export type RealtimeUser = {
-  id: string;
   name: string;
   image: string;
+};
+
+export type UserInfoType = {
+  image: string;
+  name: string;
+  joinTime: number;
+  presence_ref: string;
 };
 
 /**
@@ -22,43 +30,43 @@ export type RealtimeUser = {
  */
 export const useRealtimePresenceRoom = (roomName: string, username: string) => {
   // 현재 나의 이미지와 이름 받아오기
-  const [users, setUsers] = useState<Record<string, RealtimeUser>>({});
+
   const myJoinTime = useRef<number>(Date.now());
+
   const { receiveBroadcastStore } = useReceiveBroadcastStore();
   const formatBroadcastStorePayload = useBroadcastStore(
     (state) => state.formatBroadcastStorePayload
   );
+  const setCurrentUsers = useUsersStore((store) => store.setCurrentUsers);
+  const setLeftUsers = useUsersStore((store) => store.setLeftUsers);
   const currentUserImage = useCurrentUserImage();
+
   const currentUserName = username;
 
   useEffect(() => {
     const room = supabase.channel(roomName);
 
     room.on('presence', { event: 'sync' }, () => {
-      // 현재 방의 상태 가져오기
-      const allUsersInfo = room.presenceState<{
-        image: string;
-        name: string;
-        joinTime: number;
-      }>();
+      // 현재 방의 접속자업데이트
+      const currentUsersInfo = room.presenceState<UserInfoType>();
+      setCurrentUsers(currentUsersInfo);
 
-      // { userId(랜덤UUID): { name: '이름', image: 'URL' } } 형태로 변환
-      const formattingAllUsersInfo = Object.fromEntries(
-        Object.entries(allUsersInfo).map(([key, values]) => [
-          key,
-          { name: values[0].name, image: values[0].image },
-        ])
-      ) as Record<string, RealtimeUser>;
-      setUsers(formattingAllUsersInfo);
-
+      //새로들어온 사용자면 브로드캐스트로주고받은 정보 요청
       const { firstUserJoinTime, newUserJoinTime, isNewUser } =
-        checkUserJoinTime(allUsersInfo, myJoinTime.current);
+        checkUserJoinTime(currentUsersInfo, myJoinTime.current);
       if (isNewUser) {
         room.send({
           type: 'broadcast',
           event: 'request_broadcasts_store',
           payload: { firstUserJoinTime, newUserJoinTime },
         });
+      }
+    });
+
+    room.on('presence', { event: 'leave' }, (payload) => {
+      const leftUser = payload.leftPresences[0] as unknown as UserInfoType;
+      if (isRegisteredUser(leftUser.name)) {
+        setLeftUsers(leftUser);
       }
     });
 
@@ -99,6 +107,4 @@ export const useRealtimePresenceRoom = (roomName: string, username: string) => {
       room.unsubscribe();
     };
   }, [roomName, currentUserName, currentUserImage]);
-
-  return { users };
 };
