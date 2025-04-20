@@ -33,71 +33,69 @@ const CalendarFloatingSheet = ({
 
   return (
     <FloatingSheet>
-      <div className='mx-auto h-[50vh] w-[60vw] md:h-[60vh] md:w-[50vw] lg:h-[800px] lg:w-[500px]'>
-        <div className='handle cursor-grab px-5 active:cursor-grabbing'>
-          <div className='fixed right-4 top-4 w-fit' onClick={hide}>
-            <button className='bg-transparent'>
-              <X />
-            </button>
-          </div>
-          <Spacer size='lg' />
-          <div className='flex justify-start'>
-            <Text size='18px-semibold' textColor='sub'>
-              {getProcessedDate(info)}
-            </Text>
-          </div>
-          <Title as='h1' size='28px-semibold'>
-            TO DO LIST
-          </Title>
-          <Spacer size={'xl'} />
+      <div className='handle cursor-grab px-5 active:cursor-grabbing'>
+        <div className='fixed right-4 top-4 w-fit' onClick={hide}>
+          <button className='bg-transparent'>
+            <X />
+          </button>
         </div>
-        <hr className='mb-6' />
-        {isSatisfied && data ? (
-          data
-            .filter((core) =>
-              core.topics.some((topic) =>
-                topic.subtopics.some((sub) =>
-                  sub.todos.some((todo) => todo.scheduledDate === info)
-                )
+        <Spacer size='lg' />
+        <div className='flex justify-start'>
+          <Text size='18px-semibold' textColor='sub'>
+            {getProcessedDate(info)}
+          </Text>
+        </div>
+        <Title as='h1' size='28px-semibold'>
+          TO DO LIST
+        </Title>
+        <Spacer size={'xl'} />
+      </div>
+      <hr className='mb-6' />
+      {isSatisfied && data ? (
+        data
+          .filter((core) =>
+            core.topics.some((topic) =>
+              topic.subtopics.some((sub) =>
+                sub.todos.some((todo) => todo.scheduledDate === info)
               )
             )
-            .map((core) => (
-              <div key={core.title} className='mb-5 flex flex-col gap-2 px-5'>
-                {/* 하이라이트 컬러 DB에서 받아와서 수정 예정 */}
-                <Title
-                  as='h2'
-                  highlightColor={0}
-                  textColor='sub'
-                  size='18px-semibold'
-                >
-                  {core.title}
-                </Title>
-                {core.topics.map((topic) =>
-                  topic.subtopics.map((sub) =>
-                    sub.todos
-                      .filter((todo) => todo.scheduledDate === info)
-                      .sort((a, b) => Number(a.isDone) - Number(b.isDone))
-                      .map((todo, idx) => (
-                        <CalendarTodoItem
-                          key={todo.id}
-                          todo={todo}
-                          sub={sub}
-                          topic={topic}
-                        />
-                      ))
-                  )
-                )}
-              </div>
-            ))
-        ) : (
-          <div className='h- flex flex-col items-center justify-center'>
-            <Spacer size='4xl' />
-            <Text size='16px-regular' textColor='caption'>
-              오늘은 여유로운 하루네요.
-            </Text>
-          </div>
-        )}
-      </div>
+          )
+          .map((core) => (
+            <div key={core.title} className='mb-5 flex flex-col gap-2 px-5'>
+              {/* 하이라이트 컬러 DB에서 받아와서 수정 예정 */}
+              <Title
+                as='h2'
+                highlightColor={0}
+                textColor='sub'
+                size='18px-semibold'
+              >
+                {core.title}
+              </Title>
+              {core.topics.map((topic) =>
+                topic.subtopics.map((sub) =>
+                  sub.todos
+                    .filter((todo) => todo.scheduledDate === info)
+                    .sort((a, b) => Number(a.isDone) - Number(b.isDone))
+                    .map((todo, idx) => (
+                      <CalendarTodoItem
+                        key={todo.id}
+                        todo={todo}
+                        sub={sub}
+                        topic={topic}
+                      />
+                    ))
+                )
+              )}
+            </div>
+          ))
+      ) : (
+        <div className='h- flex flex-col items-center justify-center'>
+          <Spacer size='4xl' />
+          <Text size='16px-regular' textColor='caption'>
+            오늘은 여유로운 하루네요.
+          </Text>
+        </div>
+      )}
     </FloatingSheet>
   );
 };
