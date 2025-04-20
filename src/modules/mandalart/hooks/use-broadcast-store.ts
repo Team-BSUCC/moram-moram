@@ -9,7 +9,6 @@ import {
   TopicPayloadType,
 } from '../types/realtime-type';
 import { mandalartBatchUpdateSupabase } from '../services/mandalart-batch-update-supabase-service';
-import Swal from 'sweetalert2';
 
 // 브로드캐스트 스토어 상태 타입
 type BroadcastStoreStateType = {
