@@ -44,9 +44,9 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
       await fetchUpdateRoomPasscode(pathParamRoomId, passwordInputValue);
       alert('변경성공');
       updateRoomData();
-    } catch (err) {
+    } catch (error) {
       //TODO 센트리로 리펙터링
-      console.log(err);
+      console.log(error);
       alert('변경실패');
     }
   };
@@ -58,9 +58,9 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
       `;
       await navigator.clipboard.writeText(inviteText);
       alert('클립보드에 복사되었습니다!');
-    } catch (err) {
+    } catch (error) {
       //TODO 센트리로 리펙터링
-      console.log(err);
+      console.log(error);
       alert('복사실패');
     }
   };

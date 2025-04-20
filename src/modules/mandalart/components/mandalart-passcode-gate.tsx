@@ -10,11 +10,16 @@ import MandalartMainContent from './mandalart-main-content';
 type MandalartPasswordGateType = {
   user: User | null;
   roomId: string;
+  mandalartId: string;
 };
 
-const MandalartPasscodeGate = ({ user, roomId }: MandalartPasswordGateType) => {
+const MandalartPasscodeGate = ({
+  user,
+  roomId,
+  mandalartId,
+}: MandalartPasswordGateType) => {
   const [passwordInputValue, setPasswordInputValue] = useState<string>('');
-  const [isPasscodeMatch, setPasscodeMatch] = useState<boolean>(false);
+  const [isPasscodeMatch, setIsPasscodeMatch] = useState<boolean>(false);
   const handlePasswordSubmit = async () => {
     const isCheckPasscodeResult = await fetchCheckRoomPasscode(
       roomId,
@@ -25,13 +30,13 @@ const MandalartPasscodeGate = ({ user, roomId }: MandalartPasswordGateType) => {
     } else {
       alert('잘못된비밀번호');
     }
-    setPasscodeMatch(isCheckPasscodeResult);
+    setIsPasscodeMatch(isCheckPasscodeResult);
   };
 
   return (
     <>
       {isPasscodeMatch ? (
-        <MandalartMainContent user={user} />
+        <MandalartMainContent user={user} mandalartId={mandalartId} />
       ) : (
         <div>
           <form
@@ -45,7 +50,7 @@ const MandalartPasscodeGate = ({ user, roomId }: MandalartPasswordGateType) => {
               onChange={(e) => {
                 setPasswordInputValue(e.target.value);
               }}
-            ></Input>
+            />
             <Button>비밀번호입력</Button>
           </form>
         </div>

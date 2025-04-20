@@ -35,10 +35,13 @@ import { getCurrentUserId } from '@/shared/utils/get-current-user-id';
 
 type MandalartMainContentProps = {
   user: User | null;
+  mandalartId: string;
 };
 
-const MandalartMainContent = ({ user }: MandalartMainContentProps) => {
-  // floating sheet가 열렸는지 닫혔는지 판별하는 변수
+const MandalartMainContent = ({
+  user,
+  mandalartId,
+}: MandalartMainContentProps) => {
   const supabase = getBrowserClient();
   const queryClient = useQueryClient();
 
@@ -51,9 +54,8 @@ const MandalartMainContent = ({ user }: MandalartMainContentProps) => {
   const currentUsers = useUsersStore((state) => state.currentUsers);
 
   //TODO: 동적 값으로 수정 예정
-  const { data, isPending, isError } = useMandalartDataQuery(
-    '6424de9b-7fbf-470a-9743-c9bb5e3cdad8'
-  );
+  const { data, isPending, isError } = useMandalartDataQuery(mandalartId);
+
   useEffect(() => {
     if (isPending) return;
     createTodoListkey(queryClient, data);

@@ -9,6 +9,7 @@ const MandalartPage = async () => {
   const user = await getUserInfo();
   const supabase = getServerClient();
 
+  //TODO 동적으로 pathPram 가져오는 걸로 수정
   const pathParamRoomId = 'e5a689a9-0f5f-4cdb-935e-9250ca71f60f';
   const { data, error } = await supabase
     .from('rooms')
@@ -18,14 +19,21 @@ const MandalartPage = async () => {
   if (error) throw error;
   const roomInfo: Tables<'rooms'> = data[0];
 
-  //조인으로 파티셔널까지 다 긁어와서 비교 유저 id랑 하나라도 일치하면 만다라트 컴포넌트 렌더링
+  //TODO path로 가져온 룸ID를 기준으로 가져오는걸로 수정
+  const mandalartId = '6424de9b-7fbf-470a-9743-c9bb5e3cdad8';
+
+  //TODO 조인으로 파티셔널까지 다 긁어와서 비교 유저 id랑 하나라도 일치하면 만다라트 컴포넌트 렌더링
   const isAuthenticated = roomInfo.owner === user?.id;
   return (
     <>
       {isAuthenticated ? (
-        <MandalartMainContent user={user} />
+        <MandalartMainContent user={user} mandalartId={mandalartId} />
       ) : (
-        <MandalartPasscodeGate user={user} roomId={pathParamRoomId} />
+        <MandalartPasscodeGate
+          user={user}
+          roomId={pathParamRoomId}
+          mandalartId={mandalartId}
+        />
       )}
     </>
   );
