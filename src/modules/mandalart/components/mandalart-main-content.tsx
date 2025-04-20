@@ -27,6 +27,7 @@ import { useRealtimePresenceRoom } from '../hooks/use-realtime-presence-room';
 import { AvatarStack } from './avatar-stack';
 import { useUsersStore } from '../hooks/use-users-store';
 import { getCurrentUserId } from '@/shared/utils/get-current-user-id';
+import Button from '@/components/commons/button';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -129,8 +130,7 @@ const MandalartMainContent = ({
 
   return (
     <div className='flex flex-col items-center'>
-      <Spacer size='2xl' />
-
+      <Spacer size='top' />
       <RealtimeCursors
         roomName='cursor-room'
         username={username}
@@ -140,13 +140,15 @@ const MandalartMainContent = ({
       <div className='w-full max-w-[1440px] px-4'>
         <div className='flex flex-col'>
           <div className='flex justify-between'>
-            <Title as='h1'>2025년 성장의 해로 만들기</Title>
+            <Title as='h1' size='32px-medium' textColor='black'>
+              2025년 성장의 해로 만들기
+            </Title>
             <div onClick={handleClickAvatarStack}>
               <AvatarStack avatars={currentUsers} />
             </div>
             {isVisibleUsersInfoSheet && <UsersInfoSheet user={user} />}
           </div>
-          <Spacer size='sm' />
+          <Spacer size='md' />
           <div className='flex'>
             <CalendarDays />
             <Text>365일 남음</Text>
@@ -158,19 +160,11 @@ const MandalartMainContent = ({
           </div>
         </div>
       </div>
-      <Spacer />
-      <div className='flex flex-col md:w-[1024px]'>
-        <div className='float-start flex'>
-          <Title as='h2'>
-            총 <span>{calculatorProgress(data.done_count)}%</span> 완료!
-          </Title>
-        </div>
 
-        <LinearProgress
-          value={calculatorProgress(data.done_count)}
-        ></LinearProgress>
-
-        <Spacer />
+      <div className='flex flex-col items-center md:w-[1024px]'>
+        <Spacer size='lg' />
+        <LinearProgress value={calculatorProgress(data.done_count)} />
+        <Spacer size='lg' />
         <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
           {/* 중앙 블록 */}
           <MainBlock
@@ -194,9 +188,26 @@ const MandalartMainContent = ({
             <MandalartFloatingSheet channelReceiver={broadcastChannel} />
           )}
         </div>
+        <Spacer size='3xl' />
+        <div className='flex gap-8'>
+          <Button>만다라트 작성법 보기</Button>
+          <Button variant='secondary'>이미지로 저장하기</Button>
+        </div>
+        <Spacer size='3xl' />
       </div>
     </div>
   );
 };
 
 export default MandalartMainContent;
+
+// //예시로 넣어둠
+// xs: 'h-1', // 4px
+// sm: 'h-2', // 8px
+// md: 'h-4', // 16px
+// lg: 'h-8', // 32px
+// xl: 'h-12', // 48px
+// '2xl': 'h-16', // 64px
+// '3xl': 'h-20', // 80px
+// '4xl': 'h-24', // 96px
+// top: 'h-[72px]',
