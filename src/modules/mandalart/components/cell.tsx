@@ -1,4 +1,3 @@
-import Button from '@/components/commons/button';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import RegisterTodo from './register-todo';
 import { CellInfoType, TodoPayloadType } from '../types/realtime-type';
@@ -47,6 +46,9 @@ const Cell = ({ value, className, info }: CellProps) => {
     show();
   };
 
+  //대주제일때 글씨 색 black
+  const textColor = 'title' in info ? 'black' : 'sub';
+
   return (
     <>
       {/* 셀의 스타일 지정 */}
@@ -56,11 +58,16 @@ const Cell = ({ value, className, info }: CellProps) => {
       >
         {/* 소주제인지 아닌지 판단 */}
         {'topic_id' in info ? (
-          <Text align='center' size='mlg'>
+          <Text align='center' size='16px-regular' textColor={textColor}>
             {data}
           </Text>
         ) : (
-          <Text align='center' weight='bold' size='mlg'>
+          <Text
+            align='center'
+            weight='bold'
+            size='16px-semibold'
+            textColor={textColor}
+          >
             {data}
           </Text>
         )}
