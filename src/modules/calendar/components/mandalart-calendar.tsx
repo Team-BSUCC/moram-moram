@@ -22,10 +22,9 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
 
   // 전체 평탄화된 투두 리스트 생성
   const flatTodos = useMemo(
-    () => myMandalarts.flatMap(flattenTodos),
+    () => (myMandalarts?.length ? myMandalarts.flatMap(flattenTodos) : []),
     [myMandalarts]
   );
-
   // FullCalendar용 이벤트 리스트 생성
   const events = useMemo(
     () =>
