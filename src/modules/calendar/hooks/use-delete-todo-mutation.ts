@@ -1,11 +1,18 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
+import { useTransition } from 'react';
+import { useRouter } from 'next/navigation';
 import { deleteTodoData } from '../services/edit-todo-data';
 
 export const useDeleteTodoMutation = () => {
-  const queryClient = useQueryClient();
+  const [isPending, startTransition] = useTransition();
+  const router = useRouter();
+
   return useMutation({
     mutationFn: deleteTodoData,
-    onSuccess: () =>
-      queryClient.invalidateQueries({ queryKey: ['my-mandalarts'] }),
+    onSuccess: () => {
+      startTransition(() => {
+        router.refresh();
+      });
+    },
   });
 };
