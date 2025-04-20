@@ -5,6 +5,7 @@ import Link from 'next/link';
 import React from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import SignOutButton from '@/modules/auth/components/sign-out-button';
+import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 
 type HeaderProps = {
   user: User | null;
@@ -13,6 +14,8 @@ type HeaderProps = {
 const Header = ({ user }: HeaderProps) => {
   const linkStyle =
     'flex items-center justify-center gap-2.5 rounded-lg px-6 py-3 text-md';
+
+  const userName = getCurrentUserName(user);
 
   return (
     <div className='h-full w-full border-b bg-white-light'>
@@ -51,15 +54,9 @@ const Header = ({ user }: HeaderProps) => {
               <div className='flex gap-2 pl-2'>
                 <Avatar className='border border-black hover:z-10'>
                   <AvatarImage src={'유저이미지 추가해야함'} />
-                  <AvatarFallback>
-                    {user.user_metadata.nickname
-                      ? user.user_metadata.nickname.slice(0, 1)
-                      : user.user_metadata.name.slice(0, 1)}
-                  </AvatarFallback>
+                  <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
                 </Avatar>
-                <p className='text-xl'>
-                  {user.user_metadata.nickname ?? user.user_metadata.name}
-                </p>
+                <p className='text-xl'>{userName}</p>
               </div>
             </>
           ) : (
