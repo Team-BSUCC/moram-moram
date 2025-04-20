@@ -57,7 +57,7 @@ const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
         <Title as='h1' size='28px-semibold'>
           TO DO LIST
         </Title>
-        <Spacer size={'xl'} />
+        <Spacer size='xl' />
       </div>
       <hr className='mb-6' />
 
