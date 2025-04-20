@@ -6,14 +6,7 @@ import { User } from '@supabase/supabase-js';
  */
 export const getCurrentUserId = (user: User | null): string => {
   if (!user) {
-    let guestId = localStorage.getItem('guestId');
-    if (guestId !== null) {
-      return guestId;
-    } else {
-      guestId = crypto.randomUUID();
-      localStorage.setItem('guestId', guestId);
-      return guestId;
-    }
+    return crypto.randomUUID();
   } else {
     return user.id;
   }
