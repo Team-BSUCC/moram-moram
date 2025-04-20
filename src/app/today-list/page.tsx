@@ -1,18 +1,15 @@
 import Spacer from '@/components/commons/spacer';
 import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
+import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 import TodayTodoList from '@/modules/today-list/components/today-todo-list';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
 
 const TodayListPage = async () => {
   const supabase = getServerClient();
-  const {
-    data: { user },
-    error: userError,
-  } = await supabase.auth.getUser();
-
-  if (!user || userError) {
-    throw new Error('로그인이 필요합니다.');
+  const user = await getUserInfo();
+  if (!user) {
+    throw new Error('User is not authenticated');
   }
 
   const { data: myMandalarts, error } = await supabase.rpc(
