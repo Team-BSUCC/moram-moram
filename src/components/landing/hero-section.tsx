@@ -3,6 +3,8 @@ import Text from '../commons/text';
 import Spacer from '../commons/spacer';
 import Button from '../commons/button';
 import Title from '../commons/title';
+import Link from 'next/link';
+import URLS from '@/shared/constants/url-constants';
 
 const HeroSection = () => {
   return (
@@ -50,7 +52,9 @@ const HeroSection = () => {
               <Text size='20px-regular' textColor='sub'>
                 한 칸씩 채우며 나아가는 여정에 <br /> Manda가 함께할게요.
               </Text>
-              <Button size='medium'>지금 시작하기</Button>
+              <Link href={URLS.MANDALART}>
+                <Button size='medium'>지금 시작하기</Button>
+              </Link>
             </div>
           </div>
         </div>

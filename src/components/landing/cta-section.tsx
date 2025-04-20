@@ -1,7 +1,9 @@
+import Link from 'next/link';
 import Button from '../commons/button';
 import Spacer from '../commons/spacer';
 import Text from '../commons/text';
 import Title from '../commons/title';
+import URLS from '@/shared/constants/url-constants';
 
 const CTASection = () => {
   return (
@@ -21,7 +23,9 @@ const CTASection = () => {
             로 정리해보세요.
           </Title>
           <Spacer size='xl' />
-          <Button size='large'>지금 시작하기</Button>
+          <Link href={URLS.MANDALART}>
+            <Button size='medium'>지금 시작하기</Button>
+          </Link>
         </div>
 
         {/* ✅ 모바일 전용 */}
@@ -39,7 +43,9 @@ const CTASection = () => {
             로 정리해보세요.
           </Title>
           <Spacer size='lg' />
-          <Button size='medium'>지금 시작하기</Button>
+          <Link href={URLS.MANDALART}>
+            <Button size='medium'>지금 시작하기</Button>
+          </Link>
         </div>
       </div>
     </section>

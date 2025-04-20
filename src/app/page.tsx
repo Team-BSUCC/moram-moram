@@ -12,7 +12,7 @@ import ScrollTop from '@/components/landing/scroll-top';
 const HomePage = async () => {
   return (
     <div className='min-h-screen w-full self-stretch'>
-      {/* <ScrollTop /> */}
+      <ScrollTop />
 
       <AnimatedSection>
         <HeroSection />
