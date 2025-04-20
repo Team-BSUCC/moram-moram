@@ -1,8 +1,10 @@
 // 달력에 표시하기 위한 데이터 타입들
 export type TodoType = {
+  id: string;
   title: string;
   isDone: boolean;
   createdAt: string;
+  scheduledDate: string;
 };
 
 export type SubtopicType = {

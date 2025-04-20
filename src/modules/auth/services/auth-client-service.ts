@@ -11,7 +11,7 @@ export const signWithGoogle = async () => {
   await supabase.auth.signInWithOAuth({
     provider: 'google',
     options: {
-      redirectTo: `${origin}/${API}/${URL.CALL_BACK}`,
+      redirectTo: `${origin}/${API}${URL.CALL_BACK}`,
     },
   });
 };
@@ -21,7 +21,7 @@ export const signWithKaKao = async () => {
   await supabase.auth.signInWithOAuth({
     provider: 'kakao',
     options: {
-      redirectTo: `${origin}/${API}/${URL.CALL_BACK}`,
+      redirectTo: `${origin}/${API}${URL.CALL_BACK}`,
     },
   });
 };

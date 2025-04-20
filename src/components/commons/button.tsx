@@ -3,24 +3,31 @@ import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const buttonVariants = cva(
-  'inline-flex items-center w-full justify-center rounded-lg font-semibold transition-colors outline-none disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center text-main w-fit justify-center rounded-lg font-semibold outline-none disabled:pointer-events-none disabled:text-caption disabled:bg-[#E6E6E6] disabled:border-none',
   {
     variants: {
       variant: {
-        default: 'bg-primary text-black ',
-        secondary: 'bg-beige-light text-black',
-        outline: 'bg-white-light text-black border-beige border',
+        default: 'bg-primary hover:bg-[#BF93E1] active:bg-[#A76BD6]',
+        secondary: 'bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4]',
+        outline:
+          'bg-white-light outline outline-[1.5px] outline-beige box-border outline-offset-[0px] hover:outline-[3px] active:outline-[3px] active:outline-[#B3947F]',
+        none: 'bg-white-light justify-start w-full rounded-none hover:bg-beige-light active:bg-beige',
       },
       size: {
-        default:
-          'text-16-regular sm:text-20-bold md:text-24-semibold h-8 sm:h-10 md:h-12 px-3 sm:px-4 md:px-6',
-        sm: 'text-14 sm:text-16-regular md:text-20-medium h-6 sm:h-9 md:h-10 px-3 sm:px-4',
-        lg: 'text-20-bold sm:text-24-semibold md:text-28-regular h-10 sm:h-12 md:h-14 px-4 sm:px-5 md:px-6',
+        large:
+          'text-[24px] leading-[36px] font-medium sm:text-[28px] sm:leading-[42px] md:text-[32px] md:leading-[48px] py-[14px] px-[44px] sm:py-[16px] sm:px-[46px] md:py-[18px] md:px-[48px]',
+        medium:
+          'text-[16px] leading-[24px] font-medium sm:text-[18px] sm:leading-[27px] md:text-[20px] md:leading-[30px] gap-[4px] sm:gap-[6px] md:gap-[8px] py-[11px] px-[28px] sm:py-[11px] sm:px-[30px] md:py-[13px] md:px-[32px]',
+        small:
+          'text-[14px] leading-[20px] font-medium sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] sm:gap-[4px] md:gap-[6px] py-[8px] px-[20px] sm:py-[10px] sm:px-[22px] md:py-[12px] md:px-[24px]',
+        'x-small':
+          'text-[13px] leading-[17px] font-medium sm:text-[14px] sm:leading-[18px] md:text-[16px] md:leading-[20px] gap-[2px] sm:gap-[4px] md:gap-[6px] py-[8px] px-[20px] sm:py-[10px] sm:px-[22px] md:py-[12px] md:px-[24px]',
+        none: 'text-[14px] leading-[20px] font-medium sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]  ',
       },
     },
     defaultVariants: {
       variant: 'default',
-      size: 'default',
+      size: 'medium',
     },
   }
 );
