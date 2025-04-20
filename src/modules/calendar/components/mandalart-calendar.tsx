@@ -10,11 +10,17 @@ import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floati
 import { MyMandalartsType } from '@/modules/today-list/types/today-list-type';
 import { flattenTodos } from '@/modules/today-list/utils/flatten-todos';
 import Spacer from '@/components/commons/spacer';
+import { getPastelCodeWithIndex } from '@/shared/utils/get-color-with-index';
 
 type MandalartCalendarProps = {
   myMandalarts: MyMandalartsType;
 };
 
+/**
+ * 캘린더 컴포넌트
+ * @param myMandalarts - 내 만다라트 정보
+ * @returns
+ */
 const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const show = useFloatingSheetStore((state) => state.show);
@@ -25,6 +31,7 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
     () => (myMandalarts?.length ? myMandalarts.flatMap(flattenTodos) : []),
     [myMandalarts]
   );
+
   // FullCalendar용 이벤트 리스트 생성
   const events = useMemo(
     () =>
@@ -33,6 +40,7 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
         title: todo.todoTitle,
         date: new Date(todo.scheduledDate).toISOString(),
         isDone: todo.isDone,
+        color: getPastelCodeWithIndex(todo.color as number),
       })),
     [flatTodos]
   );
@@ -57,7 +65,10 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
         aspectRatio={1.25}
         showNonCurrentDates={true}
         eventContent={(arg) => (
-          <div className='custom-event cursor-pointer'>
+          <div
+            className='custom-event cursor-pointer'
+            style={{ backgroundColor: arg.backgroundColor }}
+          >
             <span>{arg.event.title}</span>
           </div>
         )}
@@ -84,7 +95,6 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
           info.el.style.pointerEvents = 'none';
         }}
       />
-
       {isVisible && <CalendarFloatingSheet todos={flatTodos} />}
     </div>
   );
