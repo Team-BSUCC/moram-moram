@@ -15,7 +15,8 @@ const TodayListPage = async () => {
   const mandalarts = await response.json();
 
   return (
-    <div className='mb-[72px] h-full w-full bg-white-dark'>
+    <div className='h-full w-full bg-white-dark'>
+      <Spacer size='top' />
       <div className='mx-auto flex w-2/3 flex-col items-start'>
         <Spacer size='top' />
         <Title as='h1' size='32px-semibold'>
