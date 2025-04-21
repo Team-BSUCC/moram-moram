@@ -64,7 +64,8 @@ const MandalartPasscodeGate = ({
                 <Spacer size='md' />
                 <Input
                   value={passwordInputValue}
-                  variant='auth'
+                  //TODO 나중에 auth로 variant 수정
+                  variant='default'
                   placeholder='입장코드를 입력해주세요.'
                   onChange={(e) => {
                     setPasswordInputValue(e.target.value);
