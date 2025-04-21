@@ -72,14 +72,14 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
     <FloatingSheet hideOnOutsideClick={true}>
       <div className='flex h-full flex-col'>
         <div
-          className={`handle cursor-grab px-5 active:cursor-grabbing ${headerColor} rounded-t-lg`}
+          className={`handle cursor-grab active:cursor-grabbing ${headerColor} rounded-t-lg`}
         >
           <div className='fixed right-4 top-4 w-fit'>
             <button className='bg-transparent' onClick={hide}>
               <X />
             </button>
           </div>
-          <div className='flex flex-col items-start p-8'>
+          <div className='flex flex-col items-start p-6 lg:p-8'>
             <Text size='16px-medium' textColor='sub'>
               TO DO LIST
             </Text>
