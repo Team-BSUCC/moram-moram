@@ -41,7 +41,7 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
   }, []);
 
   const handleResize = () => {
-    if (window.innerWidth < 768) {
+    if (window.innerWidth < 480) {
       // 모바일 레이아웃
       setHeaderToolbar({
         start: 'today',

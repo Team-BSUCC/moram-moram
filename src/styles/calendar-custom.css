@@ -306,11 +306,20 @@ a.fc-event::after {
     gap: 60px;
     display: flex;
     padding: 10px 20px;
+    position: relative;
   }
 
   .fc-toolbar-chunk {
     display: flex;
     flex-direction: row;
+    align-items: center;
+  }
+
+  .fc .fc-toolbar-chunk:nth-child(2) {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
   }
 
   .fc .fc-today-button,
@@ -318,6 +327,12 @@ a.fc-event::after {
   .fc .fc-next-button {
     padding: 3px 6px !important;
     font-size: 12px;
+  }
+
+  .fc .fc-prev-button,
+  .fc .fc-next-button {
+    width: 28px;
+    height: 28px;
   }
 
   .fc {
@@ -351,7 +366,6 @@ a.fc-event::after {
     font-size: 18px;
     width: 100%;
     align-items: center;
-    padding-top: 5px;
     padding-right: 0;
   }
 
@@ -435,5 +449,16 @@ a.fc-event::after {
 
   .custom-event span {
     font-size: 10px;
+  }
+}
+
+/* 태블릿 스타일 */
+@media screen and (min-width: 481px) and (max-width: 1024px) {
+  .fc {
+    max-width: 90%;
+    margin: 0 auto;
+    border-radius: 10px;
+    overflow: hidden;
+    background-color: white;
   }
 }
