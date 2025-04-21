@@ -450,6 +450,10 @@ a.fc-event::after {
   .custom-event span {
     font-size: 10px;
   }
+
+  .fc-daygrid-more-link {
+    display: none;
+  }
 }
 
 /* 태블릿 스타일 */
