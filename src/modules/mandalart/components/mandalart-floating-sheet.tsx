@@ -24,7 +24,7 @@ import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
 import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 import Spacer from '@/components/commons/spacer';
-import { X } from 'lucide-react';
+import { SquarePlus, X } from 'lucide-react';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -64,16 +64,17 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
     headerColor = 'bg-violet-pigment';
   }
 
-  // <div className='handle cursor-grab px-5 active:cursor-grabbing'>
-  <div className='fixed right-4 top-4 w-fit'>
-    <button className='bg-transparent'>
-      <X />
-    </button>
-  </div>;
+  const customButtonClass =
+    'w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
 
   return (
     <FloatingSheet>
-      <div className='flex w-full flex-col space-y-4'>
+      <div
+        className='flex w-full flex-col space-y-4'
+        onClick={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <div
           className={`handle cursor-grab px-5 active:cursor-grabbing ${headerColor}`}
         >
@@ -128,10 +129,14 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
           )}
           {/* 소주제일 경우 */}
           {info.category === 'SUBTOPIC' && (
-            <div>
-              <Button variant='outline' onClick={() => createTodo()}>
-                투두 추가하기
-              </Button>
+            <div className='px-8'>
+              <button
+                className={customButtonClass}
+                onClick={() => createTodo()}
+              >
+                <SquarePlus />
+                투두 리스트 추가하기
+              </button>
               {todoListCacheArray.map((todo: TodoType) => (
                 <TodoItem
                   key={todo.id}
