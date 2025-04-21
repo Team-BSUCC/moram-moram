@@ -9,6 +9,7 @@ const inputVariants = cva(
       variant: {
         default: '',
         outline: 'border-gray-400',
+        none: 'border-none',
       },
       sizes: {
         '48px-semibold':
