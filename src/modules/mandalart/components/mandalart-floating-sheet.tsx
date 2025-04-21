@@ -24,7 +24,8 @@ import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
 import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 import Spacer from '@/components/commons/spacer';
-import { SquarePlus, X } from 'lucide-react';
+import { BicepsFlexed, CalendarDays, SquarePlus, X } from 'lucide-react';
+import Title from '@/components/commons/title';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -87,19 +88,39 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
             <Text size='16px-medium' textColor='sub'>
               TO DO LIST
             </Text>
-            <Input
-              sizes='28px-regular'
-              type='text'
-              value={value}
-              placeholder={value || '목표를 작성해 주세요'}
-              onChange={(e) => {
-                setValue(e.target.value);
-                throttleMutate();
-              }}
-            />
-            <Text size='18px-medium' textColor='sub'>
-              2025년, 성장의 해로 만들기 &gt; {value}
-            </Text>
+
+            {info.category === 'CORE' ? (
+              <>
+                <Title as='h2' size='28px-semibold'>
+                  2025년 성장의 해로 만들기
+                </Title>
+                <div className='flex'>
+                  <CalendarDays color='var(--color-sub)' />
+                  <Text textColor='sub'>365일 남음</Text>
+                </div>
+                <Spacer size='sm' />
+                <div className='flex'>
+                  <BicepsFlexed color='var(--color-sub)' />
+                  <Text textColor='sub'>이번년도 반드시 이루고 말거야 !</Text>
+                </div>
+              </>
+            ) : (
+              <>
+                <Input
+                  sizes='28px-regular'
+                  type='text'
+                  value={value}
+                  placeholder={value || '목표를 작성해 주세요'}
+                  onChange={(e) => {
+                    setValue(e.target.value);
+                    throttleMutate();
+                  }}
+                />
+                <Text size='18px-medium' textColor='sub'>
+                  2025년, 성장의 해로 만들기 &gt; {value}
+                </Text>
+              </>
+            )}
           </div>
         </div>
         <div className='max-h-[550px] overflow-y-auto'>
