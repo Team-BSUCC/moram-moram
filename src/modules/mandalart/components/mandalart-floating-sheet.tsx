@@ -39,6 +39,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   const info = getDataCategory(
     useFloatingSheetStore((state) => state.info) as CellInfoType
   );
+  const hide = useFloatingSheetStore((state) => state.hide);
 
   const { data: initialValue } = useCellCacheQuery(info);
 
@@ -77,7 +78,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
           className={`handle cursor-grab px-5 active:cursor-grabbing ${headerColor}`}
         >
           <div className='fixed right-4 top-4 w-fit'>
-            <button className='bg-transparent'>
+            <button className='bg-transparent' onClick={hide}>
               <X />
             </button>
           </div>
