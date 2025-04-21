@@ -1,35 +1,44 @@
+'use client';
+
 import FloatingSheet from '@/components/commons/floating-sheet';
 import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { CoreType, EventType } from '../type/todo-type';
+import { FlatTodo } from '@/modules/today-list/types/today-list-type';
 import Spacer from '@/components/commons/spacer';
 import { getProcessedDate } from '../utils/get-processed-date';
 import CalendarTodoItem from './calendar-todo-item';
 import { X } from 'lucide-react';
+import { groupBy } from '@/modules/today-list/utils/group-by';
+import { rangeWithIndex } from '@/shared/utils/range-with-index';
+import { matchWithCommonColor } from '../utils/match-with-common-color';
 
 type CalendarFloatingSheetProps = {
-  todos: CoreType[] | undefined;
-  events: EventType[] | undefined;
+  todos: FlatTodo[];
 };
 
 /**
- * 달력에서 선택한 날짜에 해당하는 투두 목록을 보여주는 플로팅 시트
- * @param todos - 플로팅 시트에 표시할 투두 목록
- * @param events - 달력에 표시된 이벤트 목록
- * @returns
+ * 캘린더 플로팅 시트 컴포넌트
+ * @param todos - todo 목록
+ * @returns - 캘린더 플로팅 시트
  */
-const CalendarFloatingSheet = ({
-  todos: data,
-  events,
-}: CalendarFloatingSheetProps) => {
-  // 달력에서 선택한 날짜
-  const info = useFloatingSheetStore((state) => state.info as string);
+const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
+  const info = useFloatingSheetStore((state) => state.info) as string;
   const hide = useFloatingSheetStore((state) => state.hide);
-  // 클릭한 날짜에 해당하는 투두 목록을 가져오기 위한 필터링
-  const isSatisfied =
-    events &&
-    events?.filter((event) => event.date.slice(0, 10) === info).length > 0;
+
+  // 날짜 기준 필터링
+  const filteredTodos = todos.filter((todo) => todo.scheduledDate === info);
+
+  // mandalartId 기준으로 그룹핑
+  const groupedByMandalart = groupBy(filteredTodos, 'mandalartId');
+
+  // 각 mandalart 그룹 내부에서만 isDone 기준으로 정렬
+  const sortedGroups = Object.entries(groupedByMandalart).map(
+    ([mandalartId, group]) => ({
+      mandalartId,
+      todos: [...group].sort((a, b) => Number(a.isDone) - Number(b.isDone)),
+    })
+  );
 
   return (
     <FloatingSheet>
@@ -48,48 +57,38 @@ const CalendarFloatingSheet = ({
         <Title as='h1' size='28px-semibold'>
           TO DO LIST
         </Title>
-        <Spacer size={'xl'} />
+        <Spacer size='xl' />
       </div>
       <hr className='mb-6' />
-      {isSatisfied && data ? (
-        data
-          .filter((core) =>
-            core.topics.some((topic) =>
-              topic.subtopics.some((sub) =>
-                sub.todos.some((todo) => todo.scheduledDate === info)
-              )
-            )
-          )
-          .map((core) => (
-            <div key={core.title} className='mb-5 flex flex-col gap-2 px-5'>
-              {/* 하이라이트 컬러 DB에서 받아와서 수정 예정 */}
+
+      {/* 선택된 날짜에 해당하는 todo가 있을 경우 */}
+      {filteredTodos.length > 0 ? (
+        <div className='flex flex-col gap-6 px-5'>
+          {/* mandalartId 기준으로 그룹핑된 todo 출력 */}
+          {sortedGroups.map(({ mandalartId, todos }) => (
+            <div key={mandalartId} className='flex flex-col gap-3'>
+              {/* mandalart 제목 출력 */}
               <Title
                 as='h2'
-                highlightColor={0}
-                textColor='sub'
                 size='18px-semibold'
+                textColor='sub'
+                highlightColor={rangeWithIndex(
+                  matchWithCommonColor(todos[0].color as number)
+                )}
               >
-                {core.title}
+                {todos[0].mandalartTitle}
               </Title>
-              {core.topics.map((topic) =>
-                topic.subtopics.map((sub) =>
-                  sub.todos
-                    .filter((todo) => todo.scheduledDate === info)
-                    .sort((a, b) => Number(a.isDone) - Number(b.isDone))
-                    .map((todo, idx) => (
-                      <CalendarTodoItem
-                        key={todo.id}
-                        todo={todo}
-                        sub={sub}
-                        topic={topic}
-                      />
-                    ))
-                )
-              )}
+
+              {/* 각 mandalart에 해당하는 todo 출력 */}
+              {todos.map((todo) => (
+                <CalendarTodoItem key={todo.todoId} todo={todo} />
+              ))}
             </div>
-          ))
+          ))}
+        </div>
       ) : (
-        <div className='h- flex flex-col items-center justify-center'>
+        // 선택된 날짜에 해당하는 todo가 없을 경우
+        <div className='flex flex-col items-center justify-center'>
           <Spacer size='4xl' />
           <Text size='16px-regular' textColor='caption'>
             오늘은 여유로운 하루네요.

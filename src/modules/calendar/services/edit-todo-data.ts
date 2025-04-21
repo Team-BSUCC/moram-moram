@@ -1,5 +1,5 @@
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
-import { TodoType } from '../type/todo-type';
+import { FlatTodo } from '@/modules/today-list/types/today-list-type';
 
 const supabase = getBrowserClient();
 
@@ -17,13 +17,13 @@ export const deleteTodoData = async (id: string) => {
  * todo의 isDone 데이터를 DB에서 업데이트하는 함수
  * @param todo - 업데이트할 todo
  */
-export const updateTodoToggleData = async (todo: TodoType) => {
+export const updateTodoToggleData = async (todo: FlatTodo) => {
   const supabase = getBrowserClient();
 
   const { error } = await supabase
     .from('cell_todos')
     .update({ is_done: !todo.isDone })
-    .eq('id', todo.id);
+    .eq('id', todo.todoId);
 
   if (error) throw new Error('Update Failed!');
 };

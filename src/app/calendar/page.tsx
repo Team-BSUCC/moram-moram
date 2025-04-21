@@ -1,95 +1,27 @@
-'use client';
+import { getUserInfo } from '@/modules/auth/services/auth-server-service';
+import MandalartCalendar from '@/modules/calendar/components/mandalart-calendar';
+import { getServerClient } from '@/shared/utils/supabase/server-client';
 
-import FullCalendar from '@fullcalendar/react';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import '../../styles/calendar-custom.css';
-import interactionPlugin from '@fullcalendar/interaction';
-import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floating-sheet';
-import { useGetMyMandalartsQuery } from '@/shared/hooks/use-get-my-mandalarts-query';
+const CalendarPage = async () => {
+  const supabase = getServerClient();
+  const user = await getUserInfo();
+  if (!user) {
+    throw new Error('User is not authenticated');
+  }
 
-/**
- * @todo : 캘린더 UI 추가 수정
- */
-const CalendarPage = () => {
-  const isVisible = useFloatingSheetStore((state) => state.isVisible);
-  const show = useFloatingSheetStore((state) => state.show);
-  const setInfo = useFloatingSheetStore((state) => state.setInfo);
-
-  const { data: date, isPending } = useGetMyMandalartsQuery();
-
-  if (isPending) return <div>Loading...</div>;
-
-  const allTodos = date?.flatMap((core) =>
-    core.topics.flatMap((topic) => topic.subtopics.flatMap((sub) => sub.todos))
+  const { data: myMandalarts, error } = await supabase.rpc(
+    'get_all_mandalarts_by_user',
+    { _user_id: user.id }
   );
 
-  const events = allTodos?.map((todo) => ({
-    id: todo.id,
-    title: todo.title,
-    date: new Date(todo.scheduledDate).toISOString(),
-    isDone: todo.isDone,
-  }));
+  if (error) {
+    /**
+     * @todo: sentry 도입
+     */
+    throw new Error('Failed to fetch mandalarts');
+  }
 
-  // 셀 클릭 핸들러
-  const handleCellClick = (dateStr: string) => {
-    setInfo(dateStr);
-    show();
-  };
-
-  return (
-    <div className='right-0 min-h-screen w-full bg-white-dark p-8'>
-      <FullCalendar
-        plugins={[dayGridPlugin, interactionPlugin]}
-        initialView='dayGridMonth'
-        events={events}
-        headerToolbar={{
-          start: 'today prev,next',
-          center: 'title',
-          end: '',
-        }}
-        dayMaxEvents={3}
-        fixedWeekCount={false}
-        height='auto'
-        aspectRatio={1.25}
-        showNonCurrentDates={true}
-        eventContent={(arg) => (
-          <div className='custom-event'>
-            <span>{arg.event.title}</span>
-          </div>
-        )}
-        dateClick={(arg) => {
-          handleCellClick(arg.dateStr);
-        }}
-        dayCellDidMount={(info) => {
-          // 셀 전체에 클릭 이벤트 리스너 추가
-          info.el.addEventListener('click', () => {
-            const year = info.date.getFullYear();
-            const month = String(info.date.getMonth() + 1).padStart(2, '0');
-            const day = String(info.date.getDate()).padStart(2, '0');
-            const dateStr = `${year}-${month}-${day}`;
-            handleCellClick(dateStr);
-          });
-        }}
-        dayHeaderFormat={{ weekday: 'narrow' }}
-        titleFormat={{ year: 'numeric', month: 'short' }}
-        dayCellContent={({ date }) => date.getDate()}
-        initialDate={new Date()}
-        unselectAuto={true}
-        moreLinkContent={(args) => {
-          return {
-            html: `<span class="custom-more-link">+${args.num}</span>`,
-          };
-        }}
-        // 더보기 링크에서 이벤트 리스너 제거
-        moreLinkDidMount={(info) => {
-          const linkEl = info.el;
-          linkEl.style.pointerEvents = 'none';
-        }}
-      />
-      {isVisible && <CalendarFloatingSheet todos={date} events={events} />}
-    </div>
-  );
+  return <MandalartCalendar myMandalarts={myMandalarts} />;
 };
 
 export default CalendarPage;
