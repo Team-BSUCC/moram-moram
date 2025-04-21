@@ -114,7 +114,21 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
         />
         <Dropdown>
           <Button variant='none'>뭐들어가야하지</Button>
-          <Button variant='none' onClick={deleteMutate}>
+          <Button
+            variant='none'
+            onClick={() => {
+              queryClient.setQueryData(
+                QUERY_KEY.todolist(cellId.cell_id),
+                (todoList: TodoPayloadType[]) =>
+                  todoList.map((todo) =>
+                    todo.id === id
+                      ? { ...todo, action: 'DELETE', category: 'TODO' }
+                      : todo
+                  )
+              );
+              deleteMutate();
+            }}
+          >
             삭제하기
           </Button>
         </Dropdown>

@@ -123,7 +123,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
             )}
           </div>
         </div>
-        <div className='max-h-[550px] overflow-y-auto'>
+        <div className='h-[550px] overflow-y-auto'>
           {/* 핵심주제일 경우 */}
           {info.category === 'CORE' && (
             <div>
@@ -170,7 +170,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
           )}
         </div>
       </div>
-      <Spacer size='lg' />
+      <Spacer size='sm' />
     </FloatingSheet>
   );
 };
