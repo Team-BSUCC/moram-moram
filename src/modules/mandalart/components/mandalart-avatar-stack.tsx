@@ -90,7 +90,7 @@ const AvatarStack = ({
         ))}
         <div className='flex h-[35px] w-[100px] items-center rounded-r-full bg-stroke pl-6'>
           <Text align={'center'}>{avatars.length} / 8</Text>
-          <Dropdown selection>
+          <Dropdown selection size='w-auto'>
             <UsersInfoSheet user={user} />
           </Dropdown>
         </div>
