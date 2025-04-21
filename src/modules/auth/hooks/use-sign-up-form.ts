@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  checkEmailDuplicated,
   checkNicknameDuplicated,
   signUp,
 } from '../services/auth-server-service';
@@ -15,9 +14,7 @@ import FormSchema from '../../../shared/constants/auth-schema';
 
 const useSignUpForm = () => {
   const [isPending, startTransition] = useTransition();
-  const [checkingEmail, setCheckingEmail] = useState(false);
   const [checkingNickname, setCheckingNickname] = useState(false);
-  const [emailChecked, setEmailChecked] = useState(false);
   const [nicknameChecked, setNicknameChecked] = useState(false);
 
   const router = useRouter();
@@ -55,10 +52,6 @@ const useSignUpForm = () => {
   });
 
   const onSubmit = (data: SignUpDTO) => {
-    if (!emailChecked) {
-      setError('email', { message: '이메일 중복 확인을 해주세요.' });
-      return;
-    }
     if (!nicknameChecked) {
       setError('nickname', { message: '닉네임 중복 확인을 해주세요.' });
       return;
@@ -78,26 +71,6 @@ const useSignUpForm = () => {
 
       router.push('/');
     });
-  };
-
-  const handleCheckEmail = async () => {
-    const isValid = await trigger('email');
-    if (!isValid) {
-      return;
-    }
-
-    const email = getValues('email');
-    setCheckingEmail(true);
-    const isTaken = await checkEmailDuplicated(email);
-    setCheckingEmail(false);
-
-    if (isTaken) {
-      setError('email', { message: '이미 사용 중인 이메일입니다.' });
-      setEmailChecked(false);
-    } else {
-      setError('email', { message: '사용 가능한 이메일입니다.' });
-      setEmailChecked(true);
-    }
   };
 
   const handleCheckNickname = async () => {
@@ -125,9 +98,7 @@ const useSignUpForm = () => {
     handleSubmit: handleSubmit(onSubmit),
     errors,
     isPending,
-    checkingEmail,
     checkingNickname,
-    handleCheckEmail,
     handleCheckNickname,
   };
 };
