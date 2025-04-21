@@ -66,7 +66,7 @@ const IntroSection = () => {
 
         {/* 데스크탑/태블릿 전용 이미지 구성 */}
         <div className='hidden w-full items-center justify-center gap-8 sm:flex'>
-          {/* 🔹 만다라트 이미지 + 설명 */}
+          {/* 만다라트 이미지 + 설명 */}
           <div className='flex min-w-0 flex-1 flex-col items-center gap-2'>
             <Image
               src='/images/intro/otani-mandalart.png'
@@ -80,7 +80,7 @@ const IntroSection = () => {
             </Text>
           </div>
 
-          {/* 🔹 화살표 */}
+          {/* 화살표 */}
           <div className='flex items-center justify-center'>
             <Image
               src='/images/intro/arrow.png'
@@ -91,7 +91,7 @@ const IntroSection = () => {
             />
           </div>
 
-          {/* 🔹 오타니 이미지 */}
+          {/* 오타니 이미지 */}
           <div className='flex min-w-0 flex-1 items-center justify-center'>
             <Image
               src='/images/intro/otani.png'

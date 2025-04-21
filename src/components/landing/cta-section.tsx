@@ -16,7 +16,7 @@ const CTASection = () => {
           </Text>
           <Spacer size='xl' />
           <Title as='h2' size='32px-semibold'>
-            당신의 목표, 지금{' '}
+            당신의 목표, 지금
             <Text size='32px-semibold' textColor='primary' align='center'>
               만다
             </Text>
@@ -36,7 +36,7 @@ const CTASection = () => {
           </Text>
           <Spacer size='lg' />
           <Title as='h2' size='18px-semibold'>
-            당신의 목표, 지금{' '}
+            당신의 목표, 지금
             <Text size='16px-semibold' textColor='primary' align='center'>
               만다
             </Text>
