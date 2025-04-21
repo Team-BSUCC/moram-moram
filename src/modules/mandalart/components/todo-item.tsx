@@ -112,7 +112,6 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
           }}
         />
         <Dropdown>
-          <Button variant='none'>날짜수정</Button>
           <Button
             variant='none'
             onClick={() => {
