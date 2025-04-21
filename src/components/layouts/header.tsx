@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable indent */
 import URLS from '@/shared/constants/url-constants';
 import { User } from '@supabase/supabase-js';
 import Image from 'next/image';
