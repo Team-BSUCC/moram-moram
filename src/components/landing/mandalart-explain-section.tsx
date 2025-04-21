@@ -2,28 +2,14 @@ import Image from 'next/image';
 import Text from '../commons/text';
 import Title from '../commons/title';
 import Spacer from '../commons/spacer';
-
-const getColorWithNumber = (index: number): string => {
-  const idx = index % 8;
-  const color: Record<number, string> = {
-    0: 'bg-pink-pastel',
-    1: 'bg-red-pastel',
-    2: 'bg-orange-pastel',
-    3: 'bg-purple-pastel',
-    4: 'bg-yellow-pastel',
-    5: 'bg-blue-pastel',
-    6: 'bg-sky-pastel',
-    7: 'bg-green-pastel',
-  };
-  return color[idx];
-};
+import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 
 const MandalartExplainSection = () => {
   return (
     <div className='mx-auto w-full max-w-screen-xl px-4 py-20 sm:flex sm:items-start sm:justify-center sm:gap-24 sm:px-16 sm:py-40'>
       {/* 데스크탑 전용 - 그리드 + 텍스트 */}
       <div className='hidden w-full sm:flex sm:items-center sm:justify-center sm:gap-16'>
-        {/* 🔹 3x3 만다라트 */}
+        {/* 3x3 만다라트 */}
         <div className='relative grid aspect-square w-full max-w-[625px] grid-cols-3 grid-rows-3 gap-2'>
           {Array.from({ length: 9 }).map((_, i) => {
             if (i === 4) {
@@ -68,7 +54,7 @@ const MandalartExplainSection = () => {
           </div>
         </div>
 
-        {/* 🔹 설명 텍스트 */}
+        {/* 설명 텍스트 */}
         <div className='flex flex-col text-left'>
           <Title as='h2' size='32px-semibold'>
             AI와 함께 완성하는 나만의 만다라트
@@ -84,7 +70,7 @@ const MandalartExplainSection = () => {
 
       {/* 모바일 전용 */}
       <div className='block flex flex-col items-center justify-center sm:hidden'>
-        {/* 🔹 텍스트 */}
+        {/* 텍스트 */}
         <div className='flex flex-col items-center text-center'>
           <Title as='h2' size='24px-semibold'>
             AI와 함께 완성하는 나만의 만다라트
@@ -99,7 +85,7 @@ const MandalartExplainSection = () => {
 
         <Spacer size='3xl' />
 
-        {/* 🔹 3x3 그리드 */}
+        {/* 3x3 그리드 */}
         <div className='relative grid aspect-square w-full max-w-[280px] grid-cols-3 grid-rows-3 gap-1 text-sm'>
           {Array.from({ length: 9 }).map((_, i) => {
             if (i === 4) {
