@@ -8,6 +8,10 @@ import {
 } from '@/components/ui/tooltip';
 import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
+import Text from '@/components/commons/text';
+import Dropdown from '@/components/commons/drop-down';
+import UsersInfoSheet from './users-info-sheet';
+import { User } from '@supabase/supabase-js';
 
 /**
  * 아바타 스택의 방향 결정 (가로 or 세로)
@@ -29,6 +33,7 @@ export interface AvatarStackProps
     VariantProps<typeof avatarStackVariants> {
   avatars: { name: string; image: string }[];
   maxAvatarsAmount?: number;
+  user: User | null;
 }
 
 /**
@@ -42,6 +47,7 @@ export interface AvatarStackProps
 const AvatarStack = ({
   className,
   orientation,
+  user,
   avatars,
   maxAvatarsAmount = 3,
   ...props
@@ -49,7 +55,6 @@ const AvatarStack = ({
   // 화면에 보여줄 아바타 컴포넌트
   const shownAvatars = avatars.slice(0, maxAvatarsAmount);
   // 화면에 보여주지 않을 아바타 컴포넌트(최대 개수 이상 접속 시)
-  const hiddenAvatars = avatars.slice(maxAvatarsAmount);
 
   return (
     <TooltipProvider>
@@ -57,6 +62,7 @@ const AvatarStack = ({
         className={cn(
           avatarStackVariants({ orientation }),
           className,
+          'flex items-center',
           orientation === 'horizontal' ? '-space-x-0' : '-space-y-0'
         )}
         {...props}
@@ -64,9 +70,9 @@ const AvatarStack = ({
         {shownAvatars.map(({ name, image }, index) => (
           <Tooltip key={`${name}-${image}-${index}`}>
             <TooltipTrigger asChild>
-              <Avatar className='hover:z-10'>
+              <Avatar className='z-10 hover:z-20'>
                 <AvatarImage src={image} />
-                <AvatarFallback>
+                <AvatarFallback className='bg-white'>
                   {/* 가장 첫글자를 이미지에 표시 ex) 테스트 -> 테 */}
                   {name
                     ?.split(' ')
@@ -82,25 +88,12 @@ const AvatarStack = ({
             </TooltipContent>
           </Tooltip>
         ))}
-
-        {hiddenAvatars.length ? (
-          <Tooltip key='hidden-avatars'>
-            <TooltipTrigger asChild>
-              <Avatar>
-                <AvatarFallback>
-                  {/* 3개 이상 시 +(개수)로 아바타 표시 */}+
-                  {avatars.length - shownAvatars.length}
-                </AvatarFallback>
-              </Avatar>
-            </TooltipTrigger>
-            <TooltipContent>
-              {/* 툴팁에 숨겨진 모든 사용자 이름 목록 표시 */}
-              {hiddenAvatars.map(({ name }, index) => (
-                <p key={`${name}-${index}`}>{name}</p>
-              ))}
-            </TooltipContent>
-          </Tooltip>
-        ) : null}
+        <div className='flex h-[35px] w-[100px] items-center rounded-r-full bg-stroke pl-6'>
+          <Text align={'center'}>{avatars.length} / 8</Text>
+          <Dropdown selection>
+            <UsersInfoSheet user={user} />
+          </Dropdown>
+        </div>
       </div>
     </TooltipProvider>
   );

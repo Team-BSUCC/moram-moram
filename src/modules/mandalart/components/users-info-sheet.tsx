@@ -65,7 +65,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
 
   return (
     <>
-      <div>
+      <div className='p-6'>
         <div>
           <div>현재 접속중인 사람들</div>
           {currentUsers.map((user) => (
