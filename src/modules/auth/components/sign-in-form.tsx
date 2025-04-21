@@ -2,7 +2,6 @@
 
 import useSignInForm from '../hooks/use-sign-in-form';
 import Text from '@/components/commons/text';
-import Text from '@/components/commons/text';
 import Input from '@/components/commons/input';
 import Link from 'next/link';
 import GoogleLoginButton from './google-login-button';
@@ -13,15 +12,6 @@ import URLS from '@/shared/constants/url-constants';
 import Title from '@/components/commons/title';
 
 const SignInForm = () => {
-  const { register, handleSubmit, errors, isPending, setValue } =
-    useSignInForm();
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-
-  useEffect(() => {
-    setValue('password', password);
-  }, [password, setValue]);
-
   const { register, handleSubmit, errors, isPending, setValue } =
     useSignInForm();
   const [password, setPassword] = useState('');
