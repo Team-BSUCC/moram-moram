@@ -67,7 +67,7 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
       ) : (
         // 투두가 있을 때
         <div>
-          <div className='mb-5 flex gap-4'>
+          <div className='scrollbar-hide flex flex-nowrap gap-4 overflow-x-auto whitespace-nowrap'>
             {myMandalarts?.map((mandalart: MandalartType) => (
               <MandalartTitleTab
                 key={mandalart.core.id}
@@ -88,7 +88,7 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
                 ([topicId, todos], topicIdx) => (
                   <div
                     key={topicId}
-                    className={`w-full border-l-8 ${getBorderColorWithNumber(topicIdx)} bg-white-light p-6`}
+                    className={`w-full border-l-8 ${getBorderColorWithNumber(topicIdx)} rounded-br-md rounded-tr-md bg-white-light p-6 shadow-md`}
                   >
                     <Title as='h2' size='24px-semibold'>
                       {todos[0].topicTitle}
