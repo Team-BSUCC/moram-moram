@@ -9,6 +9,10 @@ import RoundButton from '@/components/commons/round-button';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { useThrottleMutate } from '../hooks/use-throttle-mutate';
+import Spacer from '@/components/commons/spacer';
+import Dropdown from '@/components/commons/drop-down';
+import Button from '@/components/commons/button';
+import Text from '@/components/commons/text';
 
 type TodoItemProps = {
   id: string;
@@ -45,83 +49,84 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
 
   return (
     /* eslint-disable indent */ //삼항연산자오류때문에 작성했습니다 해당 규칙에대해 논의 필요합니다.
-    <div className='flex items-center'>
-      <CheckBox
-        checked={done}
-        onChange={() => {
-          const newDone = done;
-          setDone(!newDone);
-          queryClient.setQueryData(
-            QUERY_KEY.todo(id),
-            (entry: TodoPayloadType) => {
-              queryClient.setQueryData(
-                QUERY_KEY.todolist(cellId.cell_id),
-                (todoList: TodoPayloadType[]) =>
-                  todoList.map((todo) =>
-                    todo.id === id
-                      ? {
-                          ...todo,
-                          is_done: !newDone,
-                          action: 'UPDATE',
-                          category: 'TODO',
-                        }
-                      : todo
-                  )
-              );
-              return { ...entry, is_done: !newDone };
-            }
-          );
-          throttledMutate();
-        }}
-      />
-      <Input
-        variant='outline'
-        value={valuePayload || value}
-        placeholder='TODO를 작성해주세요.'
-        onChange={(e) => {
-          const newValue = e.target.value;
-          setValue(newValue);
-          queryClient.setQueryData(
-            QUERY_KEY.todo(id),
-            (entry: TodoPayloadType) => {
-              queryClient.setQueryData(
-                QUERY_KEY.todolist(cellId.cell_id),
-                (todoList: TodoPayloadType[]) =>
-                  todoList.map((todo) =>
-                    todo.id === id
-                      ? {
-                          ...todo,
-                          action: 'UPDATE',
-                          category: 'TODO',
-                          value: newValue,
-                        }
-                      : todo
-                  )
-              );
-              return { ...entry, action: 'UPDATE', value: newValue };
-            }
-          );
-          throttledMutate();
-        }}
-      />
-      <RoundButton
-        size='xs'
-        onClick={() => {
-          queryClient.setQueryData(
-            QUERY_KEY.todolist(cellId.cell_id),
-            (todoList: TodoPayloadType[]) =>
-              todoList.map((todo) =>
-                todo.id === id
-                  ? { ...todo, action: 'DELETE', category: 'TODO' }
-                  : todo
-              )
-          );
-          deleteMutate();
-        }}
-      >
-        X
-      </RoundButton>
-    </div>
+    <>
+      <Spacer size='sm' />
+      <div className='flex items-center justify-between gap-3'>
+        <CheckBox
+          sizes='lg'
+          checked={done}
+          onChange={() => {
+            const newDone = done;
+            setDone(!newDone);
+            queryClient.setQueryData(
+              QUERY_KEY.todo(id),
+              (entry: TodoPayloadType) => {
+                queryClient.setQueryData(
+                  QUERY_KEY.todolist(cellId.cell_id),
+                  (todoList: TodoPayloadType[]) =>
+                    todoList.map((todo) =>
+                      todo.id === id
+                        ? {
+                            ...todo,
+                            is_done: !newDone,
+                            action: 'UPDATE',
+                            category: 'TODO',
+                          }
+                        : todo
+                    )
+                );
+                return { ...entry, is_done: !newDone };
+              }
+            );
+            throttledMutate();
+          }}
+        />
+        <Input
+          variant='outline'
+          sizes='20px-regular'
+          value={valuePayload || value}
+          placeholder='TODO를 작성해주세요.'
+          onChange={(e) => {
+            const newValue = e.target.value;
+            setValue(newValue);
+            queryClient.setQueryData(
+              QUERY_KEY.todo(id),
+              (entry: TodoPayloadType) => {
+                queryClient.setQueryData(
+                  QUERY_KEY.todolist(cellId.cell_id),
+                  (todoList: TodoPayloadType[]) =>
+                    todoList.map((todo) =>
+                      todo.id === id
+                        ? {
+                            ...todo,
+                            action: 'UPDATE',
+                            category: 'TODO',
+                            value: newValue,
+                          }
+                        : todo
+                    )
+                );
+                return { ...entry, action: 'UPDATE', value: newValue };
+              }
+            );
+            throttledMutate();
+          }}
+        />
+        <Dropdown>
+          <Button variant='none'>뭐들어가야하지</Button>
+          <Button variant='none' onClick={deleteMutate}>
+            삭제하기
+          </Button>
+        </Dropdown>
+      </div>
+      <Spacer size='sm' />
+      <div className='pl-12'>
+        <Text size='16px-regular' textColor='sub'>
+          2025.3.15 &gt;
+        </Text>
+      </div>
+      <Spacer size='sm' />
+    </>
   );
 };
 

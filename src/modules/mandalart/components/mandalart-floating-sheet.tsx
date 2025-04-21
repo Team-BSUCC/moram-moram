@@ -23,6 +23,8 @@ import {
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
 import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
+import Spacer from '@/components/commons/spacer';
+import { X } from 'lucide-react';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -61,64 +63,87 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
     headerColor = 'bg-violet-pigment';
   }
 
+  // <div className='handle cursor-grab px-5 active:cursor-grabbing'>
+  <div className='fixed right-4 top-4 w-fit'>
+    <button className='bg-transparent'>
+      <X />
+    </button>
+  </div>;
+
   return (
     <FloatingSheet>
-      <div className='h-[700px] w-[500px] space-y-4 overflow-y-auto p-4'>
-        <div className={headerColor}>
-          <div className='flex flex-col items-start gap-0'>
-            <Text>TO DO LIST</Text>
+      <div className='flex w-full flex-col space-y-4'>
+        <div
+          className={`handle cursor-grab px-5 active:cursor-grabbing ${headerColor}`}
+        >
+          <div className='fixed right-4 top-4 w-fit'>
+            <button className='bg-transparent'>
+              <X />
+            </button>
+          </div>
+          <div className='flex flex-col items-start p-8'>
+            <Text size='16px-medium' textColor='sub'>
+              TO DO LIST
+            </Text>
             <Input
+              sizes='28px-regular'
               type='text'
               value={value}
-              placeholder={value}
+              placeholder={value || '목표를 작성해 주세요'}
               onChange={(e) => {
                 setValue(e.target.value);
                 throttleMutate();
               }}
             />
+            <Text size='18px-medium' textColor='sub'>
+              2025년, 성장의 해로 만들기 &gt; {value}
+            </Text>
           </div>
         </div>
-        {/* 핵심주제일 경우 */}
-        {info.category === 'CORE' && (
-          <div>
-            {info.mandalart_topics?.map((topic) => (
-              <TopicGroup
-                key={topic.id}
-                topic={topic}
-                channelReceiver={channelReceiver}
-              />
-            ))}
-          </div>
-        )}
-        {/* 대주제일 경우 */}
-        {info.category === 'TOPIC' && (
-          <div>
-            {info.mandalart_subtopics?.map((sub) => (
-              <SubtopicGroup
-                key={sub.id}
-                sub={sub}
-                channelReceiver={channelReceiver}
-              />
-            ))}
-          </div>
-        )}
-        {/* 소주제일 경우 */}
-        {info.category === 'SUBTOPIC' && (
-          <div>
-            <Button variant='outline' onClick={() => createTodo()}>
-              투두 추가하기
-            </Button>
-            {todoListCacheArray.map((todo: TodoType) => (
-              <TodoItem
-                key={todo.id}
-                id={todo.id}
-                cellId={todo}
-                channelReceiver={channelReceiver}
-              />
-            ))}
-          </div>
-        )}
+        <div className='max-h-[550px] overflow-y-auto'>
+          {/* 핵심주제일 경우 */}
+          {info.category === 'CORE' && (
+            <div>
+              {info.mandalart_topics?.map((topic) => (
+                <TopicGroup
+                  key={topic.id}
+                  topic={topic}
+                  channelReceiver={channelReceiver}
+                />
+              ))}
+            </div>
+          )}
+          {/* 대주제일 경우 */}
+          {info.category === 'TOPIC' && (
+            <div>
+              {info.mandalart_subtopics?.map((sub) => (
+                <SubtopicGroup
+                  key={sub.id}
+                  sub={sub}
+                  channelReceiver={channelReceiver}
+                />
+              ))}
+            </div>
+          )}
+          {/* 소주제일 경우 */}
+          {info.category === 'SUBTOPIC' && (
+            <div>
+              <Button variant='outline' onClick={() => createTodo()}>
+                투두 추가하기
+              </Button>
+              {todoListCacheArray.map((todo: TodoType) => (
+                <TodoItem
+                  key={todo.id}
+                  id={todo.id}
+                  cellId={todo}
+                  channelReceiver={channelReceiver}
+                />
+              ))}
+            </div>
+          )}
+        </div>
       </div>
+      <Spacer size='lg' />
     </FloatingSheet>
   );
 };

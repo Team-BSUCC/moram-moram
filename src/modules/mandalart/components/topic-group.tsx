@@ -1,10 +1,10 @@
-import Text from '@/components/commons/text';
 import { TopicType } from '../types/realtime-type';
 import SubtopicGroup from './subtopic-group';
 import { useTopicCacheQuery } from '../hooks/use-mandalart-data-query';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import Title from '@/components/commons/title';
-import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
+import { rangeWithIndex } from '@/shared/utils/range-with-index';
+import Spacer from '@/components/commons/spacer';
 
 type TopicGroupProps = {
   topic: TopicType;
@@ -14,11 +14,16 @@ type TopicGroupProps = {
 const TopicGroup = ({ topic, channelReceiver }: TopicGroupProps) => {
   const { data: topicName } = useTopicCacheQuery(topic.id);
   return (
-    <div className='pl-2'>
-      <div className='flex gap-2'>
-        <div className={`${getColorWithNumber(topic.topic_index)} h-fll w-2`} />
-        <Title as='h3'>{topicName}</Title>
-      </div>
+    <div className='px-8'>
+      <Title
+        as='h3'
+        size='18px-medium'
+        textColor='sub'
+        highlightColor={rangeWithIndex(topic.topic_index)}
+      >
+        {topicName}
+      </Title>
+
       {topic.mandalart_subtopics?.map((sub) => (
         <SubtopicGroup
           key={sub.id}
@@ -26,6 +31,7 @@ const TopicGroup = ({ topic, channelReceiver }: TopicGroupProps) => {
           channelReceiver={channelReceiver}
         />
       ))}
+      <Spacer size='lg' />
     </div>
   );
 };
