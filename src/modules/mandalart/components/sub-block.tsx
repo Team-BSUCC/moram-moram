@@ -51,9 +51,7 @@ const SubBlock = ({ title, topic, subTopics }: SubBlockProps) => {
             info={cell}
             value={cell?.content || ''}
             className={
-              cell?.isCenter
-                ? `bg-gray-100 border-2 font-bold ${cellColor}`
-                : ''
+              cell?.isCenter && `border-[3px] border-black ${cellColor}`
             }
           />
         );

@@ -34,15 +34,18 @@ const MainBlock = ({ topics, info, className }: MainBlockProps) => {
   return (
     <div className={`grid grid-cols-3 grid-rows-3 gap-2 ${className}`}>
       {memoizedCells.map((cell, idx) => {
-        let cellColor =
+        //중앙 블럭의 대주제 스타일
+        let cellStyle =
           idx < 4 ? getColorWithNumber(idx) : getColorWithNumber(idx - 1);
-        if (idx === 4) cellColor = 'bg-violet-pigment';
+        //코어주제 스타일
+        if (idx === 4)
+          cellStyle = 'bg-violet-pigment border-black border-[3px]';
         return (
           <Cell
             key={idx}
             info={cell}
             value={cell?.topic || cell?.title || ''}
-            className={cellColor}
+            className={cellStyle}
           />
         );
       })}
