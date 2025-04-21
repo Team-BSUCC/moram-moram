@@ -6,14 +6,19 @@ import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
 type FloatingSheetProps = {
   children: ReactNode;
+  hideOnOutsideClick?: boolean;
 };
 
 /**
  * FloatingSheet 공통 컴포넌트 - 드래그 가능한 플로팅 패널을 제공합니다
  * @param children - 플로팅 시트 내부에 표시될 콘텐츠
+ * @parma hideOnOutsideClick - true로 지정시 바깥영역을 클릭하면 닫힘
  * @returns - 드래그 가능한 플로팅 패널 요소
  */
-const FloatingSheet = ({ children }: FloatingSheetProps) => {
+const FloatingSheet = ({
+  children,
+  hideOnOutsideClick,
+}: FloatingSheetProps) => {
   const position = useFloatingSheetStore((state) => state.position);
   const setPosition = useFloatingSheetStore((state) => state.setPosition);
   const hide = useFloatingSheetStore((state) => state.hide);
@@ -42,11 +47,10 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
     setPosition({ x: data.x, y: data.y });
   };
 
+  const outSideClick = !hideOnOutsideClick && 'pointer-events-none';
+
   return (
-    <div
-      className='pointer-events-none fixed inset-0 z-[10] m-3'
-      onClick={hide}
-    >
+    <div className={`${outSideClick} fixed inset-0 z-[10] m-3`} onClick={hide}>
       <Draggable
         handle='.handle' // 드래그 핸들 지정 (선택사항)
         position={position}

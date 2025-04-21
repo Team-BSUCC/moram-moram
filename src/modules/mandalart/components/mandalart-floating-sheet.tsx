@@ -69,7 +69,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
     'w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
 
   return (
-    <FloatingSheet>
+    <FloatingSheet hideOnOutsideClick={true}>
       <div className='flex h-full flex-col'>
         <div
           className={`handle cursor-grab px-5 active:cursor-grabbing ${headerColor} rounded-t-lg`}
