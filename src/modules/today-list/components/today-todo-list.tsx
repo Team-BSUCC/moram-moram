@@ -41,9 +41,10 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
   }, [myMandalarts, clickedTitle]);
 
   // 필터링된 todo만 추출(완료한 일, 남은 할 일, 전체 보기 기준)
-  const filteredTodos = flatTodos.filter((todo) =>
-    filterByCompletionStatus(todo, selectedOption)
-  );
+  // 토픽순으로 정렬
+  const filteredTodos = flatTodos
+    .filter((todo) => filterByCompletionStatus(todo, selectedOption))
+    .sort((a, b) => a.topicId.localeCompare(b.topicId));
 
   // 대주제 id를 기준으로 그룹핑
   const groupedByTopic = (() => {
