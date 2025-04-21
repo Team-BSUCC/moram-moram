@@ -5,12 +5,16 @@ import MandalartPasscodeGate from '@/modules/mandalart/components/mandalart-pass
 import { Tables } from '@/shared/types/database.types';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
 
-const MandalartPage = async () => {
+type MandalartPageType = {
+  params: { id: string };
+};
+
+const MandalartPage = async ({ params }: MandalartPageType) => {
   const user = await getUserInfo();
   const supabase = getServerClient();
 
   //TODO 동적으로 pathPram 가져오는 걸로 수정
-  const pathParamRoomId = 'e5a689a9-0f5f-4cdb-935e-9250ca71f60f';
+  const pathParamRoomId = params.id;
   const { data, error } = await supabase
     .from('rooms')
     .select('*')
