@@ -9,6 +9,7 @@ import KaKaoLoginButton from './kakao-login-button';
 import { useState, useEffect } from 'react';
 import { Eye, EyeOff } from 'lucide-react';
 import URLS from '@/shared/constants/url-constants';
+import Title from '@/components/commons/title';
 
 const SignInForm = () => {
   const { register, handleSubmit, errors, isPending, setValue } =
@@ -21,14 +22,16 @@ const SignInForm = () => {
   }, [password, setValue]);
 
   return (
-    <section className='flex min-h-screen w-full items-center justify-center bg-[#fff] px-4 py-10 sm:bg-white-dark'>
+    <section className='flex h-full w-full items-center justify-center bg-white-light sm:bg-white-dark'>
       <form
         onSubmit={handleSubmit}
-        className='w-full max-w-[345px] rounded-[8px] bg-[#fff] sm:max-w-[472px]'
+        className='w-full max-w-[345px] rounded-[8px] bg-white-light sm:max-w-[472px]'
       >
         {/* PC 전용 레이아웃 */}
-        <div className='hidden sm:flex sm:flex-col sm:items-center sm:gap-6 sm:rounded-[16px] sm:p-12'>
-          <Text size='24px-semibold'>로그인</Text>
+        <div className='hidden sm:flex sm:flex-col sm:gap-6 sm:rounded-[16px] sm:p-12'>
+          <Title as='h1' size='32px-semibold'>
+            로그인
+          </Title>
 
           <div className='w-full space-y-6'>
             <div className='space-y-2'>
@@ -47,7 +50,7 @@ const SignInForm = () => {
               <div className='relative'>
                 <Input
                   id='password'
-                  type={showPassword ? 'password' : 'text'}
+                  type={showPassword ? 'text' : 'password'}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder='비밀번호'
@@ -60,7 +63,7 @@ const SignInForm = () => {
                   onClick={() => setShowPassword((prev) => !prev)}
                   className='text-gray-500 absolute right-3 top-1/2 -translate-y-1/2'
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
                 </button>
               </div>
               {errors.password && <Text>{errors.password.message}</Text>}
@@ -72,7 +75,9 @@ const SignInForm = () => {
             disabled={isPending}
             className='mt-4 w-full rounded-lg bg-primary py-3 text-sm font-semibold text-black transition hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:cursor-not-allowed disabled:opacity-50'
           >
-            {isPending ? '로그인 중...' : '로그인'}
+            <Text size='18px-medium' align='center'>
+              {isPending ? '로그인 중...' : '로그인'}
+            </Text>
           </button>
 
           <div className='text-gray-500 flex w-full justify-center gap-4 pt-3 text-sm'>
@@ -99,8 +104,10 @@ const SignInForm = () => {
         </div>
 
         {/* 모바일 전용 레이아웃 */}
-        <div className='flex flex-col items-center gap-6 rounded-[12px] px-4 py-6 sm:hidden'>
-          <Text size='24px-semibold'>로그인</Text>
+        <div className='flex flex-col gap-6 rounded-[12px] px-4 py-6 sm:hidden'>
+          <Title as='h1' size='28px-semibold'>
+            로그인
+          </Title>
 
           <div className='w-full space-y-4'>
             <div className='space-y-1'>
@@ -138,7 +145,7 @@ const SignInForm = () => {
                   onClick={() => setShowPassword((prev) => !prev)}
                   className='text-gray-500 absolute right-3 top-1/2 -translate-y-1/2'
                 >
-                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                  {showPassword ? <Eye size={18} /> : <EyeOff size={18} />}
                 </button>
               </div>
               {errors.password && <Text>{errors.password.message}</Text>}
@@ -150,14 +157,14 @@ const SignInForm = () => {
             disabled={isPending}
             className='w-full rounded-lg bg-primary py-3 text-sm font-semibold text-black transition hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:cursor-not-allowed disabled:opacity-50'
           >
-            {isPending ? '로그인 중...' : '로그인'}
+            <Text size='16px-medium' align='center'>
+              {isPending ? '로그인 중...' : '로그인'}
+            </Text>
           </button>
 
           <div className='text-gray-500 flex w-full justify-center gap-4 pt-3 text-sm'>
             <Link href='/find-id'>아이디 찾기</Link>
-            <span>|</span>
             <Link href='/reset-password'>비밀번호 재설정</Link>
-            <span>|</span>
             <Link href='/sign-up'>회원가입</Link>
           </div>
 
@@ -166,8 +173,8 @@ const SignInForm = () => {
               간편 로그인
             </Text>
             <div className='mt-2 flex justify-center gap-4'>
-              <GoogleLoginButton />
               <KaKaoLoginButton />
+              <GoogleLoginButton />
             </div>
           </div>
 

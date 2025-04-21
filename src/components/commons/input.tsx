@@ -9,19 +9,7 @@ const inputVariants = cva(
       variant: {
         default: '',
         outline: 'border-gray-400',
-        auth: `
-        bg-white 
-        border 
-        border-gray-300 
-        rounded-lg 
-        px-4 
-        py-3 
-        placeholder-gray-400 
-        text-black 
-        focus:outline-none 
-        focus:ring-1 
-        focus:ring-primary
-      `,
+        auth: 'bg-white border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-primary ',
       },
       sizes: {
         '48px-semibold':
