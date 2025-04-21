@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 'use client';
 
 import { useState } from 'react';
@@ -33,9 +34,6 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
         return room.mandalart.doneCount === 64;
       })
     : null;
-
-  console.log('아직', yetMandalart);
-  console.log('다 함', doneMandalart);
 
   return (
     <>
