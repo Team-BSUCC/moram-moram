@@ -1,73 +1,165 @@
-/* eslint-disable indent */
+'use client';
+
 import URLS from '@/shared/constants/url-constants';
 import { User } from '@supabase/supabase-js';
 import Image from 'next/image';
 import Link from 'next/link';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
-import SignOutButton from '@/modules/auth/components/sign-out-button';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
+import { Menu, SquarePlus, X } from 'lucide-react';
+import Text from '../commons/text';
+import Button from '../commons/button';
+
+type MenuItem = {
+  to: string;
+  label: string;
+  variant:
+    | 'header'
+    | 'secondary'
+    | 'outline'
+    | 'default'
+    | 'none'
+    | null
+    | undefined;
+};
 
 type HeaderProps = {
   user: User | null;
 };
 
 const Header = ({ user }: HeaderProps) => {
-  const linkStyle =
-    'flex items-center justify-center gap-2.5 rounded-lg px-6 py-3 text-md';
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  // 메뉴가 열렸을 때 스크롤 방지
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, [isMenuOpen]);
 
   const userName = getCurrentUserName(user);
 
-  const menuItems = user
+  const menuItems: MenuItem[] = user
     ? [
-        { to: URLS.DASHBOARD, label: '내 만다라트', className: 'bg-[#F0E9E5]' },
-        { to: URLS.CALENDAR, label: '캘린더', className: 'bg-[#F0E9E5]' },
-        { to: URLS.TODAY_LIST, label: '투두리스트', className: 'bg-[#F0E9E5]' },
+        { to: URLS.DASHBOARD, label: '내 만다라트', variant: 'header' },
+        { to: URLS.CALENDAR, label: '캘린더', variant: 'header' },
+        { to: URLS.TODAY_LIST, label: '투두 모아보기', variant: 'header' },
       ]
     : [
-        { to: URLS.SIGN_IN, label: '로그인', className: 'bg-[#F0E9E5]' },
-        { to: URLS.SIGN_UP, label: '회원가입', className: 'bg-[#F0E9E5]' },
+        {
+          to: URLS.SIGN_IN,
+          label: '3초만에 시작하기',
+          variant: 'secondary',
+        },
         {
           to: URLS.GUEST,
           label: '비회원으로 체험하기',
-          className: 'border-2 border-[#F0E9E5]',
+          variant: 'outline',
         },
       ];
 
   return (
-    <div className='h-full w-full border-b bg-white-light'>
-      <div className='flex h-full items-center justify-between'>
-        <div className='p-8'>
-          <Image
-            src='images/manda-logo-text.svg'
-            alt='만다로고'
-            width='166'
-            height='48'
-          />
+    <div className='w-full border-none bg-white-light lg:border-b'>
+      <div className='flex items-center justify-between'>
+        <div className='px-6 py-4 lg:p-8'>
+          <Link href={URLS.HOME}>
+            <Image
+              src='images/manda-logo-text.svg'
+              alt='만다로고'
+              width='166'
+              height='48'
+              className='hidden lg:block'
+            />
+            <Image
+              src='images/manda-logo.svg'
+              alt='만다로고'
+              width='28'
+              height='28'
+              className='block lg:hidden'
+            />
+          </Link>
         </div>
-        <div className='flex gap-4 pr-8'>
+
+        {/* 데스크탑 메뉴 */}
+        <div className='hidden gap-4 pr-8 lg:flex'>
           {menuItems.map((item, index) => (
-            <Link
-              key={index}
-              href={item.to}
-              className={`${linkStyle} ${item.className}`}
-            >
-              {item.label}
+            <Link key={index} href={item.to}>
+              <Button variant={item.variant} size='header'>
+                {!user && <SquarePlus className='mr-1' />}
+                {item.label}
+              </Button>
             </Link>
           ))}
 
           {user && (
-            <>
-              <SignOutButton />
-              <div className='flex gap-2 pl-2'>
-                <Avatar className='border border-black hover:z-10'>
-                  <AvatarImage src={'유저이미지 추가해야함'} />
-                  <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
-                </Avatar>
-                <p className='text-xl'>{userName}</p>
+            <div className='flex items-center gap-2 pl-2'>
+              <Avatar className='border border-black hover:z-10'>
+                <AvatarImage src={'유저이미지 추가해야함'} />
+                <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
+              </Avatar>
+              <div className='pr-[10px]'>
+                <Text size='20px-medium'>{userName}</Text>
               </div>
-            </>
+            </div>
           )}
+        </div>
+
+        {/* 햄버거 메뉴 아이콘  */}
+        <button onClick={toggleMenu} className='pr-8 lg:hidden'>
+          <Menu size={24} />
+        </button>
+      </div>
+
+      {/* 사이드 메뉴 오버레이 */}
+      {isMenuOpen && (
+        <div className='fixed inset-0 z-10 bg-black' onClick={toggleMenu}></div>
+      )}
+
+      {/* 사이드 메뉴 패널 */}
+      <div
+        className={`fixed right-0 top-0 z-50 h-full w-3/5 transform bg-white-light transition-transform duration-300 ease-in-out ${
+          isMenuOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className='flex justify-end p-6'>
+          <button onClick={toggleMenu}>
+            <X size={24} />
+          </button>
+        </div>
+
+        <div className='flex flex-col items-start'>
+          {user && (
+            <div className='mb-4 flex w-full items-center gap-2 px-4'>
+              <Avatar className='border border-black hover:z-10'>
+                <AvatarImage src={'유저이미지 추가해야함'} />
+                <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
+              </Avatar>
+              <Text size='20px-medium'>{userName}</Text>
+            </div>
+          )}
+          {menuItems.map((item, index) => (
+            <Link
+              key={index}
+              href={item.to}
+              onClick={toggleMenu}
+              className='w-full'
+            >
+              <Button variant='none' size='none'>
+                <Text size='18px-semibold'>{item.label}</Text>
+              </Button>
+            </Link>
+          ))}
         </div>
       </div>
     </div>
