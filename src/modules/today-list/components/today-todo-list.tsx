@@ -56,65 +56,75 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
   })();
 
   return (
-    <>
-      {/* 만다라트 제목 탭 */}
-      <div className='mb-5 flex gap-4'>
-        {myMandalarts?.map((mandalart: MandalartType) => (
-          <MandalartTitleTab
-            key={mandalart.core.id}
-            title={mandalart.core.title}
-            value={clickedTitle}
-            handleClick={setClickedTitle}
-          />
-        ))}
-      </div>
-
-      {/* 셀렉트 박스 */}
-      <OrderOptionSelection
-        selectedOption={selectedOption}
-        setSelectedOption={setSelectedOption}
-      />
-
-      {/* 투두 출력 */}
-      <div className='w-full'>
-        <div className='mt-2 flex w-full flex-col gap-11'>
-          {Object.entries(groupedByTopic).map(([topicId, todos], topicIdx) => (
-            <div
-              key={topicId}
-              className={`w-full border-l-8 ${getBorderColorWithNumber(topicIdx)} bg-white-light p-6`}
-            >
-              <Title as='h2' size='24px-semibold'>
-                {todos[0].topicTitle}
-              </Title>
-              <Spacer size={'md'} />
-              <div className='space-y-6'>
-                {/* 소주제별로 그룹핑 */}
-                {Object.entries(groupBy(todos, 'subtopicId')).map(
-                  ([subtopicId, subTodos]) => (
-                    <div key={subtopicId}>
-                      <Title
-                        as='h3'
-                        size='18px-semibold'
-                        textColor='sub'
-                        highlightColor={8}
-                      >
-                        {subTodos[0].subtopicContent}
-                      </Title>
-                      <Spacer size='sm' />
-                      <div className='flex flex-col gap-5'>
-                        {subTodos.map((todo) => (
-                          <TodoItem todo={todo} key={todo.todoId} />
-                        ))}
-                      </div>
-                    </div>
-                  )
-                )}
-              </div>
-            </div>
-          ))}
+    <div className='h-full w-full'>
+      {/* 투두가 없을 때 */}
+      {!myMandalarts || myMandalarts.length === 0 ? (
+        <div className='flex h-full w-full items-center justify-center py-40'>
+          <Title as='h2' size='20px-medium' textColor='caption'>
+            아직 생성된 투두 리스트가 없어요.
+          </Title>
         </div>
-      </div>
-    </>
+      ) : (
+        // 투두가 있을 때
+        <div>
+          <div className='mb-5 flex gap-4'>
+            {myMandalarts?.map((mandalart: MandalartType) => (
+              <MandalartTitleTab
+                key={mandalart.core.id}
+                title={mandalart.core.title}
+                value={clickedTitle}
+                handleClick={setClickedTitle}
+              />
+            ))}
+          </div>
+          <OrderOptionSelection
+            selectedOption={selectedOption}
+            setSelectedOption={setSelectedOption}
+          />
+
+          <div className='w-full'>
+            <div className='mt-2 flex w-full flex-col gap-11'>
+              {Object.entries(groupedByTopic).map(
+                ([topicId, todos], topicIdx) => (
+                  <div
+                    key={topicId}
+                    className={`w-full border-l-8 ${getBorderColorWithNumber(topicIdx)} bg-white-light p-6`}
+                  >
+                    <Title as='h2' size='24px-semibold'>
+                      {todos[0].topicTitle}
+                    </Title>
+                    <Spacer size={'md'} />
+                    <div className='space-y-6'>
+                      {/* 소주제별로 그룹핑 */}
+                      {Object.entries(groupBy(todos, 'subtopicId')).map(
+                        ([subtopicId, subTodos]) => (
+                          <div key={subtopicId}>
+                            <Title
+                              as='h3'
+                              size='18px-semibold'
+                              textColor='sub'
+                              highlightColor={8}
+                            >
+                              {subTodos[0].subtopicContent}
+                            </Title>
+                            <Spacer size='sm' />
+                            <div className='flex flex-col gap-5'>
+                              {subTodos.map((todo) => (
+                                <TodoItem todo={todo} key={todo.todoId} />
+                              ))}
+                            </div>
+                          </div>
+                        )
+                      )}
+                    </div>
+                  </div>
+                )
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
