@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import '../../../styles/calendar-custom.css';
@@ -25,6 +25,38 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const show = useFloatingSheetStore((state) => state.show);
   const setInfo = useFloatingSheetStore((state) => state.setInfo);
+
+  const [headerToolbar, setHeaderToolbar] = useState({
+    start: 'today prev,next',
+    center: 'title',
+    end: '',
+  });
+
+  useEffect(() => {
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  const handleResize = () => {
+    if (window.innerWidth < 768) {
+      // 모바일 레이아웃
+      setHeaderToolbar({
+        start: 'today',
+        center: 'prev title next',
+        end: '',
+      });
+    } else {
+      // 데스크탑 레이아웃
+      setHeaderToolbar({
+        start: 'today prev,next',
+        center: 'title',
+        end: '',
+      });
+    }
+  };
 
   // 전체 평탄화된 투두 리스트 생성
   const flatTodos = useMemo(
@@ -58,7 +90,7 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView='dayGridMonth'
         events={events}
-        headerToolbar={{ start: 'today prev,next', center: 'title', end: '' }}
+        headerToolbar={headerToolbar}
         dayMaxEvents={3}
         fixedWeekCount={false}
         height='auto'
