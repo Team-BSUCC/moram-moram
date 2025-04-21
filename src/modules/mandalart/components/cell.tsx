@@ -1,4 +1,3 @@
-import Button from '@/components/commons/button';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import RegisterTodo from './register-todo';
 import { CellInfoType, TodoPayloadType } from '../types/realtime-type';
@@ -9,6 +8,7 @@ import {
   useCellCacheQuery,
   useTodoListCacheQuery,
 } from '../hooks/use-mandalart-data-query';
+import Text from '@/components/commons/text';
 
 type CellProps = {
   value: string;
@@ -46,18 +46,32 @@ const Cell = ({ value, className, info }: CellProps) => {
     show();
   };
 
+  //대주제일때 글씨 색 black
+  const textColor = 'title' in info ? 'black' : 'sub';
+
   return (
     <>
-      <Button onClick={handleClick} variant='outline'>
-        {/* 셀의 스타일 지정 */}
-        <div
-          className={`relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border p-2 ${className}`}
-          style={{ borderRadius: '8px' }}
-        >
-          {data}
-        </div>
-      </Button>
-
+      {/* 셀의 스타일 지정 */}
+      <div
+        onClick={handleClick}
+        className={`relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-2 p-2 hover:cursor-pointer ${className}`}
+      >
+        {/* 소주제인지 아닌지 판단 */}
+        {'topic_id' in info ? (
+          <Text align='center' size='16px-regular' textColor={textColor}>
+            {data}
+          </Text>
+        ) : (
+          <Text
+            align='center'
+            weight='bold'
+            size='16px-semibold'
+            textColor={textColor}
+          >
+            {data}
+          </Text>
+        )}
+      </div>
       {/* Todo key 등록을 위한 등록 컴포넌트 */}
       {'cell_todos' in info &&
         todoListCacheArray.map((todo, idx) => {

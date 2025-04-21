@@ -1,11 +1,12 @@
 'use client';
 
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { X } from 'lucide-react';
-import { ReactNode, useRef } from 'react';
+import { ReactNode, useRef, useLayoutEffect } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 
-type FloatingSheetProps = { children: ReactNode };
+type FloatingSheetProps = {
+  children: ReactNode;
+};
 
 /**
  * FloatingSheet 공통 컴포넌트 - 드래그 가능한 플로팅 패널을 제공합니다
@@ -17,19 +18,35 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
   const setPosition = useFloatingSheetStore((state) => state.setPosition);
   const hide = useFloatingSheetStore((state) => state.hide);
 
-  const nodeRef = useRef(null);
+  const nodeRef = useRef<HTMLDivElement>(null);
+
+  useLayoutEffect(() => {
+    // x, y가 0이면 (초기값) 중앙 좌표로 재설정
+    if (position.x === 0 && position.y === 0 && nodeRef.current) {
+      const w = nodeRef.current.offsetWidth;
+      const h = nodeRef.current.offsetHeight;
+      setPosition({
+        x: (window.innerWidth - w) / 2,
+        y: (window.innerHeight - h) / 2,
+      });
+    }
+  }, [position]);
 
   // 드래그가 끝났을 때 위치 업데이트
   const handleDragStop = (e: DraggableEvent, data: DraggableData) => {
     setPosition({ x: data.x, y: data.y });
   };
+
   //드래그중 일때 위치 업데이트
   const handleDrag = (e: DraggableEvent, data: DraggableData) => {
     setPosition({ x: data.x, y: data.y });
   };
 
   return (
-    <div className='fixed z-[99999] m-3 h-dvh w-dvw' onClick={hide}>
+    <div
+      className='pointer-events-none fixed inset-0 z-[10] m-3'
+      onClick={hide}
+    >
       <Draggable
         handle='.handle' // 드래그 핸들 지정 (선택사항)
         position={position}
@@ -45,18 +62,13 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
           onClick={(e) => {
             e.stopPropagation();
           }}
-          className='fixed z-50 rounded-[8px] bg-[#fff] shadow-lg'
+          className='pointer-events-auto fixed z-50 rounded-md bg-white-light shadow-lg'
         >
-          {/* 드래그 핸들 */}
-          <div className='handle flex h-[50px] justify-end'>
-            <button onClick={hide} className='mr-5 mt-2 bg-transparent'>
-              <X />
-            </button>
-          </div>
-
           {/* 시트 안에 들어갈 내용 드래그 중 텍스트 선택 방지 */}
           <div className='select-none'>
-            <div>{children}</div>
+            <div className='mx-auto h-[50vh] w-[60vw] md:h-[60vh] md:w-[50vw] lg:h-[800px] lg:w-[500px]'>
+              {children}
+            </div>
           </div>
         </div>
       </Draggable>

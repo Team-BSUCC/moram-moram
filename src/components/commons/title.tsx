@@ -55,6 +55,7 @@ export const titleVariants = cva('flex gap-2 transition-all', {
       5: 'bg-blue-pastel',
       6: 'bg-sky-pastel',
       7: 'bg-green-pastel',
+      8: 'bg-sub',
     },
     textColor: {
       black: 'text-black',
