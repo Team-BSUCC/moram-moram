@@ -22,11 +22,13 @@ const signInSchema = z.object({
 const useSignInForm = () => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    setValue,
   } = useForm<SignInDTO>({
     resolver: zodResolver(signInSchema),
     defaultValues: signInDefaultValue,
@@ -59,6 +61,7 @@ const useSignInForm = () => {
     handleSubmit: handleSubmit(onSubmit),
     errors,
     isPending,
+    setValue,
   };
 };
 
