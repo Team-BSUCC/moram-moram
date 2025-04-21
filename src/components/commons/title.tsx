@@ -25,6 +25,8 @@ export const titleVariants = cva('flex gap-2 transition-all', {
         'text-[20px] leading-[30px] font-normal sm:text-[24px] sm:leading-[36px] md:text-[28px] md:leading-[42px]',
       '24px-semibold':
         'text-[20px] leading-[28px] font-semibold sm:text-[22px] sm:leading-[30px] md:text-[24px] md:leading-[32.4px]',
+      '24px-regular':
+        'text-[18px] leading-[27px] font-normal sm:text-[20px] sm:leading-[30px] md:text-[24px] md:leading-[36px]',
       '20px-bold':
         'text-[16px] leading-[24px] font-bold sm:text-[18px] sm:leading-[27px] md:text-[20px] md:leading-[30px]',
       '20px-medium':
