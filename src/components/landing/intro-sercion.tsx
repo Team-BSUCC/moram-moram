@@ -7,7 +7,7 @@ const IntroSection = () => {
   return (
     <section className="flex min-h-screen w-full flex-col items-center justify-center bg-[url('/images/intro/background.png')] bg-cover bg-center bg-no-repeat px-4 py-20 sm:px-16 sm:py-40">
       <div className='flex w-full max-w-screen-xl flex-col items-center'>
-        {/* ✅ 데스크탑/태블릿 전용 텍스트 */}
+        {/* 데스크탑/태블릿 전용 텍스트 */}
         <div className='hidden w-full flex-col items-center sm:flex'>
           <Title as='h2' size='40px-semibold'>
             막연한 목표, 어디서부터 시작해야 할지 막막하셨나요?
@@ -42,7 +42,7 @@ const IntroSection = () => {
           <Spacer size='3xl' />
         </div>
 
-        {/* ✅ 모바일 전용 텍스트 */}
+        {/* 모바일 전용 텍스트 */}
         <div className='block w-full flex-col items-center justify-center text-center sm:hidden'>
           <Title as='h2' size='24px-semibold'>
             막연한 목표, 어디서부터 시작해야 할지 막막하셨나요?
@@ -64,7 +64,7 @@ const IntroSection = () => {
           <Spacer size='md' />
         </div>
 
-        {/* ✅ 데스크탑/태블릿 전용 이미지 구성 */}
+        {/* 데스크탑/태블릿 전용 이미지 구성 */}
         <div className='hidden w-full items-center justify-center gap-8 sm:flex'>
           {/* 🔹 만다라트 이미지 + 설명 */}
           <div className='flex min-w-0 flex-1 flex-col items-center gap-2'>
@@ -103,7 +103,7 @@ const IntroSection = () => {
           </div>
         </div>
 
-        {/* ✅ 모바일 전용 이미지 + 배경 */}
+        {/* 모바일 전용 이미지 + 배경 */}
         <div className='relative block w-full px-4 py-20 text-left sm:hidden'>
           {/* 배경 이미지 - 오른쪽에 정렬 */}
           <div

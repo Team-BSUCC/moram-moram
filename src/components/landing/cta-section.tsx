@@ -9,7 +9,7 @@ const CTASection = () => {
   return (
     <section className='flex max-h-[1080px] min-h-screen w-full items-center justify-center bg-gradient-to-b from-white to-[#E9E4F0] px-4 py-20 sm:px-16 sm:py-40'>
       <div className='w-full max-w-screen-xl'>
-        {/* ✅ 데스크탑/태블릿 전용 */}
+        {/* 데스크탑/태블릿 전용 */}
         <div className='hidden flex-col items-center text-center sm:flex'>
           <Text size='32px-medium' align='center'>
             생각은 추상적일 수 있어도, 실천은 구체적이어야 하니까.
@@ -28,7 +28,7 @@ const CTASection = () => {
           </Link>
         </div>
 
-        {/* ✅ 모바일 전용 */}
+        {/* 모바일 전용 */}
         <div className='flex flex-col items-center text-center sm:hidden'>
           <Text size='16px-regular' align='center'>
             생각은 추상적일 수 있어도, <br />

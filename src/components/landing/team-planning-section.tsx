@@ -7,7 +7,7 @@ const TeamPlanningSection = () => {
   return (
     <section className='w-full px-4 py-20 sm:px-16 sm:py-40'>
       <div className='mx-auto w-full max-w-screen-xl'>
-        {/* ✅ 데스크탑/태블릿 전용 */}
+        {/* 데스크탑/태블릿 전용 */}
         <div className='hidden flex-col items-center sm:flex'>
           <Title as='h2' size='32px-semibold'>
             실시간 협업
@@ -26,7 +26,7 @@ const TeamPlanningSection = () => {
           </div>
         </div>
 
-        {/* ✅ 모바일 전용 */}
+        {/* 모바일 전용 */}
         <div className='flex flex-col items-center text-center sm:hidden'>
           <Title as='h2' size='18px-semibold'>
             실시간 협업

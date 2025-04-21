@@ -15,7 +15,7 @@ const HeroSection = () => {
 
       {/* 🔹 텍스트 콘텐츠 컨테이너 */}
       <div className='relative mx-auto min-h-screen w-full max-w-screen-xl px-6 pb-20 pt-20 sm:px-24 sm:pb-40 sm:pt-32'>
-        {/* ✅ PC/태블릿용 (640px 이상) */}
+        {/* PC/태블릿용 (640px 이상) */}
         <div className='hidden sm:block'>
           <div className='mx-auto max-w-5xl'>
             <div className='flex flex-col text-left'>
@@ -37,7 +37,7 @@ const HeroSection = () => {
           </div>
         </div>
 
-        {/* ✅ 모바일용 */}
+        {/* 모바일용 */}
         <div className='block sm:hidden'>
           <div className='mx-auto w-full max-w-md'>
             <div className='flex flex-col items-center space-y-5 text-center'>

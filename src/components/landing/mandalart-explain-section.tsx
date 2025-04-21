@@ -21,7 +21,7 @@ const getColorWithNumber = (index: number): string => {
 const MandalartExplainSection = () => {
   return (
     <div className='mx-auto w-full max-w-screen-xl px-4 py-20 sm:flex sm:items-start sm:justify-center sm:gap-24 sm:px-16 sm:py-40'>
-      {/* ✅ 데스크탑 전용 - 그리드 + 텍스트 */}
+      {/* 데스크탑 전용 - 그리드 + 텍스트 */}
       <div className='hidden w-full sm:flex sm:items-center sm:justify-center sm:gap-16'>
         {/* 🔹 3x3 만다라트 */}
         <div className='relative grid aspect-square w-full max-w-[625px] grid-cols-3 grid-rows-3 gap-2'>
@@ -82,7 +82,7 @@ const MandalartExplainSection = () => {
         </div>
       </div>
 
-      {/* ✅ 모바일 전용 */}
+      {/* 모바일 전용 */}
       <div className='block flex flex-col items-center justify-center sm:hidden'>
         {/* 🔹 텍스트 */}
         <div className='flex flex-col items-center text-center'>
@@ -113,7 +113,7 @@ const MandalartExplainSection = () => {
                     성장의 해로 <br /> 만들기
                   </Text>
 
-                  {/* ✅ 모바일용 말풍선 */}
+                  {/* 모바일용 말풍선 */}
                   <div className='absolute -right-28 -top-20 flex min-w-[240px] max-w-full items-center justify-center gap-2 rounded-[8px] bg-white px-4 py-2 shadow-lg'>
                     <Image
                       src='/images/mandalart/ai-icon.png'
