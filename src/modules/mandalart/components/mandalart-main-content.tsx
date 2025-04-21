@@ -54,7 +54,6 @@ const MandalartMainContent = ({
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const currentUsers = useUsersStore((state) => state.currentUsers);
 
-  //TODO: 동적 값으로 수정 예정
   const { data, isPending, isError } = useMandalartDataQuery(mandalartId);
 
   useEffect(() => {
@@ -120,7 +119,6 @@ const MandalartMainContent = ({
     })
     .subscribe();
 
-  // useRealtimeUserSync(broadcastChannel);
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>error</div>;
 

@@ -9,6 +9,7 @@ export type FlatTodo = {
   todoTitle: string;
   scheduledDate: string;
   isDone: boolean;
+  color: number;
 };
 
 /**
