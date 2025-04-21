@@ -66,7 +66,7 @@ const FloatingSheet = ({ children }: FloatingSheetProps) => {
         >
           {/* 시트 안에 들어갈 내용 드래그 중 텍스트 선택 방지 */}
           <div className='select-none'>
-            <div className='mx-auto h-[50vh] w-[60vw] md:h-[60vh] md:w-[50vw] lg:h-[800px] lg:w-[500px]'>
+            <div className='mx-auto h-[50vh] w-[60vw] rounded-lg md:h-[60vh] md:w-[50vw] lg:h-[800px] lg:w-[500px]'>
               {children}
             </div>
           </div>

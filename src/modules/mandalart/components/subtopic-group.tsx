@@ -24,20 +24,21 @@ const SubtopicGroup = ({ sub, channelReceiver }: SubtopicGroupProps) => {
   const todoListCacheArray = (todoList ?? []) as TodoPayloadType[];
   return (
     <>
-      <div className='pl-4'>
+      <div className='pl-6'>
         <Spacer size='xs' />
         <Title as='h3' size='18px-medium' highlightColor={8} textColor='sub'>
           {subtopicName}
         </Title>
+
+        {todoListCacheArray.map((todo: TodoType) => (
+          <TodoItem
+            key={todo.id}
+            id={todo.id}
+            cellId={todo}
+            channelReceiver={channelReceiver}
+          />
+        ))}
       </div>
-      {todoListCacheArray.map((todo: TodoType) => (
-        <TodoItem
-          key={todo.id}
-          id={todo.id}
-          cellId={todo}
-          channelReceiver={channelReceiver}
-        />
-      ))}
     </>
   );
 };

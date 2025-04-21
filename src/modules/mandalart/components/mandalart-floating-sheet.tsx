@@ -70,14 +70,9 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
 
   return (
     <FloatingSheet>
-      <div
-        className='flex w-full flex-col space-y-4'
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-      >
+      <div className='flex h-full flex-col'>
         <div
-          className={`handle cursor-grab px-5 active:cursor-grabbing ${headerColor}`}
+          className={`handle cursor-grab px-5 active:cursor-grabbing ${headerColor} rounded-t-lg`}
         >
           <div className='fixed right-4 top-4 w-fit'>
             <button className='bg-transparent' onClick={hide}>
@@ -88,7 +83,6 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
             <Text size='16px-medium' textColor='sub'>
               TO DO LIST
             </Text>
-
             {info.category === 'CORE' ? (
               <>
                 <Title as='h2' size='28px-semibold'>
@@ -123,7 +117,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
             )}
           </div>
         </div>
-        <div className='h-[550px] overflow-y-auto'>
+        <div className='flex-grow overflow-y-auto py-6'>
           {/* 핵심주제일 경우 */}
           {info.category === 'CORE' && (
             <div>
@@ -169,8 +163,8 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
             </div>
           )}
         </div>
+        <Spacer size='4xl' />
       </div>
-      <Spacer size='sm' />
     </FloatingSheet>
   );
 };

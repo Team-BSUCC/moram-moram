@@ -5,7 +5,6 @@ import { TodoPayloadType, TodoType } from '../types/realtime-type';
 import { useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import Input from '@/components/commons/input';
-import RoundButton from '@/components/commons/round-button';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { useThrottleMutate } from '../hooks/use-throttle-mutate';
@@ -113,7 +112,7 @@ const TodoItem = ({ id, cellId, channelReceiver }: TodoItemProps) => {
           }}
         />
         <Dropdown>
-          <Button variant='none'>뭐들어가야하지</Button>
+          <Button variant='none'>날짜수정</Button>
           <Button
             variant='none'
             onClick={() => {
