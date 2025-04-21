@@ -61,7 +61,7 @@ const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
           <Spacer size='xl' />
         </div>
 
-        <div className='h-[350px] overflow-y-auto py-6'>
+        <div className='overflow-y-auto py-6'>
           {/* 선택된 날짜에 해당하는 todo가 있을 경우 */}
           {filteredTodos.length > 0 ? (
             <div className='flex flex-col gap-6 px-5'>

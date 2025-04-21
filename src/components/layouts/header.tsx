@@ -74,7 +74,7 @@ const Header = ({ user }: HeaderProps) => {
     <div className='w-full border-none bg-white-light lg:border-b'>
       <div className='flex items-center justify-between'>
         <div className='px-6 py-4 lg:p-8'>
-          <Link href={URLS.HOME}>
+          <Link href={user ? URLS.DASHBOARD : URLS.HOME}>
             <Image
               src='images/manda-logo-text.svg'
               alt='만다로고'
@@ -96,7 +96,7 @@ const Header = ({ user }: HeaderProps) => {
         <div className='hidden gap-4 pr-8 lg:flex'>
           {menuItems.map((item, index) => (
             <Link key={index} href={item.to}>
-              <Button variant={item.variant} size='header'>
+              <Button variant={item.variant} size={user ? 'header' : 'none'}>
                 {!user && <SquarePlus className='mr-1' />}
                 {item.label}
               </Button>
