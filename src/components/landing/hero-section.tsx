@@ -9,11 +9,11 @@ import URLS from '@/shared/constants/url-constants';
 const HeroSection = () => {
   return (
     <div className="relative min-h-screen w-full bg-[url('/images/hero/landing-img-hero.png')] bg-cover bg-center bg-no-repeat">
-      {/* 🔹 반투명 그라디언트 배경 */}
+      {/* 반투명 그라디언트 배경 */}
       <div className='pointer-events-none absolute left-0 top-0 h-full w-1/2 bg-[linear-gradient(to_right,_white_0%,_white_200px,_rgba(255,255,255,0)_100%)] max-sm:hidden' />
       <div className='pointer-events-none absolute left-0 top-0 h-[75%] w-full bg-[linear-gradient(to_bottom,_white_0%,_white_200px,_rgba(255,255,255,0)_100%)] sm:hidden' />
 
-      {/* 🔹 텍스트 콘텐츠 컨테이너 */}
+      {/* 텍스트 콘텐츠 컨테이너 */}
       <div className='relative mx-auto min-h-screen w-full max-w-screen-xl px-6 pb-20 pt-20 sm:px-24 sm:pb-40 sm:pt-32'>
         {/* PC/태블릿용 (640px 이상) */}
         <div className='hidden sm:block'>
