@@ -39,6 +39,8 @@ const textVariants = cva('transition-all', {
         'text-[13px] leading-[17px] font-medium sm:text-[14px] sm:leading-[18px] md:text-[16px] md:leading-[20px]',
       '16px-regular':
         'text-[13px] leading-[17px] font-normal sm:text-[14px] sm:leading-[18px] md:text-[16px] md:leading-[20px]',
+      '14px-regular':
+        'text-[12px] leading-[16px] font-normal sm:text-[13px] sm:leading-[16px] md:text-[13px] md:leading-[18px]',
     },
     textColor: {
       black: 'text-black',
