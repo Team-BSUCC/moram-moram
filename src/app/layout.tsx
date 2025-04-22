@@ -33,7 +33,7 @@ export default async function RootLayout({
         className={`${pretendard.variable} flex h-full w-full flex-col antialiased`}
       >
         <SessionInit />
-        <header className='fixed left-0 right-0 top-0 z-50 h-[100px]'>
+        <header className='fixed left-0 right-0 top-0 z-50 h-[100px] w-screen'>
           <Header user={user} />
         </header>
 
