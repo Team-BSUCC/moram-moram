@@ -7,7 +7,6 @@ import SubBlock from '@/modules/mandalart/components/sub-block';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import { useBatchUpdateTrigger } from '@/modules/mandalart/hooks/use-batch-update-trigger';
 import { useRpcMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
-import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useBroadcastStore } from '@/modules/mandalart/hooks/use-broadcast-store';
 import Spacer from '@/components/commons/spacer';
@@ -22,7 +21,9 @@ import { AvatarStack } from './mandalart-avatar-stack';
 import { useUsersStore } from '../hooks/use-users-store';
 import { getCurrentUserId } from '@/shared/utils/get-current-user-id';
 import Button from '@/components/commons/button';
-import { useClientStateStore } from '../hooks/use-client-state.store';
+import { useClientStateStore } from '../hooks/use-client-state-store';
+import { formatDate } from '@/modules/dashboard/util/format-date';
+import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -45,8 +46,8 @@ const MandalartMainContent = ({
 
   const initialize = useClientStateStore((state) => state.initialize);
 
-  const isVisible = useFloatingSheetStore((state) => state.isVisible);
-  // const currentUsers = useUsersStore((state) => state.currentUsers);
+  const isVisible = useTodoFloatingSheetStore((state) => state.isVisible);
+  const currentUsers = useUsersStore((state) => state.currentUsers);
 
   const { data, isPending, isError } = useRpcMandalartDataQuery(mandalartId);
 
@@ -72,8 +73,6 @@ const MandalartMainContent = ({
 
   initialize(data);
 
-  console.log(data);
-
   return (
     <div className='flex flex-col items-center'>
       <Spacer size='top' />
@@ -87,19 +86,19 @@ const MandalartMainContent = ({
         <div className='flex flex-col'>
           <div className='flex justify-between'>
             <Title as='h1' size='32px-medium' textColor='black'>
-              2025년 성장의 해로 만들기
+              {data.core.title}
             </Title>
-            {/* <AvatarStack avatars={currentUsers} user={user} /> */}
+            <AvatarStack avatars={currentUsers} user={user} />
           </div>
           <Spacer size='md' />
           <div className='flex'>
             <CalendarDays />
-            <Text>365일 남음</Text>
+            <Text>{`${formatDate(data.core.startDate)} ~ ${formatDate(data.core.endDate)}`}</Text>
           </div>
           <Spacer size='sm' />
           <div className='flex'>
             <BicepsFlexed />
-            <Text>이번년도 반드시 이루고 말거야 !</Text>
+            <Text>{data.core.subTitle}</Text>
           </div>
         </div>
       </div>
@@ -111,15 +110,12 @@ const MandalartMainContent = ({
         <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
           {/* 중앙 블록 */}
           <MainBlock />
+
           {/* 나머지 블록 */}
-          {data.topics.map((item) => {
-            <SubBlock
-              key={item.id}
-              title={item.topic}
-              topic={item}
-              subTopics={item.mandalart_subtopics}
-            />;
+          {data.topics.map((item, idx) => {
+            return <SubBlock key={item.id} topic={item} index={idx} />;
           })}
+
           {/* 플로팅 시트 */}
           {isVisible && (
             <MandalartFloatingSheet channelReceiver={broadcastChannel} />

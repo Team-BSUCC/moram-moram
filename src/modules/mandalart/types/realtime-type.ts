@@ -120,8 +120,8 @@ export type MandalartCore = {
   subTitle: string | null;
   private: boolean;
   doneCount: number;
-  startDate: string | null;
-  endDate: string | null;
+  startDate: Date;
+  endDate: Date;
   color: number;
   createdAt: string;
 };
@@ -158,3 +158,10 @@ export type MandalartAllJson = {
   subtopics: MandalartSubtopic[];
   todos: CellTodo[];
 };
+
+export type MandalartFloatingSheetInfo =
+  | MandalartCore
+  | MandalartTopic
+  | MandalartSubtopic
+  | undefined
+  | null;

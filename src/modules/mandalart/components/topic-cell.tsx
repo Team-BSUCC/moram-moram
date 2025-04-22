@@ -1,27 +1,29 @@
 import React from 'react';
 import Text from '@/components/commons/text';
-import { useClientStateStore } from '../hooks/use-client-state-store';
+import { MandalartTopic } from '../types/realtime-type';
 import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
 
-const CoreCell = () => {
+type TopicCellProps = {
+  value: MandalartTopic | undefined;
+  backColor: string;
+  className?: string;
+};
+
+const TopicCell = ({ value, backColor, className }: TopicCellProps) => {
   const show = useTodoFloatingSheetStore((state) => state.show);
   const setInfo = useTodoFloatingSheetStore((state) => state.setInfo);
 
-  const core = useClientStateStore((state) => state.core);
-
   const handleClick = () => {
-    setInfo(core);
+    setInfo(value);
     show();
   };
-
-  console.log('코어임');
 
   return (
     <>
       {/* 셀의 스타일 지정 */}
       <div
         onClick={handleClick}
-        className='relative col-start-2 row-start-2 flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[3px] border-black bg-violet-pigment p-2 hover:cursor-pointer'
+        className={`relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-2 p-2 hover:cursor-pointer ${backColor} ${className}`}
       >
         <Text
           align='center'
@@ -29,11 +31,11 @@ const CoreCell = () => {
           size='16px-semibold'
           textColor='main'
         >
-          {core?.title}
+          {value?.topic}
         </Text>
       </div>
     </>
   );
 };
 
-export default React.memo(CoreCell);
+export default React.memo(TopicCell);

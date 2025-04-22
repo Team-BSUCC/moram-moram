@@ -7,6 +7,7 @@ import {
   MandalartTopic,
   MandalartAllJson,
 } from '../types/realtime-type';
+import { shallow } from 'zustand/shallow';
 
 type MapStore = {
   core: MandalartCore | null;
@@ -19,10 +20,10 @@ type MapStore = {
   setCoreItem: (item: MandalartCore) => void;
 
   setTopicItem: (key: string, item: MandalartTopic) => void;
-  getTopicItem: (key: string) => MandalartTopic | undefined;
+  getTopicItem: (key: string) => MandalartTopic | null;
 
   setSubTopicItem: (key: string, item: MandalartSubtopic) => void;
-  getSubTopicItem: (key: string) => MandalartSubtopic | undefined;
+  getSubTopicItem: (key: string) => MandalartSubtopic | null;
 
   setTodoItem: (key: string, item: CellTodo) => void;
   getTodoItem: (key: string) => CellTodo | undefined;
@@ -63,7 +64,10 @@ export const useClientStateStore = create<MapStore>((set, get) => ({
     newMap.set(key, item);
     set({ topics: newMap });
   },
-  getTopicItem: (key) => get().topics.get(key),
+  getTopicItem: (key) => {
+    const topic = get().topics.get(key);
+    return topic ?? null;
+  },
 
   // subTopics
   setSubTopicItem: (key, item) => {
@@ -71,7 +75,10 @@ export const useClientStateStore = create<MapStore>((set, get) => ({
     newMap.set(key, item);
     set({ subTopics: newMap });
   },
-  getSubTopicItem: (key) => get().subTopics.get(key),
+  getSubTopicItem: (key) => {
+    const subTopic = get().subTopics.get(key);
+    return subTopic ?? null;
+  },
 
   // todos
   setTodoItem: (key, item) => {
@@ -95,4 +102,5 @@ export const useClientStateStore = create<MapStore>((set, get) => ({
       todos: new Map(),
     });
   },
+  shallow,
 }));

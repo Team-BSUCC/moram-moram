@@ -1,5 +1,6 @@
 import TodoItem from './todo-item';
 import {
+  MandalartSubtopic,
   SubTopicType,
   TodoPayloadType,
   TodoType,
@@ -11,30 +12,32 @@ import {
 import { RealtimeChannel } from '@supabase/supabase-js';
 import Title from '@/components/commons/title';
 import Spacer from '@/components/commons/spacer';
+import { useClientStateStore } from '../hooks/use-client-state-store';
 
 type SubtopicGroupProps = {
-  sub: SubTopicType;
+  sub: MandalartSubtopic;
   channelReceiver: RealtimeChannel;
 };
 
 const SubtopicGroup = ({ sub, channelReceiver }: SubtopicGroupProps) => {
-  const { data: subtopicName } = useSubtopicCacheQuery(sub.id);
+  const todos = useClientStateStore((state) => state.todos);
+  const todosWithSubTopicId = Array.from(todos)
+    .filter(([key, value]) => value.cellId === sub.id)
+    .map(([_, value]) => value);
 
-  const { data: todoList } = useTodoListCacheQuery(sub.id);
-  const todoListCacheArray = (todoList ?? []) as TodoPayloadType[];
   return (
     <>
       <div className='pl-6'>
         <Spacer size='xs' />
         <Title as='h3' size='18px-medium' highlightColor={8} textColor='sub'>
-          {subtopicName}
+          {sub.content}
         </Title>
 
-        {todoListCacheArray.map((todo: TodoType) => (
+        {todosWithSubTopicId.map((todo) => (
           <TodoItem
             key={todo.id}
             id={todo.id}
-            cellId={todo}
+            todo={todo}
             channelReceiver={channelReceiver}
           />
         ))}
