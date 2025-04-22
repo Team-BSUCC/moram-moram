@@ -143,8 +143,8 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
               className={customButtonClass}
               onClick={handleInviteClick}
             >
-              <Link />
-              &nbsp;&nbsp;초대링크 복사 하기
+              <Link className='mr-2' />
+              초대링크 복사 하기
             </button>
           </>
         )}
