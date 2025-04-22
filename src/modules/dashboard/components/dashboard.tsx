@@ -13,6 +13,7 @@ import { SquarePlus, X } from 'lucide-react';
 import ColorPicker from './color-picker';
 import { useCreateRoom } from '../hooks/use-create-room';
 import { useQueryClient } from '@tanstack/react-query';
+import * as Sentry from '@sentry/nextjs';
 
 type DashBoardProps = {
   user: string | null;
@@ -82,8 +83,16 @@ const DashBoard = ({ user }: DashBoardProps) => {
           setSelectedColor(0);
           queryclient.invalidateQueries({ queryKey: ['mandalarts-cards'] });
         },
-        onError: (err) => {
-          alert('생성 중 오류 발생: ' + err.message);
+        onError: (error) => {
+          Sentry.withScope((scope) => {
+            scope.setTag('page', 'dashboard page');
+            scope.setTag('feature', 'handleCreateMandalart');
+
+            Sentry.captureException(
+              new Error(`[handleCreateMandalart] ${error.message}`)
+            );
+          });
+          alert('생성 중 오류 발생: ' + error.message);
         },
       }
     );

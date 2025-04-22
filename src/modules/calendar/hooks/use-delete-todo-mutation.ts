@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { deleteTodoData } from '../services/edit-todo-data';
-import * as Sentry from '@sentry/nextjs';
 import Swal from 'sweetalert2';
 
 export const useDeleteTodoMutation = () => {
@@ -16,17 +15,7 @@ export const useDeleteTodoMutation = () => {
         router.refresh();
       });
     },
-    onError: (error) => {
-      Sentry.withScope((scope) => {
-        scope.setTag('page', 'TodayList & Calendar Page');
-        scope.setTag('feature', 'deleteTodo');
-
-        Sentry.captureException(
-          new Error(
-            `[deleteTodo] ${error instanceof Error ? error.message : 'Unknown error'}`
-          )
-        );
-      });
+    onError: () => {
       Swal.fire({
         icon: 'error',
         title: '삭제를 실패했습니다. 다시 시도해주세요!',

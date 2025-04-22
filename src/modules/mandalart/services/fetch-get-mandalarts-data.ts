@@ -2,6 +2,7 @@
 import { MandalartType } from '../types/realtime-type';
 import { PostgrestError } from '@supabase/supabase-js';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
+import * as Sentry from '@sentry/nextjs';
 
 /**
  * 만다라트 데이터를 불러오는 fetch 함수
@@ -34,6 +35,14 @@ export const fetchGetMandalartsData = async (
     .eq('id', id);
 
   if (error) {
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'mandalart page');
+      scope.setTag('feature', 'fetchGetMandalartsData');
+
+      Sentry.captureException(
+        new Error(`[fetchGetMandalartsData] ${error.message}`)
+      );
+    });
     throw error;
   }
 

@@ -2,6 +2,7 @@ import { Tables } from '@/shared/types/database.types';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { User } from '@supabase/supabase-js';
 import { useEffect, useState } from 'react';
+import * as Sentry from '@sentry/nextjs';
 
 /**
  *
@@ -25,7 +26,14 @@ export const useGetRoomData = (user: User | null, roomId: string) => {
         .eq('id', roomId)
         .single();
       if (error) {
-        //TODO 센트리로 처리
+        Sentry.withScope((scope) => {
+          scope.setTag('page', 'mandalart page');
+          scope.setTag('feature', 'fetchGetRoomOwner');
+
+          Sentry.captureException(
+            new Error(`[fetchGetRoomOwner] ${error.message}`)
+          );
+        });
       }
       if (data) {
         setIsOwner(user?.id === data.owner);

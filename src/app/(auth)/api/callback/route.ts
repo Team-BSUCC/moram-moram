@@ -1,3 +1,4 @@
+import * as Sentry from '@sentry/nextjs';
 import { NextResponse, NextRequest } from 'next/server';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
 
@@ -19,6 +20,12 @@ export const GET = async (request: NextRequest) => {
 
   const { error } = await supabase.auth.exchangeCodeForSession(code);
   if (error) {
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'none');
+      scope.setTag('feature', 'callback route');
+
+      Sentry.captureException(new Error(`[Callback Route] ${error.message}`));
+    });
     return NextResponse.redirect(new URL('/auth/auth-code-error', request.url));
   }
 

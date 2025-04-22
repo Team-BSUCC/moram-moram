@@ -1,6 +1,7 @@
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColorMutationParams } from '../types/dashboard-type';
+import * as Sentry from '@sentry/nextjs';
 
 export const useUpdateRoomColor = () => {
   const queryclient = useQueryClient();
@@ -13,6 +14,14 @@ export const useUpdateRoomColor = () => {
         .eq('id', params.mandalartId);
 
       if (error) {
+        Sentry.withScope((scope) => {
+          scope.setTag('page', 'dashboard page');
+          scope.setTag('feature', 'useUpdateRoomColor');
+
+          Sentry.captureException(
+            new Error(`[useUpdateRoomColor] ${error.message}`)
+          );
+        });
         alert(`업데이트 실패, ${error.message}`);
         return false;
       }

@@ -86,6 +86,7 @@ const Header = ({ user }: HeaderProps) => {
               width='166'
               height='48'
               className='hidden lg:block'
+              priority={true}
             />
             <Image
               src='/images/manda-logo.svg'
@@ -93,6 +94,7 @@ const Header = ({ user }: HeaderProps) => {
               width='28'
               height='28'
               className='block lg:hidden'
+              priority={true}
             />
           </Link>
         </div>

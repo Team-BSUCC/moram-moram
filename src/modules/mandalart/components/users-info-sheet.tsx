@@ -14,6 +14,7 @@ import Title from '@/components/commons/title';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import Text from '@/components/commons/text';
 import { Link } from 'lucide-react';
+import * as Sentry from '@sentry/nextjs';
 
 type UsersInfoSheetType = { user: User | null };
 
@@ -51,8 +52,14 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
       alert('변경성공');
       updateRoomData();
     } catch (error) {
-      //TODO 센트리로 리펙터링
-      console.log(error);
+      Sentry.withScope((scope) => {
+        scope.setTag('page', 'mandalart page');
+        scope.setTag('feature', 'handleSetPasswordSubmit');
+
+        Sentry.captureException(
+          new Error(`[handleSetPasswordSubmit] ${error}`)
+        );
+      });
       alert('변경실패');
     }
   };
@@ -65,8 +72,12 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
       await navigator.clipboard.writeText(inviteText);
       alert('클립보드에 복사되었습니다!');
     } catch (error) {
-      //TODO 센트리로 리펙터링
-      console.log(error);
+      Sentry.withScope((scope) => {
+        scope.setTag('page', 'mandalart page');
+        scope.setTag('feature', 'handleInviteClick');
+
+        Sentry.captureException(new Error(`[handleInviteClick] ${error}`));
+      });
       alert('복사실패');
     }
   };

@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { judgingAction } from '../services/judging-action';
 import { useBroadcastStore } from './use-broadcast-store';
+import * as Sentry from '@sentry/nextjs';
 
 export const useTodoBroadcastMutation = (
   myChannel: RealtimeChannel,
@@ -28,11 +29,15 @@ export const useTodoBroadcastMutation = (
       });
       addBroadcastStore(todoRowData);
     },
-    onError: () => {
-      /**
-       * TODO: error 핸들링 sentry 리팩터링
-       */
-      console.error('broadcast에 오류가 발생했습니다.');
+    onError: (error) => {
+      Sentry.withScope((scope) => {
+        scope.setTag('page', 'mandalart page');
+        scope.setTag('feature', 'mutationUpdateCache');
+
+        Sentry.captureException(
+          new Error(`[mutationUpdateCache] ${error.message}`)
+        );
+      });
     },
   });
 

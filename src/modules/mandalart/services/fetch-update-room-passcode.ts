@@ -1,4 +1,5 @@
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
+import * as Sentry from '@sentry/nextjs';
 
 export const fetchUpdateRoomPasscode = async (
   roomId: string,
@@ -11,7 +12,14 @@ export const fetchUpdateRoomPasscode = async (
     .update({ passcode })
     .eq('id', roomId);
   if (error) {
-    //TODO 센트리처리
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'mandalart page');
+      scope.setTag('feature', 'fetchUpdateRoomPasscode');
+
+      Sentry.captureException(
+        new Error(`[fetchUpdateRoomPasscode] ${error.message}`)
+      );
+    });
     throw error;
   }
 };
