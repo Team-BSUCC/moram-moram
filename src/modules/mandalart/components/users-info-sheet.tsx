@@ -13,6 +13,7 @@ import Spacer from '@/components/commons/spacer';
 import Title from '@/components/commons/title';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import Text from '@/components/commons/text';
+import { Link } from 'lucide-react';
 
 type UsersInfoSheetType = { user: User | null };
 
@@ -41,6 +42,9 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
   const isRoomPasswordButtonDisabled =
     passwordInputValue === '' || passwordInputValue === roomData?.passcode;
 
+  const isLinkCopButtonDisabled =
+    passwordInputValue === '' || passwordInputValue !== roomData?.passcode;
+
   const handleSetPasswordSubmit = async () => {
     try {
       await fetchUpdateRoomPasscode(pathParamRoomId, passwordInputValue);
@@ -66,6 +70,9 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
       alert('복사실패');
     }
   };
+
+  const customButtonClass =
+    'disabled:pointer-events-none disabled:text-caption disabled:bg-[#E6E6E6] disabled:border-none w-full inline-flex items-center h-14 text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
 
   return (
     <>
@@ -120,7 +127,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
                   onChange={(e) => {
                     setPasswordInputValue(e.target.value);
                   }}
-                ></Input>
+                />
               </div>
               <Button
                 size='small'
@@ -131,8 +138,14 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
               </Button>
             </form>
             <Spacer size='md' />
-            {/* 여기도 꽉차는 버튼으로 디자인 수정 */}
-            <Button onClick={handleInviteClick}>초대하기</Button>
+            <button
+              disabled={isLinkCopButtonDisabled}
+              className={customButtonClass}
+              onClick={handleInviteClick}
+            >
+              <Link />
+              &nbsp;&nbsp;초대링크 복사 하기
+            </button>
           </>
         )}
       </div>
