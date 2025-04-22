@@ -4,7 +4,13 @@ import type { NextRequest } from 'next/server';
 import URLS from './shared/constants/url-constants';
 
 // 보호할 경로
-const PROTECTED_ROUTES = [URLS.HUB, URLS.MY_PAGE, URLS.STATUS, URLS.STUDIO];
+const PROTECTED_ROUTES = [
+  URLS.CALENDAR,
+  URLS.MY_PAGE,
+  URLS.TODAY_LIST,
+  URLS.MANDALART,
+  URLS.DASHBOARD,
+];
 const AUTH_ROUTES = [URLS.SIGN_IN, URLS.SIGN_UP];
 
 // token을 통해 로그인 상태 확인
