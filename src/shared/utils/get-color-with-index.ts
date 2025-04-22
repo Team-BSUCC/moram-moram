@@ -37,3 +37,24 @@ export const getPastelCodeWithIndex = (index: number): string => {
   };
   return colorCode[idx];
 };
+
+/**
+ * 색상 인덱스에 따라 tailwind 형식으로 반환하는 함수
+ * @param index - 색상 인덱스
+ * @returns - tailwind 속성
+ */
+export const getColorWithIndexOrder = (index: number): string => {
+  const idx = index % 8;
+  const color: Record<number, string> = {
+    0: 'bg-pink-pastel',
+    1: 'bg-red-pastel',
+    2: 'bg-orange-pastel',
+    3: 'bg-yellow-pastel',
+    4: 'bg-green-pastel',
+    5: 'bg-sky-pastel',
+    6: 'bg-blue-pastel',
+    7: 'bg-purple-pastel',
+  };
+
+  return color[idx];
+};
