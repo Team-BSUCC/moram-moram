@@ -13,7 +13,7 @@ export const useUpdateRoomColor = () => {
         .eq('id', params.mandalartId);
 
       if (error) {
-        alert(`삭제 실패, ${error.message}`);
+        alert(`업데이트 실패, ${error.message}`);
         return false;
       }
 

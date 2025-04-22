@@ -10,7 +10,10 @@ type CreateRoomParams = {
   startDate?: string; // 'YYYY-MM-DD'
   endDate?: string; // 'YYYY-MM-DD'
 };
-
+/**
+ * 만다라트 데이터 생성 뮤테이션
+ * @returns 성공 여부를 반환 해줍니다.
+ */
 export const useCreateRoom = () => {
   const supabase = getBrowserClient();
   return useMutation<string, PostgrestError, CreateRoomParams>({
@@ -35,7 +38,7 @@ export const useCreateRoom = () => {
         throw error;
       }
 
-      return data; // mandalart_id
+      return data;
     },
   });
 };

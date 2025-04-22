@@ -5,12 +5,15 @@ import Link from 'next/link';
 import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
 import { calculatorProgress } from '@/shared/utils/calculator-progress';
-import { getPigmentCodeWithIndex } from '../util/get-pigment-code-with-index';
-import { getPastelCodeWithIndex } from '../util/get-pastel-code-with-index';
 import { FetchUserRoomsAndParticipantsResponse } from '@/modules/dashboard/types/dashboard-type';
-import { AvatarStack } from '@/modules/mandalart/components/avatar-stack';
 import { getDateDiff } from '../util/calculate-date-differents';
 import { formatDate } from '../util/format-date';
+import { DashboardAvatarStack } from './dashboard-avatar-stack';
+import {
+  getPastelCodeWithIndex,
+  getPigmentCodeWithIndex,
+} from '@/shared/utils/get-color-with-index';
+import URLS from '@/shared/constants/url-constants';
 
 type MandalartCardProps = {
   card: FetchUserRoomsAndParticipantsResponse;
@@ -25,12 +28,10 @@ const MandalartCard = ({
   index,
   user,
 }: MandalartCardProps) => {
-  /**
-   * TODO : Link 태그 href 내부 링크 수정 (room/uuid)
-   */
+  const diff = getDateDiff(card.mandalart.endDate);
   return (
     <div
-      className={`${bandColor} grid w-full min-w-[330px] max-w-[384px] rounded-br-lg rounded-tr-lg shadow-[2px_2px_20px_0px_rgba(0,0,0,0.10)]`}
+      className={`${bandColor} grid h-[] w-full min-w-[330px] max-w-[394px] rounded-br-lg rounded-tr-lg shadow-[2px_2px_20px_0px_rgba(0,0,0,0.10)]`}
     >
       <div className='relative ml-3 rounded-br-lg rounded-tr-lg bg-white-light'>
         <div className='absolute right-[10px] top-[20px]'>
@@ -42,12 +43,20 @@ const MandalartCard = ({
             roomId={card.roomId}
           />
         </div>
-        <Link href={`/mandalart/${card.roomId}`}>
+        <Link href={`${URLS.MANDALART}/${card.roomId}`}>
           <div className='w-full flex-col px-[24px] pb-[22px] pt-[32px]'>
             <div className='flex justify-between'>
               <div className='flex place-items-end gap-[4px] md:gap-[8px]'>
-                <Text align='left' size='16px-semibold' textColor='sub'>
-                  {getDateDiff(card.mandalart.endDate)}
+                <Text
+                  align='left'
+                  size='16px-semibold'
+                  textColor={diff < 0 ? 'error' : 'sub'}
+                >
+                  {diff < 0
+                    ? `${Math.abs(diff)}일 지남`
+                    : diff === 0
+                      ? '오늘까지'
+                      : `${diff}일 남음`}
                 </Text>
                 {card.mandalart.startDate ? (
                   <Text size='14px-regular' textColor='caption'>
@@ -80,8 +89,8 @@ const MandalartCard = ({
                     </Text>
                   )}
                 </div>
-                <AvatarStack
-                  maxAvatarsAmount={5}
+                <DashboardAvatarStack
+                  maxAvatarsAmount={3}
                   avatars={card.participants.map((person) => {
                     return {
                       name: person.nickname,

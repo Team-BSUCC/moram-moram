@@ -11,13 +11,11 @@ const getToday = (): string => {
   return `${yyyy}-${mm}-${dd}`;
 };
 
-export const getDateDiff = (endStr: Date): string => {
+export const getDateDiff = (endStr: Date): number => {
   const end = parseDate(endStr.toString());
   const now = parseDate(getToday());
 
   const diffTime = end.getTime() - now.getTime();
   const diffDays = diffTime / (1000 * 60 * 60 * 24);
-  if (diffDays === 0) return '오늘까지!';
-  if (diffDays < 0) return '이미 지났어!';
-  return `${diffDays}일 남았어!`;
+  return diffDays;
 };

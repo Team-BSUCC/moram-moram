@@ -1,4 +1,3 @@
-'use server';
 import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 import DashBoard from '@/modules/dashboard/components/dashboard';
 

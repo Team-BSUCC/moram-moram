@@ -139,9 +139,9 @@ const DeleteModal = ({
               <button
                 className='absolute h-[48px] w-[48px] place-items-center'
                 onClick={(e) => {
-                  setIsDeleteOpen(false);
                   e.stopPropagation();
                   e.preventDefault();
+                  setIsDeleteOpen(false);
                 }}
               >
                 <X size={24} />
@@ -165,9 +165,9 @@ const DeleteModal = ({
                   variant='outline'
                   size='small'
                   onClick={(e) => {
-                    setIsDeleteOpen(false);
                     e.stopPropagation();
                     e.preventDefault();
+                    setIsDeleteOpen(false);
                   }}
                 >
                   취소하기
@@ -175,9 +175,9 @@ const DeleteModal = ({
                 <Button
                   size='small'
                   onClick={(e) => {
-                    handleDeleteRoom(roomId);
                     e.stopPropagation();
                     e.preventDefault();
+                    handleDeleteRoom(roomId);
                   }}
                 >
                   삭제하기
@@ -242,9 +242,9 @@ const UpdateModal = ({
               <button
                 className='absolute h-[48px] w-[48px] place-items-center'
                 onClick={(e) => {
-                  setIsUpdateOpen(false);
                   e.stopPropagation();
                   e.preventDefault();
+                  setIsUpdateOpen(false);
                 }}
               >
                 <X size={24} />
