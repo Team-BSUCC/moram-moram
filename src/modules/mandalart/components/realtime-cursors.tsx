@@ -36,10 +36,15 @@ export const RealtimeCursors = ({
   return (
     <div>
       {Object.keys(cursors).map((id) => {
+        // 타임스탬프가 0일 경우 return
+        if (cursors[id].timestamp === 0) return;
+
         const rect = boardRef.current?.getBoundingClientRect();
         if (!rect) return null;
+        // 상대좌표 -> 절대좌표로 변환
         const x = cursors[id].position.x * rect.width + rect.left;
         const y = cursors[id].position.y * rect.height + rect.top;
+
         return (
           <Cursor
             key={id}

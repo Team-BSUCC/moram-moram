@@ -152,7 +152,26 @@ export const useRealtimeCursors = ({
       }
     });
 
+    // 화면에 포커스가 없을 경우 timestamp를 0으로 지정
+    const handleBlur = () => {
+      const rect = boardRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      channelRef.current?.send({
+        type: 'broadcast',
+        event: EVENT_NAME,
+        payload: {
+          position: { x: 0, y: 0 },
+          user: { id: userId, name: username },
+          color,
+          timestamp: 0,
+        },
+      });
+    };
+    window.addEventListener('blur', handleBlur);
+
     return () => {
+      window.removeEventListener('blur', handleBlur);
       channel.unsubscribe();
     };
   }, []);
