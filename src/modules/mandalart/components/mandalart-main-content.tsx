@@ -62,6 +62,8 @@ const MandalartMainContent = ({
   const username = getCurrentUserName(user);
   const userId = getCurrentUserId(user);
 
+  console.log('랜더링테스트');
+
   return (
     <div className='flex flex-col items-center'>
       <Spacer size='top' />
