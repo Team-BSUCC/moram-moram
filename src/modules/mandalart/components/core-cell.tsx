@@ -1,7 +1,7 @@
 import React from 'react';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import Text from '@/components/commons/text';
-import { useClientStateStore } from '../hooks/use-client-state-store';
+import { useClientStateStore } from '../hooks/use-client-state.store';
 
 const CoreCell = () => {
   const show = useFloatingSheetStore((state) => state.show);

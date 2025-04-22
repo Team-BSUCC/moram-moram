@@ -9,7 +9,6 @@ import { useBatchUpdateTrigger } from '@/modules/mandalart/hooks/use-batch-updat
 import { useRpcMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
-import { useQueryClient } from '@tanstack/react-query';
 import { useBroadcastStore } from '@/modules/mandalart/hooks/use-broadcast-store';
 import Spacer from '@/components/commons/spacer';
 import Title from '@/components/commons/title';
@@ -23,7 +22,7 @@ import { AvatarStack } from './mandalart-avatar-stack';
 import { useUsersStore } from '../hooks/use-users-store';
 import { getCurrentUserId } from '@/shared/utils/get-current-user-id';
 import Button from '@/components/commons/button';
-import { useClientStateStore } from '../hooks/use-client-state-store';
+import { useClientStateStore } from '../hooks/use-client-state.store';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -45,7 +44,6 @@ const MandalartMainContent = ({
   useRealtimePresenceRoom('avatar-room', user);
 
   const initialize = useClientStateStore((state) => state.initialize);
-  const topicsData = useClientStateStore((state) => state.topics);
 
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   // const currentUsers = useUsersStore((state) => state.currentUsers);
@@ -69,9 +67,12 @@ const MandalartMainContent = ({
     .subscribe();
 
   if (isPending) return <div>Loading...</div>;
+
   if (isError) return <div>error</div>;
 
   initialize(data);
+
+  console.log(data);
 
   return (
     <div className='flex flex-col items-center'>
@@ -109,15 +110,15 @@ const MandalartMainContent = ({
         <Spacer size='lg' />
         <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
           {/* 중앙 블록 */}
-          {/* <MainBlock /> */}
+          <MainBlock />
           {/* 나머지 블록 */}
-          {Array.from(topicsData).map(([key, value]) => {
-            // <SubBlock
-            //   key={topic.id}
-            //   title={topic.topic}
-            //   topic={topic}
-            //   subTopics={topic.mandalart_subtopics}
-            // />
+          {data.topics.map((item) => {
+            <SubBlock
+              key={item.id}
+              title={item.topic}
+              topic={item}
+              subTopics={item.mandalart_subtopics}
+            />;
           })}
           {/* 플로팅 시트 */}
           {isVisible && (
