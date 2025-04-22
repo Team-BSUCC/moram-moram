@@ -23,6 +23,9 @@ import {
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
 import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
+import Spacer from '@/components/commons/spacer';
+import { BicepsFlexed, CalendarDays, SquarePlus, X } from 'lucide-react';
+import Title from '@/components/commons/title';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -37,6 +40,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   const info = getDataCategory(
     useFloatingSheetStore((state) => state.info) as CellInfoType
   );
+  const hide = useFloatingSheetStore((state) => state.hide);
 
   const { data: initialValue } = useCellCacheQuery(info);
 
@@ -61,63 +65,105 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
     headerColor = 'bg-violet-pigment';
   }
 
+  const customButtonClass =
+    'w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
+
   return (
-    <FloatingSheet>
-      <div className='h-[700px] w-[500px] space-y-4 overflow-y-auto p-4'>
-        <div className={headerColor}>
-          <div className='flex flex-col items-start gap-0'>
-            <Text>TO DO LIST</Text>
-            <Input
-              type='text'
-              value={value}
-              placeholder={value}
-              onChange={(e) => {
-                setValue(e.target.value);
-                throttleMutate();
-              }}
-            />
+    <FloatingSheet hideOnOutsideClick={true}>
+      <div className='flex h-full flex-col'>
+        <div
+          className={`handle cursor-grab active:cursor-grabbing ${headerColor} rounded-t-lg`}
+        >
+          <div className='fixed right-4 top-4 w-fit'>
+            <button className='bg-transparent' onClick={hide}>
+              <X />
+            </button>
+          </div>
+          <div className='flex flex-col items-start p-6 lg:p-8'>
+            <Text size='16px-medium' textColor='sub'>
+              TO DO LIST
+            </Text>
+            {info.category === 'CORE' ? (
+              <>
+                <Title as='h2' size='28px-semibold'>
+                  2025년 성장의 해로 만들기
+                </Title>
+                <div className='flex'>
+                  <CalendarDays color='var(--color-sub)' />
+                  <Text textColor='sub'>365일 남음</Text>
+                </div>
+                <Spacer size='sm' />
+                <div className='flex'>
+                  <BicepsFlexed color='var(--color-sub)' />
+                  <Text textColor='sub'>이번년도 반드시 이루고 말거야 !</Text>
+                </div>
+              </>
+            ) : (
+              <>
+                <Input
+                  sizes='28px-regular'
+                  type='text'
+                  value={value}
+                  placeholder={value || '목표를 작성해 주세요'}
+                  onChange={(e) => {
+                    setValue(e.target.value);
+                    throttleMutate();
+                  }}
+                />
+                <Text size='18px-medium' textColor='sub'>
+                  2025년, 성장의 해로 만들기 &gt; {value}
+                </Text>
+              </>
+            )}
           </div>
         </div>
-        {/* 핵심주제일 경우 */}
-        {info.category === 'CORE' && (
-          <div>
-            {info.mandalart_topics?.map((topic) => (
-              <TopicGroup
-                key={topic.id}
-                topic={topic}
-                channelReceiver={channelReceiver}
-              />
-            ))}
-          </div>
-        )}
-        {/* 대주제일 경우 */}
-        {info.category === 'TOPIC' && (
-          <div>
-            {info.mandalart_subtopics?.map((sub) => (
-              <SubtopicGroup
-                key={sub.id}
-                sub={sub}
-                channelReceiver={channelReceiver}
-              />
-            ))}
-          </div>
-        )}
-        {/* 소주제일 경우 */}
-        {info.category === 'SUBTOPIC' && (
-          <div>
-            <Button variant='outline' onClick={() => createTodo()}>
-              투두 추가하기
-            </Button>
-            {todoListCacheArray.map((todo: TodoType) => (
-              <TodoItem
-                key={todo.id}
-                id={todo.id}
-                cellId={todo}
-                channelReceiver={channelReceiver}
-              />
-            ))}
-          </div>
-        )}
+        <div className='flex-grow overflow-y-auto py-6'>
+          {/* 핵심주제일 경우 */}
+          {info.category === 'CORE' && (
+            <div>
+              {info.mandalart_topics?.map((topic) => (
+                <TopicGroup
+                  key={topic.id}
+                  topic={topic}
+                  channelReceiver={channelReceiver}
+                />
+              ))}
+            </div>
+          )}
+          {/* 대주제일 경우 */}
+          {info.category === 'TOPIC' && (
+            <div>
+              {info.mandalart_subtopics?.map((sub) => (
+                <SubtopicGroup
+                  key={sub.id}
+                  sub={sub}
+                  channelReceiver={channelReceiver}
+                />
+              ))}
+            </div>
+          )}
+          {/* 소주제일 경우 */}
+          {info.category === 'SUBTOPIC' && (
+            <div className='px-8'>
+              <button
+                className={customButtonClass}
+                onClick={() => createTodo()}
+              >
+                <SquarePlus />
+                투두 리스트 추가하기
+              </button>
+              {todoListCacheArray.map((todo: TodoType) => (
+                <TodoItem
+                  key={todo.id}
+                  id={todo.id}
+                  cellId={todo}
+                  channelReceiver={channelReceiver}
+                />
+              ))}
+            </div>
+          )}
+        </div>
+        <Spacer size='4xl' />
       </div>
     </FloatingSheet>
   );

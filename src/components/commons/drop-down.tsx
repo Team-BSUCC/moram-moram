@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, EllipsisVertical } from 'lucide-react';
 import { useRef, useState, useEffect, ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
@@ -51,7 +51,15 @@ const Dropdown = ({
         <div className='flex'>
           {text}
           <button>
-            {selection ? isOpen ? <ChevronUp /> : <ChevronDown /> : '⋮'}
+            {selection ? (
+              isOpen ? (
+                <ChevronUp />
+              ) : (
+                <ChevronDown />
+              )
+            ) : (
+              <EllipsisVertical />
+            )}
           </button>
         </div>
       </div>
