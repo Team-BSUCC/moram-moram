@@ -34,6 +34,8 @@ const MandalartPasscodeGate = ({
         } else {
           alert('접속성공');
         }
+      } else {
+        alert('접속성공');
       }
     } else {
       alert('잘못된비밀번호');
