@@ -12,6 +12,8 @@ const buttonVariants = cva(
         outline:
           'bg-white-light outline outline-[1.5px] outline-beige box-border outline-offset-[0px] hover:outline-[3px] active:outline-[3px] active:outline-[#B3947F]',
         none: 'bg-white-light justify-start w-full rounded-none hover:bg-beige-light active:bg-beige',
+        header:
+          'bg-transparent hover:font-bold hover:scale-105 active:font-bold text-sub hover:text-main active:text-main',
       },
       size: {
         large:
@@ -22,7 +24,9 @@ const buttonVariants = cva(
           'text-[14px] leading-[20px] font-medium sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] sm:gap-[4px] md:gap-[6px] py-[8px] px-[20px] sm:py-[10px] sm:px-[22px] md:py-[12px] md:px-[24px]',
         'x-small':
           'text-[13px] leading-[17px] font-medium sm:text-[14px] sm:leading-[18px] md:text-[16px] md:leading-[20px] gap-[2px] sm:gap-[4px] md:gap-[6px] py-[8px] px-[20px] sm:py-[10px] sm:px-[22px] md:py-[12px] md:px-[24px]',
-        none: 'text-[14px] leading-[20px] font-medium sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]  ',
+        none: 'text-[14px] leading-[20px] font-medium sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]',
+        header:
+          'text-[16px] leading-[24px] font-medium sm:text-[18px] sm:leading-[27px] md:text-[20px] md:leading-[30px] py-[6px] px-[6px] sm:py-[8px] sm:px-[8px] md:py-[10px] md:px-[10px]',
       },
     },
     defaultVariants: {

@@ -35,7 +35,7 @@ const Footer = () => {
         </div>
         {/* 텍스트 컴포넌트로 대체 예정 */}
         <p className='text-xs text-[#666666]'>
-          © 2023 Manda. All rights reserved.
+          © 2025 Manda. All rights reserved.
         </p>
       </div>
     </div>
