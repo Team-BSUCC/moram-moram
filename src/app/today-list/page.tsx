@@ -27,12 +27,12 @@ const TodayListPage = async () => {
   return (
     <div className='h-full w-full bg-white-dark'>
       <Spacer size='top' />
-      <div className='mx-auto flex w-2/3 flex-col items-start'>
+      <div className='mx-auto flex w-10/12 flex-col items-start sm:w-4/5'>
         <Title as='h1' size='32px-semibold'>
           투두 모아보기
         </Title>
         <Text size='20px-regular' textColor='sub'>
-          내 만다라트 별 TO DO LIST를 한번에 확인하세요.
+          내 만다라트의 할 일들을 한 곳에서 간편하게 확인해보세요.
         </Text>
         <Spacer size='lg' />
         <TodayTodoList myMandalarts={myMandalarts} />

@@ -2,7 +2,7 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
 
-export const titleVariants = cva('flex gap-2 transition-all', {
+export const titleVariants = cva('flex gap-4 transition-all', {
   variants: {
     size: {
       '48px-semibold':
@@ -43,6 +43,8 @@ export const titleVariants = cva('flex gap-2 transition-all', {
         'text-[13px] leading-[17px] font-medium sm:text-[14px] sm:leading-[18px] md:text-[16px] md:leading-[20px]',
       '16px-regular':
         'text-[13px] leading-[17px] font-normal sm:text-[14px] sm:leading-[18px] md:text-[16px] md:leading-[20px]',
+      '14px-regular':
+        'text-[12px] leading-[16px] font-normal sm:text-[13px] sm:leading-[18px] md:text-[14px] md:leading-[20px]',
     },
     highlightColor: {
       0: 'bg-pink-pastel',
@@ -136,7 +138,7 @@ const Title = ({
       {highlightColor !== undefined && (
         <div className={`w-1 ${titleVariants({ highlightColor })}`}></div>
       )}
-      {children}
+      <div className='py-1'>{children}</div>
     </Component>
   );
 };
