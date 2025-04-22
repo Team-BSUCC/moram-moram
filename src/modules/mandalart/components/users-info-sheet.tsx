@@ -72,7 +72,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
   };
 
   const customButtonClass =
-    'disabled:pointer-events-none disabled:text-caption disabled:bg-[#E6E6E6] disabled:border-none w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
+    'disabled:pointer-events-none disabled:text-caption disabled:bg-[#E6E6E6] h-full disabled:border-none w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
 
   return (
     <>
@@ -124,10 +124,9 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
                 e.preventDefault();
                 handleSetPasswordSubmit();
               }}
-              className='flex h-14 grow'
             >
               {/* //TODO 회원가입 머지되면 auth로 스타일 수정 */}
-              <div className='flex w-full gap-4'>
+              <div className='flex h-14 w-full gap-4'>
                 <Input
                   variant='auth'
                   value={passwordInputValue}
@@ -135,13 +134,14 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
                     setPasswordInputValue(e.target.value);
                   }}
                 />
-
-                <Button
-                  variant='secondary'
-                  disabled={isRoomPasswordButtonDisabled}
-                >
-                  {passwordButtonText}
-                </Button>
+                <div className='w-4/5'>
+                  <button
+                    className={customButtonClass}
+                    disabled={isRoomPasswordButtonDisabled}
+                  >
+                    {passwordButtonText}
+                  </button>
+                </div>
               </div>
             </form>
             <Spacer size='md' />
