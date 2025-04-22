@@ -14,7 +14,7 @@ import {
 export const flattenTodos = (mandalart: MandalartType): FlatTodo[] => {
   const { core, topics, subtopics, todos } = mandalart;
   // todo를 기준으로 각각 연결되는 소주제와 대주제 찾기
-  return todos.map((todo: TodoType) => {
+  return todos?.map((todo: TodoType) => {
     const subtopic = subtopics.find(
       (subtopic: SubTopicType) => subtopic.id === todo.cellId
     );

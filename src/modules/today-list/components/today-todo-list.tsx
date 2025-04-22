@@ -43,13 +43,13 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
   // 필터링된 todo만 추출(완료한 일, 남은 할 일, 전체 보기 기준)
   // 토픽순으로 정렬
   const filteredTodos = flatTodos
-    .filter((todo) => filterByCompletionStatus(todo, selectedOption))
+    ?.filter((todo) => filterByCompletionStatus(todo, selectedOption))
     .sort((a, b) => a.topicId.localeCompare(b.topicId));
 
   // 대주제 id를 기준으로 그룹핑
   const groupedByTopic = (() => {
     const map: { [topicId: string]: FlatTodo[] } = {};
-    filteredTodos.forEach((todo) => {
+    filteredTodos?.forEach((todo) => {
       if (!map[todo.topicId]) map[todo.topicId] = [];
       map[todo.topicId].push(todo);
     });
@@ -59,7 +59,7 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
   return (
     <div className='h-full w-full'>
       {/* 투두가 없을 때 */}
-      {!myMandalarts || myMandalarts.length === 0 ? (
+      {!myMandalarts || myMandalarts.length === 0 || !filteredTodos ? (
         <div className='flex h-full w-full items-center justify-center py-40'>
           <Title as='h2' size='20px-medium' textColor='caption'>
             아직 생성된 투두 리스트가 없어요.
