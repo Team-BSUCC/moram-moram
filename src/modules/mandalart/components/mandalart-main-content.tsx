@@ -10,7 +10,7 @@ import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-d
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { createTodoListkey } from '@/modules/mandalart/services/create-todo-list-key';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { TodoPayloadType } from '@/modules/mandalart/types/realtime-type';
@@ -21,10 +21,9 @@ import Text from '@/components/commons/text';
 import { BicepsFlexed, CalendarDays } from 'lucide-react';
 import LinearProgress from '@/components/commons/progress-bar';
 import { calculatorProgress } from '@/shared/utils/calculator-progress';
-import UsersInfoSheet from '@/modules/mandalart/components/users-info-sheet';
 import { User } from '@supabase/supabase-js';
 import { useRealtimePresenceRoom } from '../hooks/use-realtime-presence-room';
-import { AvatarStack } from './avatar-stack';
+import { AvatarStack } from './mandalart-avatar-stack';
 import { useUsersStore } from '../hooks/use-users-store';
 import { getCurrentUserId } from '@/shared/utils/get-current-user-id';
 import Button from '@/components/commons/button';
@@ -49,8 +48,6 @@ const MandalartMainContent = ({
   useBatchUpdateTrigger();
   useRealtimePresenceRoom('avatar-room', user);
 
-  const [isVisibleUsersInfoSheet, setIsVisibleUsersInfoSheet] =
-    useState<boolean>(false);
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const currentUsers = useUsersStore((state) => state.currentUsers);
 
@@ -122,10 +119,6 @@ const MandalartMainContent = ({
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>error</div>;
 
-  const handleClickAvatarStack = () => {
-    setIsVisibleUsersInfoSheet(true);
-  };
-
   return (
     <div className='flex flex-col items-center'>
       <Spacer size='top' />
@@ -141,10 +134,7 @@ const MandalartMainContent = ({
             <Title as='h1' size='32px-medium' textColor='black'>
               2025년 성장의 해로 만들기
             </Title>
-            <div onClick={handleClickAvatarStack}>
-              <AvatarStack avatars={currentUsers} />
-            </div>
-            {isVisibleUsersInfoSheet && <UsersInfoSheet user={user} />}
+            <AvatarStack avatars={currentUsers} user={user} />
           </div>
           <Spacer size='md' />
           <div className='flex'>
