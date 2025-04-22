@@ -1,30 +1,29 @@
 'use client';
 
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'next/navigation';
+import { User } from '@supabase/supabase-js';
 import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
-import { User } from '@supabase/supabase-js';
-import React, { useEffect, useState } from 'react';
-import { useGetRoomData } from '../hooks/use-get-room-data';
-import { fetchUpdateRoomPasscode } from '../services/fetch-update-room-passcode';
-import { useUsersStore } from '../hooks/use-users-store';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { useGetRoomData } from '../hooks/use-get-room-data';
+import { useUsersStore } from '../hooks/use-users-store';
+import { fetchUpdateRoomPasscode } from '../services/fetch-update-room-passcode';
 
 type UsersInfoSheetType = { user: User | null };
 
 const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
-  const [passwordInputValue, setPasswordInputValue] = useState<string>('');
-  const [passwordButtonText, setPasswordButtonText] =
-    useState<string>('생성하기');
-
-  //나중에 페스파라미터 가져오는 훅으로 리펙터링
-  const pathParamRoomId = 'e5a689a9-0f5f-4cdb-935e-9250ca71f60f';
+  const { id: pathParamRoomId }: { id: string } = useParams();
   const { roomData, updateRoomData, isOwner } = useGetRoomData(
     user,
     pathParamRoomId
   );
-
   const currentUsers = useUsersStore((store) => store.currentUsers);
   const leftUsers = useUsersStore((store) => store.leftUsers);
+
+  const [passwordInputValue, setPasswordInputValue] = useState<string>('');
+  const [passwordButtonText, setPasswordButtonText] =
+    useState<string>('생성하기');
 
   useEffect(() => {
     if (roomData) {
@@ -35,7 +34,6 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
     }
   }, [roomData]);
 
-  //변경된 비밀번호가 없거나 비어있으면 변경하기 비활성화
   const isRoomPasswordButtonDisabled =
     passwordInputValue === '' || passwordInputValue === roomData?.passcode;
 
@@ -68,7 +66,6 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
   return (
     <>
       <div>
-        {/* 여기 두개는 아바타룸에 정보를 전역으로 관리해서 사용해야지 */}
         <div>
           <div>현재 접속중인 사람들</div>
           {currentUsers.map((user) => (
@@ -87,7 +84,6 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
             </Avatar>
           ))}
         </div>
-        {/* 이 밑에 부터는 오너만 볼 수 있는 내용 */}
 
         {isOwner && (
           <>

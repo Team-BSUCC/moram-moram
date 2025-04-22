@@ -24,6 +24,9 @@ const roundButtonVariants = cva(
         primary: 'border-primary',
         secondary: 'border-secondary',
       },
+      bgColor: {
+        kakao: 'bg-[#FDDC3F]',
+      },
     },
     defaultVariants: {
       size: 'md',
@@ -48,11 +51,12 @@ const RoundButton = ({
   size,
   borderColor,
   children,
+  bgColor,
   ...props
 }: RoundButtonProps) => {
   return (
     <button
-      className={twMerge(roundButtonVariants({ size, borderColor }))}
+      className={twMerge(roundButtonVariants({ size, borderColor, bgColor }))}
       {...props}
     >
       {children}
