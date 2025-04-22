@@ -8,7 +8,7 @@ import Link from 'next/link';
 import React, { useState, useEffect } from 'react';
 import { Avatar, AvatarFallback, AvatarImage } from '../ui/avatar';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
-import { Menu, SquarePlus, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import Text from '../commons/text';
 import Button from '../commons/button';
 
@@ -59,14 +59,19 @@ const Header = ({ user }: HeaderProps) => {
       ]
     : [
         {
+          to: URLS.GUEST,
+          label: '비회원으로 체험하기',
+          variant: 'header',
+        },
+        {
           to: URLS.SIGN_IN,
-          label: '3초만에 시작하기',
+          label: '로그인',
           variant: 'secondary',
         },
         {
-          to: URLS.GUEST,
-          label: '비회원으로 체험하기',
-          variant: 'outline',
+          to: URLS.SIGN_IN,
+          label: '3초만에 시작하기',
+          variant: 'default',
         },
       ];
 
@@ -97,7 +102,6 @@ const Header = ({ user }: HeaderProps) => {
           {menuItems.map((item, index) => (
             <Link key={index} href={item.to}>
               <Button variant={item.variant} size={user ? 'header' : 'none'}>
-                {!user && <SquarePlus className='mr-1' />}
                 {item.label}
               </Button>
             </Link>
