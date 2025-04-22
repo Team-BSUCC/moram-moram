@@ -1,6 +1,6 @@
 'use client';
 
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, EllipsisVertical } from 'lucide-react';
 import { useRef, useState, useEffect, ReactNode } from 'react';
 
 type DropdownProps = {
@@ -44,7 +44,15 @@ const Dropdown = ({ children, selection = false, text }: DropdownProps) => {
         <div className='flex'>
           {text}
           <button>
-            {selection ? isOpen ? <ChevronUp /> : <ChevronDown /> : '⋮'}
+            {selection ? (
+              isOpen ? (
+                <ChevronUp />
+              ) : (
+                <ChevronDown />
+              )
+            ) : (
+              <EllipsisVertical />
+            )}
           </button>
         </div>
       </div>

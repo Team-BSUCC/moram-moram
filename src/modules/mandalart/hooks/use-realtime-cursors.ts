@@ -1,3 +1,4 @@
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -75,9 +76,11 @@ export const useRealtimeCursors = ({
   );
 
   const channelRef = useRef<RealtimeChannel | null>(null);
+  const isVisible = useFloatingSheetStore((state) => state.isVisible);
 
   const callback = useCallback(
     (event: MouseEvent) => {
+      if (isVisible) return;
       const { clientX, clientY } = event;
 
       const payload: CursorEventPayload = {
