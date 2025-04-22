@@ -13,6 +13,11 @@ import { SquarePlus, X } from 'lucide-react';
 import ColorPicker from './color-picker';
 import { useCreateRoom } from '../hooks/use-create-room';
 import { useQueryClient } from '@tanstack/react-query';
+import {
+  errorAlert,
+  infoAlert,
+  successAlert,
+} from '@/shared/utils/sweet-alert';
 
 type DashBoardProps = {
   user: string | null;
@@ -51,10 +56,10 @@ const DashBoard = ({ user }: DashBoardProps) => {
   const isDisable = Object.values(date).every((value) => value !== '');
 
   const handleCreateMandalart = () => {
-    if (error) return alert(error);
-    if (!user) return alert('유저 없음');
-    if (!title) return alert('제목을 꼭 입력해주세요');
-    if (!isStartBig) return alert('시작일보다 종료일이 더 커요!');
+    if (error) return errorAlert('만다라트 생성 중 에러가 발생했습니다.');
+    if (!user) return infoAlert('유저 없음');
+    if (!title) return infoAlert('제목을 꼭 입력해주세요');
+    if (!isStartBig) return infoAlert('시작일보다 종료일이 더 커요!');
     createRoom(
       {
         userId: user,
@@ -66,7 +71,7 @@ const DashBoard = ({ user }: DashBoardProps) => {
       },
       {
         onSuccess: () => {
-          alert('생성 완료');
+          successAlert('생성 완료');
           setIsCreateModalOpen(false);
           setIsDateDropDownOpen(false);
           setDate({
@@ -83,7 +88,7 @@ const DashBoard = ({ user }: DashBoardProps) => {
           queryclient.invalidateQueries({ queryKey: ['mandalarts-cards'] });
         },
         onError: (err) => {
-          alert('생성 중 오류 발생: ' + err.message);
+          errorAlert('생성 중 오류 발생: ' + err.message);
         },
       }
     );
