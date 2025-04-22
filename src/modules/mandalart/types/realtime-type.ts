@@ -112,3 +112,49 @@ export type FormatBroadcastStorePayloadType = {
     [k: string]: TodoPayloadType;
   };
 };
+
+export type MandalartCore = {
+  id: string;
+  roomId: string;
+  title: string;
+  subTitle: string | null;
+  private: boolean;
+  doneCount: number;
+  startDate: string | null;
+  endDate: string | null;
+  color: number;
+  createdAt: string;
+};
+
+export type MandalartTopic = {
+  id: string;
+  mandalartId: string;
+  topicIndex: number;
+  createdAt: string;
+  topic: string;
+};
+
+export type MandalartSubtopic = {
+  id: string;
+  topicId: string;
+  cellIndex: number;
+  isDone: boolean;
+  content: string | null;
+  createdAt: string;
+};
+
+export type CellTodo = {
+  id: string;
+  cellId: string;
+  title: string;
+  scheduledDate: string | null;
+  isDone: boolean;
+  createdAt: string;
+};
+
+export type MandalartAllJson = {
+  core: MandalartCore;
+  topics: MandalartTopic[];
+  subtopics: MandalartSubtopic[];
+  todos: CellTodo[];
+};

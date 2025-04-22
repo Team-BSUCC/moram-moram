@@ -6,14 +6,10 @@ import { RealtimeCursors } from '@/modules/mandalart/components/realtime-cursors
 import SubBlock from '@/modules/mandalart/components/sub-block';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import { useBatchUpdateTrigger } from '@/modules/mandalart/hooks/use-batch-update-trigger';
-import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
+import { useRpcMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { createTodoListkey } from '@/modules/mandalart/services/create-todo-list-key';
-import { QUERY_KEY } from '@/shared/constants/query-key';
-import { TodoPayloadType } from '@/modules/mandalart/types/realtime-type';
 import { useBroadcastStore } from '@/modules/mandalart/hooks/use-broadcast-store';
 import Spacer from '@/components/commons/spacer';
 import Title from '@/components/commons/title';
@@ -27,6 +23,7 @@ import { AvatarStack } from './mandalart-avatar-stack';
 import { useUsersStore } from '../hooks/use-users-store';
 import { getCurrentUserId } from '@/shared/utils/get-current-user-id';
 import Button from '@/components/commons/button';
+import { useClientStateStore } from '../hooks/use-client-state-store';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -43,20 +40,18 @@ const MandalartMainContent = ({
   mandalartId,
 }: MandalartMainContentProps) => {
   const supabase = getBrowserClient();
-  const queryClient = useQueryClient();
 
   useBatchUpdateTrigger();
   useRealtimePresenceRoom('avatar-room', user);
 
+  const initialize = useClientStateStore((state) => state.initialize);
+  const topicsData = useClientStateStore((state) => state.topics);
+
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
-  const currentUsers = useUsersStore((state) => state.currentUsers);
+  // const currentUsers = useUsersStore((state) => state.currentUsers);
 
-  const { data, isPending, isError } = useMandalartDataQuery(mandalartId);
+  const { data, isPending, isError } = useRpcMandalartDataQuery(mandalartId);
 
-  useEffect(() => {
-    if (isPending) return;
-    createTodoListkey(queryClient, data);
-  }, [isPending, data, queryClient]);
   const addBroadcastStore = useBroadcastStore(
     (state) => state.addBroadcastStore
   );
@@ -69,55 +64,14 @@ const MandalartMainContent = ({
   broadcastChannel
     .on('broadcast', { event: 'shout' }, (payload) => {
       addBroadcastStore(payload.payload);
-      //투두일때
-      if ('action' in payload.payload) {
-        if (payload.payload.action === 'UPDATE') {
-          queryClient.setQueryData(
-            QUERY_KEY.todolist(payload.payload.cell_id),
-            (todoList: TodoPayloadType[]) => {
-              return todoList.map((item) =>
-                item.id === payload.payload.id ? payload.payload : item
-              );
-            }
-          );
-
-          queryClient.setQueryData(
-            QUERY_KEY.todo(payload.payload.id),
-            payload.payload
-          );
-          return;
-        }
-
-        if (payload.payload.action === 'CREATE') {
-          queryClient.setQueryData(
-            QUERY_KEY.todolist(payload.payload.cell_id),
-            (todoList: TodoPayloadType[]) => {
-              return [...todoList, payload.payload];
-            }
-          );
-          return;
-        }
-
-        if (payload.payload.action === 'DELETE') {
-          queryClient.setQueryData(
-            QUERY_KEY.todolist(payload.payload.cell_id),
-            (todoList: TodoPayloadType[]) => {
-              return todoList.filter((item) => item.id !== payload.payload.id);
-            }
-          );
-          return;
-        }
-      }
-
-      queryClient.setQueryData(
-        [payload.payload.category, payload.payload.id],
-        payload.payload.value
-      );
+      console.log('111');
     })
     .subscribe();
 
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>error</div>;
+
+  initialize(data);
 
   return (
     <div className='flex flex-col items-center'>
@@ -134,7 +88,7 @@ const MandalartMainContent = ({
             <Title as='h1' size='32px-medium' textColor='black'>
               2025년 성장의 해로 만들기
             </Title>
-            <AvatarStack avatars={currentUsers} user={user} />
+            {/* <AvatarStack avatars={currentUsers} user={user} /> */}
           </div>
           <Spacer size='md' />
           <div className='flex'>
@@ -151,25 +105,19 @@ const MandalartMainContent = ({
 
       <div className='flex flex-col items-center md:w-[1024px]'>
         <Spacer size='lg' />
-        <LinearProgress value={calculatorProgress(data.done_count)} />
+        <LinearProgress value={calculatorProgress(data.core.doneCount)} />
         <Spacer size='lg' />
         <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
           {/* 중앙 블록 */}
-          <MainBlock
-            topics={data.mandalart_topics}
-            info={data}
-            className='col-start-2 row-start-2 h-full'
-          />
+          {/* <MainBlock /> */}
           {/* 나머지 블록 */}
-          {data.mandalart_topics.map((topic) => {
-            return (
-              <SubBlock
-                key={topic.id}
-                title={topic.topic}
-                topic={topic}
-                subTopics={topic.mandalart_subtopics}
-              />
-            );
+          {Array.from(topicsData).map(([key, value]) => {
+            // <SubBlock
+            //   key={topic.id}
+            //   title={topic.topic}
+            //   topic={topic}
+            //   subTopics={topic.mandalart_subtopics}
+            // />
           })}
           {/* 플로팅 시트 */}
           {isVisible && (

@@ -3,6 +3,8 @@ import { fetchGetMandalartsData } from '../services/fetch-get-mandalarts-data';
 import { CellInfoType, MandalartType, TodoType } from '../types/realtime-type';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { getQueryKey } from '../services/get-data-category';
+import { fetchGetMandalartsDataWithRpc } from '../services/fetch-get-mandalarts-data-with-rpc';
+import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 
 /**
  * 만다라트 데이터를 불러오는 useQuery 커스텀 훅
@@ -82,5 +84,14 @@ export const useSubtopicCacheQuery = (id: string) => {
     queryKey: QUERY_KEY.subtopic(id),
     queryFn: () => Promise.resolve(null),
     enabled: false,
+  });
+};
+
+export const useRpcMandalartDataQuery = (id: string) => {
+  return useQuery({
+    queryKey: ['mandalarts-flat', id],
+    queryFn: async () => fetchGetMandalartsDataWithRpc(id),
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };
