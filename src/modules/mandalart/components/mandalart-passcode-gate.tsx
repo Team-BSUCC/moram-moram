@@ -6,6 +6,7 @@ import { User } from '@supabase/supabase-js';
 import React, { useState } from 'react';
 import { fetchCheckRoomPasscode } from '../services/fetch-check-room-passcode';
 import MandalartMainContent from './mandalart-main-content';
+import { fetchCreateParticipantsUser } from '../services/fetch-create-participants-user';
 
 type MandalartPasswordGateType = {
   user: User | null;
@@ -26,7 +27,14 @@ const MandalartPasscodeGate = ({
       passwordInputValue
     );
     if (isCheckPasscodeResult) {
-      alert('접속성공');
+      //회원일경우 참가자테이블에 등록
+      if (user) {
+        if (await fetchCreateParticipantsUser(roomId, user.id)) {
+          alert('접속성공 참가자등록완료');
+        } else {
+          alert('접속성공');
+        }
+      }
     } else {
       alert('잘못된비밀번호');
     }
