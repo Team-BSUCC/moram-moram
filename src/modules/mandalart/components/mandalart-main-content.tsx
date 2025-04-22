@@ -10,7 +10,7 @@ import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-d
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { createTodoListkey } from '@/modules/mandalart/services/create-todo-list-key';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { TodoPayloadType } from '@/modules/mandalart/types/realtime-type';
@@ -44,6 +44,7 @@ const MandalartMainContent = ({
 }: MandalartMainContentProps) => {
   const supabase = getBrowserClient();
   const queryClient = useQueryClient();
+  const boardRef = useRef<HTMLDivElement>(null);
 
   useBatchUpdateTrigger();
   useRealtimePresenceRoom('avatar-room', user);
@@ -122,12 +123,6 @@ const MandalartMainContent = ({
   return (
     <div className='flex flex-col items-center'>
       <Spacer size='top' />
-      <RealtimeCursors
-        roomName='cursor-room'
-        username={username}
-        userId={userId}
-      />
-
       <div className='w-full max-w-[1440px] px-4'>
         <div className='flex flex-col'>
           <div className='flex justify-between'>
@@ -153,7 +148,10 @@ const MandalartMainContent = ({
         <Spacer size='lg' />
         <LinearProgress value={calculatorProgress(data.done_count)} />
         <Spacer size='lg' />
-        <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
+        <div
+          className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'
+          ref={boardRef}
+        >
           {/* 중앙 블록 */}
           <MainBlock
             topics={data.mandalart_topics}
@@ -175,6 +173,12 @@ const MandalartMainContent = ({
           {isVisible && (
             <MandalartFloatingSheet channelReceiver={broadcastChannel} />
           )}
+          <RealtimeCursors
+            roomName='cursor-room'
+            username={username}
+            userId={userId}
+            boardRef={boardRef}
+          />
         </div>
         <Spacer size='3xl' />
         <div className='flex gap-8'>

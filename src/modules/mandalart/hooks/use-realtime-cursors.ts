@@ -63,11 +63,13 @@ export const useRealtimeCursors = ({
   username,
   userId: id,
   throttleMs,
+  boardRef,
 }: {
   roomName: string;
   username: string;
   userId: string;
   throttleMs: number;
+  boardRef: React.RefObject<HTMLDivElement>;
 }) => {
   const [color] = useState(generateRandomColor());
   const [userId] = useState(id);
@@ -80,13 +82,13 @@ export const useRealtimeCursors = ({
 
   const callback = useCallback(
     (event: MouseEvent) => {
-      if (isVisible) return;
-      const { clientX, clientY } = event;
+      if (isVisible || !boardRef.current) return;
+      const rect = boardRef.current.getBoundingClientRect();
 
       const payload: CursorEventPayload = {
         position: {
-          x: clientX,
-          y: clientY,
+          x: (event.clientX - rect.left) / rect.width,
+          y: (event.clientY - rect.top) / rect.height,
         },
         user: {
           id: userId,
