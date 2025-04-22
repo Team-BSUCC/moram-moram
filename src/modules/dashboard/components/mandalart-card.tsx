@@ -31,7 +31,7 @@ const MandalartCard = ({
   const diff = getDateDiff(card.mandalart.endDate);
   return (
     <div
-      className={`${bandColor} grid h-[] w-full min-w-[330px] max-w-[394px] rounded-br-lg rounded-tr-lg shadow-[2px_2px_20px_0px_rgba(0,0,0,0.10)]`}
+      className={`${bandColor} grid h-fit w-full min-w-[330px] max-w-[394px] rounded-br-lg rounded-tr-lg shadow-[2px_2px_20px_0px_rgba(0,0,0,0.10)]`}
     >
       <div className='relative ml-3 rounded-br-lg rounded-tr-lg bg-white-light'>
         <div className='absolute right-[10px] top-[20px]'>
@@ -100,7 +100,7 @@ const MandalartCard = ({
                 />
               </div>
             </div>
-            <Spacer size='sm' />
+            <Spacer size='md' />
             <hr className='w-full' />
             <Spacer size='md' />
             <div className='flex gap-[25px]'>

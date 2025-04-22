@@ -12,17 +12,20 @@ import * as React from 'react';
 /**
  * 아바타 스택의 방향 결정 (가로 or 세로)
  */
-const avatarStackVariants = cva('flex gap-[8px] -space-x-4 -space-y-4', {
-  variants: {
-    orientation: {
-      vertical: 'flex-row',
-      horizontal: 'flex-col',
+const avatarStackVariants = cva(
+  'flex relative gap-[8px] -space-x-4 -space-y-4',
+  {
+    variants: {
+      orientation: {
+        vertical: 'flex-row',
+        horizontal: 'flex-col',
+      },
     },
-  },
-  defaultVariants: {
-    orientation: 'vertical',
-  },
-});
+    defaultVariants: {
+      orientation: 'vertical',
+    },
+  }
+);
 
 export interface AvatarStackProps
   extends React.HTMLAttributes<HTMLDivElement>,
@@ -65,7 +68,8 @@ const DashboardAvatarStack = ({
           <Tooltip key={`${name}-${image}-${index}`}>
             <TooltipTrigger asChild>
               <Avatar
-                className={`z-${50 - index * 10} h-[22px] w-[22px] border-[2px] border-stroke bg-white-light text-md hover:z-50`}
+                className='h-[22px] w-[22px] border-[2px] border-stroke bg-white-light text-md hover:z-10'
+                style={{ zIndex: 5 - index }}
               >
                 <AvatarImage src={image} />
                 <AvatarFallback>
@@ -88,7 +92,7 @@ const DashboardAvatarStack = ({
         {hiddenAvatars.length ? (
           <Tooltip key='hidden-avatars'>
             <TooltipTrigger asChild>
-              <Avatar>
+              <Avatar className='z-0 h-[22px] w-[32px] bg-lightgray text-md'>
                 <AvatarFallback>
                   {/* 3개 이상 시 +(개수)로 아바타 표시 */}+
                   {avatars.length - shownAvatars.length}
