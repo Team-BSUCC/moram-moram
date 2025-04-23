@@ -14,14 +14,12 @@ const CoreCell = () => {
     show();
   };
 
-  console.log('코어임');
-
   return (
     <>
       {/* 셀의 스타일 지정 */}
       <div
         onClick={handleClick}
-        className='relative col-start-2 row-start-2 flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[3px] border-black bg-violet-pigment p-2 hover:cursor-pointer'
+        className='relative z-10 col-start-2 row-start-2 flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[3px] border-black bg-violet-pigment p-2 transition-all hover:cursor-pointer'
       >
         <Text
           align='center'

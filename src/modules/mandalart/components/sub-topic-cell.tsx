@@ -29,7 +29,7 @@ const SubTopicCell = ({ index, subTopic }: SubTopicCellProps) => {
       {/* 셀의 스타일 지정 */}
       <div
         onClick={handleClick}
-        className='relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-2 p-2 hover:cursor-pointer'
+        className='relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer'
       >
         <Text align='center' size='16px-regular' textColor='main'>
           {subTopic?.content}
