@@ -47,10 +47,12 @@ export const useClientStateStore = create<MapStore>((set, get) => ({
       fetchData.subtopics.map((item) => [`${item.topicId}-${item.id}`, item])
     );
     set({ subTopics: subTopicMap });
-    const todoMap = new Map(
-      fetchData.todos.map((item) => [`${item.cellId}-${item.id}`, item])
-    );
-    set({ todos: todoMap });
+    if (fetchData.todos) {
+      const todoMap = new Map(
+        fetchData.todos.map((item) => [`${item.cellId}-${item.id}`, item])
+      );
+      set({ todos: todoMap });
+    }
   },
 
   // core
