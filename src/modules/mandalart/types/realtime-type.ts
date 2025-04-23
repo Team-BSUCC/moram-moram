@@ -165,3 +165,32 @@ export type MandalartFloatingSheetInfo =
   | MandalartSubtopic
   | undefined
   | null;
+
+export type BroadCastDataType =
+  | MandalartCore
+  | MandalartTopic
+  | MandalartSubtopic;
+
+export type TodoBroadCastType = {
+  value: CellTodo;
+  action: string;
+};
+
+export type CellBroadCastParamsType =
+  | { action: 'core'; value: MandalartCore }
+  | { action: 'topic'; value: MandalartTopic }
+  | { action: 'subTopic'; value: MandalartSubtopic };
+
+export type DateRangeState = {
+  year: string;
+  month: string;
+  day: string;
+};
+
+export type ReceiveBroadCastPayload =
+  | { action: 'core'; value: MandalartCore }
+  | { action: 'topic'; value: MandalartTopic }
+  | { action: 'subTopic'; value: MandalartSubtopic }
+  | { action: 'CREATE'; value: CellTodo }
+  | { action: 'UPDATE'; value: CellTodo }
+  | { action: 'DELETE'; value: CellTodo };
