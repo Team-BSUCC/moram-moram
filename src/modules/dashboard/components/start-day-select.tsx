@@ -17,7 +17,7 @@ const StartDaySelect = ({
   year,
 }: StartDaySelectProps) => {
   const dayList = getDayInMonth(year, month);
-  const [selected, setSelected] = useState('1');
+  const [selected, setSelected] = useState('-');
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (value: string) => {
