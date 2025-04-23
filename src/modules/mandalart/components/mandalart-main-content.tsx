@@ -29,6 +29,7 @@ import {
   infoAlert,
   successAlert,
 } from '@/shared/utils/sweet-alert';
+import * as Sentry from '@sentry/nextjs';
 
 type MandalartMainContentProps = {
   user: User | null;
@@ -72,7 +73,11 @@ const MandalartMainContent = ({
       link.href = dataUrl;
       link.click();
     } catch (error) {
-      // TODO: sentry
+      Sentry.withScope((scope) => {
+        scope.setTag('page', 'mandalart');
+        scope.setTag('feature', 'Img Download Error');
+        Sentry.captureException(new Error(`[Img Download Error] ${error}`));
+      });
     }
   };
 
