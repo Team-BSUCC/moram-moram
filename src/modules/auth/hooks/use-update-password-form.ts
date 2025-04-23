@@ -4,7 +4,7 @@ import { useTransition } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { updatePassword } from '../services/auth-server-service';
-import Swal from 'sweetalert2';
+import { errorAlert, successAlert } from '@/shared/utils/sweet-alert';
 import * as Sentry from '@sentry/nextjs';
 
 const updatePasswordSchema = z
@@ -34,10 +34,7 @@ const useUpdatePasswordForm = (email: string) => {
     startTransition(async () => {
       try {
         await updatePassword({ email, ...data });
-        Swal.fire({
-          icon: 'success',
-          title: '비밀번호가 변경되었습니다.',
-        });
+        successAlert('비밀번호가 변경되었습니다.');
       } catch (error) {
         Sentry.withScope((scope) => {
           scope.setTag('page', 'mypage');
@@ -45,10 +42,10 @@ const useUpdatePasswordForm = (email: string) => {
 
           Sentry.captureException(new Error(`[updatePassword] ${error}`));
         });
-        Swal.fire({
-          icon: 'error',
-          title: `${error instanceof Error ? error.message : '오류가 발생했습니다.'}`,
-        });
+
+        errorAlert(
+          `${error instanceof Error ? error.message : '오류가 발생했습니다.'}`
+        );
       }
     });
   });

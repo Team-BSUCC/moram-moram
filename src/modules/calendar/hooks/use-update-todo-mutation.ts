@@ -2,10 +2,11 @@ import { useMutation } from '@tanstack/react-query';
 import { updateTodoToggleData } from '../services/edit-todo-data';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
-import Swal from 'sweetalert2';
+import * as Sentry from '@sentry/nextjs';
+import { errorAlert } from '@/shared/utils/sweet-alert';
 
 export const useUpdateTodoMutation = () => {
-  const [isPending, startTransition] = useTransition();
+  const [_, startTransition] = useTransition();
   const router = useRouter();
 
   return useMutation({
@@ -15,11 +16,18 @@ export const useUpdateTodoMutation = () => {
         router.refresh();
       });
     },
-    onError: () => {
-      Swal.fire({
-        icon: 'error',
-        title: '업데이트에 실패했습니다. 다시 시도해주세요!',
+    onError: (error) => {
+      Sentry.withScope((scope) => {
+        scope.setTag('page', 'Calendar Page');
+        scope.setTag('feature', 'update Todo');
+
+        Sentry.captureException(
+          new Error(
+            `[updateTodo] ${error instanceof Error ? error.message : 'Unknown error'}`
+          )
+        );
       });
+      errorAlert('업데이트에 실패했습니다. 다시 시도해주세요!');
     },
   });
 };

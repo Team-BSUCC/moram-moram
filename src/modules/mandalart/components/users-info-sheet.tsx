@@ -14,6 +14,11 @@ import Title from '@/components/commons/title';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import Text from '@/components/commons/text';
 import { Link } from 'lucide-react';
+import {
+  errorAlert,
+  infoAlert,
+  successAlert,
+} from '@/shared/utils/sweet-alert';
 import * as Sentry from '@sentry/nextjs';
 
 type UsersInfoSheetType = { user: User | null };
@@ -49,7 +54,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
   const handleSetPasswordSubmit = async () => {
     try {
       await fetchUpdateRoomPasscode(pathParamRoomId, passwordInputValue);
-      alert('변경성공');
+      successAlert('비밀번호가 변경 되었습니다.');
       updateRoomData();
     } catch (error) {
       Sentry.withScope((scope) => {
@@ -60,7 +65,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
           new Error(`[handleSetPasswordSubmit] ${error}`)
         );
       });
-      alert('변경실패');
+      errorAlert('비밀번호 변경이 실패하였습니다.');
     }
   };
 
@@ -70,7 +75,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
       비밀번호 : ${passwordInputValue}
       `;
       await navigator.clipboard.writeText(inviteText);
-      alert('클립보드에 복사되었습니다!');
+      successAlert('클립보드에 복사 되었습니다!');
     } catch (error) {
       Sentry.withScope((scope) => {
         scope.setTag('page', 'mandalart page');
@@ -78,7 +83,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
 
         Sentry.captureException(new Error(`[handleInviteClick] ${error}`));
       });
-      alert('복사실패');
+      infoAlert('복사가 실패하였습니다. 직접 url을 복사해주세요.');
     }
   };
 

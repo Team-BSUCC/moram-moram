@@ -1,5 +1,5 @@
 'use server';
-import { MandalartType } from '../types/realtime-type';
+import { MandalartAllJson, MandalartType } from '../types/realtime-type';
 import { PostgrestError } from '@supabase/supabase-js';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
 import * as Sentry from '@sentry/nextjs';
@@ -57,4 +57,15 @@ export const fetchGetMandalartsData = async (
   }
 
   return data[0];
+};
+
+export const getMandalartWithRPC = async (
+  id: string
+): Promise<MandalartAllJson> => {
+  const supabase = getServerClient();
+  const { data: mandalart } = await supabase.rpc('get_mandalart_all_json', {
+    _mandalart_id: id,
+  });
+
+  return mandalart;
 };

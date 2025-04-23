@@ -2,10 +2,11 @@ import { useMutation } from '@tanstack/react-query';
 import { useTransition } from 'react';
 import { useRouter } from 'next/navigation';
 import { deleteTodoData } from '../services/edit-todo-data';
-import Swal from 'sweetalert2';
+import * as Sentry from '@sentry/nextjs';
+import { errorAlert } from '@/shared/utils/sweet-alert';
 
 export const useDeleteTodoMutation = () => {
-  const [isPending, startTransition] = useTransition();
+  const [_, startTransition] = useTransition();
   const router = useRouter();
 
   return useMutation({
@@ -15,11 +16,18 @@ export const useDeleteTodoMutation = () => {
         router.refresh();
       });
     },
-    onError: () => {
-      Swal.fire({
-        icon: 'error',
-        title: '삭제를 실패했습니다. 다시 시도해주세요!',
+    onError: (error) => {
+      Sentry.withScope((scope) => {
+        scope.setTag('page', 'TodayList & Calendar Page');
+        scope.setTag('feature', 'deleteTodo');
+
+        Sentry.captureException(
+          new Error(
+            `[deleteTodo] ${error instanceof Error ? error.message : 'Unknown error'}`
+          )
+        );
       });
+      errorAlert('삭제를 실패했습니다. 다시 시도해주세요!');
     },
   });
 };
