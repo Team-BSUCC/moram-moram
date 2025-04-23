@@ -15,7 +15,7 @@ const StartYearSelect = ({
   yearList,
   date,
 }: StartYearSelectProps) => {
-  const [selected, setSelected] = useState('2025');
+  const [selected, setSelected] = useState('--');
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (value: string) => {

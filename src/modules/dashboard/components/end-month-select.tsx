@@ -15,7 +15,7 @@ const EndMonthSelect = ({
   monthList,
   month,
 }: EndMonthSelectProps) => {
-  const [selected, setSelected] = useState('1');
+  const [selected, setSelected] = useState('-');
   const [isOpen, setIsOpen] = useState(false);
 
   const handleSelect = (value: string) => {
