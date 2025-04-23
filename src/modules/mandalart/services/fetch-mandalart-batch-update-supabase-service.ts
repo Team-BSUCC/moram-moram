@@ -15,29 +15,27 @@ export const mandalartBatchUpdateSupabase = async (
   const updates = [];
 
   //Core 업데이트(update)
-  if (broadcastStore.core.size > 0) {
-    const coreData = Array.from(broadcastStore.core.entries())[0];
-    const coreUpdate = supabase
-      .from('mandalarts')
-      .update({ title: coreData[1].value })
-      .eq('id', coreData[0]);
-    updates.push(coreUpdate);
-  }
+  // if (broadcastStore.core.size > 0) {
+  //   const coreData = Array.from(broadcastStore.core.entries())[0];
+  //   const coreUpdate = supabase
+  //     .from('mandalarts')
+  //     .update({ title: coreData[1].value })
+  //     .eq('id', coreData[0]);
+  //   updates.push(coreUpdate);
+  // }
 
   // Topic 업데이트(upsert)
   if (broadcastStore.topic.size > 0) {
     const topicData = Array.from(broadcastStore.topic.values());
     const topicUpdate = supabase.from('mandalart_topics').upsert(
       topicData.map((payloadTopic) => {
-        const {
-          category,
-          mandalart_subtopics,
-          content,
-          isCenter,
-          value,
-          ...topicRowInfo
-        } = payloadTopic;
-        return { ...topicRowInfo, topic: value };
+        return {
+          id: payloadTopic.value.id,
+          mandalart_id: payloadTopic.value.mandalartId,
+          topic: payloadTopic.value.topic,
+          topic_index: payloadTopic.value.topicIndex,
+          created_at: payloadTopic.value.createdAt,
+        };
       })
     );
     updates.push(topicUpdate);
@@ -48,9 +46,14 @@ export const mandalartBatchUpdateSupabase = async (
     const subTopicData = Array.from(broadcastStore.subTopic.values());
     const subTopicUpdate = supabase.from('mandalart_subtopics').upsert(
       subTopicData.map((payloadSubtopic) => {
-        const { category, cell_todos, isCenter, value, ...subtopicRowInfo } =
-          payloadSubtopic;
-        return { ...subtopicRowInfo, content: value };
+        return {
+          id: payloadSubtopic.value.id,
+          topic_id: payloadSubtopic.value.topicId,
+          content: payloadSubtopic.value.content,
+          is_done: payloadSubtopic.value.isDone,
+          created_at: payloadSubtopic.value.createdAt,
+          cell_index: payloadSubtopic.value.cellIndex,
+        };
       })
     );
     updates.push(subTopicUpdate);
@@ -65,15 +68,20 @@ export const mandalartBatchUpdateSupabase = async (
     const upsertData = todoData
       .filter((payloadTodo) => payloadTodo.action !== 'DELETE')
       .map((payloadTodo) => {
-        //category 사용 X
-        const { category, value, action, ...todoRowInfo } = payloadTodo;
-        return { ...todoRowInfo, title: value };
+        return {
+          id: payloadTodo.value.id,
+          cell_id: payloadTodo.value.cellId,
+          created_at: payloadTodo.value.createdAt,
+          is_done: payloadTodo.value.isDone,
+          title: payloadTodo.value.title,
+          scheduled_date: payloadTodo.value.scheduledDate,
+        };
       });
 
     //todo delete를 위한 id 배열 생성
     const deleteTodoId = todoData
       .filter((payloadTodo) => payloadTodo.action === 'DELETE')
-      .map((payloadTodo) => payloadTodo.id);
+      .map((payloadTodo) => payloadTodo.value.id);
 
     if (upsertData.length !== 0) {
       const todoUpsert = todoTable.upsert(upsertData);

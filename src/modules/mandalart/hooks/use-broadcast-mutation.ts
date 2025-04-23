@@ -1,6 +1,9 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { RealtimeChannel } from '@supabase/supabase-js';
-import { BroadcastPayloadType } from '../types/realtime-type';
+import {
+  BroadcastPayloadType,
+  ReceiveBroadCastPayload,
+} from '../types/realtime-type';
 import { useBroadcastStore } from './use-broadcast-store';
 import { getQueryKey } from '../services/get-data-category';
 import * as Sentry from '@sentry/nextjs';
@@ -30,7 +33,7 @@ export const useBroadcastMutation = (
         event: 'shout',
         payload,
       });
-      addBroadcastStore(payload);
+      addBroadcastStore(payload as ReceiveBroadCastPayload);
     },
     onError: (error) => {
       Sentry.withScope((scope) => {

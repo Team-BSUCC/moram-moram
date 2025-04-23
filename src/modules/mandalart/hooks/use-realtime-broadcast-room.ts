@@ -9,15 +9,16 @@ export const useRealtimeBroadCastRoom = (roomName: string) => {
     (state) => state.addBroadcastStore
   );
   const setChannel = useChannelStore((state) => state.setChannel);
-
   const handleSynchronization = useReceiveBroadCastUpdater();
+
   const supabase = getBrowserClient();
+
   useEffect(() => {
     const channel = supabase.channel(roomName);
 
     channel.on('broadcast', { event: 'shout' }, (payload) => {
       handleSynchronization(payload.payload);
-      // addBroadcastStore(payload.payload);
+      addBroadcastStore(payload.payload);
     });
 
     channel.subscribe();
