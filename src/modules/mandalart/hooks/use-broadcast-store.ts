@@ -8,7 +8,7 @@ import {
   TodoPayloadType,
   TopicPayloadType,
 } from '../types/realtime-type';
-import { mandalartBatchUpdateSupabase } from '../services/mandalart-batch-update-supabase-service';
+import { mandalartBatchUpdateSupabase } from '../services/fetch-mandalart-batch-update-supabase-service';
 
 // 브로드캐스트 스토어 상태 타입
 type BroadcastStoreStateType = {
