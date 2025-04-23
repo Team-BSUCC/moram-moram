@@ -27,6 +27,7 @@ const buttonVariants = cva(
         none: 'text-[14px] leading-[20px] font-medium sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]',
         header:
           'text-[16px] leading-[24px] font-medium sm:text-[18px] sm:leading-[27px] md:text-[20px] md:leading-[30px] py-[6px] px-[6px] sm:py-[8px] sm:px-[8px] md:py-[10px] md:px-[10px]',
+        nickName: 'text-[16px] leading-[24px] font-medium py-[8px] px-[12px] ',
       },
     },
     defaultVariants: {
