@@ -33,15 +33,33 @@ export const updateUserAvatar = async (userId: string, file: File) => {
 };
 
 export const deleteUserAvatar = async (userId: string) => {
-  const filePath = `avatars/${userId}/profile.png`;
+  const folderPath = `avatars/${userId}`;
 
-  await supabaseAdmin.storage.from('avatars').remove([filePath]);
+  const { data: files, error: listError } = await supabaseAdmin.storage
+    .from('avatars')
+    .list(folderPath);
 
-  const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
-    user_metadata: { avatar_url: '' },
-  });
+  if (listError) throw new Error(listError.message);
 
-  if (error) throw new Error(error.message);
+  const profileFiles = files
+    ?.filter((file) => file.name.startsWith('profile'))
+    .map((file) => `${folderPath}/${file.name}`);
+
+  if (profileFiles && profileFiles.length > 0) {
+    const { error: removeError } = await supabaseAdmin.storage
+      .from('avatars')
+      .remove(profileFiles);
+
+    if (removeError) throw new Error(removeError.message);
+  }
+  const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
+    userId,
+    {
+      user_metadata: { avatar_url: '' },
+    }
+  );
+
+  if (updateError) throw new Error(updateError.message);
 };
 
 export const updateUserNickname = async (userId: string, nickname: string) => {
