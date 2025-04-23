@@ -93,9 +93,6 @@ const MandalartMainContent = ({
           {data.topics.map((item, idx) => {
             return <SubBlock key={item.id} topic={item} index={idx} />;
           })}
-
-          {/* 플로팅 시트 */}
-          {isVisible && <MandalartFloatingSheet />}
         </div>
         <Spacer size='3xl' />
         <div className='flex gap-8'>
@@ -104,6 +101,8 @@ const MandalartMainContent = ({
         </div>
         <Spacer size='3xl' />
       </div>
+      {/* 플로팅 시트 */}
+      {isVisible && <MandalartFloatingSheet />}
     </div>
   );
 };
