@@ -1,14 +1,12 @@
-import { TodoPayloadType } from '../types/realtime-type';
+import { CellTodo } from '../types/realtime-type';
 
-export const createNewTodoRowValue = (subtopicId: string): TodoPayloadType => {
+export const createNewTodoRowValue = (subtopicId: string): CellTodo => {
   return {
     id: crypto.randomUUID(),
-    cell_id: subtopicId,
-    created_at: new Date().toISOString(),
-    is_done: false,
+    cellId: subtopicId,
+    createdAt: new Date().toISOString(),
+    isDone: false,
     title: '새 TODO',
-    action: 'CREATE',
-    value: '새 TODO',
-    category: 'TODO',
+    scheduledDate: null,
   };
 };
