@@ -24,6 +24,9 @@ import Button from '@/components/commons/button';
 import { useClientStateStore } from '../hooks/use-client-state-store';
 import { formatDate } from '@/modules/dashboard/util/format-date';
 import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
+import { useEffect } from 'react';
+import { useChannelStore } from '../hooks/use-channel-store';
+import { useReceiveBroadCastUpdater } from '../services/receive-broadcast-update';
 
 /**
  * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
@@ -48,30 +51,49 @@ const MandalartMainContent = ({
 
   const isVisible = useTodoFloatingSheetStore((state) => state.isVisible);
   const currentUsers = useUsersStore((state) => state.currentUsers);
+  const setChannel = useChannelStore((state) => state.setChannel);
 
   const { data, isPending, isError } = useRpcMandalartDataQuery(mandalartId);
 
-  const addBroadcastStore = useBroadcastStore(
-    (state) => state.addBroadcastStore
-  );
+  useEffect(() => {
+    if (isPending) return;
+    if (isError) return;
+    initialize(data);
+  }, [data]);
+
+  // const addBroadcastStore = useBroadcastStore(
+  //   (state) => state.addBroadcastStore
+  // );
 
   const username = getCurrentUserName(user);
   const userId = getCurrentUserId(user);
 
   //TODO 룸네임받는 훅으로 수정
-  const broadcastChannel = supabase.channel('broadcastChannel');
+  const broadcastChannel = supabase.channel('imssotest');
+
+  const handleSynchronization = useReceiveBroadCastUpdater();
+
+  useEffect(() => {
+    setChannel(broadcastChannel);
+  }, [broadcastChannel]);
+
+  useEffect(() => {
+    return () => {
+      broadcastChannel.unsubscribe();
+    };
+  }, []);
+
   broadcastChannel
     .on('broadcast', { event: 'shout' }, (payload) => {
-      addBroadcastStore(payload.payload);
-      console.log('111');
+      console.log(payload.payload);
+      handleSynchronization(payload.payload);
+      // addBroadcastStore(payload.payload);
     })
     .subscribe();
 
   if (isPending) return <div>Loading...</div>;
 
   if (isError) return <div>error</div>;
-
-  initialize(data);
 
   return (
     <div className='flex flex-col items-center'>
@@ -107,7 +129,7 @@ const MandalartMainContent = ({
         <Spacer size='lg' />
         <LinearProgress value={calculatorProgress(data.core.doneCount)} />
         <Spacer size='lg' />
-        <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
+        <div className='animate-fadeInOnce grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
           {/* 중앙 블록 */}
           <MainBlock />
 
@@ -117,9 +139,7 @@ const MandalartMainContent = ({
           })}
 
           {/* 플로팅 시트 */}
-          {isVisible && (
-            <MandalartFloatingSheet channelReceiver={broadcastChannel} />
-          )}
+          {isVisible && <MandalartFloatingSheet />}
         </div>
         <Spacer size='3xl' />
         <div className='flex gap-8'>

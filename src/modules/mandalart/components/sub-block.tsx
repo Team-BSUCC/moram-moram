@@ -18,6 +18,7 @@ type SubBlockProps = {
  */
 const SubBlock = ({ topic, index }: SubBlockProps) => {
   const subTopic = useClientStateStore((state) => state.subTopics);
+  const getTopic = useClientStateStore((state) => state.getTopicItem(topic.id));
   const backColor = getColorWithNumber(index);
 
   const subTopicsWithTopicId = Array.from(subTopic)
@@ -29,9 +30,9 @@ const SubBlock = ({ topic, index }: SubBlockProps) => {
     <div className='grid aspect-square grid-cols-3 grid-rows-3 gap-2'>
       <TopicCell
         key={topic.id}
-        value={topic}
+        value={getTopic}
         backColor={backColor}
-        className='col-start-2 row-start-2 h-full'
+        className='col-start-2 row-start-2 h-full rounded-lg border-[3px] border-main'
       />
       {subTopicsWithTopicId.map((subTopic, idx) => {
         return (

@@ -2,16 +2,9 @@ import FloatingSheet from '@/components/commons/floating-sheet';
 import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
 import { useState } from 'react';
-import { TodoPayloadType, TodoType } from '../types/realtime-type';
 import TodoItem from './todo-item';
-import { getDataCategory } from '../services/get-data-category';
 import TopicGroup from './topic-group';
 import SubtopicGroup from './subtopic-group';
-import { RealtimeChannel } from '@supabase/supabase-js';
-import { useBroadcastMutation } from '../hooks/use-broadcast-mutation';
-import { useThrottleMutate } from '../hooks/use-throttle-mutate';
-import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
-import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
 import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 import Spacer from '@/components/commons/spacer';
 import { BicepsFlexed, CalendarDays, SquarePlus, X } from 'lucide-react';
@@ -20,41 +13,59 @@ import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
 import { formatDate } from '@/modules/dashboard/util/format-date';
 import { getDateDiff } from '@/modules/dashboard/util/calculate-date-differents';
 import { useClientStateStore } from '../hooks/use-client-state-store';
+import { useChannelStore } from '../hooks/use-channel-store';
+import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
+import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
+import { useCellBroadcastMutation } from '../hooks/use-cell-broadcast-mutation';
+import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate';
 
 /**
  * Todo floating sheet 컴포넌트
  * @returns
  */
-
-type FloatingSheetProps = {
-  channelReceiver: RealtimeChannel;
-};
-const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
+const MandalartFloatingSheet = () => {
   const info = useTodoFloatingSheetStore((state) => state.info);
 
   const hide = useTodoFloatingSheetStore((state) => state.hide);
 
-  const [value, setValue] = useState<string>();
+  const coreTitle = useClientStateStore((state) => state.core);
+  const topics = useClientStateStore((state) => state.topics);
+  const subTopics = useClientStateStore((state) => state.subTopics);
+  const parentTopic = useClientStateStore((state) => state.getTopicItem);
+  const todos = useClientStateStore((state) => state.todos);
 
-  // const { mutate: createTodo } = useTodoBroadcastMutation(
-  //   channelReceiver,
-  //   createNewTodoRowValue(info.id)
-  // );
+  const [value, setValue] = useState<string>(() => {
+    if (!info) return '';
 
-  // const { mutate } = useBroadcastMutation(channelReceiver, { ...info, value });
-  // const throttleMutate = useThrottleMutate(mutate, 0.5 * 1000);
+    if ('private' in info) return info.title ?? '';
+    if ('topicIndex' in info) return info.topic ?? '';
+    if ('cellIndex' in info) return info.content ?? '';
+
+    return '';
+  });
+
+  const channel = useChannelStore((state) => state.channel);
+
+  const { mutate: mutationTodo } = useTodoBroadcastMutation(channel);
+
+  const { mutate: mutationCell } = useCellBroadcastMutation(channel);
+
+  const throttleMutate = useThrottleMutateWithTrailing(
+    mutationCell,
+    0.5 * 1000
+  );
+
   if (info === null) {
-    return console.error('플로팅시트 안열림');
+    return <div>오류</div>;
   }
 
   if (info === undefined) {
-    return console.error('플로팅시트 안열림');
+    return <div>오류</div>;
   }
 
   // core
   if ('private' in info) {
     const diff = getDateDiff(info.endDate);
-    const topics = useClientStateStore((state) => state.topics);
 
     return (
       <FloatingSheet hideOnOutsideClick={true}>
@@ -100,11 +111,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
           <div className='flex-grow overflow-y-auto py-6'>
             <div>
               {Array.from(topics).map(([key, topic]) => (
-                <TopicGroup
-                  key={key}
-                  topic={topic}
-                  channelReceiver={channelReceiver}
-                />
+                <TopicGroup key={key} topic={topic} />
               ))}
             </div>
           </div>
@@ -116,9 +123,6 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
 
   // topic
   if ('topic' in info) {
-    const coreTitle = useClientStateStore((state) => state.core);
-    const subTopics = useClientStateStore((state) => state.subTopics);
-
     const subTopicsWithTopicId = Array.from(subTopics)
       .filter(([key, value]) => value.topicId === info.id)
       .map(([_, value]) => value);
@@ -144,22 +148,24 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
                 value={value}
                 placeholder={value || '목표를 작성해 주세요'}
                 onChange={(e) => {
-                  setValue(e.target.value);
+                  const newValue = e.target.value;
+                  setValue(newValue);
+                  throttleMutate({
+                    action: 'topic',
+                    value: { ...info, topic: newValue },
+                  });
                 }}
               />
               <Text size='18px-medium' textColor='sub'>
-                {coreTitle?.title} &gt; {info.topic}
+                {coreTitle?.title} &gt;{' '}
+                {info.topic || `대주제${info.topicIndex}`}
               </Text>
             </div>
           </div>
           <div className='flex-grow overflow-y-auto py-6'>
             <div>
               {subTopicsWithTopicId.map((subtopic) => (
-                <SubtopicGroup
-                  key={subtopic.id}
-                  sub={subtopic}
-                  channelReceiver={channelReceiver}
-                />
+                <SubtopicGroup key={subtopic.id} sub={subtopic} />
               ))}
             </div>
           </div>
@@ -170,14 +176,11 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   }
 
   // subTopic
-  const coreTitle = useClientStateStore((state) => state.core);
-  const parentTopic = useClientStateStore((state) =>
-    state.getTopicItem(info.topicId)
-  );
-  const todos = useClientStateStore((state) => state.todos);
   const todosWithSubTopicId = Array.from(todos)
     .filter(([key, value]) => value.cellId === info.id)
     .map(([_, value]) => value);
+
+  const topicTitle = parentTopic(info.topicId);
 
   const customButtonClass =
     'w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
@@ -185,9 +188,7 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
   return (
     <FloatingSheet hideOnOutsideClick={true}>
       <div className='flex h-full flex-col'>
-        <div
-          className={`handle cursor-grab rounded-t-lg active:cursor-grabbing`}
-        >
+        <div className='handle cursor-grab rounded-t-lg active:cursor-grabbing'>
           <div className='fixed right-4 top-4 w-fit'>
             <button className='bg-transparent' onClick={hide}>
               <X />
@@ -203,27 +204,37 @@ const MandalartFloatingSheet = ({ channelReceiver }: FloatingSheetProps) => {
               value={value}
               placeholder={value || '목표를 작성해 주세요'}
               onChange={(e) => {
-                setValue(e.target.value);
+                const newValue = e.target.value;
+                setValue(newValue);
+                throttleMutate({
+                  action: 'subTopic',
+                  value: { ...info, content: newValue },
+                });
               }}
             />
             <Text size='18px-medium' textColor='sub'>
-              {coreTitle?.title} &gt; {parentTopic?.topic} &gt; {info.content}
+              {coreTitle?.title} &gt;{' '}
+              {topicTitle?.topic || `대주제${topicTitle?.topicIndex}`} &gt;{' '}
+              {info.content || '소주제'}
             </Text>
           </div>
         </div>
         <div className='flex-grow overflow-y-auto py-6'>
           <div className='px-8'>
-            <button className={customButtonClass} onClick={() => {}}>
+            <button
+              className={customButtonClass}
+              onClick={() => {
+                mutationTodo({
+                  value: createNewTodoRowValue(info.id),
+                  action: 'CREATE',
+                });
+              }}
+            >
               <SquarePlus />
               투두 리스트 추가하기
             </button>
-            {todosWithSubTopicId.map((todo) => (
-              <TodoItem
-                key={todo.id}
-                id={todo.id}
-                todo={todo}
-                channelReceiver={channelReceiver}
-              />
+            {todosWithSubTopicId.map((todo, index) => (
+              <TodoItem key={todo.id + index} todo={todo} />
             ))}
           </div>
         </div>
