@@ -45,6 +45,8 @@ const textVariants = cva('transition-all', {
         'text-[12px] leading-[16px] font-semibold sm:text-[13px] sm:leading-[16px] md:text-[13px] md:leading-[18px]',
       '14px-regular':
         'text-[12px] leading-[16px] font-normal sm:text-[13px] sm:leading-[16px] md:text-[13px] md:leading-[18px]',
+      'logout-button-text':
+        'text-[13px] leading-[20px] font-medium sm:text-[14px] sm:leading-[24px] md:text-[16px] lg:text-[20px] lg:leading-[30px]',
     },
     textColor: {
       black: 'text-black',
