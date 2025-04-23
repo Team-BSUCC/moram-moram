@@ -1,6 +1,7 @@
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ColorMutationParams } from '../types/dashboard-type';
+import { errorAlert, successAlert } from '@/shared/utils/sweet-alert';
 
 export const useUpdateRoomColor = () => {
   const queryclient = useQueryClient();
@@ -13,18 +14,15 @@ export const useUpdateRoomColor = () => {
         .eq('id', params.mandalartId);
 
       if (error) {
-        alert(`업데이트 실패, ${error.message}`);
-        return false;
+        throw error;
       }
-
-      return true;
     },
     onSuccess: () => {
-      alert('수정 되었습니다.');
+      successAlert('수정 되었습니다.');
       queryclient.invalidateQueries({ queryKey: ['mandalarts-cards'] });
     },
     onError: (error) => {
-      alert(`수정 과정에서 문제가 발생하였습니다., ${error}`);
+      errorAlert(`수정 과정에서 문제가 발생하였습니다., ${error.message}`);
     },
   });
 };

@@ -1,63 +1,46 @@
-import { useMemo } from 'react';
-import Cell from './cell';
-import { SubTopicType, TopicType } from '../types/realtime-type';
 import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
+import { useClientStateStore } from '../hooks/use-client-state-store';
+import TopicCell from './topic-cell';
+import { MandalartTopic } from '../types/realtime-type';
+import React from 'react';
+import SubTopicCell from './sub-topic-cell';
 
 type SubBlockProps = {
-  title: string;
-  topic: TopicType;
-  subTopics: SubTopicType[];
+  topic: MandalartTopic;
+  index: number;
 };
 
 /**
  * 중앙 블록을 제외한 서브 블록 컴포넌트
  * @param title - 중앙 셀 제목
  * @param topic - 대주제
- * @param subTopics - 소주제 배열
  * @returns
  */
-const SubBlock = ({ title, topic, subTopics }: SubBlockProps) => {
-  // props로 객체를 넘겨주기 위한 메모이제이션
-  const memoizedCells = useMemo(() => {
-    const gridCells = Array(9).fill(null);
+const SubBlock = ({ topic, index }: SubBlockProps) => {
+  const subTopic = useClientStateStore((state) => state.subTopics);
+  const getTopic = useClientStateStore((state) => state.getTopicItem(topic.id));
+  const backColor = getColorWithNumber(index);
 
-    gridCells[4] = {
-      content: title,
-      isCenter: true,
-      ...topic,
-    };
-    // 나머지 셀에 서브토픽 배치
-    subTopics.forEach((subTopic: SubTopicType, idx: number) => {
-      // 중앙 위치는 건너뛰기
-      const index = idx >= 4 ? idx + 1 : idx;
-
-      gridCells[index] = {
-        isCenter: false,
-        ...subTopic,
-      };
-    });
-    return gridCells;
-  }, [title, topic, subTopics]);
+  const subTopicsWithTopicId = Array.from(subTopic)
+    .filter(([key, value]) => value.topicId === topic.id)
+    .map(([_, value]) => value);
 
   return (
     // 서브블럭 스타일 지정
     <div className='grid aspect-square grid-cols-3 grid-rows-3 gap-2'>
-      {memoizedCells.map((cell, idx) => {
-        let cellColor = '';
-        if (idx === 4) cellColor = getColorWithNumber(cell.topic_index);
+      <TopicCell
+        key={topic.id}
+        value={getTopic}
+        backColor={backColor}
+        className='col-start-2 row-start-2 h-full rounded-lg border-[3px] border-main'
+      />
+      {subTopicsWithTopicId.map((subTopic, idx) => {
         return (
-          <Cell
-            key={cell?.id || idx}
-            info={cell}
-            value={cell?.content || ''}
-            className={
-              cell?.isCenter && `border-[3px] border-black ${cellColor}`
-            }
-          />
+          <SubTopicCell key={subTopic.id} index={idx} subTopic={subTopic} />
         );
       })}
     </div>
   );
 };
 
-export default SubBlock;
+export default React.memo(SubBlock);

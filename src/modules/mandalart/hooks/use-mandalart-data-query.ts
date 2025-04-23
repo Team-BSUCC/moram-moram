@@ -1,6 +1,14 @@
 import { useQuery } from '@tanstack/react-query';
-import { fetchGetMandalartsData } from '../services/fetch-get-mandalarts-data';
-import { CellInfoType, MandalartType, TodoType } from '../types/realtime-type';
+import {
+  fetchGetMandalartsData,
+  getMandalartWithRPC,
+} from '../services/fetch-get-mandalarts-data';
+import {
+  CellInfoType,
+  MandalartAllJson,
+  MandalartType,
+  TodoType,
+} from '../types/realtime-type';
 import { QUERY_KEY } from '@/shared/constants/query-key';
 import { getQueryKey } from '../services/get-data-category';
 
@@ -82,5 +90,14 @@ export const useSubtopicCacheQuery = (id: string) => {
     queryKey: QUERY_KEY.subtopic(id),
     queryFn: () => Promise.resolve(null),
     enabled: false,
+  });
+};
+
+export const useRpcMandalartDataQuery = (id: string) => {
+  return useQuery<MandalartAllJson>({
+    queryKey: ['mandalarts-flat', id],
+    queryFn: () => getMandalartWithRPC(id) as Promise<MandalartAllJson>,
+    staleTime: Infinity,
+    gcTime: Infinity,
   });
 };

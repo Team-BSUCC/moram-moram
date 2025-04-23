@@ -71,7 +71,7 @@ const Header = ({ user }: HeaderProps) => {
           variant: 'secondary',
         },
         {
-          to: URLS.SIGN_IN,
+          to: URLS.SIGN_UP,
           label: '3초만에 시작하기',
           variant: 'default',
         },

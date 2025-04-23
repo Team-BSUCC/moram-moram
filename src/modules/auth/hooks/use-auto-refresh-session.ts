@@ -2,7 +2,7 @@
 
 import { useEffect } from 'react';
 import URLS from '@/shared/constants/url-constants';
-import Swal from 'sweetalert2';
+import { errorAlert } from '@/shared/utils/sweet-alert';
 
 const useAutoRefreshSession = () => {
   useEffect(() => {
@@ -13,16 +13,10 @@ const useAutoRefreshSession = () => {
           if (res.statusText === 'Unauthorized') {
             return;
           }
-          Swal.fire({
-            icon: 'error',
-            title: '세션 갱신 실패',
-          });
+          errorAlert('세션 갱신 실패');
         }
       } catch (err) {
-        Swal.fire({
-          icon: 'error',
-          title: `세션 갱신 중 오류 발생 : ${err}`,
-        });
+        errorAlert(`세션 갱신 중 오류 발생 : ${err}`);
       }
     };
 

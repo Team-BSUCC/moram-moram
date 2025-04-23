@@ -14,6 +14,11 @@ import Title from '@/components/commons/title';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import Text from '@/components/commons/text';
 import { Link } from 'lucide-react';
+import {
+  errorAlert,
+  infoAlert,
+  successAlert,
+} from '@/shared/utils/sweet-alert';
 
 type UsersInfoSheetType = { user: User | null };
 
@@ -48,12 +53,11 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
   const handleSetPasswordSubmit = async () => {
     try {
       await fetchUpdateRoomPasscode(pathParamRoomId, passwordInputValue);
-      alert('변경성공');
+      successAlert('비밀번호가 변경 되었습니다.');
       updateRoomData();
     } catch (error) {
       //TODO 센트리로 리펙터링
-      console.log(error);
-      alert('변경실패');
+      errorAlert('비밀번호 변경이 실패하였습니다.');
     }
   };
 
@@ -63,16 +67,14 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
       비밀번호 : ${passwordInputValue}
       `;
       await navigator.clipboard.writeText(inviteText);
-      alert('클립보드에 복사되었습니다!');
+      successAlert('클립보드에 복사 되었습니다!');
     } catch (error) {
-      //TODO 센트리로 리펙터링
-      console.log(error);
-      alert('복사실패');
+      infoAlert('복사가 실패하였습니다. 직접 url을 복사해주세요.');
     }
   };
 
   const customButtonClass =
-    'disabled:pointer-events-none disabled:text-caption disabled:bg-[#E6E6E6] disabled:border-none w-full inline-flex items-center h-14 text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
+    'disabled:pointer-events-none disabled:text-caption disabled:bg-[#E6E6E6] h-full disabled:border-none w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
 
   return (
     <>
@@ -81,7 +83,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
           <Title as='h3'>현재 접속중인 사람들</Title>
           {currentUsers.map((currentUsers) => (
             <div key={currentUsers.name} className='flex'>
-              <Avatar className='border border-black hover:z-10'>
+              <Avatar>
                 <AvatarImage src={currentUsers.image} />
                 <AvatarFallback>{currentUsers.name.slice(0, 1)}</AvatarFallback>
               </Avatar>
@@ -104,38 +106,45 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
         <div className='flex flex-col gap-4'>
           <Title as='h3'>전에 접속했던 사람들</Title>
           {leftUsers.map((user) => (
-            <Avatar key={user.name} className='border border-black hover:z-10'>
-              <AvatarImage src={user.image} />
-              <AvatarFallback>{user.name.slice(0, 1)}</AvatarFallback>
-            </Avatar>
+            <div key={user.name} className='flex'>
+              <Avatar>
+                <AvatarImage src={user.image} />
+                <AvatarFallback>{user.name.slice(0, 1)}</AvatarFallback>
+              </Avatar>
+              <div className='flex items-center pl-3'>
+                <Text size='16px-semibold'>{user.name}</Text>
+              </div>
+            </div>
           ))}
         </div>
 
         {isOwner && (
           <>
+            <Spacer size='lg' />
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 handleSetPasswordSubmit();
               }}
-              className='flex h-14 justify-between'
             >
               {/* //TODO 회원가입 머지되면 auth로 스타일 수정 */}
-              <div className='w-48'>
+              <div className='flex h-14 w-full gap-4'>
                 <Input
+                  variant='auth'
                   value={passwordInputValue}
                   onChange={(e) => {
                     setPasswordInputValue(e.target.value);
                   }}
                 />
+                <div className='w-4/5'>
+                  <button
+                    className={customButtonClass}
+                    disabled={isRoomPasswordButtonDisabled}
+                  >
+                    {passwordButtonText}
+                  </button>
+                </div>
               </div>
-              <Button
-                size='small'
-                variant='secondary'
-                disabled={isRoomPasswordButtonDisabled}
-              >
-                {passwordButtonText}
-              </Button>
             </form>
             <Spacer size='md' />
             <button
