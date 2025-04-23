@@ -19,23 +19,20 @@ const SubTopicCell = ({ index, subTopic }: SubTopicCellProps) => {
   const setInfo = useTodoFloatingSheetStore((state) => state.setInfo);
 
   // 플로팅 시트를 띄우는 이벤트 핸들러
-  const handleClick = () => {
+  const handleFloatingToggle = () => {
     setInfo(subTopic);
     show();
   };
 
   return (
-    <>
-      {/* 셀의 스타일 지정 */}
-      <div
-        onClick={handleClick}
-        className='relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer'
-      >
-        <Text align='center' size='16px-regular' textColor='main'>
-          {subTopic?.content}
-        </Text>
-      </div>
-    </>
+    <div
+      onClick={handleFloatingToggle}
+      className='relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer'
+    >
+      <Text align='center' size='16px-regular' textColor='main'>
+        {subTopic?.content}
+      </Text>
+    </div>
   );
 };
 

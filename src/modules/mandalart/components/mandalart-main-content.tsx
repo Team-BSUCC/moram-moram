@@ -85,7 +85,6 @@ const MandalartMainContent = ({
 
   broadcastChannel
     .on('broadcast', { event: 'shout' }, (payload) => {
-      console.log(payload.payload);
       handleSynchronization(payload.payload);
       // addBroadcastStore(payload.payload);
     })

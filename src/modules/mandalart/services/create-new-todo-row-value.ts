@@ -1,4 +1,5 @@
 import { CellTodo } from '../types/realtime-type';
+import { getTodayDateYYYYMMDD } from './get-today-yyyy-mm-dd';
 
 export const createNewTodoRowValue = (subtopicId: string): CellTodo => {
   return {
@@ -7,6 +8,6 @@ export const createNewTodoRowValue = (subtopicId: string): CellTodo => {
     createdAt: new Date().toISOString(),
     isDone: false,
     title: '새 TODO',
-    scheduledDate: null,
+    scheduledDate: getTodayDateYYYYMMDD(),
   };
 };

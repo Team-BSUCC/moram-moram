@@ -26,7 +26,7 @@ type MapStore = {
   getSubTopicItem: (key: string) => MandalartSubtopic | null;
 
   setTodoItem: (key: string, item: CellTodo) => void;
-  getTodoItem: (key: string) => CellTodo | undefined;
+  getTodoItem: (key: string) => CellTodo | null;
   removeTodoItem: (key: string) => void;
 
   clear: () => void;
@@ -88,7 +88,10 @@ export const useClientStateStore = create<MapStore>((set, get) => ({
     newMap.set(key, item);
     set({ todos: newMap });
   },
-  getTodoItem: (key) => get().todos.get(key),
+  getTodoItem: (key) => {
+    const todo = get().todos.get(key);
+    return todo ?? null;
+  },
   removeTodoItem: (key) => {
     const newMap = new Map(get().todos);
     newMap.delete(key);

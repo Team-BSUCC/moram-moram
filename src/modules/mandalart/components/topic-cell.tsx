@@ -13,28 +13,20 @@ const TopicCell = ({ value, backColor, className }: TopicCellProps) => {
   const show = useTodoFloatingSheetStore((state) => state.show);
   const setInfo = useTodoFloatingSheetStore((state) => state.setInfo);
 
-  const handleClick = () => {
+  const handleFloatingToggle = () => {
     setInfo(value);
     show();
   };
 
   return (
-    <>
-      {/* 셀의 스타일 지정 */}
-      <div
-        onClick={handleClick}
-        className={`relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer ${backColor} ${className}`}
-      >
-        <Text
-          align='center'
-          weight='bold'
-          size='16px-semibold'
-          textColor='main'
-        >
-          {value?.topic}
-        </Text>
-      </div>
-    </>
+    <div
+      onClick={handleFloatingToggle}
+      className={`relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer ${backColor} ${className}`}
+    >
+      <Text align='center' weight='bold' size='16px-semibold' textColor='main'>
+        {value?.topic}
+      </Text>
+    </div>
   );
 };
 

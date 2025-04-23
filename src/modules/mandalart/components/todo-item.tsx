@@ -50,7 +50,6 @@ const TodoItem = ({ todo }: TodoItemProps) => {
   );
 
   const handleMutateDate = () => {
-    console.log(date);
     if (Object.values(date).every((value) => value !== '')) {
       throttleMutate({
         value: {

@@ -97,7 +97,7 @@ export const useRpcMandalartDataQuery = (id: string) => {
   return useQuery<MandalartAllJson>({
     queryKey: ['mandalarts-flat', id],
     queryFn: () => getMandalartWithRPC(id) as Promise<MandalartAllJson>,
-    staleTime: Infinity,
-    gcTime: Infinity,
+    staleTime: 1,
+    gcTime: 100,
   });
 };

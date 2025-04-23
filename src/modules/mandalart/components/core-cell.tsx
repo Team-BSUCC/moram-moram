@@ -9,28 +9,20 @@ const CoreCell = () => {
 
   const core = useClientStateStore((state) => state.core);
 
-  const handleClick = () => {
+  const handleFloatingToggle = () => {
     setInfo(core);
     show();
   };
 
   return (
-    <>
-      {/* 셀의 스타일 지정 */}
-      <div
-        onClick={handleClick}
-        className='relative z-10 col-start-2 row-start-2 flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[3px] border-black bg-violet-pigment p-2 transition-all hover:cursor-pointer'
-      >
-        <Text
-          align='center'
-          weight='bold'
-          size='16px-semibold'
-          textColor='main'
-        >
-          {core?.title}
-        </Text>
-      </div>
-    </>
+    <div
+      onClick={handleFloatingToggle}
+      className='relative z-10 col-start-2 row-start-2 flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[3px] border-black bg-violet-pigment p-2 transition-all hover:cursor-pointer'
+    >
+      <Text align='center' weight='bold' size='16px-semibold' textColor='main'>
+        {core?.title}
+      </Text>
+    </div>
   );
 };
 
