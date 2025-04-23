@@ -8,6 +8,7 @@ import { getServerClient } from '@/shared/utils/supabase/server-client';
  * @param id - 만다라트 id
  * @returns
  */
+
 export const getMandalartWithRPC = async (
   id: string
 ): Promise<MandalartAllJson> => {
