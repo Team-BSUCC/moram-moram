@@ -112,3 +112,85 @@ export type FormatBroadcastStorePayloadType = {
     [k: string]: TodoPayloadType;
   };
 };
+
+export type MandalartCore = {
+  id: string;
+  roomId: string;
+  title: string;
+  subTitle: string | null;
+  private: boolean;
+  doneCount: number;
+  startDate: Date;
+  endDate: Date;
+  color: number;
+  createdAt: string;
+};
+
+export type MandalartTopic = {
+  id: string;
+  mandalartId: string;
+  topicIndex: number;
+  createdAt: string;
+  topic: string;
+};
+
+export type MandalartSubtopic = {
+  id: string;
+  topicId: string;
+  cellIndex: number;
+  isDone: boolean;
+  content: string | null;
+  createdAt: string;
+};
+
+export type CellTodo = {
+  id: string;
+  cellId: string;
+  title: string;
+  scheduledDate: string | null;
+  isDone: boolean;
+  createdAt: string;
+};
+
+export type MandalartAllJson = {
+  core: MandalartCore;
+  topics: MandalartTopic[];
+  subtopics: MandalartSubtopic[];
+  todos: CellTodo[];
+};
+
+export type MandalartFloatingSheetInfo =
+  | MandalartCore
+  | MandalartTopic
+  | MandalartSubtopic
+  | undefined
+  | null;
+
+export type BroadCastDataType =
+  | MandalartCore
+  | MandalartTopic
+  | MandalartSubtopic;
+
+export type TodoBroadCastType = {
+  value: CellTodo;
+  action: string;
+};
+
+export type CellBroadCastParamsType =
+  | { action: 'core'; value: MandalartCore }
+  | { action: 'topic'; value: MandalartTopic }
+  | { action: 'subTopic'; value: MandalartSubtopic };
+
+export type DateRangeState = {
+  year: string;
+  month: string;
+  day: string;
+};
+
+export type ReceiveBroadCastPayload =
+  | { action: 'core'; value: MandalartCore }
+  | { action: 'topic'; value: MandalartTopic }
+  | { action: 'subTopic'; value: MandalartSubtopic }
+  | { action: 'CREATE'; value: CellTodo }
+  | { action: 'UPDATE'; value: CellTodo }
+  | { action: 'DELETE'; value: CellTodo };
