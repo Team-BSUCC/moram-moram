@@ -69,7 +69,7 @@ const Header = ({ user }: HeaderProps) => {
           variant: 'secondary',
         },
         {
-          to: URLS.SIGN_IN,
+          to: URLS.SIGN_UP,
           label: '3초만에 시작하기',
           variant: 'default',
         },
@@ -109,8 +109,8 @@ const Header = ({ user }: HeaderProps) => {
 
           {user && (
             <div className='flex items-center gap-2 pl-2'>
-              <Avatar className='border border-black hover:z-10'>
-                <AvatarImage src={'유저이미지 추가해야함'} />
+              <Avatar>
+                <AvatarImage src={user.user_metadata.avatar_url} />
                 <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
               </Avatar>
               <div className='pr-[10px]'>
@@ -146,8 +146,8 @@ const Header = ({ user }: HeaderProps) => {
         <div className='flex flex-col items-start'>
           {user && (
             <div className='mb-4 flex w-full items-center gap-2 px-4'>
-              <Avatar className='border border-black hover:z-10'>
-                <AvatarImage src={'유저이미지 추가해야함'} />
+              <Avatar>
+                <AvatarImage src={user.user_metadata.avatar_url} />
                 <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
               </Avatar>
               <Text size='20px-medium'>{userName}</Text>
