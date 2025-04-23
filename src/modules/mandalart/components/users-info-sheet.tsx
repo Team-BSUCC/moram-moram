@@ -82,7 +82,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
           {currentUsers.map((currentUsers) => (
             <div key={currentUsers.name} className='flex'>
               <Avatar className='border border-black hover:z-10'>
-                <AvatarImage src={'유저이미지 추가해야함'} />
+                <AvatarImage src={currentUsers.image} />
                 <AvatarFallback>{currentUsers.name.slice(0, 1)}</AvatarFallback>
               </Avatar>
               {currentUsers.name === getCurrentUserName(user) ? (
@@ -105,7 +105,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
           <Title as='h3'>전에 접속했던 사람들</Title>
           {leftUsers.map((user) => (
             <Avatar key={user.name} className='border border-black hover:z-10'>
-              <AvatarImage src={'유저이미지 추가해야함'} />
+              <AvatarImage src={user.image} />
               <AvatarFallback>{user.name.slice(0, 1)}</AvatarFallback>
             </Avatar>
           ))}

@@ -11,6 +11,7 @@ import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import { Menu, X } from 'lucide-react';
 import Text from '../commons/text';
 import Button from '../commons/button';
+import Profile from '../../modules/auth/components/profile/profile';
 
 type MenuItem = {
   to: string;
@@ -31,6 +32,7 @@ type HeaderProps = {
 
 const Header = ({ user }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -78,7 +80,7 @@ const Header = ({ user }: HeaderProps) => {
   return (
     <div className='w-full border-none bg-white-light lg:border-b'>
       <div className='flex items-center justify-between'>
-        <div className='px-6 py-4 lg:p-8'>
+        <div className='px-6 py-4'>
           <Link href={user ? URLS.DASHBOARD : URLS.HOME}>
             <Image
               src='/images/manda-logo-text.svg'
@@ -108,13 +110,18 @@ const Header = ({ user }: HeaderProps) => {
           ))}
 
           {user && (
-            <div className='flex items-center gap-2 pl-2'>
-              <Avatar className='border border-black hover:z-10'>
-                <AvatarImage src={'유저이미지 추가해야함'} />
-                <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
-              </Avatar>
-              <div className='pr-[10px]'>
-                <Text size='20px-medium'>{userName}</Text>
+            <div className='relative flex items-center justify-center'>
+              <div
+                className='flex cursor-pointer items-center gap-2 pl-2'
+                onClick={() => setIsProfileOpen(!isProfileOpen)}
+              >
+                <Avatar className='border border-black hover:z-10'>
+                  <AvatarImage src={user.user_metadata.avatar_url} />
+                  <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
+                </Avatar>
+                <div className='pr-[10px]'>
+                  <Text size='20px-medium'>{userName}</Text>
+                </div>
               </div>
             </div>
           )}
@@ -133,7 +140,7 @@ const Header = ({ user }: HeaderProps) => {
 
       {/* 사이드 메뉴 패널 */}
       <div
-        className={`fixed right-0 top-0 z-50 h-full w-3/5 transform bg-white-light transition-transform duration-300 ease-in-out ${
+        className={`fixed right-0 top-0 z-50 h-full w-[314px] transform bg-white-light transition-transform duration-300 ease-in-out ${
           isMenuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >
@@ -145,12 +152,17 @@ const Header = ({ user }: HeaderProps) => {
 
         <div className='flex flex-col items-start'>
           {user && (
-            <div className='mb-4 flex w-full items-center gap-2 px-4'>
-              <Avatar className='border border-black hover:z-10'>
-                <AvatarImage src={'유저이미지 추가해야함'} />
-                <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
-              </Avatar>
-              <Text size='20px-medium'>{userName}</Text>
+            <div>
+              <div
+                className='mb-4 flex w-full cursor-pointer items-center gap-2 px-4'
+                onClick={() => setIsProfileOpen(true)}
+              >
+                <Avatar className='border border-black hover:z-10'>
+                  <AvatarImage src={user.user_metadata.avatar_url} />
+                  <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
+                </Avatar>
+                <Text size='20px-medium'>{userName}</Text>
+              </div>
             </div>
           )}
           {menuItems.map((item, index) => (
@@ -161,12 +173,20 @@ const Header = ({ user }: HeaderProps) => {
               className='w-full'
             >
               <Button variant='none' size='none'>
-                <Text size='18px-semibold'>{item.label}</Text>
+                <Text size='16px-medium'>{item.label}</Text>
               </Button>
             </Link>
           ))}
         </div>
       </div>
+      {/* Profile 공통 */}
+      {user && (
+        <Profile
+          isOpen={isProfileOpen}
+          onClose={() => setIsProfileOpen(false)}
+          user={user}
+        />
+      )}
     </div>
   );
 };
