@@ -30,7 +30,11 @@ const SignInForm = () => {
         <Title as='h1' size='28px-semibold'>
           로그인
         </Title>
-
+        {errors.root && (
+          <Text size='18px-medium' textColor='error' align='center'>
+            {errors.root.message}
+          </Text>
+        )}
         <div className='w-full space-y-4 sm:space-y-6'>
           <div className='space-y-1 sm:space-y-2'>
             <Input
