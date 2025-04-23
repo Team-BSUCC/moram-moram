@@ -7,8 +7,6 @@ import SubBlock from '@/modules/mandalart/components/sub-block';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import { useBatchUpdateTrigger } from '@/modules/mandalart/hooks/use-batch-update-trigger';
 import { useRpcMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
-import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
-import { useBroadcastStore } from '@/modules/mandalart/hooks/use-broadcast-store';
 import Spacer from '@/components/commons/spacer';
 import Title from '@/components/commons/title';
 import Text from '@/components/commons/text';
@@ -16,22 +14,14 @@ import { BicepsFlexed, CalendarDays } from 'lucide-react';
 import LinearProgress from '@/components/commons/progress-bar';
 import { calculatorProgress } from '@/shared/utils/calculator-progress';
 import { User } from '@supabase/supabase-js';
-import { useRealtimePresenceRoom } from '../hooks/use-realtime-presence-room';
-import { AvatarStack } from './mandalart-avatar-stack';
-import { useUsersStore } from '../hooks/use-users-store';
 import { getCurrentUserId } from '@/shared/utils/get-current-user-id';
 import Button from '@/components/commons/button';
+import { useRealtimeBroadCastRoom } from '../hooks/use-realtime-broadcast-room';
+import AvatarStack from './mandalart-avatar-stack';
 import { useClientStateStore } from '../hooks/use-client-state-store';
 import { formatDate } from '@/modules/dashboard/util/format-date';
 import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
 import { useEffect } from 'react';
-import { useChannelStore } from '../hooks/use-channel-store';
-import { useReceiveBroadCastUpdater } from '../services/receive-broadcast-update';
-
-/**
- * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
- * RealtimeAvatarStack과 RealtimeCursors에 props로 전달하면 됩니다.
- */
 
 type MandalartMainContentProps = {
   user: User | null;
@@ -42,17 +32,12 @@ const MandalartMainContent = ({
   user,
   mandalartId,
 }: MandalartMainContentProps) => {
-  const supabase = getBrowserClient();
+  const isVisible = useTodoFloatingSheetStore((state) => state.isVisible);
 
+  useRealtimeBroadCastRoom(`broadcast-room ${mandalartId}`);
   useBatchUpdateTrigger();
-  useRealtimePresenceRoom('avatar-room', user);
 
   const initialize = useClientStateStore((state) => state.initialize);
-
-  const isVisible = useTodoFloatingSheetStore((state) => state.isVisible);
-  const currentUsers = useUsersStore((state) => state.currentUsers);
-  const setChannel = useChannelStore((state) => state.setChannel);
-
   const { data, isPending, isError } = useRpcMandalartDataQuery(mandalartId);
 
   useEffect(() => {
@@ -61,44 +46,16 @@ const MandalartMainContent = ({
     initialize(data);
   }, [data]);
 
-  // const addBroadcastStore = useBroadcastStore(
-  //   (state) => state.addBroadcastStore
-  // );
-
   const username = getCurrentUserName(user);
   const userId = getCurrentUserId(user);
 
-  //TODO 룸네임받는 훅으로 수정
-  const broadcastChannel = supabase.channel('imssotest');
-
-  const handleSynchronization = useReceiveBroadCastUpdater();
-
-  useEffect(() => {
-    setChannel(broadcastChannel);
-  }, [broadcastChannel]);
-
-  useEffect(() => {
-    return () => {
-      broadcastChannel.unsubscribe();
-    };
-  }, []);
-
-  broadcastChannel
-    .on('broadcast', { event: 'shout' }, (payload) => {
-      handleSynchronization(payload.payload);
-      // addBroadcastStore(payload.payload);
-    })
-    .subscribe();
-
   if (isPending) return <div>Loading...</div>;
-
   if (isError) return <div>error</div>;
-
   return (
     <div className='flex flex-col items-center'>
       <Spacer size='top' />
       <RealtimeCursors
-        roomName='cursor-room'
+        roomName={`cursor-room ${mandalartId}`}
         username={username}
         userId={userId}
       />
@@ -109,7 +66,7 @@ const MandalartMainContent = ({
             <Title as='h1' size='32px-medium' textColor='black'>
               {data.core.title}
             </Title>
-            <AvatarStack avatars={currentUsers} user={user} />
+            <AvatarStack user={user} roomName={`avatar-room ${mandalartId}`} />
           </div>
           <Spacer size='md' />
           <div className='flex'>
@@ -136,9 +93,6 @@ const MandalartMainContent = ({
           {data.topics.map((item, idx) => {
             return <SubBlock key={item.id} topic={item} index={idx} />;
           })}
-
-          {/* 플로팅 시트 */}
-          {isVisible && <MandalartFloatingSheet />}
         </div>
         <Spacer size='3xl' />
         <div className='flex gap-8'>
@@ -147,6 +101,8 @@ const MandalartMainContent = ({
         </div>
         <Spacer size='3xl' />
       </div>
+      {/* 플로팅 시트 */}
+      {isVisible && <MandalartFloatingSheet />}
     </div>
   );
 };

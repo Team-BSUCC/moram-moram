@@ -1,4 +1,3 @@
-import { cn } from '@/lib/utils';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import {
   Tooltip,
@@ -6,67 +5,36 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from '@/components/ui/tooltip';
-import { cva, type VariantProps } from 'class-variance-authority';
 import * as React from 'react';
 import Text from '@/components/commons/text';
 import Dropdown from '@/components/commons/drop-down';
 import UsersInfoSheet from './users-info-sheet';
 import { User } from '@supabase/supabase-js';
+import { useRealtimePresenceRoom } from '../hooks/use-realtime-presence-room';
+import { useUsersStore } from '../hooks/use-users-store';
 
-/**
- * 아바타 스택의 방향 결정 (가로 or 세로)
- */
-const avatarStackVariants = cva('flex -space-x-4 -space-y-4', {
-  variants: {
-    orientation: {
-      vertical: 'flex-row',
-      horizontal: 'flex-col',
-    },
-  },
-  defaultVariants: {
-    orientation: 'vertical',
-  },
-});
-
-export interface AvatarStackProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof avatarStackVariants> {
-  avatars: { name: string; image: string }[];
-  maxAvatarsAmount?: number;
+export type AvatarStackProps = {
   user: User | null;
-}
+  roomName: string;
+};
 
 /**
  * 아바타 스택 컴포넌트
- * @param className - 컨테이너 스타일
- * @param orientation - 아바타 스택 방향 (가로 or 세로)
- * @param avatars - 아바타 배열 ([{name: '', image: ''}, {}])
+ * @param user - 유저정보
  * @param maxAvatarsAmount - 최대 아바타 스택 개수
+ * @param roomName - 만다라트룸네임
  * @returns
  */
-const AvatarStack = ({
-  className,
-  orientation,
-  user,
-  avatars,
-  maxAvatarsAmount = 3,
-  ...props
-}: AvatarStackProps) => {
-  // 화면에 보여줄 아바타 컴포넌트
-  const shownAvatars = avatars.slice(0, maxAvatarsAmount);
-  // 화면에 보여주지 않을 아바타 컴포넌트(최대 개수 이상 접속 시)
+const AvatarStack = ({ user, roomName }: AvatarStackProps) => {
+  useRealtimePresenceRoom(roomName, user);
+  const avatars = useUsersStore((state) => state.currentUsers);
+
+  const MAX_AVATARS_AMOUNT = 3;
+  const shownAvatars = avatars.slice(0, MAX_AVATARS_AMOUNT);
 
   return (
     <TooltipProvider>
-      <div
-        className={cn(
-          avatarStackVariants({ orientation }),
-          className,
-          'flex items-center',
-          orientation === 'horizontal' ? '-space-x-0' : '-space-y-0'
-        )}
-        {...props}
-      >
+      <div className='flex items-center -space-x-4 -space-y-0'>
         {shownAvatars.map(({ name, image }, index) => (
           <Tooltip key={`${name}-${image}-${index}`}>
             <TooltipTrigger asChild>
@@ -99,4 +67,4 @@ const AvatarStack = ({
   );
 };
 
-export { AvatarStack, avatarStackVariants };
+export default AvatarStack;
