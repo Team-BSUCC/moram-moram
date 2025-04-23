@@ -18,17 +18,10 @@ import { BicepsFlexed, CalendarDays } from 'lucide-react';
 import LinearProgress from '@/components/commons/progress-bar';
 import { calculatorProgress } from '@/shared/utils/calculator-progress';
 import { User } from '@supabase/supabase-js';
-import { useRealtimePresenceRoom } from '../hooks/use-realtime-presence-room';
-import { AvatarStack } from './mandalart-avatar-stack';
-import { useUsersStore } from '../hooks/use-users-store';
 import { getCurrentUserId } from '@/shared/utils/get-current-user-id';
 import Button from '@/components/commons/button';
 import { useRealtimeBroadCastRoom } from '../hooks/use-realtime-broadcast-room';
-
-/**
- * Memo: useCurrentUserName 훅으로 닉네임을 가져와서
- * RealtimeAvatarStack과 RealtimeCursors에 props로 전달하면 됩니다.
- */
+import AvatarStack from './mandalart-avatar-stack';
 
 type MandalartMainContentProps = {
   user: User | null;
@@ -43,11 +36,9 @@ const MandalartMainContent = ({
   const { data, isPending, isError } = useMandalartDataQuery(mandalartId);
 
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
-  const currentUsers = useUsersStore((state) => state.currentUsers);
 
-  useRealtimePresenceRoom(`avatar-room ${mandalartId}`, user);
   const broadcastChannel = useRealtimeBroadCastRoom(
-    `broadcastChannel ${mandalartId}`
+    `broadcast-room ${mandalartId}`
   );
   useBatchUpdateTrigger();
 
@@ -66,7 +57,7 @@ const MandalartMainContent = ({
     <div className='flex flex-col items-center'>
       <Spacer size='top' />
       <RealtimeCursors
-        roomName='cursor-room'
+        roomName={`cursor-room ${mandalartId}`}
         username={username}
         userId={userId}
       />
@@ -77,7 +68,7 @@ const MandalartMainContent = ({
             <Title as='h1' size='32px-medium' textColor='black'>
               2025년 성장의 해로 만들기
             </Title>
-            <AvatarStack avatars={currentUsers} user={user} />
+            <AvatarStack user={user} roomName={`avatar-room ${mandalartId}`} />
           </div>
           <Spacer size='md' />
           <div className='flex'>
