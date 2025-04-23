@@ -3,6 +3,7 @@ import MandalartMainContent from '@/modules/mandalart/components/mandalart-main-
 import MandalartPasscodeGate from '@/modules/mandalart/components/mandalart-passcode-gate';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
 import { PostgrestError } from '@supabase/supabase-js';
+import * as Sentry from '@sentry/nextjs';
 
 type MandalartPageType = {
   params: { id: string };
@@ -22,7 +23,14 @@ const MandalartPage = async ({ params }: MandalartPageType) => {
     room_uuid: pathParamRoomId,
   })) as FetchDataType;
 
-  if (error) throw error;
+  if (error) {
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'Mandalart Page');
+      scope.setTag('feature', 'fetch_room_data_for_mandalart');
+
+      Sentry.captureException(new Error(`[Mandalart Page] ${error.message}`));
+    });
+  }
 
   const isAuthenticated =
     data.ownerId === user?.id || data.participants.includes(user?.id ?? '');

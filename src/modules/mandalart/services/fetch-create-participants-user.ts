@@ -1,6 +1,7 @@
 'use server';
 
 import { getServerClient } from '@/shared/utils/supabase/server-client';
+import * as Sentry from '@sentry/nextjs';
 
 export const fetchCreateParticipantsUser = async (
   roomId: string,
@@ -13,7 +14,14 @@ export const fetchCreateParticipantsUser = async (
     .insert([{ room_id: roomId, user_id: userId, role: 'editor' }]);
 
   if (error) {
-    //센트리처리
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'mandalart page');
+      scope.setTag('feature', 'fetchCreateParticipantsUser');
+
+      Sentry.captureException(
+        new Error(`[fetchCreateParticipantsUser] ${error.message}`)
+      );
+    });
     return false;
   }
 

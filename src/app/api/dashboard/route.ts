@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
+import * as Sentry from '@sentry/nextjs';
 
 export const GET = async () => {
   const supabase = getServerClient();
@@ -21,6 +22,12 @@ export const GET = async () => {
   );
 
   if (error) {
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'DashBoard');
+      scope.setTag('feature', 'fetch_user_rooms_and_participants');
+
+      Sentry.captureException(new Error(`[Dashboard Route] ${error.message}`));
+    });
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 

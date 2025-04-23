@@ -1,6 +1,7 @@
 'use server';
 
 import { getServerClient } from '@/shared/utils/supabase/server-client';
+import * as Sentry from '@sentry/nextjs';
 
 export const fetchCheckRoomPasscode = async (
   roomId: string,
@@ -14,7 +15,14 @@ export const fetchCheckRoomPasscode = async (
     .eq('id', roomId)
     .single<{ passcode: string }>();
   if (error) {
-    //센트리처리
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'mandalart page');
+      scope.setTag('feature', 'fetchCheckRoomPasscode');
+
+      Sentry.captureException(
+        new Error(`[fetchCheckRoomPasscode] ${error.message}`)
+      );
+    });
     return false;
   }
 

@@ -6,6 +6,7 @@ import {
 } from '../types/realtime-type';
 import { useBroadcastStore } from './use-broadcast-store';
 import { getQueryKey } from '../services/get-data-category';
+import * as Sentry from '@sentry/nextjs';
 
 /**
  * 클라이언트 상태의 수정을 서버에 broadcast해주는 mutation
@@ -34,11 +35,15 @@ export const useBroadcastMutation = (
       });
       addBroadcastStore(payload as ReceiveBroadCastPayload);
     },
-    onError: (err) => {
-      /**
-       * TODO: error 핸들링 sentry 리팩토링
-       */
-      console.error('broadcast에 오류가 발생했습니다.', err);
+    onError: (error) => {
+      Sentry.withScope((scope) => {
+        scope.setTag('page', 'mandalart page');
+        scope.setTag('feature', 'mutationUpdateCache');
+
+        Sentry.captureException(
+          new Error(`[mutationUpdateCache] ${error.message}`)
+        );
+      });
     },
   });
 
