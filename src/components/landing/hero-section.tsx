@@ -32,7 +32,11 @@ const HeroSection = () => {
                 한 칸씩 채우며 나아가는 여정에 Manda가 함께할게요.
               </Text>
               <Spacer size='xl' />
-              <Button size='large'>지금 시작하기</Button>
+              <Link href={URLS.DASHBOARD}>
+                <Button size='large'>
+                  <Text size='32px-medium'>지금 시작하기</Text>
+                </Button>
+              </Link>
             </div>
           </div>
         </div>
@@ -52,8 +56,10 @@ const HeroSection = () => {
               <Text size='20px-regular' textColor='sub'>
                 한 칸씩 채우며 나아가는 여정에 <br /> Manda가 함께할게요.
               </Text>
-              <Link href={URLS.MANDALART}>
-                <Button size='medium'>지금 시작하기</Button>
+              <Link href={URLS.DASHBOARD}>
+                <Button size='medium'>
+                  <Text size='20px-medium'>지금 시작하기</Text>
+                </Button>
               </Link>
             </div>
           </div>
