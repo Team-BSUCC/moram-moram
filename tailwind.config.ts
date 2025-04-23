@@ -11,6 +11,15 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      keyframes: {
+        fadeIn: {
+          '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        fadeInOnce: 'fadeIn 0.5s ease-out forwards',
+      },
       zIndex: {
         '1': '1',
         '2': '2',
