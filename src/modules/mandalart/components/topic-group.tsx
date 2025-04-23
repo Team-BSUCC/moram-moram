@@ -1,6 +1,5 @@
 import { MandalartTopic } from '../types/realtime-type';
 import SubtopicGroup from './subtopic-group';
-import { RealtimeChannel } from '@supabase/supabase-js';
 import Title from '@/components/commons/title';
 import { rangeWithIndex } from '@/shared/utils/range-with-index';
 import Spacer from '@/components/commons/spacer';
@@ -8,10 +7,9 @@ import { useClientStateStore } from '../hooks/use-client-state-store';
 
 type TopicGroupProps = {
   topic: MandalartTopic;
-  channelReceiver: RealtimeChannel;
 };
 
-const TopicGroup = ({ topic, channelReceiver }: TopicGroupProps) => {
+const TopicGroup = ({ topic }: TopicGroupProps) => {
   const subTopics = useClientStateStore((state) => state.subTopics);
 
   const subTopicsWithTopicId = Array.from(subTopics)
@@ -30,11 +28,7 @@ const TopicGroup = ({ topic, channelReceiver }: TopicGroupProps) => {
       </Title>
 
       {subTopicsWithTopicId.map((subtopic) => (
-        <SubtopicGroup
-          key={subtopic.id}
-          sub={subtopic}
-          channelReceiver={channelReceiver}
-        />
+        <SubtopicGroup key={subtopic.id} sub={subtopic} />
       ))}
       <Spacer size='lg' />
     </div>

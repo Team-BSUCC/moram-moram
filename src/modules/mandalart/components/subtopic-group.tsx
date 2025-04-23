@@ -1,25 +1,14 @@
 import TodoItem from './todo-item';
-import {
-  MandalartSubtopic,
-  SubTopicType,
-  TodoPayloadType,
-  TodoType,
-} from '../types/realtime-type';
-import {
-  useSubtopicCacheQuery,
-  useTodoListCacheQuery,
-} from '../hooks/use-mandalart-data-query';
-import { RealtimeChannel } from '@supabase/supabase-js';
+import { MandalartSubtopic } from '../types/realtime-type';
 import Title from '@/components/commons/title';
 import Spacer from '@/components/commons/spacer';
 import { useClientStateStore } from '../hooks/use-client-state-store';
 
 type SubtopicGroupProps = {
   sub: MandalartSubtopic;
-  channelReceiver: RealtimeChannel;
 };
 
-const SubtopicGroup = ({ sub, channelReceiver }: SubtopicGroupProps) => {
+const SubtopicGroup = ({ sub }: SubtopicGroupProps) => {
   const todos = useClientStateStore((state) => state.todos);
   const todosWithSubTopicId = Array.from(todos)
     .filter(([key, value]) => value.cellId === sub.id)
@@ -34,12 +23,7 @@ const SubtopicGroup = ({ sub, channelReceiver }: SubtopicGroupProps) => {
         </Title>
 
         {todosWithSubTopicId.map((todo) => (
-          <TodoItem
-            key={todo.id}
-            id={todo.id}
-            todo={todo}
-            channelReceiver={channelReceiver}
-          />
+          <TodoItem key={todo.id} todo={todo} />
         ))}
       </div>
     </>
