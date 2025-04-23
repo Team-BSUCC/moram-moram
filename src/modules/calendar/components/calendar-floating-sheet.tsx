@@ -27,7 +27,9 @@ const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
   const hide = useFloatingSheetStore((state) => state.hide);
 
   // 날짜 기준 필터링
-  const filteredTodos = todos.filter((todo) => todo.scheduledDate === info);
+  const filteredTodos = todos
+    .filter(Boolean)
+    .filter((todo) => todo.scheduledDate === info);
 
   // mandalartId 기준으로 그룹핑
   const groupedByMandalart = groupBy(filteredTodos, 'mandalartId');

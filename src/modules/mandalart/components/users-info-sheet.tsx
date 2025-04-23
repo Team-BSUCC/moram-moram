@@ -9,6 +9,16 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useGetRoomData } from '../hooks/use-get-room-data';
 import { useUsersStore } from '../hooks/use-users-store';
 import { fetchUpdateRoomPasscode } from '../services/fetch-update-room-passcode';
+import Spacer from '@/components/commons/spacer';
+import Title from '@/components/commons/title';
+import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
+import Text from '@/components/commons/text';
+import { Link } from 'lucide-react';
+import {
+  errorAlert,
+  infoAlert,
+  successAlert,
+} from '@/shared/utils/sweet-alert';
 
 type UsersInfoSheetType = { user: User | null };
 
@@ -37,15 +47,17 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
   const isRoomPasswordButtonDisabled =
     passwordInputValue === '' || passwordInputValue === roomData?.passcode;
 
+  const isLinkCopButtonDisabled =
+    passwordInputValue === '' || passwordInputValue !== roomData?.passcode;
+
   const handleSetPasswordSubmit = async () => {
     try {
       await fetchUpdateRoomPasscode(pathParamRoomId, passwordInputValue);
-      alert('변경성공');
+      successAlert('비밀번호가 변경 되었습니다.');
       updateRoomData();
     } catch (error) {
       //TODO 센트리로 리펙터링
-      console.log(error);
-      alert('변경실패');
+      errorAlert('비밀번호 변경이 실패하였습니다.');
     }
   };
 
@@ -55,28 +67,44 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
       비밀번호 : ${passwordInputValue}
       `;
       await navigator.clipboard.writeText(inviteText);
-      alert('클립보드에 복사되었습니다!');
+      successAlert('클립보드에 복사 되었습니다!');
     } catch (error) {
-      //TODO 센트리로 리펙터링
-      console.log(error);
-      alert('복사실패');
+      infoAlert('복사가 실패하였습니다. 직접 url을 복사해주세요.');
     }
   };
 
+  const customButtonClass =
+    'disabled:pointer-events-none disabled:text-caption disabled:bg-[#E6E6E6] disabled:border-none w-full inline-flex items-center h-14 text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
+
   return (
     <>
-      <div>
-        <div>
-          <div>현재 접속중인 사람들</div>
-          {currentUsers.map((user) => (
-            <Avatar key={user.name} className='border border-black hover:z-10'>
-              <AvatarImage src={'유저이미지 추가해야함'} />
-              <AvatarFallback>{user.name.slice(0, 1)}</AvatarFallback>
-            </Avatar>
+      <div className='w-[364px] p-6'>
+        <div className='flex flex-col gap-4'>
+          <Title as='h3'>현재 접속중인 사람들</Title>
+          {currentUsers.map((currentUsers) => (
+            <div key={currentUsers.name} className='flex'>
+              <Avatar className='border border-black hover:z-10'>
+                <AvatarImage src={'유저이미지 추가해야함'} />
+                <AvatarFallback>{currentUsers.name.slice(0, 1)}</AvatarFallback>
+              </Avatar>
+              {currentUsers.name === getCurrentUserName(user) ? (
+                <div className='flex flex-col justify-between pl-3'>
+                  <Text size='16px-semibold'>{currentUsers.name}</Text>
+                  <Text size='16px-regular' textColor='sub'>
+                    나
+                  </Text>
+                </div>
+              ) : (
+                <div className='flex items-center pl-3'>
+                  <Text size='16px-regular'>{currentUsers.name}</Text>
+                </div>
+              )}
+            </div>
           ))}
         </div>
-        <div>
-          <div>전에 접속했던 사람들</div>
+        <Spacer size='lg' />
+        <div className='flex flex-col gap-4'>
+          <Title as='h3'>전에 접속했던 사람들</Title>
           {leftUsers.map((user) => (
             <Avatar key={user.name} className='border border-black hover:z-10'>
               <AvatarImage src={'유저이미지 추가해야함'} />
@@ -92,19 +120,34 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
                 e.preventDefault();
                 handleSetPasswordSubmit();
               }}
-              className='flex'
+              className='flex h-14 justify-between'
             >
-              <Input
-                value={passwordInputValue}
-                onChange={(e) => {
-                  setPasswordInputValue(e.target.value);
-                }}
-              ></Input>
-              <Button disabled={isRoomPasswordButtonDisabled}>
+              {/* //TODO 회원가입 머지되면 auth로 스타일 수정 */}
+              <div className='w-48'>
+                <Input
+                  value={passwordInputValue}
+                  onChange={(e) => {
+                    setPasswordInputValue(e.target.value);
+                  }}
+                />
+              </div>
+              <Button
+                size='small'
+                variant='secondary'
+                disabled={isRoomPasswordButtonDisabled}
+              >
                 {passwordButtonText}
               </Button>
             </form>
-            <Button onClick={handleInviteClick}>초대하기</Button>
+            <Spacer size='md' />
+            <button
+              disabled={isLinkCopButtonDisabled}
+              className={customButtonClass}
+              onClick={handleInviteClick}
+            >
+              <Link className='mr-2' />
+              초대링크 복사 하기
+            </button>
           </>
         )}
       </div>

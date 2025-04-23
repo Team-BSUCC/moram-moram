@@ -8,6 +8,7 @@ import Title from '@/components/commons/title';
 import Text from '@/components/commons/text';
 import { useUpdateRoomColor } from '../hooks/use-update-room-color';
 import ColorPicker from './color-picker';
+import { errorAlert, infoAlert } from '@/shared/utils/sweet-alert';
 
 type CardButtonDropDownProps = {
   roomId: string;
@@ -103,7 +104,7 @@ const DeleteModal = ({
   const { mutate: deleteRoom } = useDeleteRoom();
 
   const handleDeleteRoom = (id: string) => {
-    if (owner !== user) return alert('만다라트의 주인이 아닙니다.');
+    if (owner !== user) return errorAlert('만다라트의 주인이 아닙니다.');
     deleteRoom(id);
     setIsDeleteOpen(false);
     setIsOpen(false);
@@ -210,7 +211,7 @@ const UpdateModal = ({
   const [selectedColor, setSelectedColor] = useState<number>(colorId);
 
   const handleUpdateRoomColor = (mandalartId: string) => {
-    if (selectedColor === colorId) return alert('색상의 변화가 없는데요?');
+    if (selectedColor === colorId) return infoAlert('색상의 변화가 없는데요?');
     updateRoom({ mandalartId: mandalartId, colorId: selectedColor });
     setIsUpdateOpen(false);
     setIsOpen(false);

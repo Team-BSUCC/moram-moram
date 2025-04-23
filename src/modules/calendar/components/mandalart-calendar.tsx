@@ -67,7 +67,7 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
   // FullCalendar용 이벤트 리스트 생성
   const events = useMemo(
     () =>
-      flatTodos.map((todo) => ({
+      flatTodos.filter(Boolean).map((todo) => ({
         id: todo.todoId,
         title: todo.todoTitle,
         date: new Date(todo.scheduledDate).toISOString(),

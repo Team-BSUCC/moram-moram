@@ -81,14 +81,14 @@ const Header = ({ user }: HeaderProps) => {
         <div className='px-6 py-4 lg:p-8'>
           <Link href={user ? URLS.DASHBOARD : URLS.HOME}>
             <Image
-              src='images/manda-logo-text.svg'
+              src='/images/manda-logo-text.svg'
               alt='만다로고'
               width='166'
               height='48'
               className='hidden lg:block'
             />
             <Image
-              src='images/manda-logo.svg'
+              src='/images/manda-logo.svg'
               alt='만다로고'
               width='28'
               height='28'

@@ -9,6 +9,8 @@ import MandalartMainContent from './mandalart-main-content';
 import Spacer from '@/components/commons/spacer';
 import Title from '@/components/commons/title';
 import Text from '@/components/commons/text';
+import { fetchCreateParticipantsUser } from '../services/fetch-create-participants-user';
+import { infoAlert, successAlert } from '@/shared/utils/sweet-alert';
 
 type MandalartPasswordGateType = {
   user: User | null;
@@ -28,11 +30,21 @@ const MandalartPasscodeGate = ({
       roomId,
       passwordInputValue
     );
-    if (isCheckPasscodeResult) {
-      alert('접속성공');
-    } else {
-      alert('잘못된비밀번호');
+
+    if (!isCheckPasscodeResult) {
+      infoAlert('잘못된 비밀번호 입니다.');
+      return;
     }
+
+    if (user && (await fetchCreateParticipantsUser(roomId, user.id))) {
+      successAlert(
+        '편집에 참여할 수 있어요!',
+        '대시보드에 추가되었습니다. 비밀번호 입력이 필요하지 않습니다.'
+      );
+    } else {
+      successAlert('편집에 참여할 수 있어요!');
+    }
+
     setIsPasscodeMatch(isCheckPasscodeResult);
   };
 

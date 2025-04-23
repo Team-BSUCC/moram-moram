@@ -23,8 +23,10 @@ const CTASection = () => {
             로 정리해보세요.
           </Title>
           <Spacer size='xl' />
-          <Link href={URLS.MANDALART}>
-            <Button size='medium'>지금 시작하기</Button>
+          <Link href={URLS.DASHBOARD}>
+            <Button size='large'>
+              <Text size='32px-medium'>지금 시작하기</Text>
+            </Button>
           </Link>
         </div>
 
@@ -43,8 +45,10 @@ const CTASection = () => {
             로 정리해보세요.
           </Title>
           <Spacer size='lg' />
-          <Link href={URLS.MANDALART}>
-            <Button size='medium'>지금 시작하기</Button>
+          <Link href={URLS.DASHBOARD}>
+            <Button size='medium'>
+              <Text size='20px-medium'>지금 시작하기</Text>
+            </Button>
           </Link>
         </div>
       </div>
