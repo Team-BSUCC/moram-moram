@@ -22,6 +22,14 @@ import { formatDate } from '@/modules/dashboard/util/format-date';
 import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
 import { useEffect, useRef } from 'react';
 import { RealtimeCursors } from './realtime-cursors';
+import { toPng } from 'html-to-image';
+import { useBroadcastStore } from '../hooks/use-broadcast-store';
+import {
+  errorAlert,
+  infoAlert,
+  successAlert,
+} from '@/shared/utils/sweet-alert';
+import * as Sentry from '@sentry/nextjs';
 
 type MandalartMainContentProps = {
   user: User | null;
@@ -37,6 +45,11 @@ const MandalartMainContent = ({
 
   useRealtimeBroadCastRoom(`broadcast-room ${mandalartId}`);
   useBatchUpdateTrigger();
+  const batchUpdateSupabase = useBroadcastStore(
+    (state) => state.batchUpdateSupabase
+  );
+
+  const downLoadRef = useRef<HTMLDivElement>(null);
 
   const initialize = useClientStateStore((state) => state.initialize);
   const { data, isPending, isError } = useRpcMandalartDataQuery(mandalartId);
@@ -49,6 +62,24 @@ const MandalartMainContent = ({
 
   const username = getCurrentUserName(user);
   const userId = getCurrentUserId(user);
+
+  const handleDownload = async () => {
+    if (downLoadRef.current === null) return;
+
+    try {
+      const dataUrl = await toPng(downLoadRef.current);
+      const link = document.createElement('a');
+      link.download = `${data?.core.title}.png`;
+      link.href = dataUrl;
+      link.click();
+    } catch (error) {
+      Sentry.withScope((scope) => {
+        scope.setTag('page', 'mandalart');
+        scope.setTag('feature', 'Img Download Error');
+        Sentry.captureException(new Error(`[Img Download Error] ${error}`));
+      });
+    }
+  };
 
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>error</div>;
@@ -76,26 +107,46 @@ const MandalartMainContent = ({
         </div>
       </div>
 
-      <div className='flex flex-col items-center md:w-[1024px]'>
-        <Spacer size='lg' />
-        <LinearProgress value={calculatorProgress(data.core.doneCount)} />
-        <Spacer size='lg' />
-        <div
-          className='animate-fadeInOnce grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'
-          ref={boardRef}
-        >
-          {/* 중앙 블록 */}
-          <MainBlock />
+      <div className='flex flex-col items-center md:w-[1088px]'>
+        <div ref={downLoadRef} className='bg-white-light px-8'>
+          <Spacer size='lg' />
+          <LinearProgress value={calculatorProgress(data.core.doneCount)} />
+          <Spacer size='lg' />
+          <div
+            className='grid w-fit animate-fadeInOnce grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'
+            ref={boardRef}
+          >
+            {/* 중앙 블록 */}
+            <MainBlock />
 
-          {/* 나머지 블록 */}
-          {data.topics.map((item, idx) => {
-            return <SubBlock key={item.id} topic={item} index={idx} />;
-          })}
+            {/* 나머지 블록 */}
+            {data.topics.map((item, idx) => {
+              return <SubBlock key={item.id} topic={item} index={idx} />;
+            })}
+          </div>
+          <Spacer size='3xl' />
         </div>
-        <Spacer size='3xl' />
         <div className='flex gap-8'>
-          <Button>만다라트 작성법 보기</Button>
-          <Button variant='secondary'>이미지로 저장하기</Button>
+          <Button
+            onClick={() => {
+              batchUpdateSupabase().then((isSuccess) => {
+                if (isSuccess) {
+                  successAlert('저장 되었습니다.');
+                }
+                if (isSuccess === false) {
+                  errorAlert('저장에 실패했습니다.');
+                }
+                if (isSuccess === null) {
+                  infoAlert('변경된 값이 없습니다.');
+                }
+              });
+            }}
+          >
+            저장하기
+          </Button>
+          <Button variant='secondary' onClick={handleDownload}>
+            이미지로 저장하기
+          </Button>
         </div>
         <Spacer size='3xl' />
       </div>

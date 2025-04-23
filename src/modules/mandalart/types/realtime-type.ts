@@ -77,39 +77,29 @@ export type SubtopicPayloadType = CellInfoWithSubtopicCategoryType & {
   value: string;
 };
 
-export type TodoPayloadType = Tables<'cell_todos'> & {
-  action: 'CREATE' | 'UPDATE' | 'DELETE';
-  value: string;
-  category: 'TODO';
-};
-
-export type BroadcastPayloadType =
-  | CorePayloadType
-  | TopicPayloadType
-  | SubtopicPayloadType
-  | TodoPayloadType;
+export type BroadcastPayloadType = CellBroadCastParamsType | TodoBroadCastType;
 
 export type PartialBroadcastPayloadType = Partial<BroadcastPayloadType>;
 
 export type BroadcastStoreType = {
-  core: Map<string, CorePayloadType>;
-  topic: Map<string, TopicPayloadType>;
-  subTopic: Map<string, SubtopicPayloadType>;
-  todo: Map<string, TodoPayloadType>;
+  core: Map<string, CoreBroadCastType>;
+  topic: Map<string, TopicBroadCastType>;
+  subTopic: Map<string, SubTopicBroadCastType>;
+  todo: Map<string, TodoBroadCastType>;
 };
 
 export type FormatBroadcastStorePayloadType = {
   core: {
-    [k: string]: CorePayloadType;
+    [k: string]: CoreBroadCastType;
   };
   topic: {
-    [k: string]: TopicPayloadType;
+    [k: string]: TopicBroadCastType;
   };
   subTopic: {
-    [k: string]: SubtopicPayloadType;
+    [k: string]: SubTopicBroadCastType;
   };
   todo: {
-    [k: string]: TodoPayloadType;
+    [k: string]: TodoBroadCastType;
   };
 };
 
@@ -175,6 +165,12 @@ export type TodoBroadCastType = {
   value: CellTodo;
   action: string;
 };
+
+type CoreBroadCastType = { action: 'core'; value: MandalartCore };
+
+type TopicBroadCastType = { action: 'topic'; value: MandalartTopic };
+
+type SubTopicBroadCastType = { action: 'subTopic'; value: MandalartSubtopic };
 
 export type CellBroadCastParamsType =
   | { action: 'core'; value: MandalartCore }

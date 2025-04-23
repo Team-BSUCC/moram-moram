@@ -17,7 +17,7 @@ const CoreCell = () => {
   return (
     <div
       onClick={handleFloatingToggle}
-      className='relative z-10 col-start-2 row-start-2 flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[3px] border-black bg-violet-pigment p-2 transition-all hover:cursor-pointer'
+      className='relative z-10 col-start-2 row-start-2 flex aspect-square h-[88px] w-[88px] max-w-full items-center justify-center overflow-hidden rounded-lg border-[3px] border-black bg-violet-pigment p-2 transition-all hover:cursor-pointer'
     >
       <Text align='center' weight='bold' size='16px-semibold' textColor='main'>
         {core?.title}

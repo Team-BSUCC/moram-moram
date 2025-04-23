@@ -27,7 +27,7 @@ const SubTopicCell = ({ index, subTopic }: SubTopicCellProps) => {
   return (
     <div
       onClick={handleFloatingToggle}
-      className='relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer'
+      className='relative flex aspect-square h-[88px] w-[88px] max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer'
     >
       <Text align='center' size='16px-regular' textColor='main'>
         {subTopic?.content}

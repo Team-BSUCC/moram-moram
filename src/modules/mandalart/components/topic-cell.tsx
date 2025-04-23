@@ -21,7 +21,7 @@ const TopicCell = ({ value, backColor, className }: TopicCellProps) => {
   return (
     <div
       onClick={handleFloatingToggle}
-      className={`relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer ${backColor} ${className}`}
+      className={`relative flex aspect-square h-[88px] w-[88px] max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer ${backColor} ${className}`}
     >
       <Text align='center' weight='bold' size='16px-semibold' textColor='main'>
         {value?.topic}

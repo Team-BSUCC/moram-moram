@@ -1,12 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
-import {
-  fetchGetMandalartsData,
-  getMandalartWithRPC,
-} from '../services/fetch-get-mandalarts-data';
+import { getMandalartWithRPC } from '../services/fetch-get-mandalarts-data';
 import {
   CellInfoType,
   MandalartAllJson,
-  MandalartType,
   TodoType,
 } from '../types/realtime-type';
 import { QUERY_KEY } from '@/shared/constants/query-key';
@@ -17,14 +13,6 @@ import { getQueryKey } from '../services/get-data-category';
  * @param id - 만다라트 id
  * @returns
  */
-export const useMandalartDataQuery = (id: string) => {
-  return useQuery<MandalartType>({
-    queryKey: ['mandalarts', id],
-    queryFn: () => fetchGetMandalartsData(id) as Promise<MandalartType>,
-    staleTime: Infinity,
-    gcTime: Infinity,
-  });
-};
 
 /**
  * 투두 데이터를 키에 저장하는 함수
@@ -97,7 +85,5 @@ export const useRpcMandalartDataQuery = (id: string) => {
   return useQuery<MandalartAllJson>({
     queryKey: ['mandalarts-flat', id],
     queryFn: () => getMandalartWithRPC(id) as Promise<MandalartAllJson>,
-    staleTime: Infinity,
-    gcTime: Infinity,
   });
 };
