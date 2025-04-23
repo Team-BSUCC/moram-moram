@@ -2,7 +2,6 @@
 
 import MainBlock from '@/modules/mandalart/components/main-block';
 import MandalartFloatingSheet from '@/modules/mandalart/components/mandalart-floating-sheet';
-import { RealtimeCursors } from '@/modules/mandalart/components/realtime-cursors';
 import SubBlock from '@/modules/mandalart/components/sub-block';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import { useBatchUpdateTrigger } from '@/modules/mandalart/hooks/use-batch-update-trigger';
@@ -21,7 +20,8 @@ import AvatarStack from './mandalart-avatar-stack';
 import { useClientStateStore } from '../hooks/use-client-state-store';
 import { formatDate } from '@/modules/dashboard/util/format-date';
 import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
+import { RealtimeCursors } from './realtime-cursors';
 
 type MandalartMainContentProps = {
   user: User | null;
@@ -33,6 +33,7 @@ const MandalartMainContent = ({
   mandalartId,
 }: MandalartMainContentProps) => {
   const isVisible = useTodoFloatingSheetStore((state) => state.isVisible);
+  const boardRef = useRef<HTMLDivElement>(null);
 
   useRealtimeBroadCastRoom(`broadcast-room ${mandalartId}`);
   useBatchUpdateTrigger();
@@ -54,12 +55,6 @@ const MandalartMainContent = ({
   return (
     <div className='flex flex-col items-center'>
       <Spacer size='top' />
-      <RealtimeCursors
-        roomName={`cursor-room ${mandalartId}`}
-        username={username}
-        userId={userId}
-      />
-
       <div className='w-full max-w-[1440px] px-4'>
         <div className='flex flex-col'>
           <div className='flex justify-between'>
@@ -85,7 +80,10 @@ const MandalartMainContent = ({
         <Spacer size='lg' />
         <LinearProgress value={calculatorProgress(data.core.doneCount)} />
         <Spacer size='lg' />
-        <div className='animate-fadeInOnce grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
+        <div
+          className='animate-fadeInOnce grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'
+          ref={boardRef}
+        >
           {/* 중앙 블록 */}
           <MainBlock />
 
@@ -103,6 +101,12 @@ const MandalartMainContent = ({
       </div>
       {/* 플로팅 시트 */}
       {isVisible && <MandalartFloatingSheet />}
+      <RealtimeCursors
+        roomName={`cursor-room ${mandalartId}`}
+        username={username}
+        userId={userId}
+        boardRef={boardRef}
+      />
     </div>
   );
 };
