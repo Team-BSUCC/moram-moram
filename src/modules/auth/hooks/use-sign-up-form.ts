@@ -12,7 +12,7 @@ import {
 } from '../services/auth-server-service';
 import { SignUpDTO } from '../types/auth-type';
 import FormSchema from '../../../shared/constants/auth-schema';
-import Swal from 'sweetalert2';
+import { errorAlert } from '@/shared/utils/sweet-alert';
 
 const useSignUpForm = () => {
   const [isPending, startTransition] = useTransition();
@@ -57,12 +57,10 @@ const useSignUpForm = () => {
     const isEmailDuplicated = await checkEmailDuplicated(data.email);
     if (isEmailDuplicated) {
       setError('email', { message: '이미 가입된 이메일입니다.' });
-      await Swal.fire({
-        icon: 'error',
-        title: '중복된 이메일',
-        text: '이미 가입된 이메일입니다. 다른 이메일을 입력해주세요',
-        confirmButtonColor: 'error',
-      });
+      await errorAlert(
+        '중복된 이메일',
+        '이미 가입된 이메일입니다. 다른 이메일을 입력해주세요'
+      );
     }
     if (!nicknameChecked) {
       setError('nickname', { message: '닉네임 중복 확인을 해주세요.' });
