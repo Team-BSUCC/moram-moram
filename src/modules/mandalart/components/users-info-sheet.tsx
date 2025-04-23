@@ -19,6 +19,7 @@ import {
   infoAlert,
   successAlert,
 } from '@/shared/utils/sweet-alert';
+import * as Sentry from '@sentry/nextjs';
 
 type UsersInfoSheetType = { user: User | null };
 
@@ -56,7 +57,14 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
       successAlert('비밀번호가 변경 되었습니다.');
       updateRoomData();
     } catch (error) {
-      //TODO 센트리로 리펙터링
+      Sentry.withScope((scope) => {
+        scope.setTag('page', 'mandalart page');
+        scope.setTag('feature', 'handleSetPasswordSubmit');
+
+        Sentry.captureException(
+          new Error(`[handleSetPasswordSubmit] ${error}`)
+        );
+      });
       errorAlert('비밀번호 변경이 실패하였습니다.');
     }
   };
@@ -69,6 +77,12 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
       await navigator.clipboard.writeText(inviteText);
       successAlert('클립보드에 복사 되었습니다!');
     } catch (error) {
+      Sentry.withScope((scope) => {
+        scope.setTag('page', 'mandalart page');
+        scope.setTag('feature', 'handleInviteClick');
+
+        Sentry.captureException(new Error(`[handleInviteClick] ${error}`));
+      });
       infoAlert('복사가 실패하였습니다. 직접 url을 복사해주세요.');
     }
   };

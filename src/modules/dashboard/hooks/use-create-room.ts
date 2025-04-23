@@ -1,6 +1,7 @@
 import { useMutation } from '@tanstack/react-query';
 import { PostgrestError } from '@supabase/supabase-js';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
+import * as Sentry from '@sentry/nextjs';
 
 type CreateRoomParams = {
   userId: string;
@@ -35,7 +36,14 @@ export const useCreateRoom = () => {
       });
 
       if (error) {
-        throw error;
+        Sentry.withScope((scope) => {
+          scope.setTag('page', 'dashboard page');
+          scope.setTag('feature', 'create_full_room_flow');
+
+          Sentry.captureException(
+            new Error(`[create_full_room_flow] ${error.message}`)
+          );
+        });
       }
 
       return data;

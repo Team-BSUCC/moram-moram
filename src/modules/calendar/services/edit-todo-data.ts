@@ -10,7 +10,7 @@ const supabase = getBrowserClient();
 export const deleteTodoData = async (id: string) => {
   const { error } = await supabase.from('cell_todos').delete().eq('id', id);
 
-  if (error) throw new Error('Delete Failed');
+  if (error) throw new Error('Delete Todo Failed');
 };
 
 /**
@@ -25,5 +25,5 @@ export const updateTodoToggleData = async (todo: FlatTodo) => {
     .update({ is_done: !todo.isDone })
     .eq('id', todo.todoId);
 
-  if (error) throw new Error('Update Failed!');
+  if (error) throw new Error('Update Todo Failed!');
 };

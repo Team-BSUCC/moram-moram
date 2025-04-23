@@ -4,6 +4,7 @@ import Title from '@/components/commons/title';
 import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 import TodayTodoList from '@/modules/today-list/components/today-todo-list';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
+import * as Sentry from '@sentry/nextjs';
 
 const TodayListPage = async () => {
   const supabase = getServerClient();
@@ -18,10 +19,12 @@ const TodayListPage = async () => {
   );
 
   if (error) {
-    /**
-     * @todo: sentry 도입
-     */
-    throw new Error('Failed to fetch mandalarts');
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'Today-list Page');
+      scope.setTag('feature', 'get_all_mandalarts_by_user');
+
+      Sentry.captureException(new Error(`[Today-list Page] ${error.message}`));
+    });
   }
 
   return (
