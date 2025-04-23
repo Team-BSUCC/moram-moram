@@ -49,18 +49,18 @@ export const useRealtimePresenceRoom = (
   const currentUserName = getCurrentUserName(user);
 
   useEffect(() => {
-    const room = supabase.channel(roomName);
+    const channel = supabase.channel(roomName);
 
-    room.on('presence', { event: 'sync' }, () => {
+    channel.on('presence', { event: 'sync' }, () => {
       // 현재 방의 접속자업데이트
-      const currentUsersInfo = room.presenceState<UserInfoType>();
+      const currentUsersInfo = channel.presenceState<UserInfoType>();
       setCurrentUsers(currentUsersInfo);
 
       //새로들어온 사용자면 브로드캐스트로주고받은 정보 요청
       const { firstUserJoinTime, newUserJoinTime, isNewUser } =
         checkUserJoinTime(currentUsersInfo, myJoinTime.current);
       if (isNewUser) {
-        room.send({
+        channel.send({
           type: 'broadcast',
           event: 'request_broadcasts_store',
           payload: { firstUserJoinTime, newUserJoinTime },
@@ -68,7 +68,7 @@ export const useRealtimePresenceRoom = (
       }
     });
 
-    room.on('presence', { event: 'leave' }, (payload) => {
+    channel.on('presence', { event: 'leave' }, (payload) => {
       const leftUser = payload.leftPresences[0] as unknown as UserInfoType;
       if (isRegisteredUser(leftUser.name)) {
         setLeftUsers(leftUser);
@@ -76,32 +76,40 @@ export const useRealtimePresenceRoom = (
     });
 
     //가장 먼저 들어온 유저면 브로드캐스트스토어 보내주기(request_broadcasts_store에 대한 응답을 보내줌)
-    room.on('broadcast', { event: 'request_broadcasts_store' }, (payload) => {
-      if (payload.payload.firstUserJoinTime === myJoinTime.current) {
-        room.send({
-          type: 'broadcast',
-          event: 'response_broadcasts_store',
-          payload: {
-            newUserJoinTime: payload.payload.newUserJoinTime,
-            broadCastStore: formatBroadcastStorePayload(),
-          },
-        });
+    channel.on(
+      'broadcast',
+      { event: 'request_broadcasts_store' },
+      (payload) => {
+        if (payload.payload.firstUserJoinTime === myJoinTime.current) {
+          channel.send({
+            type: 'broadcast',
+            event: 'response_broadcasts_store',
+            payload: {
+              newUserJoinTime: payload.payload.newUserJoinTime,
+              broadCastStore: formatBroadcastStorePayload(),
+            },
+          });
+        }
       }
-    });
+    );
 
     //브로드캐스트스토어 요청보낸 유저면 브로드캐스트응답받아서 변경상태동기화(request_broadcasts_store 받아서 처리)
-    room.on('broadcast', { event: 'response_broadcasts_store' }, (payload) => {
-      if (payload.payload.newUserJoinTime === myJoinTime.current) {
-        receiveBroadcastStore(payload.payload.broadCastStore);
+    channel.on(
+      'broadcast',
+      { event: 'response_broadcasts_store' },
+      (payload) => {
+        if (payload.payload.newUserJoinTime === myJoinTime.current) {
+          receiveBroadcastStore(payload.payload.broadCastStore);
+        }
       }
-    });
+    );
 
-    room.subscribe(async (status) => {
+    channel.subscribe(async (status) => {
       if (status !== 'SUBSCRIBED') {
         return;
       }
       // 내 정보를 등록
-      await room.track({
+      await channel.track({
         joinTime: myJoinTime.current,
         name: currentUserName,
         image: currentUserImage,
@@ -109,7 +117,7 @@ export const useRealtimePresenceRoom = (
     });
 
     return () => {
-      room.unsubscribe();
+      channel.unsubscribe();
     };
   }, []);
 };

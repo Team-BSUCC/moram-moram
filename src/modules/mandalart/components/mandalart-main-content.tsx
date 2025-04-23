@@ -6,11 +6,7 @@ import { RealtimeCursors } from '@/modules/mandalart/components/realtime-cursors
 import SubBlock from '@/modules/mandalart/components/sub-block';
 import { getCurrentUserName } from '@/shared/utils/get-current-user-name';
 import { useBatchUpdateTrigger } from '@/modules/mandalart/hooks/use-batch-update-trigger';
-import { useMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
-import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
-import { createTodoListkey } from '@/modules/mandalart/services/create-todo-list-key';
+import { useRpcMandalartDataQuery } from '@/modules/mandalart/hooks/use-mandalart-data-query';
 import Spacer from '@/components/commons/spacer';
 import Title from '@/components/commons/title';
 import Text from '@/components/commons/text';
@@ -22,6 +18,10 @@ import { getCurrentUserId } from '@/shared/utils/get-current-user-id';
 import Button from '@/components/commons/button';
 import { useRealtimeBroadCastRoom } from '../hooks/use-realtime-broadcast-room';
 import AvatarStack from './mandalart-avatar-stack';
+import { useClientStateStore } from '../hooks/use-client-state-store';
+import { formatDate } from '@/modules/dashboard/util/format-date';
+import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
+import { useEffect } from 'react';
 
 type MandalartMainContentProps = {
   user: User | null;
@@ -32,27 +32,25 @@ const MandalartMainContent = ({
   user,
   mandalartId,
 }: MandalartMainContentProps) => {
-  const queryClient = useQueryClient();
-  const { data, isPending, isError } = useMandalartDataQuery(mandalartId);
+  const isVisible = useTodoFloatingSheetStore((state) => state.isVisible);
 
-  const isVisible = useFloatingSheetStore((state) => state.isVisible);
-
-  const broadcastChannel = useRealtimeBroadCastRoom(
-    `broadcast-room ${mandalartId}`
-  );
+  useRealtimeBroadCastRoom(`broadcast-room ${mandalartId}`);
   useBatchUpdateTrigger();
+
+  const initialize = useClientStateStore((state) => state.initialize);
+  const { data, isPending, isError } = useRpcMandalartDataQuery(mandalartId);
 
   useEffect(() => {
     if (isPending) return;
-    createTodoListkey(queryClient, data);
-  }, [isPending, data, queryClient]);
-
-  if (isPending || !broadcastChannel) return <div>Loading...</div>;
-  if (isError) return <div>error</div>;
+    if (isError) return;
+    initialize(data);
+  }, [data]);
 
   const username = getCurrentUserName(user);
   const userId = getCurrentUserId(user);
 
+  if (isPending) return <div>Loading...</div>;
+  if (isError) return <div>error</div>;
   return (
     <div className='flex flex-col items-center'>
       <Spacer size='top' />
@@ -66,49 +64,38 @@ const MandalartMainContent = ({
         <div className='flex flex-col'>
           <div className='flex justify-between'>
             <Title as='h1' size='32px-medium' textColor='black'>
-              2025년 성장의 해로 만들기
+              {data.core.title}
             </Title>
             <AvatarStack user={user} roomName={`avatar-room ${mandalartId}`} />
           </div>
           <Spacer size='md' />
           <div className='flex'>
             <CalendarDays />
-            <Text>365일 남음</Text>
+            <Text>{`${formatDate(data.core.startDate)} ~ ${formatDate(data.core.endDate)}`}</Text>
           </div>
           <Spacer size='sm' />
           <div className='flex'>
             <BicepsFlexed />
-            <Text>이번년도 반드시 이루고 말거야 !</Text>
+            <Text>{data.core.subTitle}</Text>
           </div>
         </div>
       </div>
 
       <div className='flex flex-col items-center md:w-[1024px]'>
         <Spacer size='lg' />
-        <LinearProgress value={calculatorProgress(data.done_count)} />
+        <LinearProgress value={calculatorProgress(data.core.doneCount)} />
         <Spacer size='lg' />
-        <div className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
+        <div className='animate-fadeInOnce grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'>
           {/* 중앙 블록 */}
-          <MainBlock
-            topics={data.mandalart_topics}
-            info={data}
-            className='col-start-2 row-start-2 h-full'
-          />
+          <MainBlock />
+
           {/* 나머지 블록 */}
-          {data.mandalart_topics.map((topic) => {
-            return (
-              <SubBlock
-                key={topic.id}
-                title={topic.topic}
-                topic={topic}
-                subTopics={topic.mandalart_subtopics}
-              />
-            );
+          {data.topics.map((item, idx) => {
+            return <SubBlock key={item.id} topic={item} index={idx} />;
           })}
+
           {/* 플로팅 시트 */}
-          {isVisible && (
-            <MandalartFloatingSheet channelReceiver={broadcastChannel} />
-          )}
+          {isVisible && <MandalartFloatingSheet />}
         </div>
         <Spacer size='3xl' />
         <div className='flex gap-8'>
