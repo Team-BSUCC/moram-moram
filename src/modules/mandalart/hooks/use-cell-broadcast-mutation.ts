@@ -1,17 +1,17 @@
 import { RealtimeChannel } from '@supabase/supabase-js';
-import { TodoBroadCastType } from '../types/realtime-type';
+import { CellBroadCastParamsType } from '../types/realtime-type';
 import { useMutation } from '@tanstack/react-query';
-import { useTodoOptimisticUpdater } from '../services/optimistic-update';
+import { useCellOptimisticUpdater } from '../services/optimistic-update';
 // import { useBroadcastStore } from './use-broadcast-store';
 
-export const useTodoBroadcastMutation = (myChannel: RealtimeChannel | null) => {
+export const useCellBroadcastMutation = (myChannel: RealtimeChannel | null) => {
   // const addBroadcastStore = useBroadcastStore(
   //   (state) => state.addBroadcastStore
   // );
-  const optimisticUpdate = useTodoOptimisticUpdater();
+  const optimisticUpdate = useCellOptimisticUpdater();
   const mutationUpdateCache = useMutation({
-    onMutate: (arg: TodoBroadCastType) => optimisticUpdate(arg),
-    mutationFn: async (arg: TodoBroadCastType) => {
+    onMutate: (arg: CellBroadCastParamsType) => optimisticUpdate(arg),
+    mutationFn: async (arg: CellBroadCastParamsType) => {
       if (!myChannel) throw new Error('채널없음');
       await myChannel.send({
         type: 'broadcast',
