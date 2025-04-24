@@ -48,10 +48,8 @@ export const useMandalartCreator = (
       queryClient.invalidateQueries({ queryKey: ['mandalarts-cards'] });
       onSuccessCallback();
     } catch (err) {
-      Sentry.captureException(
-        new Error(`[handleCreateMandalart] ${(err as any).message}`)
-      );
-      errorAlert('오류 발생: ' + (err as any).message);
+      Sentry.captureException(new Error('[handleCreateMandalart]'));
+      errorAlert('생성 과정에서 오류가 발생했습니다. 다시 시도해주세요.');
     }
   };
 

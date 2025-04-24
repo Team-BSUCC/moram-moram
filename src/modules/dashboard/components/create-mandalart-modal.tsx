@@ -143,7 +143,7 @@ const CreateMandalartModal = ({
 
                 <div className='flex w-full justify-center pt-[8px] sm:pt-[16px] md:pt-[24px]'>
                   <button
-                    className={`mx-[28px] h-[51px] w-full select-none rounded-lg bg-primary text-[14px] font-medium leading-[20px] transition-colors ease-in-out hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:pointer-events-none disabled:border-none disabled:bg-[#E6E6E6] disabled:text-caption sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px]`}
+                    className='mx-[28px] h-[51px] w-full select-none rounded-lg bg-primary text-[14px] font-medium leading-[20px] transition-colors ease-in-out hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:pointer-events-none disabled:border-none disabled:bg-[#E6E6E6] disabled:text-caption sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px]'
                     disabled={!isFilled || !isDateValid() || isSubmitting}
                     onClick={handleCreate}
                   >
