@@ -124,8 +124,10 @@ const MandalartFloatingSheet = () => {
   // topic
   if ('topic' in info) {
     const subTopicsWithTopicId = Array.from(subTopics)
-      .filter(([key, value]) => value.topicId === info.id)
-      .map(([_, value]) => value);
+      .filter(
+        ([_, value]) => value.topicId === info.id && value.content !== null
+      )
+      .map(([__, value]) => value);
 
     return (
       <FloatingSheet hideOnOutsideClick={true}>
@@ -177,8 +179,8 @@ const MandalartFloatingSheet = () => {
 
   // subTopic
   const todosWithSubTopicId = Array.from(todos)
-    .filter(([key, value]) => value.cellId === info.id)
-    .map(([_, value]) => value);
+    .filter(([_, value]) => value.cellId === info.id)
+    .map(([__, value]) => value);
 
   const topicTitle = parentTopic(info.topicId);
 
