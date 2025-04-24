@@ -1,7 +1,7 @@
 import FloatingSheet from '@/components/commons/floating-sheet';
 import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import TodoItem from './todo-item';
 import TopicGroup from './topic-group';
 import SubtopicGroup from './subtopic-group';
@@ -62,6 +62,25 @@ const MandalartFloatingSheet = () => {
   if (info === undefined) {
     return <div>오류</div>;
   }
+
+  const charLimit = 15;
+  const charLimitNotice = `${value.length} / ${charLimit}`;
+  const handleInputValue = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length - 1 === charLimit) return;
+    const newValue = e.target.value;
+    setValue(newValue);
+    if ('topic' in info) {
+      throttleMutate({
+        action: 'topic',
+        value: { ...info, topic: newValue },
+      });
+    } else if ('cellIndex' in info) {
+      throttleMutate({
+        action: 'subTopic',
+        value: { ...info, content: newValue },
+      });
+    }
+  };
 
   // core
   if ('private' in info) {
@@ -144,7 +163,7 @@ const MandalartFloatingSheet = () => {
             </div>
             <div className='flex flex-col items-start p-6 lg:p-8'>
               <Text size='16px-medium' textColor='sub'>
-                TO DO LIST
+                TO DO LIST - {charLimitNotice}
               </Text>
               <div className='no-drag'>
                 <Input
@@ -153,12 +172,7 @@ const MandalartFloatingSheet = () => {
                   value={value}
                   placeholder={value || '목표를 작성해 주세요'}
                   onChange={(e) => {
-                    const newValue = e.target.value;
-                    setValue(newValue);
-                    throttleMutate({
-                      action: 'topic',
-                      value: { ...info, topic: newValue },
-                    });
+                    handleInputValue(e);
                   }}
                 />
               </div>
@@ -202,7 +216,7 @@ const MandalartFloatingSheet = () => {
           </div>
           <div className='flex flex-col items-start p-6 lg:p-8'>
             <Text size='16px-medium' textColor='sub'>
-              TO DO LIST
+              TO DO LIST - {charLimitNotice}
             </Text>
             <div className='no-drag'>
               <Input
@@ -211,12 +225,7 @@ const MandalartFloatingSheet = () => {
                 value={value}
                 placeholder={value || '목표를 작성해 주세요'}
                 onChange={(e) => {
-                  const newValue = e.target.value;
-                  setValue(newValue);
-                  throttleMutate({
-                    action: 'subTopic',
-                    value: { ...info, content: newValue },
-                  });
+                  handleInputValue(e);
                 }}
               />
             </div>
