@@ -87,6 +87,7 @@ const Header = ({ user }: HeaderProps) => {
               alt='만다로고'
               width='166'
               height='48'
+              draggable={false}
               className='hidden lg:block'
               priority={true}
             />
@@ -95,6 +96,7 @@ const Header = ({ user }: HeaderProps) => {
               alt='만다로고'
               width='28'
               height='28'
+              draggable={false}
               className='block lg:hidden'
               priority={true}
             />
