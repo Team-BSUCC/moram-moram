@@ -1,5 +1,11 @@
 import type { Metadata } from 'next';
+import localFont from 'next/font/local';
 import '@/styles/globals.css';
+import SessionInit from '@/modules/auth/components/session-init';
+import TQProvider from '@/providers/tq-provider';
+import Footer from '@/components/layouts/footer';
+import Header from '@/components/layouts/header';
+import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 
 export const metadata: Metadata = {
   title: '모람모람',
@@ -8,14 +14,42 @@ export const metadata: Metadata = {
   // openGraph:
 };
 
-export default function RootLayout({
+const pretendard = localFont({
+  src: '../../public/fonts/pretendard-variable.woff2',
+  display: 'swap',
+  weight: '45 920',
+  variable: '--font-pretendard',
+});
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const user = await getUserInfo();
   return (
-    <html lang='ko-kr'>
-      <body className='antialiased'>{children}</body>
+    <html lang='ko-KR' className='h-full w-full'>
+      <body
+        className={`${pretendard.variable} flex h-full w-full flex-col antialiased`}
+      >
+        <SessionInit />
+
+        <header className='fixed left-0 right-0 top-0 z-50 h-[72px] lg:h-[100px] w-screen'>
+          <Header user={user} />
+        </header>
+
+        <main className='mt-[72px] flex-grow lg:mt-[100px]'>
+          <div className='flex h-full w-full items-center justify-center'>
+            {/* children에 메인 영역이 위치합니다. 중앙 70%의 영역만 차지합니다 */}
+            <div className='h-full w-full'>
+              <TQProvider>{children}</TQProvider>
+            </div>
+          </div>
+        </main>
+        <footer className='w-full border-t border-lightgray bg-white-light py-8'>
+          <Footer />
+        </footer>
+      </body>
     </html>
   );
 }

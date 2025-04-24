@@ -2,9 +2,9 @@ name: Build test
 
 on:
   push:
-    branches: {}
+    branches: ['**']
   pull_request:
-    branches: {}
+    branches: ['**']
 
 jobs:
   build:
@@ -22,21 +22,26 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20.11.0
-          cache: "pnpm"
+          cache: 'pnpm'
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Create .env.local
         run: |
-          echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.SUPABASE_PROJECT_URL }}" >> .env.local
-          echo "NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.SUPABASE_PROJECT_ANON_KEYS }}" >> .env.local
+          echo "NEXT_PUBLIC_SUPABASE_URL=${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}" >> .env.local
+          echo "NEXT_PUBLIC_SUPABASE_API_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_API_KEY }}" >> .env.local
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env.local
+          echo "SUPABASE_API_KEY=${{ secrets.SUPABASE_API_KEY }}" >> .env.local
+          echo "NEXT_SUPABASE_SERVICE_ROLE=${{ secrets.NEXT_SUPABASE_SERVICE_ROLE }}" >> .env.local
+          echo "NEXT_PUBLIC_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_STORAGE_BUCKET }}" >> .env.local
 
       - name: Build Test
         env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_PROJECT_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_PROJECT_API_KEYS }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_API_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_API_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
+          NEXT_SUPABASE_SERVICE_ROLE: ${{ secrets.NEXT_SUPABASE_SERVICE_ROLE }}
+          NEXT_PUBLIC_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_STORAGE_BUCKET }}
         run: pnpm build
-
-      - name: Start Next.js Server (Optional)
-        run: pnpm start &
