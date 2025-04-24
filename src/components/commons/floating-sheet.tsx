@@ -52,14 +52,15 @@ const FloatingSheet = ({
   return (
     <div className={`${outSideClick} fixed inset-0 z-[10] m-3`} onClick={hide}>
       <Draggable
-        handle='.handle' // 드래그 핸들 지정 (선택사항)
+        handle='.handle' // 드래그 핸들 지정
+        cancel='.no-drag' //드래그를 원하지 않는 영역
         position={position}
         nodeRef={nodeRef}
         grid={[1, 1]}
         scale={1}
         onDrag={handleDrag}
         onStop={handleDragStop}
-        bounds='parent' // 부모 요소 내부로 제한 (선택사항)
+        bounds='parent' // 부모 요소 내부로 제한
       >
         <div
           ref={nodeRef}

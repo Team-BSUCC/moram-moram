@@ -146,20 +146,22 @@ const MandalartFloatingSheet = () => {
               <Text size='16px-medium' textColor='sub'>
                 TO DO LIST
               </Text>
-              <Input
-                sizes='28px-regular'
-                type='text'
-                value={value}
-                placeholder={value || '목표를 작성해 주세요'}
-                onChange={(e) => {
-                  const newValue = e.target.value;
-                  setValue(newValue);
-                  throttleMutate({
-                    action: 'topic',
-                    value: { ...info, topic: newValue },
-                  });
-                }}
-              />
+              <div className='no-drag'>
+                <Input
+                  sizes='28px-regular'
+                  type='text'
+                  value={value}
+                  placeholder={value || '목표를 작성해 주세요'}
+                  onChange={(e) => {
+                    const newValue = e.target.value;
+                    setValue(newValue);
+                    throttleMutate({
+                      action: 'topic',
+                      value: { ...info, topic: newValue },
+                    });
+                  }}
+                />
+              </div>
               <Text size='18px-medium' textColor='sub'>
                 {coreTitle?.title} &gt;{' '}
                 {info.topic || `대주제${info.topicIndex}`}
@@ -202,20 +204,22 @@ const MandalartFloatingSheet = () => {
             <Text size='16px-medium' textColor='sub'>
               TO DO LIST
             </Text>
-            <Input
-              sizes='28px-regular'
-              type='text'
-              value={value}
-              placeholder={value || '목표를 작성해 주세요'}
-              onChange={(e) => {
-                const newValue = e.target.value;
-                setValue(newValue);
-                throttleMutate({
-                  action: 'subTopic',
-                  value: { ...info, content: newValue },
-                });
-              }}
-            />
+            <div className='no-drag'>
+              <Input
+                sizes='28px-regular'
+                type='text'
+                value={value}
+                placeholder={value || '목표를 작성해 주세요'}
+                onChange={(e) => {
+                  const newValue = e.target.value;
+                  setValue(newValue);
+                  throttleMutate({
+                    action: 'subTopic',
+                    value: { ...info, content: newValue },
+                  });
+                }}
+              />
+            </div>
             <Text size='18px-medium' textColor='sub'>
               {coreTitle?.title} &gt;{' '}
               {topicTitle?.topic || `대주제${topicTitle?.topicIndex}`} &gt;{' '}
