@@ -1,5 +1,12 @@
 import CheckBox from '@/components/commons/check-box';
-import { ChangeEvent, useEffect, useMemo, useState } from 'react';
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { CellTodo, DateRangeState } from '../types/realtime-type';
 import Input from '@/components/commons/input';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
@@ -30,6 +37,8 @@ const TodoItem = ({ todo }: TodoItemProps) => {
     day: '',
   });
   const [isFocus, setIsFocus] = useState<boolean>(false);
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const getInitialValue = thisTodo?.title || '';
   const [value, setValue] = useState<string>(getInitialValue);
@@ -74,6 +83,12 @@ const TodoItem = ({ todo }: TodoItemProps) => {
     });
   };
 
+  const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      inputRef.current?.blur();
+    }
+  };
+
   return (
     /* eslint-disable indent */ //삼항연산자오류때문에 작성했습니다 해당 규칙에대해 논의 필요합니다.
     <div>
@@ -93,12 +108,14 @@ const TodoItem = ({ todo }: TodoItemProps) => {
         />
         <Input
           autoFocus
+          ref={inputRef}
           onFocus={() => {
             setIsFocus(true);
           }}
           onBlur={() => {
             setIsFocus(false);
           }}
+          onKeyDown={handleInputKeyDown}
           maxLength={charLimit}
           variant='outline'
           sizes='20px-regular'

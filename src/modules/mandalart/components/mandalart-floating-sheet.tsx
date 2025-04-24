@@ -1,7 +1,7 @@
 import FloatingSheet from '@/components/commons/floating-sheet';
 import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react';
 import TodoItem from './todo-item';
 import TopicGroup from './topic-group';
 import SubtopicGroup from './subtopic-group';
@@ -25,7 +25,6 @@ import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate'
  */
 const MandalartFloatingSheet = () => {
   const info = useTodoFloatingSheetStore((state) => state.info);
-
   const hide = useTodoFloatingSheetStore((state) => state.hide);
 
   const coreTitle = useClientStateStore((state) => state.core);
@@ -34,20 +33,19 @@ const MandalartFloatingSheet = () => {
   const parentTopic = useClientStateStore((state) => state.getTopicItem);
   const todos = useClientStateStore((state) => state.todos);
 
+  const inputRef = useRef<HTMLInputElement>(null);
+
   const [value, setValue] = useState<string>(() => {
     if (!info) return '';
-
     if ('private' in info) return info.title ?? '';
     if ('topicIndex' in info) return info.topic ?? '';
     if ('cellIndex' in info) return info.content ?? '';
-
     return '';
   });
 
   const channel = useChannelStore((state) => state.channel);
 
   const { mutate: mutationTodo } = useTodoBroadcastMutation(channel);
-
   const { mutate: mutationCell } = useCellBroadcastMutation(channel);
 
   const throttleMutate = useThrottleMutateWithTrailing(
@@ -65,7 +63,7 @@ const MandalartFloatingSheet = () => {
 
   const charLimit = 15;
   const charLimitNotice = `글자 수 제한 ${value.length} / ${charLimit}`;
-  const handleInputValue = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleInputValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length - 1 === charLimit) return;
     const newValue = e.target.value;
     setValue(newValue);
@@ -79,6 +77,12 @@ const MandalartFloatingSheet = () => {
         action: 'subTopic',
         value: { ...info, content: newValue },
       });
+    }
+  };
+
+  const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      inputRef.current?.blur();
     }
   };
 
@@ -165,6 +169,8 @@ const MandalartFloatingSheet = () => {
               </Text>
               <div className='no-drag'>
                 <Input
+                  ref={inputRef}
+                  onKeyDown={handleInputKeyDown}
                   autoFocus
                   maxLength={charLimit}
                   sizes='28px-regular'
@@ -172,7 +178,7 @@ const MandalartFloatingSheet = () => {
                   value={value}
                   placeholder={value || '목표를 작성해 주세요'}
                   onChange={(e) => {
-                    handleInputValue(e);
+                    handleInputValueChange(e);
                   }}
                 />
               </div>
@@ -220,6 +226,8 @@ const MandalartFloatingSheet = () => {
             </Text>
             <div className='no-drag'>
               <Input
+                ref={inputRef}
+                onKeyDown={handleInputKeyDown}
                 autoFocus
                 maxLength={charLimit}
                 sizes='28px-regular'
@@ -227,7 +235,7 @@ const MandalartFloatingSheet = () => {
                 value={value}
                 placeholder={value || '목표를 작성해 주세요'}
                 onChange={(e) => {
-                  handleInputValue(e);
+                  handleInputValueChange(e);
                 }}
               />
             </div>
