@@ -2,19 +2,17 @@ import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 
 export const getServerClientAction = () => {
-  const cookieStore = cookies();
+  const reqCookies = cookies();
   return createServerClient(
     process.env.SUPABASE_URL!,
     process.env.SUPABASE_API_KEY!,
     {
       cookies: {
-        getAll() {
-          return cookieStore.getAll();
-        },
-        setAll(cookiesToSet) {
-          cookiesToSet.forEach(({ name, value, options }) =>
-            cookieStore.set(name, value, options)
-          );
+        getAll: () => reqCookies.getAll(),
+        setAll: (toSet) => {
+          for (const c of toSet) {
+            reqCookies.set(c.name, c.value, c.options);
+          }
         },
       },
     }

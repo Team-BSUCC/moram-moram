@@ -3,7 +3,10 @@
 import useSignUpForm from '../hooks/use-sign-up-form';
 import Text from '@/components/commons/text';
 import Input from '@/components/commons/input';
-import Button from '@/components/commons/button';
+import Link from 'next/link';
+import GoogleLoginButton from './google-login-button';
+import KaKaoLoginButton from './kakao-login-button';
+import Title from '@/components/commons/title';
 
 const SignUpForm = () => {
   const {
@@ -11,124 +14,123 @@ const SignUpForm = () => {
     handleSubmit,
     errors,
     isPending,
-    checkingEmail,
     checkingNickname,
-    handleCheckEmail,
     handleCheckNickname,
   } = useSignUpForm();
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className='border-gray-300 mx-auto max-w-md space-y-6 rounded-md border bg-white p-6 shadow-sm'
-    >
-      {/* 에러 메시지 */}
-      {errors.root?.message && (
-        <Text variant='default' size='sm' align='center'>
-          {errors.root.message}
-        </Text>
-      )}
-
-      {/* 이메일 */}
-      <div className='space-y-2'>
-        <label
-          htmlFor='email'
-          className='text-gray-700 block text-sm font-medium'
-        >
-          이메일
-        </label>
-        <div className='flex gap-2'>
-          <Input id='email' type='email' {...register('email')} />
-          <Button
-            variant='outline'
-            size='default'
-            type='button'
-            onClick={handleCheckEmail}
-            disabled={checkingEmail}
-          >
-            {checkingEmail ? '확인 중...' : '중복 확인'}
-          </Button>
-        </div>
-        {errors.email && <Text>{errors.email.message}</Text>}
-      </div>
-
-      {/* 닉네임 */}
-      <div className='space-y-2'>
-        <label
-          htmlFor='nickname'
-          className='text-gray-700 block text-sm font-medium'
-        >
-          닉네임
-        </label>
-        <div className='flex gap-2'>
-          <Input
-            variant='default'
-            sizes='md'
-            id='nickname'
-            type='text'
-            {...register('nickname')}
-          />
-          <Button
-            variant='outline'
-            size='default'
-            type='button'
-            onClick={handleCheckNickname}
-            disabled={checkingNickname}
-          >
-            {checkingNickname ? '확인 중...' : '중복 확인'}
-          </Button>
-        </div>
-        {errors.nickname && <Text>{errors.nickname.message}</Text>}
-      </div>
-
-      {/* 비밀번호 */}
-      <div className='space-y-2'>
-        <label
-          htmlFor='password'
-          className='text-gray-700 block text-sm font-medium'
-        >
-          비밀번호
-        </label>
-        <Input
-          variant='default'
-          sizes='md'
-          id='password'
-          type='password'
-          {...register('password')}
-        />
-        {errors.password && <Text>{errors.password.message}</Text>}
-      </div>
-
-      {/* 비밀번호 확인 */}
-      <div className='space-y-2'>
-        <label
-          htmlFor='confirmPassword'
-          className='text-gray-700 block text-sm font-medium'
-        >
-          비밀번호 확인
-        </label>
-        <Input
-          variant='default'
-          sizes='md'
-          id='confirmPassword'
-          type='password'
-          {...register('confirmPassword')}
-        />
-        {errors.confirmPassword && (
-          <Text>{errors.confirmPassword.message}</Text>
-        )}
-      </div>
-
-      {/* 제출 버튼 */}
-      <Button
-        variant='outline'
-        size='default'
-        type='submit'
-        disabled={isPending}
+    <section className='flex h-full w-full items-center justify-center bg-white-light px-4 py-8 sm:bg-white-dark'>
+      <form
+        onSubmit={handleSubmit}
+        className='flex w-full max-w-[345px] flex-col gap-6 rounded-[12px] bg-white-light px-4 py-6 sm:max-w-[472px] sm:rounded-[16px] sm:p-12'
       >
-        {isPending ? '가입 중...' : '회원가입'}
-      </Button>
-    </form>
+        <Title as='h1' size='32px-semibold'>
+          등록하기
+        </Title>
+
+        <div className='w-full space-y-4 sm:space-y-6'>
+          <div className='space-y-1 sm:space-y-2'>
+            <Input
+              type='email'
+              placeholder='이메일'
+              variant='auth'
+              sizes='16px-medium'
+              {...register('email')}
+            />
+            {errors.email && <Text>{errors.email.message}</Text>}
+          </div>
+
+          <div className='space-y-1 sm:space-y-2'>
+            <Input
+              type='password'
+              placeholder='비밀번호 (문자,숫자,특수문자 포함 8~20자)'
+              variant='auth'
+              sizes='16px-medium'
+              {...register('password')}
+            />
+            {errors.password && <Text>{errors.password.message}</Text>}
+          </div>
+
+          <div className='space-y-1 sm:space-y-2'>
+            <Input
+              type='password'
+              placeholder='비밀번호 확인'
+              variant='auth'
+              sizes='16px-medium'
+              {...register('confirmPassword')}
+            />
+            {errors.confirmPassword && (
+              <Text>{errors.confirmPassword.message}</Text>
+            )}
+          </div>
+
+          <div className='space-y-1 sm:space-y-2'>
+            <div className='flex gap-2'>
+              <Input
+                type='text'
+                placeholder='닉네임'
+                variant='auth'
+                sizes='16px-medium'
+                {...register('nickname')}
+              />
+              <button
+                type='button'
+                onClick={handleCheckNickname}
+                disabled={checkingNickname}
+                className='min-w-[88px] whitespace-nowrap rounded-lg bg-lightgray px-4 py-2 text-sm font-semibold text-black disabled:cursor-not-allowed disabled:opacity-50'
+              >
+                {checkingNickname ? '확인 중...' : '중복확인'}
+              </button>
+            </div>
+            {errors.nickname && <Text>{errors.nickname.message}</Text>}
+          </div>
+        </div>
+
+        <button
+          type='submit'
+          disabled={isPending}
+          className='w-full rounded-lg bg-primary py-3 text-sm font-semibold text-black transition hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:cursor-not-allowed disabled:opacity-50'
+        >
+          <Text size='18px-medium' align='center'>
+            {isPending ? '가입 중...' : '등록하기'}
+          </Text>
+        </button>
+
+        <Text size='14px-regular' textColor='gray' align='center'>
+          가입함으로써 이용 약관 및 개인정보 처리방침에 동의하게 됩니다.
+        </Text>
+
+        <div className='w-full border-t pt-4 text-center'>
+          <Text size='16px-semibold' align='center'>
+            간편하게 시작하기
+          </Text>
+          <div className='mt-2 flex justify-center gap-4 sm:mt-4'>
+            <KaKaoLoginButton />
+            <GoogleLoginButton />
+          </div>
+        </div>
+
+        <div className='flex items-center justify-center gap-2 text-center'>
+          <Text size='16px-regular' align='center' as='span'>
+            이미 계정이 있으신가요?
+          </Text>
+          <Link href='/sign-in'>
+            <Text
+              size='16px-semibold'
+              as='span'
+              textColor='primary'
+              align='center'
+            >
+              로그인
+            </Text>
+          </Link>
+        </div>
+
+        <Text size='16px-regular' line='underline' align='center'>
+          비회원으로 만다라트 작성해보기
+        </Text>
+      </form>
+    </section>
   );
 };
 

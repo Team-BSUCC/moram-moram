@@ -12,12 +12,11 @@ import {
 } from '../services/auth-server-service';
 import { SignUpDTO } from '../types/auth-type';
 import FormSchema from '../../../shared/constants/auth-schema';
+import { errorAlert } from '@/shared/utils/sweet-alert';
 
 const useSignUpForm = () => {
   const [isPending, startTransition] = useTransition();
-  const [checkingEmail, setCheckingEmail] = useState(false);
   const [checkingNickname, setCheckingNickname] = useState(false);
-  const [emailChecked, setEmailChecked] = useState(false);
   const [nicknameChecked, setNicknameChecked] = useState(false);
 
   const router = useRouter();
@@ -54,10 +53,14 @@ const useSignUpForm = () => {
     defaultValues: signUpDefaultValue,
   });
 
-  const onSubmit = (data: SignUpDTO) => {
-    if (!emailChecked) {
-      setError('email', { message: '이메일 중복 확인을 해주세요.' });
-      return;
+  const onSubmit = async (data: SignUpDTO) => {
+    const isEmailDuplicated = await checkEmailDuplicated(data.email);
+    if (isEmailDuplicated) {
+      setError('email', { message: '이미 가입된 이메일입니다.' });
+      await errorAlert(
+        '중복된 이메일',
+        '이미 가입된 이메일입니다. 다른 이메일을 입력해주세요'
+      );
     }
     if (!nicknameChecked) {
       setError('nickname', { message: '닉네임 중복 확인을 해주세요.' });
@@ -78,26 +81,6 @@ const useSignUpForm = () => {
 
       router.push('/');
     });
-  };
-
-  const handleCheckEmail = async () => {
-    const isValid = await trigger('email');
-    if (!isValid) {
-      return;
-    }
-
-    const email = getValues('email');
-    setCheckingEmail(true);
-    const isTaken = await checkEmailDuplicated(email);
-    setCheckingEmail(false);
-
-    if (isTaken) {
-      setError('email', { message: '이미 사용 중인 이메일입니다.' });
-      setEmailChecked(false);
-    } else {
-      setError('email', { message: '사용 가능한 이메일입니다.' });
-      setEmailChecked(true);
-    }
   };
 
   const handleCheckNickname = async () => {
@@ -125,9 +108,7 @@ const useSignUpForm = () => {
     handleSubmit: handleSubmit(onSubmit),
     errors,
     isPending,
-    checkingEmail,
     checkingNickname,
-    handleCheckEmail,
     handleCheckNickname,
   };
 };

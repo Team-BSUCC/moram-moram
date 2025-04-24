@@ -22,11 +22,13 @@ const signInSchema = z.object({
 const useSignInForm = () => {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
+
   const {
     register,
     handleSubmit,
     formState: { errors },
     setError,
+    setValue,
   } = useForm<SignInDTO>({
     resolver: zodResolver(signInSchema),
     defaultValues: signInDefaultValue,
@@ -34,7 +36,7 @@ const useSignInForm = () => {
 
   const onSubmit = (data: SignInDTO) => {
     startTransition(async () => {
-      const res = await fetch(`/api/${URLS.SIGN_IN}`, {
+      const res = await fetch(`/api${URLS.SIGN_IN}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -49,7 +51,8 @@ const useSignInForm = () => {
         return;
       }
 
-      router.push('/');
+      router.push(URLS.HOME);
+      router.refresh();
     });
   };
 
@@ -58,6 +61,7 @@ const useSignInForm = () => {
     handleSubmit: handleSubmit(onSubmit),
     errors,
     isPending,
+    setValue,
   };
 };
 

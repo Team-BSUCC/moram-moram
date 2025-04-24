@@ -3,32 +3,11 @@
 import { User } from '@supabase/supabase-js';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
-import { SignInDTO, UpdatePasswordDTO, UserType } from '../types/auth-type';
+import { UpdatePasswordDTO, UserType } from '../types/auth-type';
+import { cookies } from 'next/headers';
+import * as Sentry from '@sentry/nextjs';
 
-type PropsSignIn = SignInDTO;
 type PropsSignUp = UserType;
-
-/**
- * @param  params
- * 사용자의 정보를 받아 로그인을 하는 함수
- * @param params.email 사용자 이메일
- * @param params.password 사용자가 설정한 비밀번호
- * @throws supabase 에러
- */
-
-export const signIn = async ({
-  email,
-  password,
-}: PropsSignIn): Promise<{ error: string | null }> => {
-  const supabase = getServerClientAction();
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-  return {
-    error: error?.message || null,
-  };
-};
 
 /**
  * @param params
@@ -52,7 +31,15 @@ export const signUp = async ({
       data: { nickname: nickname },
     },
   });
-  if (error) return { error: error.message };
+  if (error) {
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'sign-up');
+      scope.setTag('feature', 'signUp');
+
+      Sentry.captureException(new Error(`[signUp] ${error.message}`));
+    });
+    return { error: error.message };
+  }
   return { error: undefined };
 };
 
@@ -63,6 +50,24 @@ export const signUp = async ({
 export const signOut = async (): Promise<{ error: string | null }> => {
   const supabase = getServerClientAction();
   const { error } = await supabase.auth.signOut();
+  // 2) 동적 이름의 Auth 토큰 쿠키 모두 삭제
+  cookies()
+    .getAll()
+    .filter((c) => c.name.startsWith('sb-') && c.name.includes('-auth-token'))
+    .forEach((c) => {
+      cookies().delete(c.name);
+    });
+
+  // 3) 필요한 경우 리프레시 토큰도 지우기
+  cookies()
+    .getAll()
+    .filter(
+      (c) => c.name.startsWith('sb-') && c.name.includes('-refresh-token')
+    )
+    .forEach((c) => {
+      cookies().delete(c.name);
+    });
+
   return { error: error?.message || null };
 };
 
@@ -159,10 +164,20 @@ export const updatePassword = async ({
   if (signInError) {
     throw new Error('현재 비밀번호가 올바르지 않습니다.');
   }
+
   const { error: updateError } = await supabase.auth.updateUser({
     password: newPassword,
   });
   if (updateError) {
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'mypage');
+      scope.setTag('feature', 'updateError');
+
+      Sentry.captureException(
+        new Error(`[updatePassword] ${updateError.message}`)
+      );
+    });
+
     throw new Error(updateError.message);
   }
 };

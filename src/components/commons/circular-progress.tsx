@@ -5,18 +5,19 @@ import 'react-circular-progressbar/dist/styles.css';
 import { cva, VariantProps } from 'class-variance-authority';
 import { twMerge } from 'tailwind-merge';
 
-const wrapperVariants = cva('', {
-  variants: {
-    size: {
-      sm: 'w-20 h-20',
-      md: 'w-28 h-28',
-      lg: 'w-36 h-36',
+const wrapperVariants = cva(
+  'transition-all select-none text-sub text-[14px] leading-[20px] font-medium',
+  {
+    variants: {
+      size: {
+        default: 'h-[80px] w-[80px]',
+      },
     },
-  },
-  defaultVariants: {
-    size: 'md',
-  },
-});
+    defaultVariants: {
+      size: 'default',
+    },
+  }
+);
 
 type CircularProgressProps = VariantProps<typeof wrapperVariants> & {
   value: number;
@@ -40,26 +41,25 @@ type CircularProgressProps = VariantProps<typeof wrapperVariants> & {
  */
 const CircularProgress = ({
   value,
-  strokeWidth = 8,
+  strokeWidth = 12,
   pathColor = '#111827',
   trailColor = '#e5e7eb',
   textColor = '#111827',
-  textSize = '15px',
   size,
 }: CircularProgressProps) => {
   return (
     <div className={twMerge(wrapperVariants({ size }))}>
       <CircularProgressbar
         value={value}
-        text={`${value}%`}
+        text={'성장중'}
         minValue={0}
         maxValue={100}
         strokeWidth={strokeWidth}
         styles={buildStyles({
+          strokeLinecap: 'butt',
           pathColor,
           trailColor,
           textColor,
-          textSize,
         })}
       />
     </div>
