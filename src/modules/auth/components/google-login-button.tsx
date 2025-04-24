@@ -5,7 +5,7 @@ import Image from 'next/image';
 
 const GoogleLoginButton = () => {
   return (
-    <RoundButton onClick={signWithGoogle} size='lg'>
+    <RoundButton type='button' onClick={signWithGoogle} size='lg'>
       <Image
         src='/images/button-image/google.svg'
         alt='구글 아이콘'
