@@ -92,6 +92,7 @@ const TodoItem = ({ todo }: TodoItemProps) => {
           }}
         />
         <Input
+          autoFocus
           onFocus={() => {
             setIsFocus(true);
           }}

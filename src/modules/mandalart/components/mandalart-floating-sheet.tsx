@@ -165,6 +165,7 @@ const MandalartFloatingSheet = () => {
               </Text>
               <div className='no-drag'>
                 <Input
+                  autoFocus
                   maxLength={charLimit}
                   sizes='28px-regular'
                   type='text'
@@ -219,6 +220,7 @@ const MandalartFloatingSheet = () => {
             </Text>
             <div className='no-drag'>
               <Input
+                autoFocus
                 maxLength={charLimit}
                 sizes='28px-regular'
                 type='text'
