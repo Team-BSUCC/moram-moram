@@ -1,5 +1,5 @@
 import CheckBox from '@/components/commons/check-box';
-import { useEffect, useMemo, useState } from 'react';
+import { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { CellTodo, DateRangeState } from '../types/realtime-type';
 import Input from '@/components/commons/input';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
@@ -29,6 +29,7 @@ const TodoItem = ({ todo }: TodoItemProps) => {
     month: '',
     day: '',
   });
+  const [isFocus, setIsFocus] = useState<boolean>(false);
 
   const getInitialValue = thisTodo?.title || '';
   const [value, setValue] = useState<string>(getInitialValue);
@@ -61,6 +62,18 @@ const TodoItem = ({ todo }: TodoItemProps) => {
     }
   };
 
+  const charLimit = 20;
+  const charLimitNotice = `글자 수 제한 ${value.length} / ${charLimit}`;
+  const handleInputValue = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length - 1 === charLimit) return;
+    const newValue = e.target.value;
+    setValue(newValue);
+    throttleMutate({
+      value: { ...todo, title: newValue },
+      action: 'UPDATE',
+    });
+  };
+
   return (
     /* eslint-disable indent */ //삼항연산자오류때문에 작성했습니다 해당 규칙에대해 논의 필요합니다.
     <div>
@@ -79,17 +92,18 @@ const TodoItem = ({ todo }: TodoItemProps) => {
           }}
         />
         <Input
+          onFocus={() => {
+            setIsFocus(true);
+          }}
+          onBlur={() => {
+            setIsFocus(false);
+          }}
           variant='outline'
           sizes='20px-regular'
           value={value || thisTodo?.title}
           placeholder='TODO를 작성해주세요.'
           onChange={(e) => {
-            const newValue = e.target.value;
-            setValue(newValue);
-            throttleMutate({
-              value: { ...todo, title: newValue },
-              action: 'UPDATE',
-            });
+            handleInputValue(e);
           }}
         />
         <Dropdown>
@@ -113,19 +127,26 @@ const TodoItem = ({ todo }: TodoItemProps) => {
         }}
         className='cursor-pointer pl-12'
       >
-        <div className='flex place-items-center justify-start'>
-          <Text size='16px-medium' textColor='sub'>
-            {todo.scheduledDate
-              ? formatDate(todo.scheduledDate)
-              : '날짜가 필요합니다!'}
-          </Text>
-          <TodoDateSelector
-            onChange={handleMutateDate}
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            handleDate={setDate}
-            date={date}
-          />
+        <div className='flex place-items-center justify-between'>
+          <div className='flex place-items-center justify-start'>
+            <Text size='16px-medium' textColor='sub'>
+              {todo.scheduledDate
+                ? formatDate(todo.scheduledDate)
+                : '날짜가 필요합니다!'}
+            </Text>
+            <TodoDateSelector
+              onChange={handleMutateDate}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              handleDate={setDate}
+              date={date}
+            />
+          </div>
+          {isFocus && (
+            <Text size='16px-medium' textColor='sub'>
+              {charLimitNotice}
+            </Text>
+          )}
         </div>
       </div>
       <Spacer size='sm' />

@@ -64,7 +64,7 @@ const MandalartFloatingSheet = () => {
   }
 
   const charLimit = 15;
-  const charLimitNotice = `${value.length} / ${charLimit}`;
+  const charLimitNotice = `글자 수 제한 ${value.length} / ${charLimit}`;
   const handleInputValue = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length - 1 === charLimit) return;
     const newValue = e.target.value;
