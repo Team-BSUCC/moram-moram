@@ -3,6 +3,7 @@ import Link from 'next/link';
 import logo from '../../../public/images/manda-logo-text.svg';
 import github from '../../../public/images/github-logo.svg';
 import palms from '../../../public/images/palms-logo.svg';
+import Text from '../commons/text';
 
 const Footer = () => {
   return (
@@ -41,7 +42,7 @@ const Footer = () => {
         </div>
       </div>
 
-      <div className='mt-4 flex flex-col items-center'>
+      <div className='mt-2 flex flex-col items-center sm:mt-4'>
         <div className='mb-2'>
           <Image
             src={logo}
@@ -51,10 +52,10 @@ const Footer = () => {
             draggable={false}
           />
         </div>
-        {/* 텍스트 컴포넌트로 대체 예정 */}
-        <p className='text-xs text-[#666666]'>
+
+        <Text size='14px-regular' textColor='sub'>
           © 2025 Manda. All rights reserved.
-        </p>
+        </Text>
       </div>
     </div>
   );
