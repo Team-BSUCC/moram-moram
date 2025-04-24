@@ -237,8 +237,6 @@ const MandalartFloatingSheet = () => {
               {info.content || '소주제'}
             </Text>
           </div>
-        </div>
-        <div className='flex-grow overflow-y-auto py-6'>
           <div className='px-8'>
             <button
               className={customButtonClass}
@@ -252,6 +250,10 @@ const MandalartFloatingSheet = () => {
               <SquarePlus />
               투두 리스트 추가하기
             </button>
+          </div>
+        </div>
+        <div className='flex-grow overflow-y-auto py-6'>
+          <div className='px-8'>
             {todosWithSubTopicId.map((todo, index) => (
               <TodoItem key={todo.id + index} todo={todo} />
             ))}
