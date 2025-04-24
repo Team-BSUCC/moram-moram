@@ -21,7 +21,7 @@ type CategoryBoardProps = {
 export const CategoryBoard = ({ user }: CategoryBoardProps) => {
   const [category, setCategory] = useState<string>('진행 중인 목표');
 
-  const { data: cards, isPending } = useGetMandalartCards();
+  const { data: cards, isPending } = useGetMandalartCards(user);
 
   if (isPending) return <div>Loading</div>;
 

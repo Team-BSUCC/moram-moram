@@ -110,9 +110,11 @@ const MandalartFloatingSheet = () => {
           </div>
           <div className='flex-grow overflow-y-auto py-6'>
             <div>
-              {Array.from(topics).map(([key, topic]) => (
-                <TopicGroup key={key} topic={topic} />
-              ))}
+              {Array.from(topics)
+                .filter(([_, value]) => value.topic !== null)
+                .map(([key, topic]) => (
+                  <TopicGroup key={key} topic={topic} />
+                ))}
             </div>
           </div>
           <Spacer size='4xl' />
@@ -124,7 +126,9 @@ const MandalartFloatingSheet = () => {
   // topic
   if ('topic' in info) {
     const subTopicsWithTopicId = Array.from(subTopics)
-      .filter(([key, value]) => value.topicId === info.id)
+      .filter(
+        ([_, value]) => value.topicId === info.id && value.content !== null
+      )
       .map(([_, value]) => value);
 
     return (
@@ -177,7 +181,7 @@ const MandalartFloatingSheet = () => {
 
   // subTopic
   const todosWithSubTopicId = Array.from(todos)
-    .filter(([key, value]) => value.cellId === info.id)
+    .filter(([_, value]) => value.cellId === info.id)
     .map(([_, value]) => value);
 
   const topicTitle = parentTopic(info.topicId);
