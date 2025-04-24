@@ -6,7 +6,7 @@ import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
 import { calculatorProgress } from '@/shared/utils/calculator-progress';
 import { FetchUserRoomsAndParticipantsResponse } from '@/modules/dashboard/types/dashboard-type';
-import { getDateDiff } from '../util/calculate-date-differents';
+import { getDateDiff } from '../util/calculate-date';
 import { formatDate } from '../util/format-date';
 import { DashboardAvatarStack } from './dashboard-avatar-stack';
 import {
@@ -14,6 +14,7 @@ import {
   getPigmentCodeWithIndex,
 } from '@/shared/utils/get-color-with-index';
 import URLS from '@/shared/constants/url-constants';
+import { BicepsFlexed } from 'lucide-react';
 
 type MandalartCardProps = {
   card: FetchUserRoomsAndParticipantsResponse;
@@ -31,16 +32,18 @@ const MandalartCard = ({
   const diff = getDateDiff(card.mandalart.endDate);
   return (
     <div
-      className={`${bandColor} grid h-fit w-full min-w-[330px] max-w-[394px] rounded-br-lg rounded-tr-lg shadow-[2px_2px_20px_0px_rgba(0,0,0,0.10)]`}
+      className={`${bandColor} focus:animate-fade-in-left grid h-fit w-full min-w-[330px] max-w-[394px] rounded-br-lg rounded-tr-lg shadow-[2px_2px_20px_0px_rgba(0,0,0,0.10)] focus:outline-none`}
     >
       <div className='relative ml-3 rounded-br-lg rounded-tr-lg bg-white-light'>
-        <div className='absolute right-[10px] top-[20px]'>
+        <div className='absolute right-0 top-0'>
           <CardButtonDropDown
             user={user}
             mandalartId={card.mandalart.id}
             colorId={card.mandalart.color}
             owner={card.roomOwner}
             roomId={card.roomId}
+            startDate={card.mandalart.startDate}
+            endDate={card.mandalart.endDate}
           />
         </div>
         <Link href={`${URLS.MANDALART}/${card.roomId}`}>
@@ -76,14 +79,14 @@ const MandalartCard = ({
                   {card.mandalart.subTitle ? (
                     <Text size='16px-medium' textColor='sub'>
                       <span className='flex gap-[4px]'>
-                        <MuscleArm />
+                        <BicepsFlexed />
                         {card.mandalart.subTitle}
                       </span>
                     </Text>
                   ) : (
                     <Text size='16px-medium' textColor='sub'>
                       <span className='flex gap-[4px]'>
-                        <MuscleArm />
+                        <BicepsFlexed />
                         반드시 완수한다 !!!!!
                       </span>
                     </Text>
@@ -152,24 +155,3 @@ const MandalartCard = ({
 };
 
 export default MandalartCard;
-
-const MuscleArm = () => {
-  return (
-    <svg
-      width='20'
-      height='20'
-      viewBox='0 0 20 20'
-      fill='none'
-      xmlns='http://www.w3.org/2000/svg'
-    >
-      <path
-        d='M8.90462 14.9974C9.50879 12.8099 11.6213 11.2474 14.0546 11.5057C16.3713 11.7516 18.213 13.7057 18.3296 16.0307C18.3588 16.6432 18.2755 17.2307 18.0963 17.7766C17.988 18.1099 17.663 18.3307 17.3088 18.3307H4.89962C2.79629 18.3307 1.21879 16.4061 1.63129 14.3436L4.16712 1.66406H9.16712L10.8338 4.58073L7.26296 7.1349L6.25046 5.83073M7.26712 7.1349L9.16712 14.1641'
-        stroke='#5E5E5E'
-        strokeWidth='1.66667'
-        strokeMiterlimit='2'
-        strokeLinecap='round'
-        strokeLinejoin='round'
-      />
-    </svg>
-  );
-};
