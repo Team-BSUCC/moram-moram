@@ -98,6 +98,7 @@ const TodoItem = ({ todo }: TodoItemProps) => {
           onBlur={() => {
             setIsFocus(false);
           }}
+          maxLength={charLimit}
           variant='outline'
           sizes='20px-regular'
           value={value || thisTodo?.title}

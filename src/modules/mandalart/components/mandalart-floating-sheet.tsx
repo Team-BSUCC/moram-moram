@@ -167,6 +167,7 @@ const MandalartFloatingSheet = () => {
               </Text>
               <div className='no-drag'>
                 <Input
+                  maxLength={charLimit}
                   sizes='28px-regular'
                   type='text'
                   value={value}
@@ -220,6 +221,7 @@ const MandalartFloatingSheet = () => {
             </Text>
             <div className='no-drag'>
               <Input
+                maxLength={charLimit}
                 sizes='28px-regular'
                 type='text'
                 value={value}
