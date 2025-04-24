@@ -10,11 +10,14 @@ import { useGuestTopicStore } from '@/modules/guest/hooks/use-guest-topic-store'
 import { toPng } from 'html-to-image';
 import React, { useRef } from 'react';
 import * as Sentry from '@sentry/nextjs';
+import { useOnBeforeUnload } from '@/shared/hooks/use-on-before-unload';
 
 const GuestPage = () => {
   const title = useGuestTopicStore((state) => state.core);
 
   const ref = useRef<HTMLDivElement>(null);
+
+  useOnBeforeUnload(title !== '');
 
   const handleDownload = async () => {
     if (ref.current === null) return;
