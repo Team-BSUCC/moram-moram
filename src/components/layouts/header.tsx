@@ -30,6 +30,8 @@ type HeaderProps = {
   user: User | null;
 };
 
+const DESKTOP_SIZE = 1024;
+
 const Header = ({ user }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -50,6 +52,18 @@ const Header = ({ user }: HeaderProps) => {
       document.body.style.overflow = 'auto';
     };
   }, [isMenuOpen]);
+
+  // 데스크탑 사이즈가 되었을 때 사이드 메뉴 자동 닫힘
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= DESKTOP_SIZE) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const userName = getCurrentUserName(user);
 
