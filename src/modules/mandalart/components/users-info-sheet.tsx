@@ -118,23 +118,27 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
         </div>
         <Spacer size='lg' />
         <div className='flex flex-col gap-4'>
-          <Title as='h3'>전에 접속했던 사람들</Title>
-          {leftUsers.map((user) => (
-            <div key={user.name} className='flex'>
-              <Avatar>
-                <AvatarImage src={user.image} />
-                <AvatarFallback>{user.name.slice(0, 1)}</AvatarFallback>
-              </Avatar>
-              <div className='flex items-center pl-3'>
-                <Text size='16px-semibold'>{user.name}</Text>
-              </div>
-            </div>
-          ))}
+          {leftUsers.length !== 0 && (
+            <>
+              <Title as='h3'>전에 접속했던 사람들</Title>
+              {leftUsers.map((user) => (
+                <div key={user.name} className='flex'>
+                  <Avatar>
+                    <AvatarImage src={user.image} />
+                    <AvatarFallback>{user.name.slice(0, 1)}</AvatarFallback>
+                  </Avatar>
+                  <div className='flex items-center pl-3'>
+                    <Text size='16px-semibold'>{user.name}</Text>
+                  </div>
+                </div>
+              ))}
+              <Spacer size='lg' />
+            </>
+          )}
         </div>
 
         {isOwner && (
           <>
-            <Spacer size='lg' />
             <form
               onSubmit={(e) => {
                 e.preventDefault();
