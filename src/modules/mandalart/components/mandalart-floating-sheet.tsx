@@ -130,7 +130,7 @@ const MandalartFloatingSheet = () => {
           <div className='flex-grow overflow-y-auto py-6'>
             <div>
               {Array.from(topics)
-                .filter(([_, value]) => value.topic !== null)
+                .filter(([_, value]) => value.topic)
                 .map(([key, topic]) => (
                   <TopicGroup key={key} topic={topic} />
                 ))}
@@ -145,9 +145,7 @@ const MandalartFloatingSheet = () => {
   // topic
   if ('topic' in info) {
     const subTopicsWithTopicId = Array.from(subTopics)
-      .filter(
-        ([_, value]) => value.topicId === info.id && value.content !== null
-      )
+      .filter(([_, value]) => value.topicId === info.id && value.content)
       .map(([_, value]) => value);
 
     return (
