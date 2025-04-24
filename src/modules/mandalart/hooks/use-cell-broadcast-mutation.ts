@@ -2,12 +2,13 @@ import { RealtimeChannel } from '@supabase/supabase-js';
 import { CellBroadCastParamsType } from '../types/realtime-type';
 import { useMutation } from '@tanstack/react-query';
 import { useCellOptimisticUpdater } from '../services/optimistic-update';
+import { useBroadcastStore } from './use-broadcast-store';
 // import { useBroadcastStore } from './use-broadcast-store';
 
 export const useCellBroadcastMutation = (myChannel: RealtimeChannel | null) => {
-  // const addBroadcastStore = useBroadcastStore(
-  //   (state) => state.addBroadcastStore
-  // );
+  const addBroadcastStore = useBroadcastStore(
+    (state) => state.addBroadcastStore
+  );
   const optimisticUpdate = useCellOptimisticUpdater();
   const mutationUpdateCache = useMutation({
     onMutate: (arg: CellBroadCastParamsType) => optimisticUpdate(arg),
@@ -18,7 +19,7 @@ export const useCellBroadcastMutation = (myChannel: RealtimeChannel | null) => {
         event: 'shout',
         payload: arg,
       });
-      // addBroadcastStore(arg);
+      addBroadcastStore(arg);
     },
     onError: (error) => {
       /**

@@ -1,10 +1,9 @@
-import { useQueryClient } from '@tanstack/react-query';
 import {
   FormatBroadcastStorePayloadType,
-  TodoPayloadType,
+  ReceiveBroadCastPayload,
 } from '../types/realtime-type';
 import { useBroadcastStore } from './use-broadcast-store';
-import { QUERY_KEY } from '@/shared/constants/query-key';
+import { useReceiveBroadCastUpdater } from '../services/receive-broadcast-update';
 
 export const useReceiveBroadcastStore = () => {
   /**
@@ -13,7 +12,8 @@ export const useReceiveBroadcastStore = () => {
    * @param payloadBroadcastStore - 수신된 브로드캐스트 스토어 페이로드
    */
   const broadcastStore = useBroadcastStore((state) => state.broadcastStore);
-  const queryClient = useQueryClient();
+
+  const receiveBroadCastUpdater = useReceiveBroadCastUpdater();
 
   const receiveBroadcastStore = (
     payloadBroadcastStore: FormatBroadcastStorePayloadType
@@ -34,62 +34,29 @@ export const useReceiveBroadcastStore = () => {
 
     //핵심주세UI업데이트
     if (broadcastStore.core.size !== 0) {
-      broadcastStore.core.forEach((corePayload, coreId) => {
-        queryClient.setQueryData(QUERY_KEY.core(coreId), corePayload.value);
+      broadcastStore.core.forEach((corePayload) => {
+        receiveBroadCastUpdater(corePayload);
       });
     }
 
     //대주제UI업데이트
     if (broadcastStore.topic.size !== 0) {
-      broadcastStore.topic.forEach((topicPayload, topicId) => {
-        queryClient.setQueryData(QUERY_KEY.topic(topicId), topicPayload.value);
+      broadcastStore.topic.forEach((topicPayload) => {
+        receiveBroadCastUpdater(topicPayload);
       });
     }
 
     //소주제UI업데이트
     if (broadcastStore.subTopic.size !== 0) {
-      broadcastStore.subTopic.forEach((subtopicPayload, subtopicId) => {
-        queryClient.setQueryData(
-          QUERY_KEY.subtopic(subtopicId),
-          subtopicPayload.value
-        );
+      broadcastStore.subTopic.forEach((subtopicPayload) => {
+        receiveBroadCastUpdater(subtopicPayload);
       });
     }
 
     //투두UI업데이트
     if (broadcastStore.todo.size !== 0) {
       broadcastStore.todo.forEach((todoPayload) => {
-        if (todoPayload.action === 'UPDATE') {
-          queryClient.setQueryData(
-            QUERY_KEY.todolist(todoPayload.cell_id),
-            (todoList: TodoPayloadType[]) => {
-              return todoList.map((item) => {
-                return item.id === todoPayload.id ? todoPayload : item;
-              });
-            }
-          );
-
-          queryClient.setQueryData(QUERY_KEY.todo(todoPayload.id), todoPayload);
-          return;
-        }
-        if (todoPayload.action === 'CREATE') {
-          queryClient.setQueryData(
-            QUERY_KEY.todolist(todoPayload.cell_id),
-            (todoList: TodoPayloadType[]) => {
-              return [...todoList, todoPayload];
-            }
-          );
-          return;
-        }
-        if (todoPayload.action === 'DELETE') {
-          queryClient.setQueryData(
-            QUERY_KEY.todolist(todoPayload.cell_id),
-            (todoList: TodoPayloadType[]) => {
-              return todoList.filter((item) => item.id !== todoPayload.id);
-            }
-          );
-          return;
-        }
+        receiveBroadCastUpdater(todoPayload as ReceiveBroadCastPayload);
       });
     }
   };
