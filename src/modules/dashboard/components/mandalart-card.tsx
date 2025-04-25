@@ -14,7 +14,7 @@ import {
   getPigmentCodeWithIndex,
 } from '@/shared/utils/get-color-with-index';
 import URLS from '@/shared/constants/url-constants';
-import { BicepsFlexed } from 'lucide-react';
+import { BicepsFlexed, MailCheck } from 'lucide-react';
 
 type MandalartCardProps = {
   card: FetchUserRoomsAndParticipantsResponse;
@@ -30,9 +30,11 @@ const MandalartCard = ({
   user,
 }: MandalartCardProps) => {
   const diff = getDateDiff(card.mandalart.endDate);
+  const pigmentCode = getPigmentCodeWithIndex(card.mandalart.color || index);
+  const pastelCode = getPastelCodeWithIndex(card.mandalart.color || index);
   return (
     <div
-      className={`${bandColor} focus:animate-fade-in-left grid h-fit w-full min-w-[330px] max-w-[394px] rounded-br-lg rounded-tr-lg shadow-[2px_2px_20px_0px_rgba(0,0,0,0.10)] focus:outline-none`}
+      className={`${bandColor} grid h-fit w-full min-w-[330px] max-w-[394px] rounded-br-lg rounded-tr-lg shadow-[2px_2px_20px_0px_rgba(0,0,0,0.10)] transition-shadow focus:outline-none active:animate-fade-out-right md:hover:shadow-[0px_0px_20px_0px_var(--color-beige)]`}
     >
       <div className='relative ml-3 rounded-br-lg rounded-tr-lg bg-white-light'>
         <div className='absolute right-0 top-0'>
@@ -92,15 +94,24 @@ const MandalartCard = ({
                     </Text>
                   )}
                 </div>
-                <DashboardAvatarStack
-                  maxAvatarsAmount={3}
-                  avatars={card.participants.map((person) => {
-                    return {
-                      name: person.nickname,
-                      image: person.profileUrl,
-                    };
-                  })}
-                />
+                {card.roomOwner === user ? (
+                  <DashboardAvatarStack
+                    maxAvatarsAmount={3}
+                    avatars={card.participants.map((person) => {
+                      return {
+                        name: person.nickname,
+                        image: person.profileUrl,
+                      };
+                    })}
+                  />
+                ) : (
+                  <div className='flex place-items-center gap-[4px]'>
+                    <MailCheck />
+                    <Text size='16px-medium' textColor='sub'>
+                      초대 된 방
+                    </Text>
+                  </div>
+                )}
               </div>
             </div>
             <Spacer size='md' />
@@ -110,12 +121,8 @@ const MandalartCard = ({
               <div>
                 <CircularProgress
                   size='default'
-                  pathColor={getPigmentCodeWithIndex(
-                    card.mandalart.color || index
-                  )}
-                  trailColor={getPastelCodeWithIndex(
-                    card.mandalart.color || index
-                  )}
+                  pathColor={pigmentCode}
+                  trailColor={pastelCode}
                   value={calculatorProgress(card.mandalart.doneCount)}
                 />
               </div>
