@@ -1,7 +1,7 @@
 import FloatingSheet from '@/components/commons/floating-sheet';
 import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
-import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, ReactNode, useRef, useState } from 'react';
 import TodoItem from './todo-item';
 import TopicGroup from './topic-group';
 import SubtopicGroup from './subtopic-group';
@@ -23,6 +23,16 @@ import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate'
  * Todo floating sheet 컴포넌트
  * @returns
  */
+
+const EmptyGuide = ({ children }: { children: string }) => {
+  return (
+    <div className='flex flex-col items-center'>
+      <Spacer size='lg'></Spacer>
+      <Text textColor='sub'>{children}</Text>
+    </div>
+  );
+};
+
 const MandalartFloatingSheet = () => {
   const info = useTodoFloatingSheetStore((state) => state.info);
   const hide = useTodoFloatingSheetStore((state) => state.hide);
@@ -90,6 +100,9 @@ const MandalartFloatingSheet = () => {
   // core
   if ('private' in info) {
     const diff = getDateDiff(info.endDate);
+    const topicGroupComponents = Array.from(topics)
+      .filter(([_, value]) => value.topic)
+      .map(([key, topic]) => <TopicGroup key={key} topic={topic} />);
 
     return (
       <FloatingSheet hideOnOutsideClick={true}>
@@ -134,11 +147,13 @@ const MandalartFloatingSheet = () => {
           </div>
           <div className='flex-grow overflow-y-auto py-6'>
             <div>
-              {Array.from(topics)
-                .filter(([_, value]) => value.topic)
-                .map(([key, topic]) => (
-                  <TopicGroup key={key} topic={topic} />
-                ))}
+              {topicGroupComponents.length === 0 ? (
+                <EmptyGuide>
+                  핵심주제를 이루기 위한 대주제를 작성해주세요.
+                </EmptyGuide>
+              ) : (
+                topicGroupComponents
+              )}
             </div>
           </div>
           <Spacer size='4xl' />
@@ -152,6 +167,9 @@ const MandalartFloatingSheet = () => {
     const subTopicsWithTopicId = Array.from(subTopics)
       .filter(([_, value]) => value.topicId === info.id && value.content)
       .map(([_, value]) => value);
+    const SubtopicGroupComponents = subTopicsWithTopicId.map((subtopic) => (
+      <SubtopicGroup key={subtopic.id} sub={subtopic} />
+    ));
 
     return (
       <FloatingSheet hideOnOutsideClick={true}>
@@ -191,9 +209,13 @@ const MandalartFloatingSheet = () => {
           </div>
           <div className='flex-grow overflow-y-auto py-6'>
             <div>
-              {subTopicsWithTopicId.map((subtopic) => (
-                <SubtopicGroup key={subtopic.id} sub={subtopic} />
-              ))}
+              {SubtopicGroupComponents.length === 0 ? (
+                <EmptyGuide>
+                  대주제를 이루기 위한 소주제를 작성해주세요.
+                </EmptyGuide>
+              ) : (
+                SubtopicGroupComponents
+              )}
             </div>
           </div>
           <Spacer size='4xl' />
@@ -203,11 +225,18 @@ const MandalartFloatingSheet = () => {
   }
 
   // subTopic
+  const topicTitle = parentTopic(info.topicId);
+
   const todosWithSubTopicId = Array.from(todos)
     .filter(([_, value]) => value.cellId === info.id)
     .map(([_, value]) => value);
-
-  const topicTitle = parentTopic(info.topicId);
+  const todoItemComponents = todosWithSubTopicId.map((todo, index) => (
+    <TodoItem
+      key={todo.id + index}
+      todo={todo}
+      isCreateTodo={isCreateTodo.current}
+    />
+  ));
 
   const customButtonClass =
     'w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
@@ -264,13 +293,11 @@ const MandalartFloatingSheet = () => {
         </div>
         <div className='flex-grow overflow-y-auto py-6'>
           <div className='px-8'>
-            {todosWithSubTopicId.map((todo, index) => (
-              <TodoItem
-                key={todo.id + index}
-                todo={todo}
-                isCreateTodo={isCreateTodo.current}
-              />
-            ))}
+            {todoItemComponents.length === 0 ? (
+              <EmptyGuide>소주제를 이루기 위한 투두를 작성해주세요.</EmptyGuide>
+            ) : (
+              todoItemComponents
+            )}
           </div>
         </div>
         <Spacer size='4xl' />
