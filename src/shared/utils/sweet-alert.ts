@@ -31,3 +31,17 @@ export const infoAlert = (title: string, message = '') => {
     confirmButtonColor,
   });
 };
+
+export const confirmAlert = (title: string, message = '') => {
+  return Swal.fire({
+    icon: 'warning',
+    title: title,
+    text: message,
+    showCancelButton: true,
+    confirmButtonColor,
+    cancelButtonColor: '#d33',
+    confirmButtonText: '확인',
+    cancelButtonText: '취소',
+    heightAuto: false,
+  });
+};
