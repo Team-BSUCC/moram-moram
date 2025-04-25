@@ -2,6 +2,7 @@ import CheckBox from '@/components/commons/check-box';
 import {
   ChangeEvent,
   KeyboardEvent,
+  MutableRefObject,
   useEffect,
   useMemo,
   useRef,
