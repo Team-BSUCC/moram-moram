@@ -3,14 +3,14 @@ import * as React from 'react';
 import { twMerge } from 'tailwind-merge';
 
 const buttonVariants = cva(
-  'inline-flex items-center text-main w-fit justify-center rounded-lg font-semibold outline-none disabled:pointer-events-none disabled:text-caption disabled:bg-[#E6E6E6] disabled:border-none',
+  'inline-flex items-center text-main w-fit transition-colors ease-in-out justify-center rounded-lg font-semibold outline-none disabled:pointer-events-none disabled:text-caption disabled:bg-[#E6E6E6] disabled:border-none',
   {
     variants: {
       variant: {
         default: 'bg-primary hover:bg-[#BF93E1] active:bg-[#A76BD6]',
         secondary: 'bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4]',
         outline:
-          'bg-white-light outline outline-[1.5px] outline-beige box-border outline-offset-[0px] hover:outline-[3px] active:outline-[3px] active:outline-[#B3947F]',
+          'bg-white-light outline outline-[1.5px] outline-beige box-border transition-all outline-offset-[0px] hover:outline-[3px] active:outline-[3px] active:outline-[#B3947F]',
         none: 'bg-white-light justify-start w-full rounded-none hover:bg-beige-light active:bg-beige',
         header:
           'bg-transparent hover:font-bold hover:scale-105 active:font-bold text-sub hover:text-main active:text-main',
