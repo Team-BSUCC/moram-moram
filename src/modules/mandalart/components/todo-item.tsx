@@ -23,7 +23,7 @@ import { useClientStateStore } from '../hooks/use-client-state-store';
 
 type TodoItemProps = {
   todo: CellTodo;
-  isCreateTodo: boolean;
+  isCreateTodo?: boolean;
 };
 
 const TodoItem = ({ todo, isCreateTodo }: TodoItemProps) => {
