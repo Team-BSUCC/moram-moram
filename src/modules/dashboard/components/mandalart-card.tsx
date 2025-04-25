@@ -108,7 +108,7 @@ const MandalartCard = ({
                   <div className='flex place-items-center gap-[4px]'>
                     <MailCheck />
                     <Text size='16px-medium' textColor='sub'>
-                      초대 된 방
+                      초대된 방
                     </Text>
                   </div>
                 )}
