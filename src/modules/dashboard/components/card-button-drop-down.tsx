@@ -389,6 +389,13 @@ const UpdateDateModal = ({
     ) {
       return infoAlert('날짜의 변화가 없는데요?');
     }
+    if (
+      selectedDate.endYear === '' ||
+      selectedDate.endMonth === '' ||
+      selectedDate.endDay === ''
+    ) {
+      return infoAlert('날짜를 모두 선택해주세요.');
+    }
     updateDate({
       mandalartId: mandalartId,
       endDate: `${selectedDate.endYear}-${selectedDate.endMonth}-${selectedDate.endDay}`,
