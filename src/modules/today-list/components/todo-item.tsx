@@ -32,7 +32,9 @@ const TodoItem = ({ todo }: TodoItemProps) => {
     <div className='space-y-1'>
       <div className='flex w-full items-center justify-between border-b border-stroke px-1 py-2'>
         <CheckBox checked={checked} onChange={handleCheckToggle} />
-        <Text size='20px-medium'>{todo.todoTitle}</Text>
+        <Text size='20px-medium'>
+          {todo.todoTitle || '작성된 TODO 내용이 없습니다'}
+        </Text>
         <Dropdown>
           <div>
             <Button variant='none' size='none' onClick={handleDelete}>

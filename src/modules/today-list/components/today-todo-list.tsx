@@ -107,7 +107,8 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
                                 textColor='sub'
                                 highlightColor={8}
                               >
-                                {subTodos[0].subtopicContent || '\u00A0'}
+                                {subTodos[0].subtopicContent ||
+                                  '작성된 소주제가 없습니다'}
                               </Title>
                               <Spacer size='sm' />
                               <div className='flex flex-col gap-5'>
