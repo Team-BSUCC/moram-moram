@@ -32,6 +32,9 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
   }, []);
 
   // 선택된 만다라트의 평탄화된 todo 목록
+  /**
+   * @todo 이름 기준으로 하니까 이름이 겹칠 경우 문제 발생
+   */
   const flatTodos = useMemo(() => {
     const mandalart = myMandalarts?.find(
       (mandalart: MandalartType) => mandalart.core.title === clickedTitle
@@ -88,6 +91,9 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
               {filteredTodos ? (
                 Object.entries(groupedByTopic).map(
                   ([topicId, todos], topicIdx) => (
+                    /**
+                     * @todo 보더 색상 변경
+                     */
                     <div
                       key={topicId}
                       className={`w-full border-l-8 ${getBorderColorWithNumber(topicIdx)} rounded-br-md rounded-tr-md bg-white-light p-6 shadow-md`}
