@@ -25,10 +25,9 @@ const GuestNavigation = ({
 
   return (
     <div>
-      {/* 모달 */}
       {isNavigationOpen && (
         <div
-          className='fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.6)] md:hidden'
+          className='fixed inset-0 z-50 flex items-center justify-center bg-[rgba(0,0,0,0.6)]'
           onClick={() => {
             setIsNavigationOpen(false);
           }}
