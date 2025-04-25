@@ -8,11 +8,7 @@ import Title from '@/components/commons/title';
 import Text from '@/components/commons/text';
 import { useUpdateRoomColor } from '../hooks/use-update-room-color';
 import ColorPicker from './color-picker';
-import {
-  confirmAlert,
-  errorAlert,
-  infoAlert,
-} from '@/shared/utils/sweet-alert';
+import { confirmAlert, infoAlert } from '@/shared/utils/sweet-alert';
 import { DateRangeState } from '../types/dashboard-type';
 import DateUnitSelect from './date-unit-select';
 import { useDateOptionList } from '../hooks/use-date-option-list';
