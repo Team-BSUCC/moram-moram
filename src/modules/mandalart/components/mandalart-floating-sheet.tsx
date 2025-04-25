@@ -18,6 +18,8 @@ import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
 import { useCellBroadcastMutation } from '../hooks/use-cell-broadcast-mutation';
 import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate';
+import Button from '@/components/commons/button';
+import { testGetAiSuggestionAPI } from '../utils/fakeTastAIFunciton';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -63,6 +65,53 @@ const MandalartFloatingSheet = () => {
     return <div>오류</div>;
   }
 
+  const handleAiTopicSuggest = async () => {
+    const topicList = Array.from(topics.values());
+    const topicValueList = topicList
+      .filter((topicValue) => topicValue.topic)
+      .map((topicValue) => topicValue.topic);
+
+    const aiSuggestTopicList = testGetAiSuggestionAPI(
+      topicValueList as string[]
+    );
+
+    topicList.forEach((topicValue) => {
+      if (!topicValue.topic) {
+        mutationCell({
+          action: 'topic',
+          value: { ...topicValue, topic: aiSuggestTopicList.pop() as string },
+        });
+      }
+    });
+  };
+
+  const handleAiSubTopicSuggest = async () => {
+    const subtopicList = Array.from(
+      subTopics
+        .values()
+        .filter((subtopicValue) => subtopicValue.topicId === info.id)
+    );
+    const subtopicValueList = subtopicList
+      .filter((subtopicValue) => subtopicValue.content)
+      .map((subtopicValue) => subtopicValue.content);
+
+    const aiSuggestTopicList = testGetAiSuggestionAPI(
+      subtopicValueList as string[]
+    );
+
+    subtopicList.forEach((subtopicValue) => {
+      if (!subtopicValue.content) {
+        mutationCell({
+          action: 'subTopic',
+          value: {
+            ...subtopicValue,
+            content: aiSuggestTopicList.pop() as string,
+          },
+        });
+      }
+    });
+  };
+
   // core
   if ('private' in info) {
     const diff = getDateDiff(info.endDate);
@@ -106,6 +155,10 @@ const MandalartFloatingSheet = () => {
                   {info.subTitle}
                 </Text>
               </div>
+            </div>
+            {/* AI버튼영역 */}
+            <div>
+              <Button onClick={handleAiTopicSuggest}>테스트</Button>
             </div>
           </div>
           <div className='flex-grow overflow-y-auto py-6'>
@@ -165,6 +218,7 @@ const MandalartFloatingSheet = () => {
                 {info.topic || `대주제${info.topicIndex}`}
               </Text>
             </div>
+            <Button onClick={handleAiSubTopicSuggest}>테스트대주제</Button>
           </div>
           <div className='flex-grow overflow-y-auto py-6'>
             <div>
