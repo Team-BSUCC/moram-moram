@@ -11,7 +11,7 @@ import { BicepsFlexed, CalendarDays, SquarePlus, X } from 'lucide-react';
 import Title from '@/components/commons/title';
 import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
 import { formatDate } from '@/modules/dashboard/util/format-date';
-import { getDateDiff } from '@/modules/dashboard/util/calculate-date-differents';
+import { getDateDiff } from '@/modules/dashboard/util/calculate-date';
 import { useClientStateStore } from '../hooks/use-client-state-store';
 import { useChannelStore } from '../hooks/use-channel-store';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
