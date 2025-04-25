@@ -89,46 +89,41 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
           <div className='w-full'>
             <div className='mt-2 flex w-full flex-col gap-11'>
               {filteredTodos ? (
-                Object.entries(groupedByTopic).map(
-                  ([topicId, todos], topicIdx) => (
-                    /**
-                     * @todo 보더 색상 변경
-                     */
-                    <div
-                      key={topicId}
-                      className={`w-full border-l-8 ${getBorderColorWithNumber(topicIdx)} rounded-br-md rounded-tr-md bg-white-light p-6 shadow-md`}
-                    >
-                      <Title as='h2' size='24px-semibold'>
-                        {todos[0].topicTitle}
-                      </Title>
-                      <Spacer size={'md'} />
-                      <div className='space-y-6'>
-                        {/* 소주제별로 그룹핑 */}
-                        {Object.entries(groupBy(todos, 'subtopicId')).map(
-                          ([subtopicId, subTodos]) => (
-                            <div key={subtopicId}>
-                              <Title
-                                as='h3'
-                                size='18px-semibold'
-                                textColor='sub'
-                                highlightColor={8}
-                              >
-                                {subTodos[0].subtopicContent ||
-                                  '작성된 소주제가 없습니다'}
-                              </Title>
-                              <Spacer size='sm' />
-                              <div className='flex flex-col gap-5'>
-                                {subTodos.map((todo) => (
-                                  <TodoItem todo={todo} key={todo.todoId} />
-                                ))}
-                              </div>
+                Object.entries(groupedByTopic).map(([topicId, todos]) => (
+                  <div
+                    key={topicId}
+                    className={`w-full border-l-8 ${getBorderColorWithNumber(todos[0].topicColor)} rounded-br-md rounded-tr-md bg-white-light p-6 shadow-md`}
+                  >
+                    <Title as='h2' size='24px-semibold'>
+                      {todos[0].topicTitle}
+                    </Title>
+                    <Spacer size={'md'} />
+                    <div className='space-y-6'>
+                      {/* 소주제별로 그룹핑 */}
+                      {Object.entries(groupBy(todos, 'subtopicId')).map(
+                        ([subtopicId, subTodos]) => (
+                          <div key={subtopicId}>
+                            <Title
+                              as='h3'
+                              size='18px-semibold'
+                              textColor='sub'
+                              highlightColor={8}
+                            >
+                              {subTodos[0].subtopicContent ||
+                                '작성된 소주제가 없습니다'}
+                            </Title>
+                            <Spacer size='sm' />
+                            <div className='flex flex-col gap-5'>
+                              {subTodos.map((todo) => (
+                                <TodoItem todo={todo} key={todo.todoId} />
+                              ))}
                             </div>
-                          )
-                        )}
-                      </div>
+                          </div>
+                        )
+                      )}
                     </div>
-                  )
-                )
+                  </div>
+                ))
               ) : (
                 <div className='flex h-full w-full items-center justify-center py-40'>
                   <Title as='h2' size='20px-medium' textColor='caption'>
