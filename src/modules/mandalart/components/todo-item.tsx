@@ -2,6 +2,7 @@ import CheckBox from '@/components/commons/check-box';
 import {
   ChangeEvent,
   KeyboardEvent,
+  MutableRefObject,
   useEffect,
   useMemo,
   useRef,
@@ -22,9 +23,10 @@ import { useClientStateStore } from '../hooks/use-client-state-store';
 
 type TodoItemProps = {
   todo: CellTodo;
+  isCreateTodo: boolean;
 };
 
-const TodoItem = ({ todo }: TodoItemProps) => {
+const TodoItem = ({ todo, isCreateTodo }: TodoItemProps) => {
   const channel = useChannelStore((state) => state.channel);
   const thisTodo = useClientStateStore((state) =>
     state.getTodoItem(`${todo.cellId}-${todo.id}`)
@@ -58,6 +60,12 @@ const TodoItem = ({ todo }: TodoItemProps) => {
     mutationTodo,
     0.5 * 1000
   );
+
+  useEffect(() => {
+    if (isCreateTodo) {
+      inputRef.current?.focus();
+    }
+  }, []);
 
   const handleMutateDate = () => {
     if (Object.values(date).every((value) => value !== '')) {
@@ -107,7 +115,6 @@ const TodoItem = ({ todo }: TodoItemProps) => {
           }}
         />
         <Input
-          autoFocus
           ref={inputRef}
           onFocus={() => {
             setIsFocus(true);

@@ -34,6 +34,7 @@ const MandalartFloatingSheet = () => {
   const todos = useClientStateStore((state) => state.todos);
 
   const inputRef = useRef<HTMLInputElement>(null);
+  const isCreateTodo = useRef<boolean>(false);
 
   const [value, setValue] = useState<string>(() => {
     if (!info) return '';
@@ -249,6 +250,7 @@ const MandalartFloatingSheet = () => {
             <button
               className={customButtonClass}
               onClick={() => {
+                isCreateTodo.current = true;
                 mutationTodo({
                   value: createNewTodoRowValue(info.id),
                   action: 'CREATE',
@@ -263,7 +265,11 @@ const MandalartFloatingSheet = () => {
         <div className='flex-grow overflow-y-auto py-6'>
           <div className='px-8'>
             {todosWithSubTopicId.map((todo, index) => (
-              <TodoItem key={todo.id + index} todo={todo} />
+              <TodoItem
+                key={todo.id + index}
+                todo={todo}
+                isCreateTodo={isCreateTodo.current}
+              />
             ))}
           </div>
         </div>
