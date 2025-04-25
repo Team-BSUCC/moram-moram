@@ -50,7 +50,7 @@ const FloatingSheet = ({
   const outSideClick = !hideOnOutsideClick && 'pointer-events-none';
 
   return (
-    <div className={`${outSideClick} fixed inset-0 z-[10] m-3`} onClick={hide}>
+    <div className={`${outSideClick} fixed inset-0 z-50 m-3`} onClick={hide}>
       <Draggable
         handle='.handle' // 드래그 핸들 지정
         cancel='.no-drag' //드래그를 원하지 않는 영역
