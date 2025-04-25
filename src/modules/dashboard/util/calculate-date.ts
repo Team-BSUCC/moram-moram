@@ -19,3 +19,13 @@ export const getDateDiff = (endStr: Date): number => {
   const diffDays = diffTime / (1000 * 60 * 60 * 24);
   return diffDays;
 };
+
+export const getDateToString = (
+  date: Date
+): { yyyy: string; mm: string; dd: string } => {
+  const formattedDate = new Date(date);
+  const yyyy = formattedDate.getFullYear().toString();
+  const mm = String(formattedDate.getMonth() + 1);
+  const dd = String(formattedDate.getDate());
+  return { yyyy, mm, dd };
+};
