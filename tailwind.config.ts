@@ -11,6 +11,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      aspectRatio: {
+        guestModal: '627/860',
+      },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
