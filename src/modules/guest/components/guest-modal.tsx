@@ -180,12 +180,7 @@ const GuestModal = ({
           >
             <div className='flex h-full w-full max-w-[627px] flex-col'>
               <div className='flex justify-end'>
-                <button
-                  className='absolute p-6'
-                  onClick={() => {
-                    handleSheetClose;
-                  }}
-                >
+                <button className='absolute p-6' onClick={handleSheetClose}>
                   <X size={24} />
                 </button>
               </div>
