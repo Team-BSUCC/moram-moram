@@ -1,7 +1,7 @@
 import FloatingSheet from '@/components/commons/floating-sheet';
 import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
-import { ChangeEvent, KeyboardEvent, ReactNode, useRef, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react';
 import TodoItem from './todo-item';
 import TopicGroup from './topic-group';
 import SubtopicGroup from './subtopic-group';

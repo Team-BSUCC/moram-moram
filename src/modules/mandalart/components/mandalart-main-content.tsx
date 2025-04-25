@@ -110,7 +110,7 @@ const MandalartMainContent = ({
           </div>
           <Spacer size='sm' />
           <div className='flex'>
-            <BicepsFlexed />
+            <BicepsFlexed /> {data.core.subTitle || '반드시 완수한다'}
             <Text>{data.core.subTitle}</Text>
           </div>
         </div>
