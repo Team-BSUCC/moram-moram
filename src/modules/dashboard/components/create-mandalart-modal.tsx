@@ -79,14 +79,18 @@ const CreateMandalartModal = ({
             </div>
             <div className='px-8'>
               {/* 제목 입력 */}
-              <Input
-                value={title}
-                sizes='24px-semibold'
-                placeholder='핵심 목표를 작성해주세요.'
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-              />
+              <div className='relative'>
+                <Input
+                  maxLength={12}
+                  value={title}
+                  sizes='24px-semibold'
+                  placeholder='핵심 목표를 작성해주세요.'
+                  onChange={(e) => {
+                    setTitle(e.target.value);
+                  }}
+                />
+                <span className='absolute right-8 top-[10px] text-sub'>{`${title.length}/12`}</span>
+              </div>
 
               {/* 날짜 선택 */}
               <div className='flex flex-col gap-y-[7px]'>
