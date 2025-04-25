@@ -8,12 +8,17 @@ import Title from '@/components/commons/title';
 import Text from '@/components/commons/text';
 import { useUpdateRoomColor } from '../hooks/use-update-room-color';
 import ColorPicker from './color-picker';
-import { errorAlert, infoAlert } from '@/shared/utils/sweet-alert';
+import {
+  confirmAlert,
+  errorAlert,
+  infoAlert,
+} from '@/shared/utils/sweet-alert';
 import { DateRangeState } from '../types/dashboard-type';
 import DateUnitSelect from './date-unit-select';
 import { useDateOptionList } from '../hooks/use-date-option-list';
 import { getDateToString } from '../util/calculate-date';
 import { useRoomDateUpdate } from '../hooks/use-room-date-update';
+import { useGetOutRoom } from '../hooks/use-get-out-room';
 
 type CardButtonDropDownProps = {
   roomId: string;
@@ -120,12 +125,37 @@ const DeleteModal = ({
   user,
 }: DeleteModalProps) => {
   const { mutate: deleteRoom } = useDeleteRoom();
+  const { mutate: getOutRoom } = useGetOutRoom();
 
   const handleDeleteRoom = (id: string) => {
-    if (owner !== user) return errorAlert('만다라트의 주인이 아닙니다.');
-    deleteRoom(id);
-    setIsDeleteOpen(false);
-    setIsOpen(false);
+    if (owner !== user)
+      return confirmAlert(
+        '만다라트의 주인이 아닙니다.',
+        '방을 나가시겠습니까?'
+      ).then((result) => {
+        if (result.isConfirmed) {
+          getOutRoom({
+            roomId: id,
+            userId: user as string,
+          });
+          setIsDeleteOpen(false);
+          setIsOpen(false);
+        } else {
+          setIsDeleteOpen(false);
+        }
+      });
+    confirmAlert(
+      '정말 삭제하시겠습니까?',
+      '삭제한 내용은 되돌릴 수 없습니다.'
+    ).then((result) => {
+      if (result.isConfirmed) {
+        deleteRoom(id);
+        setIsDeleteOpen(false);
+        setIsOpen(false);
+      } else {
+        setIsDeleteOpen(false);
+      }
+    });
   };
 
   return (
