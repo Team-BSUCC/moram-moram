@@ -34,7 +34,7 @@ const MandalartCard = ({
   const pastelCode = getPastelCodeWithIndex(card.mandalart.color || index);
   return (
     <div
-      className={`${bandColor} grid h-fit w-full min-w-[330px] max-w-[394px] rounded-br-lg rounded-tr-lg shadow-[2px_2px_20px_0px_rgba(0,0,0,0.10)] transition-shadow focus:outline-none active:animate-fade-out-right md:hover:shadow-[0px_0px_20px_0px_var(--color-beige)]`}
+      className={`${bandColor} grid h-fit w-full min-w-[330px] max-w-[394px] rounded-br-lg rounded-tr-lg shadow-[2px_2px_20px_0px_rgba(0,0,0,0.10)] transition-shadow focus:outline-none md:hover:shadow-[0px_0px_20px_0px_var(--color-beige)]`}
     >
       <div className='relative ml-3 rounded-br-lg rounded-tr-lg bg-white-light'>
         <div className='absolute right-0 top-0'>
