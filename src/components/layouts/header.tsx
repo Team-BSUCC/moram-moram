@@ -81,7 +81,7 @@ const Header = ({ user }: HeaderProps) => {
     <div className='w-full border-none bg-white-light lg:border-b'>
       <div className='flex items-center justify-between'>
         <div className='px-6 py-4'>
-          <Link href={user ? URLS.DASHBOARD : URLS.HOME}>
+          <Link href={URLS.HOME}>
             <Image
               src='/images/manda-logo-text.svg'
               alt='만다로고'
