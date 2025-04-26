@@ -17,7 +17,7 @@ const TopicGroup = ({ topic }: TopicGroupProps) => {
   const [toggle, setToggle] = useState<boolean>(true);
 
   const subTopicsWithTopicId = Array.from(subTopics)
-    .filter(([_, value]) => value.topicId === topic.id)
+    .filter(([_, value]) => value.topicId === topic.id && value.content)
     .map(([_, value]) => value);
 
   return (

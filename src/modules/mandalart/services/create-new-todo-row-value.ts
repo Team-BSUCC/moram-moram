@@ -7,7 +7,7 @@ export const createNewTodoRowValue = (subtopicId: string): CellTodo => {
     cellId: subtopicId,
     createdAt: new Date().toISOString(),
     isDone: false,
-    title: '새 TODO',
+    title: '',
     scheduledDate: getTodayDateYYYYMMDD(),
   };
 };
