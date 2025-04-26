@@ -2,7 +2,6 @@ import CheckBox from '@/components/commons/check-box';
 import {
   ChangeEvent,
   KeyboardEvent,
-  MutableRefObject,
   useEffect,
   useMemo,
   useRef,
@@ -82,8 +81,8 @@ const TodoItem = ({ todo, isCreateTodo }: TodoItemProps) => {
   const charLimit = 20;
   const charLimitNotice = `글자 수 제한 ${value.length} / ${charLimit}`;
   const handleInputValue = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length - 1 === charLimit) return;
     const newValue = e.target.value;
+    if (newValue.length - 1 === charLimit) return;
     setValue(newValue);
     throttleMutate({
       value: { ...todo, title: newValue },

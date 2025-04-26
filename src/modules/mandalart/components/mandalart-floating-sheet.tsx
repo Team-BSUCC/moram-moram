@@ -27,7 +27,7 @@ import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate'
 const EmptyGuide = ({ children }: { children: string }) => {
   return (
     <div className='flex flex-col items-center'>
-      <Spacer size='lg'></Spacer>
+      <Spacer size='lg' />
       <Text textColor='sub'>{children}</Text>
     </div>
   );
