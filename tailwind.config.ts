@@ -16,9 +16,29 @@ const config: Config = {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
+        fadeInRight: {
+          '0%': { opacity: '0', transform: 'translateX(30px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        fadeInLeft: {
+          '0%': { opacity: '0', transform: 'translateX(-30px)' },
+          '100%': { opacity: '1', transform: 'translateX(0)' },
+        },
+        fadeOutRight: {
+          '0%': { opacity: '1', transform: 'translateX(0)' },
+          '100%': { opacity: '0', transform: 'translateX(30px)' },
+        },
+        fadeOutLeft: {
+          '0%': { opacity: '1', transform: 'translateX(0)' },
+          '100%': { opacity: '0', transform: 'translateX(-30px)' },
+        },
       },
       animation: {
-        fadeInOnce: 'fadeIn 0.5s ease-out forwards',
+        fadeInOnce: 'fadeIn 0.5s ease-out',
+        'fade-in-right': 'fadeInRight 0.4s ease-out',
+        'fade-in-left': 'fadeInLeft 0.4s ease-out',
+        'fade-out-right': 'fadeOutRight 0.4s ease-in forwards',
+        'fade-out-left': 'fadeOutLeft 0.4s ease-in forwards',
       },
       zIndex: {
         '1': '1',
