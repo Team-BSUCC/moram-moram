@@ -103,9 +103,7 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
           >
             <span
               className={
-                arg.event.extendedProps.isDone
-                  ? 'text-gray-400 line-through'
-                  : ''
+                arg.event.extendedProps.isDone ? 'text-sub line-through' : ''
               }
             >
               {arg.event.title}
