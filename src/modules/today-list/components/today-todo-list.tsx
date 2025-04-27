@@ -27,17 +27,14 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
   // 최초 클릭된 만다라트 제목 세팅
   useEffect(() => {
     if (myMandalarts && myMandalarts.length > 0) {
-      setClickedTitle(myMandalarts[0].core.title);
+      setClickedTitle(myMandalarts[0].core.id);
     }
   }, []);
 
   // 선택된 만다라트의 평탄화된 todo 목록
-  /**
-   * @todo 이름 기준으로 하니까 이름이 겹칠 경우 문제 발생
-   */
   const flatTodos = useMemo(() => {
     const mandalart = myMandalarts?.find(
-      (mandalart: MandalartType) => mandalart.core.title === clickedTitle
+      (mandalart: MandalartType) => mandalart.core.id === clickedTitle
     );
     if (!mandalart) return [];
     return flattenTodos(mandalart);
@@ -51,12 +48,12 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
 
   // 대주제 id를 기준으로 그룹핑
   const groupedByTopic = (() => {
-    const map: { [topicId: string]: FlatTodo[] } = {};
+    const obj: { [topicId: string]: FlatTodo[] } = {};
     filteredTodos?.forEach((todo) => {
-      if (!map[todo.topicId]) map[todo.topicId] = [];
-      map[todo.topicId].push(todo);
+      if (!obj[todo.topicId]) obj[todo.topicId] = [];
+      obj[todo.topicId].push(todo);
     });
-    return map;
+    return obj;
   })();
 
   return (
@@ -75,6 +72,7 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
             {myMandalarts?.map((mandalart: MandalartType) => (
               <MandalartTitleTab
                 key={mandalart.core.id}
+                id={mandalart.core.id}
                 title={mandalart.core.title}
                 value={clickedTitle}
                 handleClick={setClickedTitle}
