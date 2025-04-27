@@ -43,13 +43,13 @@ const Header = ({ user }: HeaderProps) => {
   // 메뉴가 열렸을 때 스크롤 방지
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('overflow-hidden');
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.classList.remove('overflow-hidden');
     }
 
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.classList.remove('overflow-hidden');
     };
   }, [isMenuOpen]);
 
