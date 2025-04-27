@@ -46,14 +46,14 @@ export const getPastelCodeWithIndex = (index: number): string => {
 export const getColorWithIndexOrder = (index: number): string => {
   const idx = index % 8;
   const color: Record<number, string> = {
-    0: 'bg-pink-pastel',
-    1: 'bg-red-pastel',
-    2: 'bg-orange-pastel',
-    3: 'bg-yellow-pastel',
-    4: 'bg-green-pastel',
-    5: 'bg-sky-pastel',
-    6: 'bg-blue-pastel',
-    7: 'bg-purple-pastel',
+    0: 'bg-pink-pigment',
+    1: 'bg-red-pigment',
+    2: 'bg-orange-pigment',
+    3: 'bg-yellow-pigment',
+    4: 'bg-green-pigment',
+    5: 'bg-sky-pigment',
+    6: 'bg-blue-pigment',
+    7: 'bg-purple-pigment',
   };
 
   return color[idx];

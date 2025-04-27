@@ -76,7 +76,7 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className='h-[280px] w-full max-w-[360px] animate-fade-out-left rounded-lg bg-lightgray shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]'
+              className='animate-fade-out-left h-[280px] w-full max-w-[360px] rounded-lg bg-lightgray shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]'
             />
           ))}
         </div>
@@ -109,7 +109,7 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
       {category === '진행 중인 목표' ? (
         <div className='flex'>
           {yetMandalart && yetMandalart?.length ? (
-            <div className='grid w-[1252px] animate-fade-in-left grid-cols-1 place-items-center gap-[40px] md:grid-cols-2 lg:grid-cols-3'>
+            <div className='animate-fade-in-left grid w-[1252px] grid-cols-1 place-items-center gap-[40px] md:grid-cols-2 lg:grid-cols-3'>
               {yetMandalart.map(
                 (
                   card: FetchUserRoomsAndParticipantsResponse,
@@ -134,7 +134,8 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
           ) : (
             <div className='flex w-full justify-center'>
               <Text size='18px-medium' textColor='caption'>
-                아직은 비어 있지만, 곧 채워질 당신의 여정을 기대할게요 :)
+                현재 진행 중인 목표가 없어요. ‘새 만다라트’ 버튼을 눌러 지금
+                바로 시작해보세요!
               </Text>
             </div>
           )}
@@ -142,7 +143,7 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
       ) : (
         <div className='flex'>
           {doneMandalart && doneMandalart?.length ? (
-            <div className='grid w-full max-w-[1252px] animate-fade-in-left grid-cols-1 place-items-center gap-14 md:grid-cols-2 lg:grid-cols-3'>
+            <div className='animate-fade-in-left grid w-full max-w-[1252px] grid-cols-1 place-items-center gap-14 md:grid-cols-2 lg:grid-cols-3'>
               {doneMandalart.map(
                 (
                   card: FetchUserRoomsAndParticipantsResponse,
@@ -166,8 +167,7 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
           ) : (
             <div className='flex w-full justify-center'>
               <Text size='18px-medium' textColor='caption'>
-                현재 진행 중인 목표가 없어요. ‘새 만다라트’ 버튼을 눌러 지금
-                바로 시작해보세요!
+                아직은 비어 있지만, 곧 채워질 당신의 여정을 기대할게요 :)
               </Text>
             </div>
           )}
