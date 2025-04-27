@@ -3,7 +3,13 @@
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { ReactNode, useRef, useLayoutEffect, useState, useEffect } from 'react';
 import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
-import { Sheet, SheetContent, SheetTitle } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from '@/components/ui/sheet';
+import useTodoFloatingSheetStore from '@/modules/mandalart/hooks/use-todo-floating-sheet-store';
 
 type FloatingSheetProps = {
   children: ReactNode;
@@ -25,6 +31,9 @@ const FloatingSheet = ({
   const setPosition = useFloatingSheetStore((state) => state.setPosition);
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const hide = useFloatingSheetStore((state) => state.hide);
+  const mandalartFloatingSheetIsVisible = useTodoFloatingSheetStore(
+    (state) => state.isVisible
+  );
 
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const nodeRef = useRef<HTMLDivElement>(null);
@@ -51,7 +60,7 @@ const FloatingSheet = ({
         y: (window.innerHeight - h) / 2,
       });
     }
-  }, [position, isMobile]);
+  }, [position]);
 
   // 드래그가 끝났을 때 위치 업데이트
   const handleDragStop = (e: DraggableEvent, data: DraggableData) => {
@@ -69,11 +78,20 @@ const FloatingSheet = ({
   // 바텀시트 (모바일)
   if (isMobile) {
     return (
-      <Sheet open={isVisible} onOpenChange={(open) => !open && hide()}>
-        {/* 화면에는 보이지 않지만 스크린 리더가 읽을 수 있도록 표시 */}
-        <SheetTitle>바텀시트 영역</SheetTitle>
-        <SheetContent side='bottom' className='h-[60vh] overflow-y-auto p-0'>
-          <div className='mt-4'>{children}</div>
+      <Sheet
+        open={isVisible || mandalartFloatingSheetIsVisible}
+        onOpenChange={(open) => !open && hide()}
+        modal={false}
+      >
+        <SheetContent
+          side='bottom'
+          className='h-[60vh] overflow-y-auto rounded-t-lg p-0'
+        >
+          {/* 화면에는 보이지 않지만 스크린 리더가 읽을 수 있도록 표시 */}
+          <SheetHeader className='sr-only'>
+            <SheetTitle>바텀시트 영역</SheetTitle>
+          </SheetHeader>
+          <div>{children}</div>
         </SheetContent>
       </Sheet>
     );

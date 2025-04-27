@@ -111,7 +111,7 @@ const MandalartFloatingSheet = () => {
         <div className='flex h-full flex-col'>
           <div className='handle cursor-grab rounded-t-lg bg-violet-pastel active:cursor-grabbing'>
             <div className='fixed right-4 top-4 w-fit'>
-              <button className='bg-transparent' onClick={hide}>
+              <button className='hidden bg-transparent sm:block' onClick={hide}>
                 <X />
               </button>
             </div>
@@ -180,7 +180,7 @@ const MandalartFloatingSheet = () => {
             className={`handle cursor-grab active:cursor-grabbing ${getColorWithNumber(info.topicIndex)} rounded-t-lg`}
           >
             <div className='fixed right-4 top-4 w-fit'>
-              <button className='bg-transparent' onClick={hide}>
+              <button className='hidden bg-transparent sm:block' onClick={hide}>
                 <X />
               </button>
             </div>
@@ -248,7 +248,7 @@ const MandalartFloatingSheet = () => {
       <div className='flex h-full flex-col'>
         <div className='handle cursor-grab rounded-t-lg active:cursor-grabbing'>
           <div className='fixed right-4 top-4 w-fit'>
-            <button className='bg-transparent' onClick={hide}>
+            <button className='hidden bg-transparent sm:block' onClick={hide}>
               <X />
             </button>
           </div>
