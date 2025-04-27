@@ -86,7 +86,7 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
             setSelectedOption={setSelectedOption}
           />
 
-          <div className='w-full'>
+          <div className='w-full animate-fade-in-left'>
             <div className='mt-2 flex w-full flex-col gap-11'>
               {filteredTodos ? (
                 Object.entries(groupedByTopic).map(([topicId, todos]) => (
@@ -94,8 +94,9 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
                     key={topicId}
                     className={`w-full border-l-8 ${getBorderColorWithNumber(todos[0].topicColor)} rounded-br-md rounded-tr-md bg-white-light p-6 shadow-md`}
                   >
+                    {/* 만다라트 편집 페이지에서 빈칸 예외처리가 되면 삭제할 예정 */}
                     <Title as='h2' size='24px-semibold'>
-                      {todos[0].topicTitle}
+                      {todos[0].topicTitle || '작성된 대주제가 없습니다'}
                     </Title>
                     <Spacer size={'md'} />
                     <div className='space-y-6'>

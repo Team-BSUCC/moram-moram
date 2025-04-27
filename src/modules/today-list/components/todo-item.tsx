@@ -29,21 +29,25 @@ const TodoItem = ({ todo }: TodoItemProps) => {
   };
 
   return (
-    <div className='space-y-1'>
-      <div className='flex w-full items-center justify-between border-b border-stroke px-1 py-2'>
-        <CheckBox checked={checked} onChange={handleCheckToggle} />
-        <Text size='20px-medium'>
-          {todo.todoTitle || '작성된 TODO 내용이 없습니다'}
-        </Text>
-        <Dropdown>
-          <div>
-            <Button variant='none' size='none' onClick={handleDelete}>
-              삭제하기
-            </Button>
+    <div className='w-full'>
+      <div className='flex w-full items-start justify-between'>
+        <div className='flex w-full items-center gap-3'>
+          <div className='py-2'>
+            <CheckBox checked={checked} onChange={handleCheckToggle} />
           </div>
-        </Dropdown>
+          <div className='flex w-full items-center justify-between border-b pb-[7px] pl-1 pt-2'>
+            <Text size='20px-medium' line={checked ? 'cancelLine' : 'default'}>
+              {todo.todoTitle}
+            </Text>
+            <Dropdown>
+              <Button variant='none' size='none' onClick={handleDelete}>
+                삭제하기
+              </Button>
+            </Dropdown>
+          </div>
+        </div>
       </div>
-      <div className='mt-1 pl-1'>
+      <div className='ml-10 mt-[5px]'>
         <Text size='16px-medium' textColor='sub'>
           {changeDateSeparator(todo.scheduledDate)}
         </Text>
