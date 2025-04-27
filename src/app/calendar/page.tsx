@@ -1,6 +1,7 @@
 import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 import MandalartCalendar from '@/modules/calendar/components/mandalart-calendar';
 import { getServerClient } from '@/shared/utils/supabase/server-client';
+import * as Sentry from '@sentry/nextjs';
 
 const CalendarPage = async () => {
   const supabase = getServerClient();
@@ -15,9 +16,13 @@ const CalendarPage = async () => {
   );
 
   if (error) {
-    /**
-     * @todo: sentry 도입
-     */
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'Calendar Page');
+      scope.setTag('feature', 'get_all_mandalarts_by_user');
+
+      Sentry.captureException(new Error(`[Calendar Route] ${error.message}`));
+    });
+
     throw new Error('Failed to fetch mandalarts');
   }
 

@@ -50,16 +50,17 @@ const FloatingSheet = ({
   const outSideClick = !hideOnOutsideClick && 'pointer-events-none';
 
   return (
-    <div className={`${outSideClick} fixed inset-0 z-[10] m-3`} onClick={hide}>
+    <div className={`${outSideClick} fixed inset-0 z-50 m-3`} onClick={hide}>
       <Draggable
-        handle='.handle' // 드래그 핸들 지정 (선택사항)
+        handle='.handle' // 드래그 핸들 지정
+        cancel='.no-drag' //드래그를 원하지 않는 영역
         position={position}
         nodeRef={nodeRef}
         grid={[1, 1]}
         scale={1}
         onDrag={handleDrag}
         onStop={handleDragStop}
-        bounds='parent' // 부모 요소 내부로 제한 (선택사항)
+        bounds='parent' // 부모 요소 내부로 제한
       >
         <div
           ref={nodeRef}
@@ -70,7 +71,7 @@ const FloatingSheet = ({
         >
           {/* 시트 안에 들어갈 내용 드래그 중 텍스트 선택 방지 */}
           <div className='select-none'>
-            <div className='mx-auto h-[50vh] w-[60vw] rounded-lg md:h-[60vh] md:w-[50vw] lg:h-[800px] lg:w-[500px]'>
+            <div className='mx-auto h-[50vh] w-[60vw] rounded-lg md:h-[60vh] md:w-[50vw] lg:h-[70vh] lg:max-h-[800px] lg:w-[500px]'>
               {children}
             </div>
           </div>

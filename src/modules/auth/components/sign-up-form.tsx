@@ -19,7 +19,7 @@ const SignUpForm = () => {
   } = useSignUpForm();
 
   return (
-    <section className='flex h-full w-full items-center justify-center bg-white-light px-4 py-8 sm:bg-white-dark'>
+    <section className='flex h-auto min-h-[calc(100vh-164px-100px)] min-w-[375px] items-center justify-center bg-white-light py-4 sm:bg-white-dark'>
       <form
         onSubmit={handleSubmit}
         className='flex w-full max-w-[345px] flex-col gap-6 rounded-[12px] bg-white-light px-4 py-6 sm:max-w-[472px] sm:rounded-[16px] sm:p-12'
@@ -37,7 +37,11 @@ const SignUpForm = () => {
               sizes='16px-medium'
               {...register('email')}
             />
-            {errors.email && <Text>{errors.email.message}</Text>}
+            {errors.email && (
+              <Text size='16px-regular' textColor='error'>
+                {errors.email.message}
+              </Text>
+            )}
           </div>
 
           <div className='space-y-1 sm:space-y-2'>
@@ -48,7 +52,11 @@ const SignUpForm = () => {
               sizes='16px-medium'
               {...register('password')}
             />
-            {errors.password && <Text>{errors.password.message}</Text>}
+            {errors.password && (
+              <Text size='16px-regular' textColor='error'>
+                {errors.password.message}
+              </Text>
+            )}
           </div>
 
           <div className='space-y-1 sm:space-y-2'>
@@ -60,7 +68,9 @@ const SignUpForm = () => {
               {...register('confirmPassword')}
             />
             {errors.confirmPassword && (
-              <Text>{errors.confirmPassword.message}</Text>
+              <Text size='16px-regular' textColor='error'>
+                {errors.confirmPassword.message}
+              </Text>
             )}
           </div>
 
@@ -77,19 +87,23 @@ const SignUpForm = () => {
                 type='button'
                 onClick={handleCheckNickname}
                 disabled={checkingNickname}
-                className='min-w-[88px] whitespace-nowrap rounded-lg bg-lightgray px-4 py-2 text-sm font-semibold text-black disabled:cursor-not-allowed disabled:opacity-50'
+                className='min-w-[88px] whitespace-nowrap rounded-lg bg-lightgray px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50'
               >
                 {checkingNickname ? '확인 중...' : '중복확인'}
               </button>
             </div>
-            {errors.nickname && <Text>{errors.nickname.message}</Text>}
+            {errors.nickname && (
+              <Text size='16px-regular' textColor='error'>
+                {errors.nickname.message}
+              </Text>
+            )}
           </div>
         </div>
 
         <button
           type='submit'
           disabled={isPending}
-          className='w-full rounded-lg bg-primary py-3 text-sm font-semibold text-black transition hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:cursor-not-allowed disabled:opacity-50'
+          className='w-full rounded-lg bg-primary py-3 transition hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:cursor-not-allowed disabled:opacity-50'
         >
           <Text size='18px-medium' align='center'>
             {isPending ? '가입 중...' : '등록하기'}
@@ -110,25 +124,27 @@ const SignUpForm = () => {
           </div>
         </div>
 
-        <div className='flex items-center justify-center gap-2 text-center'>
-          <Text size='16px-regular' align='center' as='span'>
-            이미 계정이 있으신가요?
-          </Text>
-          <Link href='/sign-in'>
-            <Text
-              size='16px-semibold'
-              as='span'
-              textColor='primary'
-              align='center'
-            >
-              로그인
+        <div className='flex flex-col items-center justify-center gap-2 text-center'>
+          <div className=''>
+            <Text size='16px-regular' align='center' as='span'>
+              이미 계정이 있으신가요?
             </Text>
-          </Link>
-        </div>
+            <Link href='/sign-in'>
+              <Text
+                size='16px-semibold'
+                as='span'
+                textColor='primary'
+                align='center'
+              >
+                로그인
+              </Text>
+            </Link>
+          </div>
 
-        <Text size='16px-regular' line='underline' align='center'>
-          비회원으로 만다라트 작성해보기
-        </Text>
+          <Text size='16px-regular' line='underline' align='center'>
+            비회원으로 만다라트 작성해보기
+          </Text>
+        </div>
       </form>
     </section>
   );

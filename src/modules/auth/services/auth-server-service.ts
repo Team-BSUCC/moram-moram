@@ -5,6 +5,7 @@ import { getServerClient } from '@/shared/utils/supabase/server-client';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
 import { UpdatePasswordDTO, UserType } from '../types/auth-type';
 import { cookies } from 'next/headers';
+import * as Sentry from '@sentry/nextjs';
 
 type PropsSignUp = UserType;
 
@@ -30,7 +31,15 @@ export const signUp = async ({
       data: { nickname: nickname },
     },
   });
-  if (error) return { error: error.message };
+  if (error) {
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'sign-up');
+      scope.setTag('feature', 'signUp');
+
+      Sentry.captureException(new Error(`[signUp] ${error.message}`));
+    });
+    return { error: error.message };
+  }
   return { error: undefined };
 };
 
@@ -155,10 +164,20 @@ export const updatePassword = async ({
   if (signInError) {
     throw new Error('현재 비밀번호가 올바르지 않습니다.');
   }
+
   const { error: updateError } = await supabase.auth.updateUser({
     password: newPassword,
   });
   if (updateError) {
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'mypage');
+      scope.setTag('feature', 'updateError');
+
+      Sentry.captureException(
+        new Error(`[updatePassword] ${updateError.message}`)
+      );
+    });
+
     throw new Error(updateError.message);
   }
 };

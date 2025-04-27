@@ -17,11 +17,17 @@ export const useUsersStore = create<useUsersStore>((set) => ({
   leftUsers: [],
   setCurrentUsers: (currentUsersInfo) => {
     // 현재 접속한 사람들을 배열로 변환
-    const formattingAllUsersInfo = Object.values(currentUsersInfo).map(
-      (values) => ({
-        name: values[0].name,
-        image: values[0].image,
-      })
+
+    const formattingAllUsersInfo = Array.from(
+      new Map(
+        Object.values(currentUsersInfo).map((values) => [
+          values[0].name,
+          {
+            name: values[0].name,
+            image: values[0].image,
+          },
+        ])
+      ).values()
     );
 
     set((store) => {

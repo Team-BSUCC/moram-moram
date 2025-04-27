@@ -2,6 +2,7 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import useTodoFloatingSheetStore from './use-todo-floating-sheet-store';
 
 /**
  * 콜백 함수를 일정 시간 간격으로 제한(throttle)합니다.
@@ -63,11 +64,13 @@ export const useRealtimeCursors = ({
   username,
   userId: id,
   throttleMs,
+  boardRef,
 }: {
   roomName: string;
   username: string;
   userId: string;
   throttleMs: number;
+  boardRef: React.RefObject<HTMLDivElement>;
 }) => {
   const [color] = useState(generateRandomColor());
   const [userId] = useState(id);
@@ -76,17 +79,16 @@ export const useRealtimeCursors = ({
   );
 
   const channelRef = useRef<RealtimeChannel | null>(null);
-  const isVisible = useFloatingSheetStore((state) => state.isVisible);
+  const isVisible = useTodoFloatingSheetStore((state) => state.isVisible);
 
   const callback = useCallback(
     (event: MouseEvent) => {
-      if (isVisible) return;
-      const { clientX, clientY } = event;
-
+      if (isVisible || !boardRef.current) return;
+      const rect = boardRef.current.getBoundingClientRect();
       const payload: CursorEventPayload = {
         position: {
-          x: clientX,
-          y: clientY,
+          x: (event.clientX - rect.left) / rect.width,
+          y: (event.clientY - rect.top) / rect.height,
         },
         user: {
           id: userId,
@@ -102,7 +104,7 @@ export const useRealtimeCursors = ({
         payload: payload,
       });
     },
-    [color, userId, username]
+    [color, userId, username, isVisible]
   );
 
   const handleMouseMove = useThrottleCallback(callback, throttleMs);
@@ -150,7 +152,26 @@ export const useRealtimeCursors = ({
       }
     });
 
+    // 화면에 포커스가 없을 경우 timestamp를 0으로 지정
+    const handleBlur = () => {
+      const rect = boardRef.current?.getBoundingClientRect();
+      if (!rect) return;
+
+      channelRef.current?.send({
+        type: 'broadcast',
+        event: EVENT_NAME,
+        payload: {
+          position: { x: 0, y: 0 },
+          user: { id: userId, name: username },
+          color,
+          timestamp: 0,
+        },
+      });
+    };
+    window.addEventListener('blur', handleBlur);
+
     return () => {
+      window.removeEventListener('blur', handleBlur);
       channel.unsubscribe();
     };
   }, []);

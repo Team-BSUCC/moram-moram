@@ -1,25 +1,15 @@
-import { redirect } from 'next/navigation';
-import { signOut } from '../services/auth-server-service';
-import URL from '@/shared/constants/url-constants';
+import Text from '@/components/commons/text';
+import { signOutAction } from '../actions/sign-out-action';
+import Button from '@/components/commons/button';
 
-const SignOutButton = () => {
-  const handleSignOut = async () => {
-    'use server'; // 서버 액션으로 실행
-    const result = await signOut();
-    if (!result.error) {
-      redirect(URL.HOME);
-    }
-  };
+const SignOutForm = () => {
   return (
-    <form action={handleSignOut}>
-      <button
-        className='flex items-center justify-center gap-2.5 rounded-lg bg-[#F0E9E5] px-6 py-3 text-md'
-        type='submit'
-      >
-        로그아웃
-      </button>
+    <form action={signOutAction} className='w-full'>
+      <Button variant='profile' type='submit'>
+        <Text size='logout-button-text'>로그아웃</Text>
+      </Button>
     </form>
   );
 };
 
-export default SignOutButton;
+export default SignOutForm;

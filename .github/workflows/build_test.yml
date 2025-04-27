@@ -33,6 +33,8 @@ jobs:
           echo "NEXT_PUBLIC_SUPABASE_API_KEY=${{ secrets.NEXT_PUBLIC_SUPABASE_API_KEY }}" >> .env.local
           echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env.local
           echo "SUPABASE_API_KEY=${{ secrets.SUPABASE_API_KEY }}" >> .env.local
+          echo "NEXT_SUPABASE_SERVICE_ROLE=${{ secrets.NEXT_SUPABASE_SERVICE_ROLE }}" >> .env.local
+          echo "NEXT_PUBLIC_STORAGE_BUCKET=${{ secrets.NEXT_PUBLIC_STORAGE_BUCKET }}" >> .env.local
 
       - name: Build Test
         env:
@@ -40,4 +42,6 @@ jobs:
           NEXT_PUBLIC_SUPABASE_API_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_API_KEY }}
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_API_KEY: ${{ secrets.SUPABASE_API_KEY }}
+          NEXT_SUPABASE_SERVICE_ROLE: ${{ secrets.NEXT_SUPABASE_SERVICE_ROLE }}
+          NEXT_PUBLIC_STORAGE_BUCKET: ${{ secrets.NEXT_PUBLIC_STORAGE_BUCKET }}
         run: pnpm build

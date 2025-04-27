@@ -1,20 +1,18 @@
 import { create } from 'zustand';
+
+/* eslint-disable indent */
 import {
-  BroadcastPayloadType,
+  ReceiveBroadCastPayload,
   BroadcastStoreType,
-  CorePayloadType,
   FormatBroadcastStorePayloadType,
-  SubtopicPayloadType,
-  TodoPayloadType,
-  TopicPayloadType,
 } from '../types/realtime-type';
-import { mandalartBatchUpdateSupabase } from '../services/mandalart-batch-update-supabase-service';
+import { mandalartBatchUpdateSupabase } from '../services/fetch-mandalart-batch-update-supabase-service';
 
 // 브로드캐스트 스토어 상태 타입
 type BroadcastStoreStateType = {
   broadcastStore: BroadcastStoreType;
-  addBroadcastStore: (payload: BroadcastPayloadType) => void;
-  batchUpdateSupabase: () => Promise<void>;
+  addBroadcastStore: (payload: ReceiveBroadCastPayload) => void;
+  batchUpdateSupabase: () => Promise<boolean | void>;
   formatBroadcastStorePayload: () => FormatBroadcastStorePayloadType;
 };
 
@@ -27,26 +25,31 @@ type BroadcastStoreStateType = {
  */
 export const useBroadcastStore = create<BroadcastStoreStateType>((_, get) => ({
   broadcastStore: {
-    core: new Map<string, CorePayloadType>(),
-    topic: new Map<string, TopicPayloadType>(),
-    subTopic: new Map<string, SubtopicPayloadType>(),
-    todo: new Map<string, TodoPayloadType>(),
+    core: new Map(),
+    topic: new Map(),
+    subTopic: new Map(),
+    todo: new Map(),
   },
 
   /**
    * 브로드캐스트 스토어에 업데이트할 항목을 추가하는 함수
    * @param payload - 저장할 항목 데이터
    */
-  addBroadcastStore: (payload: BroadcastPayloadType) => {
+  addBroadcastStore: (payload: ReceiveBroadCastPayload) => {
     const currentStore = get().broadcastStore;
-    if (payload.category === 'CORE') {
-      currentStore.core.set(payload.id, payload);
-    } else if (payload.category === 'TOPIC') {
-      currentStore.topic.set(payload.id, payload);
-    } else if (payload.category === 'SUBTOPIC') {
-      currentStore.subTopic.set(payload.id, payload);
-    } else if (payload.category === 'TODO') {
-      currentStore.todo.set(payload.id, payload);
+    switch (payload.action) {
+      case 'core':
+        currentStore.core.set(payload.value.id, payload);
+        break;
+      case 'topic':
+        currentStore.topic.set(payload.value.id, payload);
+        break;
+      case 'subTopic':
+        currentStore.subTopic.set(payload.value.id, payload);
+        break;
+      //투두일때 "CREATE,DELETE,UPDATE"
+      default:
+        currentStore.todo.set(payload.value.id, payload);
     }
   },
 
@@ -67,14 +70,15 @@ export const useBroadcastStore = create<BroadcastStoreStateType>((_, get) => ({
         return;
       }
       await mandalartBatchUpdateSupabase(currentStore);
-      console.log('업데이트됨');
       // 업데이트 후 스토어 초기화
       currentStore.core.clear();
       currentStore.topic.clear();
       currentStore.subTopic.clear();
       currentStore.todo.clear();
-    } catch (e) {
-      console.error('배치 업데이트 중 오류 발생:', e);
+      return true;
+    } catch (error) {
+      return false;
+      console.error('배치 업데이트 중 오류 발생:', error);
     }
   },
 
