@@ -31,7 +31,7 @@ const FloatingSheet = ({
   const setPosition = useFloatingSheetStore((state) => state.setPosition);
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const hide = useFloatingSheetStore((state) => state.hide);
-  const mandalartFloatingSheetIsVisible = useTodoFloatingSheetStore(
+  const todoSheetIsVisible = useTodoFloatingSheetStore(
     (state) => state.isVisible
   );
 
@@ -79,7 +79,7 @@ const FloatingSheet = ({
   if (isMobile) {
     return (
       <Sheet
-        open={isVisible || mandalartFloatingSheetIsVisible}
+        open={isVisible || todoSheetIsVisible}
         onOpenChange={(open) => !open && hide()}
         modal={false}
       >
