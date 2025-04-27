@@ -13,6 +13,7 @@ import { groupBy } from '@/modules/today-list/utils/group-by';
 import { rangeWithIndex } from '@/shared/utils/range-with-index';
 import { matchWithCommonColor } from '../utils/match-with-common-color';
 import { AnimatePresence, motion } from 'framer-motion';
+import { useEscapeKey } from '@/shared/hooks/use-escape-key';
 
 type CalendarFloatingSheetProps = {
   todos: FlatTodo[];
@@ -26,6 +27,7 @@ type CalendarFloatingSheetProps = {
 const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
   const info = useFloatingSheetStore((state) => state.info) as string;
   const hide = useFloatingSheetStore((state) => state.hide);
+  useEscapeKey(hide);
 
   // 날짜 기준 필터링
   const filteredTodos = todos
