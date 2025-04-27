@@ -18,12 +18,8 @@ import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
 import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
 import { useCellBroadcastMutation } from '../hooks/use-cell-broadcast-mutation';
 import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate';
-import Button from '@/components/commons/button';
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
-import { fetchGetAiSuggestKeywords } from '../services/fetch-get-ai-suggest-keywords';
-import { infoAlert } from '@/shared/utils/sweet-alert';
-import { useGetAiUsageCountQuery } from '../hooks/use-get-ai-usage-count-query';
-import { useUsageCountMutations } from '../hooks/use-usage-count-mutations';
+import AiSuggestButton from './ai-suggest-button';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -66,9 +62,6 @@ const MandalartFloatingSheet = () => {
   const { mutate: mutationTodo } = useTodoBroadcastMutation(channel);
   const { mutate: mutationCell } = useCellBroadcastMutation(channel);
 
-  const { aiUsageCount } = useGetAiUsageCountQuery();
-  const { mutateAsync: usageCountPlus } = useUsageCountMutations();
-
   const throttleMutate = useThrottleMutateWithTrailing(
     mutationCell,
     0.5 * 1000
@@ -107,71 +100,6 @@ const MandalartFloatingSheet = () => {
     }
   };
 
-  const MAX_AI_USAGE_COUNT = 30;
-
-  const handleAiTopicSuggest = async () => {
-    if (aiUsageCount === null || aiUsageCount >= MAX_AI_USAGE_COUNT) {
-      infoAlert('사용할 수 없습니다.');
-      return;
-    }
-
-    const topicList = Array.from(topics.values());
-    const topicValueList = topicList
-      .filter((topicValue) => topicValue.topic)
-      .map((topicValue) => topicValue.topic);
-
-    const aiSuggestTopicList = await fetchGetAiSuggestKeywords(
-      value,
-      topicValueList as string[]
-    );
-
-    usageCountPlus();
-
-    topicList.forEach((topicValue) => {
-      if (!topicValue.topic) {
-        mutationCell({
-          action: 'topic',
-          value: { ...topicValue, topic: aiSuggestTopicList.pop() as string },
-        });
-      }
-    });
-  };
-
-  const handleAiSubTopicSuggest = async () => {
-    if (aiUsageCount === null || aiUsageCount >= MAX_AI_USAGE_COUNT) {
-      infoAlert('사용할 수 없습니다.');
-      return;
-    }
-
-    const subtopicList = Array.from(
-      subTopics
-        .values()
-        .filter((subtopicValue) => subtopicValue.topicId === info.id)
-    );
-    const subtopicValueList = subtopicList
-      .filter((subtopicValue) => subtopicValue.content)
-      .map((subtopicValue) => subtopicValue.content);
-
-    const aiSuggestTopicList = await fetchGetAiSuggestKeywords(
-      value,
-      subtopicValueList as string[]
-    );
-
-    usageCountPlus();
-
-    subtopicList.forEach((subtopicValue) => {
-      if (!subtopicValue.content) {
-        mutationCell({
-          action: 'subTopic',
-          value: {
-            ...subtopicValue,
-            content: aiSuggestTopicList.pop() as string,
-          },
-        });
-      }
-    });
-  };
-
   // core
   if ('private' in info) {
     const diff = getDateDiff(info.endDate);
@@ -188,7 +116,7 @@ const MandalartFloatingSheet = () => {
                 <X />
               </button>
             </div>
-            <div className='flex flex-col items-start p-6 lg:p-8'>
+            <div className='flex flex-col items-start pb-2 pl-6 pr-2 pt-6 lg:pb-2 lg:pl-8 lg:pr-2 lg:pt-8'>
               <Text size='16px-medium' textColor='sub'>
                 TO DO LIST
               </Text>
@@ -218,12 +146,9 @@ const MandalartFloatingSheet = () => {
                   {info.subTitle}
                 </Text>
               </div>
-            </div>
-            {/* AI버튼영역 */}
-            <div>
-              <Button onClick={handleAiTopicSuggest}>
-                테스트{aiUsageCount}
-              </Button>
+              <div className='flex w-full justify-end'>
+                <AiSuggestButton value={value} type='core' />
+              </div>
             </div>
           </div>
           <div className='flex-grow overflow-y-auto py-6'>
@@ -263,7 +188,7 @@ const MandalartFloatingSheet = () => {
                 <X />
               </button>
             </div>
-            <div className='flex flex-col items-start p-6 lg:p-8'>
+            <div className='flex flex-col items-start pb-2 pl-6 pr-2 pt-6 lg:pb-2 lg:pl-8 lg:pr-2 lg:pt-8'>
               <Text size='16px-medium' textColor='sub'>
                 TO DO LIST - {charLimitNotice}
               </Text>
@@ -286,10 +211,10 @@ const MandalartFloatingSheet = () => {
                 {coreTitle?.title} &gt;{' '}
                 {info.topic || `대주제${info.topicIndex}`}
               </Text>
+              <div className='flex w-full justify-end'>
+                <AiSuggestButton value={value} type='topic' />
+              </div>
             </div>
-            <Button onClick={handleAiSubTopicSuggest}>
-              테스트대주제${aiUsageCount}
-            </Button>
           </div>
           <div className='flex-grow overflow-y-auto py-6'>
             <div>
