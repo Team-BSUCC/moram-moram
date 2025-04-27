@@ -71,8 +71,7 @@ const UsersInfoSheet = ({ user }: UsersInfoSheetType) => {
 
   const handleInviteClick = async () => {
     try {
-      const inviteText = `초대링크 : ${window.location.href}
-      비밀번호 : ${passwordInputValue}
+      const inviteText = `초대링크 : ${window.location.href}\n비밀번호 : ${passwordInputValue}
       `;
       await navigator.clipboard.writeText(inviteText);
       successAlert('클립보드에 복사 되었습니다!');

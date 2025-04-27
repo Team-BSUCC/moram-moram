@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-const nicknameRegex = /^[가-힣a-zA-Z0-9]{2,10}$/;
+const nicknameRegex = /^[ㄱ-ㅎ가-힣a-zA-Z0-9]{2,10}$/;
 const passwordRegex =
   /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[!@#$%^&*])[a-zA-Z\d!@#$%^&*]{8,16}$/;
 

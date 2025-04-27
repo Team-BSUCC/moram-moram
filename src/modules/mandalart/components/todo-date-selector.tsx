@@ -82,7 +82,7 @@ const TodoDateSelector = ({
               <div className='flex flex-col gap-y-[24px]'>
                 <div className='flex flex-col gap-[16px] px-[24px]'>
                   <Title as='h5' size='20px-medium' weight='semi'>
-                    시작일
+                    목표일
                   </Title>
                   <div className='flex gap-[16px]'>
                     <TodoYearSelect
