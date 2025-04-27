@@ -22,10 +22,10 @@ const SignInForm = () => {
   }, [password, setValue]);
 
   return (
-    <section className='flex h-full w-full items-center justify-center bg-white-light sm:bg-white-dark'>
+    <section className='flex h-auto min-h-[calc(100vh-164px-100px)] min-w-[375px] items-center justify-center bg-white-light sm:bg-white-dark'>
       <form
         onSubmit={handleSubmit}
-        className='flex h-[525px] w-full max-w-[345px] flex-col gap-6 rounded-[12px] bg-white-light px-4 py-6 sm:h-[640px] sm:max-w-[472px] sm:rounded-[16px] sm:p-12'
+        className='flex w-full max-w-[345px] flex-col gap-6 rounded-[12px] bg-white-light px-4 py-6 sm:my-4 sm:h-[640px] sm:max-w-[472px] sm:rounded-[16px] sm:p-12'
       >
         <Title as='h1' size='28px-semibold'>
           로그인
@@ -77,7 +77,7 @@ const SignInForm = () => {
           disabled={isPending}
           className='w-full rounded-lg bg-primary py-3 transition hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:cursor-not-allowed disabled:opacity-50'
         >
-          <Text size='16px-medium' align='center'>
+          <Text size='18px-medium' align='center'>
             {isPending ? '로그인 중...' : '로그인'}
           </Text>
         </button>

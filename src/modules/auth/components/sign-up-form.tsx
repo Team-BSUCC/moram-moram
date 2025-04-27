@@ -19,7 +19,7 @@ const SignUpForm = () => {
   } = useSignUpForm();
 
   return (
-    <section className='flex h-full w-full items-center justify-center bg-white-light px-4 py-8 sm:bg-white-dark'>
+    <section className='flex h-auto min-h-[calc(100vh-164px-100px)] min-w-[375px] items-center justify-center bg-white-light py-4 sm:bg-white-dark'>
       <form
         onSubmit={handleSubmit}
         className='flex w-full max-w-[345px] flex-col gap-6 rounded-[12px] bg-white-light px-4 py-6 sm:max-w-[472px] sm:rounded-[16px] sm:p-12'
@@ -124,25 +124,27 @@ const SignUpForm = () => {
           </div>
         </div>
 
-        <div className='flex items-center justify-center gap-2 text-center'>
-          <Text size='16px-regular' align='center' as='span'>
-            이미 계정이 있으신가요?
-          </Text>
-          <Link href='/sign-in'>
-            <Text
-              size='16px-semibold'
-              as='span'
-              textColor='primary'
-              align='center'
-            >
-              로그인
+        <div className='flex flex-col items-center justify-center gap-2 text-center'>
+          <div className=''>
+            <Text size='16px-regular' align='center' as='span'>
+              이미 계정이 있으신가요?
             </Text>
-          </Link>
-        </div>
+            <Link href='/sign-in'>
+              <Text
+                size='16px-semibold'
+                as='span'
+                textColor='primary'
+                align='center'
+              >
+                로그인
+              </Text>
+            </Link>
+          </div>
 
-        <Text size='16px-regular' line='underline' align='center'>
-          비회원으로 만다라트 작성해보기
-        </Text>
+          <Text size='16px-regular' line='underline' align='center'>
+            비회원으로 만다라트 작성해보기
+          </Text>
+        </div>
       </form>
     </section>
   );

@@ -34,12 +34,12 @@ export default async function RootLayout({
       >
         <SessionInit />
 
-        <header className='fixed left-0 right-0 top-0 z-50 h-[72px] lg:h-[100px] w-screen'>
+        <header className='fixed left-0 right-0 top-0 z-50 h-[72px] w-screen lg:h-[100px]'>
           <Header user={user} />
         </header>
 
         <main className='mt-[72px] flex-grow lg:mt-[100px]'>
-          <div className='flex h-full w-full items-center justify-center'>
+          <div className='flex flex-1 items-center justify-center'>
             {/* children에 메인 영역이 위치합니다. 중앙 70%의 영역만 차지합니다 */}
             <div className='h-full w-full'>
               <TQProvider>{children}</TQProvider>
