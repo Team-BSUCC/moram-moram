@@ -15,6 +15,7 @@ import {
   MyMandalartsType,
 } from '../types/today-list-type';
 import { groupBy } from '../utils/group-by';
+import { AnimatePresence, motion } from 'framer-motion';
 
 type TodayTodoListProps = {
   myMandalarts: MyMandalartsType;
@@ -41,10 +42,18 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
   }, [myMandalarts, clickedTitle]);
 
   // 필터링된 todo만 추출(완료한 일, 남은 할 일, 전체 보기 기준)
-  // 토픽순으로 정렬
+  // 레이아웃이 변경되지 않도록 대주제 > 소주제 > todo 순 정렬
   const filteredTodos = flatTodos
     ?.filter((todo) => filterByCompletionStatus(todo, selectedOption))
-    .sort((a, b) => a.topicId.localeCompare(b.topicId));
+    .sort((a, b) => {
+      if (a.topicId !== b.topicId) {
+        return a.topicId.localeCompare(b.topicId);
+      }
+      if (a.subtopicId !== b.subtopicId) {
+        return a.subtopicId.localeCompare(b.subtopicId);
+      }
+      return a.todoId.localeCompare(b.todoId);
+    });
 
   // 대주제 id를 기준으로 그룹핑
   const groupedByTopic = (() => {
@@ -113,9 +122,24 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
                             </Title>
                             <Spacer size='sm' />
                             <div className='flex flex-col gap-5'>
-                              {subTodos.map((todo) => (
-                                <TodoItem todo={todo} key={todo.todoId} />
-                              ))}
+                              <AnimatePresence>
+                                {subTodos.map((todo) => (
+                                  <motion.div
+                                    key={todo.todoId}
+                                    initial={{ opacity: 0 }}
+                                    animate={{
+                                      opacity: todo.isDone ? 0.7 : 1,
+                                      filter: todo.isDone
+                                        ? 'blur(0.5px)'
+                                        : 'none',
+                                    }}
+                                    exit={{ opacity: 0 }}
+                                    transition={{ duration: 0.1 }}
+                                  >
+                                    <TodoItem todo={todo} />
+                                  </motion.div>
+                                ))}
+                              </AnimatePresence>
                             </div>
                           </div>
                         )
