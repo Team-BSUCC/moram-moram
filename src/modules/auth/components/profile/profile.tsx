@@ -17,6 +17,10 @@ import Spacer from '@/components/commons/spacer';
 import { errorAlert } from '@/shared/utils/sweet-alert';
 import { checkNicknameDuplicated } from '../../services/auth-server-service';
 import FormSchema from '@/shared/constants/auth-schema';
+import Spacer from '@/components/commons/spacer';
+import { errorAlert } from '@/shared/utils/sweet-alert';
+import { checkNicknameDuplicated } from '../../services/auth-server-service';
+import FormSchema from '@/shared/constants/auth-schema';
 
 type MyPagePanelProps = {
   isOpen: boolean;
