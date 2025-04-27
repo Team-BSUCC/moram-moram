@@ -102,8 +102,12 @@ const config: Config = {
         error: 'var(--color-error)',
         focus: 'var(--color-focus)',
         black: 'var(--color-black)',
-        gray: 'var(--color-gray)',
-        lightgray: 'var(--color-lightgray)',
+        email: '#989898',
+        gary: {
+          DEFAULT: 'var(--color-gray)',
+          lightgray: 'var(--color-lightgray)',
+          inputGray: 'var(--color-inputGray)',
+        },
         white: {
           DEFAULT: 'var(--color-white)',
           dark: 'var(--color-white-dark)',
