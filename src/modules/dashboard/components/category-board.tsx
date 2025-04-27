@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import MandalartCard from './mandalart-card';
 import Spacer from '@/components/commons/spacer';
 import Text from '@/components/commons/text';
-import { getColorWithIndexOrder } from '@/shared/utils/get-color-with-index';
+import { getColorWithIndexOrderPigment } from '@/shared/utils/get-color-with-index';
 import { useGetMandalartCards } from '../hooks/use-get-mandalart-cards';
 import { FetchUserRoomsAndParticipantsResponse } from '@/modules/dashboard/types/dashboard-type';
 
@@ -76,7 +76,7 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className='animate-fade-out-left h-[280px] w-full max-w-[360px] rounded-lg bg-lightgray shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]'
+              className='h-[280px] w-full max-w-[360px] animate-fade-out-left rounded-lg bg-lightgray shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]'
             />
           ))}
         </div>
@@ -109,13 +109,13 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
       {category === '진행 중인 목표' ? (
         <div className='flex'>
           {yetMandalart && yetMandalart?.length ? (
-            <div className='animate-fade-in-left grid w-[1252px] grid-cols-1 place-items-center gap-[40px] md:grid-cols-2 lg:grid-cols-3'>
+            <div className='grid w-[1252px] animate-fade-in-left grid-cols-1 place-items-center gap-[40px] md:grid-cols-2 lg:grid-cols-3'>
               {yetMandalart.map(
                 (
                   card: FetchUserRoomsAndParticipantsResponse,
                   index: number
                 ) => {
-                  const bandColor = getColorWithIndexOrder(
+                  const bandColor = getColorWithIndexOrderPigment(
                     card.mandalart.color || index
                   );
 
@@ -143,13 +143,13 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
       ) : (
         <div className='flex'>
           {doneMandalart && doneMandalart?.length ? (
-            <div className='animate-fade-in-left grid w-full max-w-[1252px] grid-cols-1 place-items-center gap-14 md:grid-cols-2 lg:grid-cols-3'>
+            <div className='grid w-full max-w-[1252px] animate-fade-in-left grid-cols-1 place-items-center gap-14 md:grid-cols-2 lg:grid-cols-3'>
               {doneMandalart.map(
                 (
                   card: FetchUserRoomsAndParticipantsResponse,
                   index: number
                 ) => {
-                  const bandColor = getColorWithIndexOrder(
+                  const bandColor = getColorWithIndexOrderPigment(
                     card.mandalart.color || index
                   );
                   return (
