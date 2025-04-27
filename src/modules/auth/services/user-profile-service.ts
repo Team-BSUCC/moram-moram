@@ -1,7 +1,9 @@
 'use server';
 
+import { getServerClient } from '@/shared/utils/supabase/server-client';
 import { createClient } from '@supabase/supabase-js';
 
+const supabase = getServerClient();
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_SUPABASE_SERVICE_ROLE!
@@ -63,9 +65,21 @@ export const deleteUserAvatar = async (userId: string) => {
 };
 
 export const updateUserNickname = async (userId: string, nickname: string) => {
-  const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
-    user_metadata: { nickname },
-  });
+  const { error: AuthError } = await supabaseAdmin.auth.admin.updateUserById(
+    userId,
+    {
+      user_metadata: { nickname },
+    }
+  );
+  if (AuthError) {
+    throw new Error(AuthError.message);
+  }
 
-  if (error) throw new Error(error.message);
+  const { error: userError } = await supabase
+    .from('users')
+    .update({ nickname })
+    .eq('id', userId);
+  if (userError) {
+    throw new Error(userError.message);
+  }
 };
