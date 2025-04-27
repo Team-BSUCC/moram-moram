@@ -49,7 +49,7 @@ const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
       <div className='flex h-full flex-col'>
         <div className='handle cursor-grab border-b px-5 active:cursor-grabbing'>
           <div className='fixed right-4 top-4 w-fit' onClick={hide}>
-            <button className='bg-transparent'>
+            <button className='hidden bg-transparent sm:block'>
               <X />
             </button>
           </div>
