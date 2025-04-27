@@ -6,6 +6,7 @@ import Draggable, { DraggableData, DraggableEvent } from 'react-draggable';
 import {
   Sheet,
   SheetContent,
+  SheetDescription,
   SheetHeader,
   SheetTitle,
 } from '@/components/ui/sheet';
@@ -90,6 +91,9 @@ const FloatingSheet = ({
           {/* 화면에는 보이지 않지만 스크린 리더가 읽을 수 있도록 표시 */}
           <SheetHeader className='sr-only'>
             <SheetTitle>바텀시트 영역</SheetTitle>
+            <SheetDescription>
+              클릭한 요소의 정보를 확인할 수 있는 바텀시트입니다.
+            </SheetDescription>
           </SheetHeader>
           <div>{children}</div>
         </SheetContent>
