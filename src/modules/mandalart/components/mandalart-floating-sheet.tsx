@@ -19,9 +19,11 @@ import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
 import { useCellBroadcastMutation } from '../hooks/use-cell-broadcast-mutation';
 import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate';
 import Button from '@/components/commons/button';
-import { testGetAiSuggestionAPI } from '../utils/fakeTastAIFunciton';
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
 import { fetchGetAiSuggestKeywords } from '../services/fetch-get-ai-suggest-keywords';
+import { infoAlert } from '@/shared/utils/sweet-alert';
+import { useGetAiUsageCountQuery } from '../hooks/use-get-ai-usage-count-query';
+import { useUsageCountMutations } from '../hooks/use-usage-count-mutations';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -64,6 +66,9 @@ const MandalartFloatingSheet = () => {
   const { mutate: mutationTodo } = useTodoBroadcastMutation(channel);
   const { mutate: mutationCell } = useCellBroadcastMutation(channel);
 
+  const { aiUsageCount } = useGetAiUsageCountQuery();
+  const { mutateAsync: usageCountPlus } = useUsageCountMutations();
+
   const throttleMutate = useThrottleMutateWithTrailing(
     mutationCell,
     0.5 * 1000
@@ -102,7 +107,14 @@ const MandalartFloatingSheet = () => {
     }
   };
 
+  const MAX_AI_USAGE_COUNT = 30;
+
   const handleAiTopicSuggest = async () => {
+    if (aiUsageCount === null || aiUsageCount >= MAX_AI_USAGE_COUNT) {
+      infoAlert('사용할 수 없습니다.');
+      return;
+    }
+
     const topicList = Array.from(topics.values());
     const topicValueList = topicList
       .filter((topicValue) => topicValue.topic)
@@ -112,6 +124,8 @@ const MandalartFloatingSheet = () => {
       value,
       topicValueList as string[]
     );
+
+    usageCountPlus();
 
     topicList.forEach((topicValue) => {
       if (!topicValue.topic) {
@@ -124,6 +138,11 @@ const MandalartFloatingSheet = () => {
   };
 
   const handleAiSubTopicSuggest = async () => {
+    if (aiUsageCount === null || aiUsageCount >= MAX_AI_USAGE_COUNT) {
+      infoAlert('사용할 수 없습니다.');
+      return;
+    }
+
     const subtopicList = Array.from(
       subTopics
         .values()
@@ -137,6 +156,8 @@ const MandalartFloatingSheet = () => {
       value,
       subtopicValueList as string[]
     );
+
+    usageCountPlus();
 
     subtopicList.forEach((subtopicValue) => {
       if (!subtopicValue.content) {
@@ -200,7 +221,9 @@ const MandalartFloatingSheet = () => {
             </div>
             {/* AI버튼영역 */}
             <div>
-              <Button onClick={handleAiTopicSuggest}>테스트</Button>
+              <Button onClick={handleAiTopicSuggest}>
+                테스트{aiUsageCount}
+              </Button>
             </div>
           </div>
           <div className='flex-grow overflow-y-auto py-6'>
@@ -264,7 +287,9 @@ const MandalartFloatingSheet = () => {
                 {info.topic || `대주제${info.topicIndex}`}
               </Text>
             </div>
-            <Button onClick={handleAiSubTopicSuggest}>테스트대주제</Button>
+            <Button onClick={handleAiSubTopicSuggest}>
+              테스트대주제${aiUsageCount}
+            </Button>
           </div>
           <div className='flex-grow overflow-y-auto py-6'>
             <div>

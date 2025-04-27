@@ -10,7 +10,6 @@ export const fetchGetAiSuggestKeywords = async (
 ) => {
   try {
     const response = await fetch('/api/mandalart', {
-      // API 경로는 실제 구현에 맞게 변경하세요
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -27,6 +26,7 @@ export const fetchGetAiSuggestKeywords = async (
     }
 
     const data = await response.json();
+
     return data.ideas; // { ideas: [...키워드 배열...] }
   } catch (error) {
     console.error('만다라트 키워드 요청 오류:', error);
