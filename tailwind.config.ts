@@ -51,6 +51,7 @@ const config: Config = {
         '8': '8',
         '9': '9',
         '10': '10',
+        '100': '100',
       },
       fontFamily: {
         pretendard: ['var(--font-pretendard)'],

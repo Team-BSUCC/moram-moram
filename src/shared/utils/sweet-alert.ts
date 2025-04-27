@@ -1,6 +1,12 @@
 import Swal from 'sweetalert2';
+import { useAlertStore } from '../hooks/use-alert-store';
 
 const confirmButtonColor = 'var(--color-beige)';
+
+const getAlertStore = () => useAlertStore.getState();
+
+export const openAlert = (title: string, message = '') =>
+  getAlertStore().openAlert('success', title, message);
 
 export const successAlert = (title: string, message = '') => {
   return Swal.fire({
