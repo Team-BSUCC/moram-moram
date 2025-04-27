@@ -48,7 +48,7 @@ export const RealtimeCursors = ({
         return (
           <Cursor
             key={id}
-            className='fixed z-50 transition-transform ease-in-out'
+            className='fixed z-20 transition-transform ease-in-out'
             style={{
               transitionDuration: '20ms',
               top: 0,
