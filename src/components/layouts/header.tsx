@@ -182,7 +182,7 @@ const Header = ({ user }: HeaderProps) => {
         </div>
       </div>
       {/* Profile 공통 */}
-      {user && (
+      {user && isProfileOpen && (
         <Profile
           isOpen={isProfileOpen}
           onClose={() => setIsProfileOpen(false)}
