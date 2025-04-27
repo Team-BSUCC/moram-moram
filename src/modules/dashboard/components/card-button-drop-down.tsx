@@ -15,6 +15,7 @@ import { useDateOptionList } from '../hooks/use-date-option-list';
 import { getDateToString } from '../util/calculate-date';
 import { useRoomDateUpdate } from '../hooks/use-room-date-update';
 import { useGetOutRoom } from '../hooks/use-get-out-room';
+import { format } from 'path';
 
 type CardButtonDropDownProps = {
   roomId: string;
@@ -379,11 +380,13 @@ const UpdateDateModal = ({
   setIsUpdateOpen,
   mandalartId,
   setIsOpen,
+  startDate,
   endDate,
 }: UpdateDateModalProps) => {
   const { mutateAsync: updateDate } = useRoomDateUpdate();
 
   const formatedEndDate = getDateToString(endDate);
+  const formatedStartDate = getDateToString(startDate);
 
   const [onProgress, setOnProgress] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DateRangeState>({
@@ -410,12 +413,23 @@ const UpdateDateModal = ({
     selectedDate.endMonth === '' ||
     selectedDate.endDay === '';
 
+  const isDateValid =
+    new Date(
+      `${selectedDate.endYear}-${selectedDate.endMonth}-${selectedDate.endDay}`
+    ) >=
+    new Date(
+      `${formatedStartDate.yyyy}-${formatedStartDate.mm}-${formatedStartDate.dd}`
+    );
+
   const handleUpdateRoomColor = async (mandalartId: string) => {
     if (isDateSame) {
       return infoAlert('날짜의 변화가 없습니다!');
     }
     if (isDateBlank) {
       return infoAlert('날짜를 모두 선택해주세요!');
+    }
+    if (!isDateValid) {
+      return infoAlert('종료일은 시작일보다 빠를 수 없습니다!');
     }
     try {
       setOnProgress(true);
@@ -508,7 +522,9 @@ const UpdateDateModal = ({
               {/* 버튼들 */}
               <div className='flex w-full justify-center gap-[12px] py-[24px]'>
                 <button
-                  disabled={isDateSame || isDateBlank || onProgress}
+                  disabled={
+                    isDateSame || isDateBlank || !isDateValid || onProgress
+                  }
                   className='h-[58px] w-full rounded-lg bg-primary text-[14px] font-medium leading-[20px] transition-colors ease-in-out hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:pointer-events-none disabled:border-none disabled:bg-[#E6E6E6] disabled:text-caption sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px]'
                   onClick={(e) => {
                     e.stopPropagation();
@@ -520,9 +536,11 @@ const UpdateDateModal = ({
                     ? '날짜를 변경해주세요!'
                     : isDateBlank
                       ? '날짜를 선택해주세요!'
-                      : onProgress
-                        ? '변경중...'
-                        : '선택하기'}
+                      : !isDateValid
+                        ? '종료일이 유효하지 않습니다.'
+                        : onProgress
+                          ? '변경중...'
+                          : '선택하기'}
                 </button>
               </div>
             </div>
