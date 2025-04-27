@@ -21,6 +21,7 @@ import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate'
 import Button from '@/components/commons/button';
 import { testGetAiSuggestionAPI } from '../utils/fakeTastAIFunciton';
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
+import { fetchGetAiSuggestKeywords } from '../services/fetch-get-ai-suggest-keywords';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -107,7 +108,8 @@ const MandalartFloatingSheet = () => {
       .filter((topicValue) => topicValue.topic)
       .map((topicValue) => topicValue.topic);
 
-    const aiSuggestTopicList = testGetAiSuggestionAPI(
+    const aiSuggestTopicList = await fetchGetAiSuggestKeywords(
+      value,
       topicValueList as string[]
     );
 
@@ -131,7 +133,8 @@ const MandalartFloatingSheet = () => {
       .filter((subtopicValue) => subtopicValue.content)
       .map((subtopicValue) => subtopicValue.content);
 
-    const aiSuggestTopicList = testGetAiSuggestionAPI(
+    const aiSuggestTopicList = await fetchGetAiSuggestKeywords(
+      value,
       subtopicValueList as string[]
     );
 
