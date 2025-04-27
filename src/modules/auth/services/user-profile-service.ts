@@ -1,9 +1,9 @@
 'use server';
 
-import { getServerClient } from '@/shared/utils/supabase/server-client';
+import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { createClient } from '@supabase/supabase-js';
 
-const supabase = getServerClient();
+const supabase = getBrowserClient();
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
   process.env.NEXT_SUPABASE_SERVICE_ROLE!

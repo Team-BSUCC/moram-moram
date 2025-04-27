@@ -91,11 +91,8 @@ const Profile = ({ isOpen, onClose, user }: MyPagePanelProps) => {
 
   return (
     <>
-      {/* 🟡 오버레이 추가 */}
-      <div
-        className='bg-black/30 fixed inset-0 z-40' // 검은 반투명 배경
-        onClick={onClose}
-      />
+      {/* 오버레이 추가 */}
+      <div className='fixed inset-0 z-40' onClick={onClose} />
       <div
         className={`fixed right-0 top-0 z-50 h-full w-[314px] transform bg-white-light transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} lg:absolute lg:right-3 lg:top-full lg:mx-3 lg:mt-2 lg:h-[520px] lg:h-auto lg:w-[304px] lg:rounded-[8px] lg:pb-[48px] lg:pt-[64px] lg:shadow-xl lg:transition-none`}
         onClick={() => {
