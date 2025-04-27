@@ -137,6 +137,7 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
         eventOrder='isDone'
       />
       {isVisible && <CalendarFloatingSheet todos={flatTodos} />}
+      <Spacer size='top' />
     </div>
   );
 };
