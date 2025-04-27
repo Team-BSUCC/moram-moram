@@ -30,6 +30,8 @@ type HeaderProps = {
   user: User | null;
 };
 
+const DESKTOP_SIZE = 1024;
+
 const Header = ({ user }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
@@ -50,6 +52,18 @@ const Header = ({ user }: HeaderProps) => {
       document.body.style.overflow = 'auto';
     };
   }, [isMenuOpen]);
+
+  // 데스크탑 사이즈가 되었을 때 사이드 메뉴 자동 닫힘
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= DESKTOP_SIZE) {
+        setIsMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const userName = getCurrentUserName(user);
 
@@ -78,15 +92,16 @@ const Header = ({ user }: HeaderProps) => {
       ];
 
   return (
-    <div className='w-full border-none bg-white-light lg:border-b'>
+    <div className='h-full w-full border-none bg-white-light shadow-[2px_2px_10px_1px_rgba(0,0,0,0.05)] lg:border-b'>
       <div className='flex items-center justify-between'>
-        <div className='px-6 py-4'>
-          <Link href={user ? URLS.DASHBOARD : URLS.HOME}>
+        <Link href={user ? URLS.DASHBOARD : URLS.HOME}>
+          <button className='px-6 py-4'>
             <Image
               src='/images/manda-logo-text.svg'
               alt='만다로고'
               width='166'
               height='48'
+              draggable={false}
               className='hidden lg:block'
               priority={true}
             />
@@ -95,11 +110,12 @@ const Header = ({ user }: HeaderProps) => {
               alt='만다로고'
               width='28'
               height='28'
+              draggable={false}
               className='block lg:hidden'
               priority={true}
             />
-          </Link>
-        </div>
+          </button>
+        </Link>
 
         {/* 데스크탑 메뉴 */}
         <div className='hidden gap-4 pr-8 lg:flex'>
@@ -130,7 +146,7 @@ const Header = ({ user }: HeaderProps) => {
         </div>
 
         {/* 햄버거 메뉴 아이콘  */}
-        <button onClick={toggleMenu} className='pr-8 lg:hidden'>
+        <button onClick={toggleMenu} className='h-full px-8 py-5 lg:hidden'>
           <Menu size={24} />
         </button>
       </div>
