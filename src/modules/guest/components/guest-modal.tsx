@@ -72,7 +72,7 @@ const GuestModal = ({
         >
           <div
             ref={ref}
-            className='aspect-guestModal h-full max-h-[860px] w-auto max-w-[627px] rounded-lg bg-white-light shadow-xl'
+            className='aspect-guestModal h-full max-h-[860px] w-auto max-w-[627px] overflow-scroll rounded-lg bg-white-light shadow-xl'
           >
             {/* 닫기 */}
             <div className='flex justify-end'>
