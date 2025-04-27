@@ -41,6 +41,8 @@ const MandalartMainContent = ({
   mandalartId,
 }: MandalartMainContentProps) => {
   const isVisible = useTodoFloatingSheetStore((state) => state.isVisible);
+  const hide = useTodoFloatingSheetStore((state) => state.hide);
+
   const boardRef = useRef<HTMLDivElement>(null);
 
   useRealtimeBroadCastRoom(`broadcast-room ${mandalartId}`);
@@ -84,7 +86,14 @@ const MandalartMainContent = ({
   if (isPending) return <div>Loading...</div>;
   if (isError) return <div>error</div>;
   return (
-    <div className='flex flex-col items-center'>
+    <div
+      className='flex flex-col items-center'
+      onClick={() => {
+        if (isVisible) {
+          hide();
+        }
+      }}
+    >
       <Spacer size='top' />
       <div className='w-full max-w-[1440px] px-4'>
         <div className='flex flex-col'>
@@ -101,7 +110,7 @@ const MandalartMainContent = ({
           </div>
           <Spacer size='sm' />
           <div className='flex'>
-            <BicepsFlexed />
+            <BicepsFlexed /> {data.core.subTitle || '반드시 완수한다'}
             <Text>{data.core.subTitle}</Text>
           </div>
         </div>

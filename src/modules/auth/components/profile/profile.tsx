@@ -12,6 +12,7 @@ import {
 import NicknameUI from './nickname-ui';
 import AvatarUI from './avatar-ui';
 import { useRouter } from 'next/navigation';
+import Button from '@/components/commons/button';
 
 type MyPagePanelProps = {
   isOpen: boolean;
@@ -64,10 +65,10 @@ const Profile = ({ isOpen, onClose, user }: MyPagePanelProps) => {
 
   return (
     <div
-      className={`fixed -top-2 right-0 z-50 h-full w-4/5 max-w-[314px] transform bg-white transition-transform duration-300 ease-in-out lg:absolute lg:right-2 lg:top-full lg:mx-3 lg:mt-2 lg:h-auto lg:w-[304px] lg:rounded-[8px] lg:pb-[48px] lg:pt-[64px] lg:shadow-xl ${isOpen ? 'translate-x-0' : 'translate-x-full'} lg:translate-x-0`}
+      className={`fixed right-0 top-0 z-50 h-full w-[314px] transform bg-white-light transition-transform duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} lg:absolute lg:right-3 lg:top-full lg:mx-3 lg:mt-2 lg:h-auto lg:w-[304px] lg:rounded-[8px] lg:pb-[48px] lg:pt-[64px] lg:shadow-xl lg:transition-none`}
     >
       {/* 상단 닫기 버튼 */}
-      <div className='flex justify-end p-6 lg:absolute lg:right-4 lg:top-4'>
+      <div className='flex justify-end p-6 lg:absolute lg:right-0 lg:top-0'>
         <button onClick={onClose}>
           <X className='h-6 w-6 lg:h-9 lg:w-9' />
         </button>
@@ -97,13 +98,13 @@ const Profile = ({ isOpen, onClose, user }: MyPagePanelProps) => {
 
       {/* 하단 메뉴 */}
       <div className='mt-6 flex w-full flex-col'>
-        <button className='px-6 py-4 text-left lg:px-8'>
+        <Button variant='profile'>
           <Text size='logout-button-text'>비밀번호 변경</Text>
-        </button>
+        </Button>
         <SignOutForm />
-        <button className='px-6 py-4 text-left lg:px-8'>
+        <Button variant='profile'>
           <Text size='logout-button-text'>계정삭제</Text>
-        </button>
+        </Button>
       </div>
     </div>
   );

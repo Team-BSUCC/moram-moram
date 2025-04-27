@@ -5,7 +5,12 @@ import Image from 'next/image';
 
 const KaKaoLoginButton = () => {
   return (
-    <RoundButton onClick={signWithKaKao} size='lg' bgColor='kakao'>
+    <RoundButton
+      type='button'
+      onClick={signWithKaKao}
+      size='lg'
+      bgColor='kakao'
+    >
       <Image
         src='/images/button-image/kakao-talk.png'
         alt='카카오 아이콘'

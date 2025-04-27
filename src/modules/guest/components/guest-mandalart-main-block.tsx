@@ -2,7 +2,7 @@
 
 import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 import { useGuestTopicStore } from '../hooks/use-guest-topic-store';
-import { useEffect, useRef } from 'react';
+import { ChangeEvent, useEffect, useRef } from 'react';
 import GuestMandalartMainCell from './guest-mandalart-main-cell';
 
 type GuestMainBlock = {
@@ -11,7 +11,7 @@ type GuestMainBlock = {
 
 const GuestMandalartMainBlock = ({ coreColor }: GuestMainBlock) => {
   const coreValue = useGuestTopicStore((state) => state.core);
-  const setCoreaValue = useGuestTopicStore((state) => state.setCore);
+  const setCoreValue = useGuestTopicStore((state) => state.setCore);
   const coreRef = useRef<HTMLTextAreaElement>(null);
   const MIN_LINE_HEIGHT = 24;
 
@@ -26,6 +26,12 @@ const GuestMandalartMainBlock = ({ coreColor }: GuestMainBlock) => {
     el.style.height = `${newHeight}px`;
   }, [coreValue]);
 
+  const charLimit = 15;
+  const handleInputValueChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+    if (e.target.value.length - 1 === charLimit) return;
+    setCoreValue(e.target.value);
+  };
+
   return (
     <div className='grid aspect-square grid-cols-3 grid-rows-3 gap-2'>
       <div
@@ -35,9 +41,8 @@ const GuestMandalartMainBlock = ({ coreColor }: GuestMainBlock) => {
           ref={coreRef}
           className='text-16px mt-1 min-h-[24px] w-full max-w-md resize-none overflow-hidden bg-transparent text-center font-semibold leading-[1.5] outline-none placeholder:text-sub'
           value={coreValue}
-          onChange={(e) => {
-            setCoreaValue(e.target.value);
-          }}
+          onChange={handleInputValueChange}
+          maxLength={15}
           placeholder='핵심주제'
           rows={1}
         />

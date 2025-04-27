@@ -537,7 +537,7 @@ const UpdateDateModal = ({
                     : isDateBlank
                       ? '날짜를 선택해주세요!'
                       : !isDateValid
-                        ? '종료일이 유효하지 않습니다.'
+                        ? '종료일은 시작일보다 빠를 수 없습니다!'
                         : onProgress
                           ? '변경중...'
                           : '선택하기'}
