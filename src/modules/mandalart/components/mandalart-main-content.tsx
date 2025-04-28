@@ -19,7 +19,6 @@ import { useRealtimeBroadCastRoom } from '../hooks/use-realtime-broadcast-room';
 import AvatarStack from './mandalart-avatar-stack';
 import { useClientStateStore } from '../hooks/use-client-state-store';
 import { formatDate } from '@/modules/dashboard/util/format-date';
-import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
 import { useEffect, useRef } from 'react';
 import { RealtimeCursors } from './realtime-cursors';
 import { toPng } from 'html-to-image';
@@ -30,6 +29,7 @@ import {
   successAlert,
 } from '@/shared/utils/sweet-alert';
 import * as Sentry from '@sentry/nextjs';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
 type MandalartMainContentProps = {
   user: User | null;
@@ -40,8 +40,8 @@ const MandalartMainContent = ({
   user,
   mandalartId,
 }: MandalartMainContentProps) => {
-  const isVisible = useTodoFloatingSheetStore((state) => state.isVisible);
-  const hide = useTodoFloatingSheetStore((state) => state.hide);
+  const isVisible = useFloatingSheetStore((state) => state.isVisible);
+  const hide = useFloatingSheetStore((state) => state.hide);
 
   const boardRef = useRef<HTMLDivElement>(null);
 

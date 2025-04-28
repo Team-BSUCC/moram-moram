@@ -1,11 +1,11 @@
 import React from 'react';
 import Text from '@/components/commons/text';
 import { useClientStateStore } from '../hooks/use-client-state-store';
-import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
 const CoreCell = () => {
-  const show = useTodoFloatingSheetStore((state) => state.show);
-  const setInfo = useTodoFloatingSheetStore((state) => state.setInfo);
+  const show = useFloatingSheetStore((state) => state.show);
+  const setInfo = useFloatingSheetStore((state) => state.setInfo);
 
   const core = useClientStateStore((state) => state.core);
 

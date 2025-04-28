@@ -49,12 +49,17 @@ const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
     <FloatingSheet>
       <div className='flex h-full flex-col'>
         <div className='handle cursor-grab border-b px-5 active:cursor-grabbing'>
-          <div className='fixed right-4 top-4 w-fit' onClick={hide}>
-            <button className='bg-transparent'>
+          <div className='fixed right-4 top-4 w-fit'>
+            <button
+              className='hidden bg-transparent sm:block sm:p-2'
+              onClick={hide}
+            >
               <X />
             </button>
           </div>
-          <Spacer size='lg' />
+          <div className='flex h-8 items-center justify-center bg-transparent'>
+            <div className='h-[3px] w-[135px] rounded-[8px] bg-black sm:hidden'></div>
+          </div>
           <div className='flex justify-start'>
             <Text size='18px-semibold' textColor='sub'>
               {getProcessedDate(info)}

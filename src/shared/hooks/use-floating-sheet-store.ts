@@ -1,15 +1,15 @@
-import { CellInfoType } from '@/modules/mandalart/types/realtime-type';
+import { MandalartFloatingSheetInfo } from '@/modules/mandalart/types/realtime-type';
 import { create } from 'zustand';
 
 type FloatingSheetState = {
   isVisible: boolean; // 온오프 상태
   position: { x: number; y: number }; // 위치 좌표
-  info: CellInfoType | string | null; // sheet 정보
+  info: MandalartFloatingSheetInfo | string | null; // sheet 정보
 
   show: () => void; // 시트 보이기
   hide: () => void; // 시트 숨기기
   setPosition: (position: { x: number; y: number }) => void; // 위치 설정
-  setInfo: (info: CellInfoType | string) => void;
+  setInfo: (info: MandalartFloatingSheetInfo | string) => void;
 };
 
 const useFloatingSheetStore = create<FloatingSheetState>((set) => ({

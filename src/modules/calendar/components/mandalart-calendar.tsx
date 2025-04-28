@@ -79,8 +79,10 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
 
   // 셀 클릭 시 날짜 저장 + 플로팅 시트 열기
   const handleCellClick = (dateStr: string) => {
-    setInfo(dateStr);
     show();
+    if (!isVisible) {
+      setInfo(dateStr);
+    }
   };
 
   return (
