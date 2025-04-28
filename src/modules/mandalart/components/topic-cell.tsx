@@ -1,7 +1,7 @@
 import React from 'react';
 import Text from '@/components/commons/text';
 import { MandalartTopic } from '../types/realtime-type';
-import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
 type TopicCellProps = {
   value: MandalartTopic | null;
@@ -10,8 +10,8 @@ type TopicCellProps = {
 };
 
 const TopicCell = ({ value, backColor, className }: TopicCellProps) => {
-  const show = useTodoFloatingSheetStore((state) => state.show);
-  const setInfo = useTodoFloatingSheetStore((state) => state.setInfo);
+  const show = useFloatingSheetStore((state) => state.show);
+  const setInfo = useFloatingSheetStore((state) => state.setInfo);
 
   const handleFloatingToggle = () => {
     setInfo(value);

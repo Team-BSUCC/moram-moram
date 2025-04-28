@@ -2,7 +2,6 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { RealtimeChannel } from '@supabase/supabase-js';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import useTodoFloatingSheetStore from './use-todo-floating-sheet-store';
 
 /**
  * 콜백 함수를 일정 시간 간격으로 제한(throttle)합니다.
@@ -79,7 +78,7 @@ export const useRealtimeCursors = ({
   );
 
   const channelRef = useRef<RealtimeChannel | null>(null);
-  const isVisible = useTodoFloatingSheetStore((state) => state.isVisible);
+  const isVisible = useFloatingSheetStore((state) => state.isVisible);
 
   const callback = useCallback(
     (event: MouseEvent) => {
