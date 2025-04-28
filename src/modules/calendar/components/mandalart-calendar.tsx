@@ -103,7 +103,13 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
             className='custom-event cursor-pointer'
             style={{ backgroundColor: arg.backgroundColor }}
           >
-            <span>{arg.event.title}</span>
+            <span
+              className={
+                arg.event.extendedProps.isDone ? 'text-sub line-through' : ''
+              }
+            >
+              {arg.event.title}
+            </span>
           </div>
         )}
         dateClick={(arg) => {
@@ -128,8 +134,10 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
         moreLinkDidMount={(info) => {
           info.el.style.pointerEvents = 'none';
         }}
+        eventOrder='isDone'
       />
       {isVisible && <CalendarFloatingSheet todos={flatTodos} />}
+      <Spacer size='top' />
     </div>
   );
 };

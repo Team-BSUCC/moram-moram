@@ -43,13 +43,13 @@ const Header = ({ user }: HeaderProps) => {
   // 메뉴가 열렸을 때 스크롤 방지
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('overflow-hidden');
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.classList.remove('overflow-hidden');
     }
 
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.classList.remove('overflow-hidden');
     };
   }, [isMenuOpen]);
 
@@ -92,9 +92,9 @@ const Header = ({ user }: HeaderProps) => {
       ];
 
   return (
-    <div className='h-full w-full border-none bg-white-light shadow-[2px_2px_10px_1px_rgba(0,0,0,0.05)] lg:border-b'>
-      <div className='flex items-center justify-between'>
-        <Link href={user ? URLS.DASHBOARD : URLS.HOME}>
+    <div className='h-full bg-white-light shadow-[2px_2px_10px_1px_rgba(0,0,0,0.05)]'>
+      <div className='flex h-full items-center justify-between'>
+        <Link href={URLS.HOME}>
           <button className='px-6 py-4'>
             <Image
               src='/images/manda-logo-text.svg'

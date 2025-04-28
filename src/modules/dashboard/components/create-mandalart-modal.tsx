@@ -5,7 +5,7 @@ import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
 import ColorPicker from './color-picker';
 import CalendarDropDown from './calendar-drop-down';
-import { useRef, useState } from 'react';
+import { ChangeEvent, useRef, useState } from 'react';
 import { useMandalartForm } from '../hooks/use-mandalart-form';
 import { useMandalartCreator } from '../hooks/use-mandalart-creator';
 import { getPastelCodeWithIndex } from '@/shared/utils/get-color-with-index';
@@ -57,6 +57,12 @@ const CreateMandalartModal = ({
     }
   };
 
+  const charLimit = 15;
+  const handleInputValueChange = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length - 1 === charLimit) return;
+    setTitle(e.target.value);
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -81,15 +87,13 @@ const CreateMandalartModal = ({
               {/* 제목 입력 */}
               <div className='relative'>
                 <Input
-                  maxLength={12}
+                  maxLength={15}
                   value={title}
                   sizes='24px-semibold'
                   placeholder='핵심 목표를 작성해주세요.'
-                  onChange={(e) => {
-                    setTitle(e.target.value);
-                  }}
+                  onChange={handleInputValueChange}
                 />
-                <span className='absolute right-8 top-[10px] text-sub'>{`${title.length}/12`}</span>
+                <span className='absolute right-8 top-[10px] text-sub'>{`${title.length}/${charLimit}`}</span>
               </div>
 
               {/* 날짜 선택 */}
