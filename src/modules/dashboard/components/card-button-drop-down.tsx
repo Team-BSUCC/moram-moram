@@ -15,7 +15,6 @@ import { useDateOptionList } from '../hooks/use-date-option-list';
 import { getDateToString } from '../util/calculate-date';
 import { useRoomDateUpdate } from '../hooks/use-room-date-update';
 import { useGetOutRoom } from '../hooks/use-get-out-room';
-import { format } from 'path';
 
 type CardButtonDropDownProps = {
   roomId: string;
@@ -130,7 +129,7 @@ const DeleteModal = ({
         '만다라트의 주인이 아닙니다.',
         '방을 나가시겠습니까?'
       ).then((result) => {
-        if (result.isConfirmed) {
+        if (result) {
           getOutRoom({
             roomId: id,
             userId: user as string,
@@ -145,7 +144,7 @@ const DeleteModal = ({
       '정말 삭제하시겠습니까?',
       '삭제한 내용은 되돌릴 수 없습니다.'
     ).then((result) => {
-      if (result.isConfirmed) {
+      if (result) {
         deleteRoom(id);
         setIsDeleteOpen(false);
         setIsOpen(false);
@@ -229,6 +228,7 @@ const DeleteModal = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
+                    setIsDeleteOpen(false);
                     handleDeleteRoom(roomId);
                   }}
                 >
