@@ -143,10 +143,10 @@ const MandalartFloatingSheet = () => {
               <div className='flex gap-[8px]'>
                 <BicepsFlexed color='var(--color-sub)' size={30} />
                 <Text size='20px-medium' textColor='sub'>
-                  {info.subTitle}
+                  {info.subTitle || '반드시 완수한다'}
                 </Text>
               </div>
-              <div className='flex w-full justify-end'>
+              <div className='mt-2 flex w-full justify-end'>
                 <AiSuggestButton value={value} type='core' />
               </div>
             </div>
@@ -211,7 +211,7 @@ const MandalartFloatingSheet = () => {
                 {coreTitle?.title} &gt;{' '}
                 {info.topic || `대주제${info.topicIndex}`}
               </Text>
-              <div className='flex w-full justify-end'>
+              <div className='mt-2 flex w-full justify-end'>
                 <AiSuggestButton value={value} type='topic' />
               </div>
             </div>
