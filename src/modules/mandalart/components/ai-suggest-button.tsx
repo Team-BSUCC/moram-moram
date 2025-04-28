@@ -8,11 +8,12 @@ import Image from 'next/image';
 import { fetchGetAiSuggestKeywords } from '../services/fetch-get-ai-suggest-keywords';
 import { useChannelStore } from '../hooks/use-channel-store';
 import { useCellBroadcastMutation } from '../hooks/use-cell-broadcast-mutation';
-import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
 import { useAlertStore } from '@/shared/hooks/use-alert-store';
 import { LoaderCircle } from 'lucide-react';
 import { useState } from 'react';
 import { errorAlert, infoAlert } from '@/shared/utils/sweet-alert';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
+import { MandalartFloatingSheetInfo } from '../types/realtime-type';
 
 type AiSuggestButtonProps = {
   value: string;
@@ -32,7 +33,9 @@ const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
   const openAlert = useAlertStore((store) => store.openAlert);
   const [isAiFetching, setIsFetching] = useState<boolean>(false);
 
-  const info = useTodoFloatingSheetStore((state) => state.info);
+  const info = useFloatingSheetStore(
+    (state) => state.info
+  ) as MandalartFloatingSheetInfo;
   if (info === undefined || info === null) {
     return <div>오류</div>;
   }
@@ -123,9 +126,13 @@ const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
     setIsFetching(false);
   };
 
-  const LIMIT_GUIDE_TITLE = '사용 횟 수 제한';
-  const LIMIT_GUIDE_MESSAGE =
-    '오늘은 더 이상 사용하실 수 없습니다. 내일 다시 이용해주세요';
+  const LIMIT_GUIDE_TITLE = '사용 횟수 제한';
+  const LIMIT_GUIDE_MESSAGE = (
+    <>
+      오늘은 더 이상 사용하실 수 없습니다.
+      <br /> 내일 다시 이용해주세요
+    </>
+  );
   const FULL_BLOCK_MESSAGE = '해당 블럭 칸이 가득 차 있습니다.';
 
   const confirmText = isAiLimited

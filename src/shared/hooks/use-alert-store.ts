@@ -5,14 +5,14 @@ type AlertType = 'success' | 'error' | 'info' | 'confirm';
 type AlertState = {
   isOpen: boolean;
   type: AlertType;
-  title: string;
-  message: string;
+  title: string | JSX.Element;
+  message: string | JSX.Element;
   isLoading: boolean;
   confirmText: string;
   openAlert: (
     type: AlertType,
-    title: string,
-    message?: string,
+    title: string | JSX.Element,
+    message?: string | JSX.Element,
     promiseResult?: (value: boolean) => void,
     confirmText?: string
   ) => void;
