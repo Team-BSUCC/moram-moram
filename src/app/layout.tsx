@@ -7,7 +7,6 @@ import Footer from '@/components/layouts/footer';
 import Header from '@/components/layouts/header';
 import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 import { Alert } from '@/components/commons/alert';
-import { updateAuthMetadataAvatar } from '@/shared/utils/avatar-utils';
 
 export const metadata: Metadata = {
   title: 'Manda',
@@ -32,9 +31,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getUserInfo();
-  if (user) {
-    await updateAuthMetadataAvatar(user.id);
-  }
 
   return (
     <html lang='ko-KR' className='h-full w-full'>
