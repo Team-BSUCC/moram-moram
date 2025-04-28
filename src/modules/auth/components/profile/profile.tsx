@@ -53,12 +53,14 @@ const Profile = ({ isOpen, onClose, user }: MyPagePanelProps) => {
 
     const { url } = await res.json();
     setAvatarUrl(url);
+    setShowPhotoMenu(false);
     router.refresh();
   };
 
   const handleDeleteAvatar = async () => {
     await deleteAvatar(user.id);
     setAvatarUrl('');
+    setShowPhotoMenu(false);
     router.refresh();
   };
 
