@@ -1,31 +1,34 @@
-import Button from '@/components/commons/button';
-import Dropdown from '@/components/commons/drop-down';
-import Text from '@/components/commons/text';
+'use client';
+
 import { useDeleteTodoMutation } from '@/modules/calendar/hooks/use-delete-todo-mutation';
-import { changeDateSeparator } from '@/modules/calendar/utils/get-processed-date';
-import { FlatTodo } from '../types/today-list-type';
-import { useState } from 'react';
-import CheckBox from '@/components/commons/check-box';
 import { useUpdateTodoMutation } from '@/modules/calendar/hooks/use-update-todo-mutation';
+import { useState } from 'react';
+import CheckBox from './check-box';
+import Text from './text';
+import Dropdown from './drop-down';
+import Button from './button';
+import { FlatTodo } from '@/modules/today-list/types/today-list-type';
+import { changeDateSeparator } from '@/modules/calendar/utils/get-processed-date';
 
 type TodoItemProps = {
   todo: FlatTodo;
+  showDate?: boolean;
 };
 
-const TodoItem = ({ todo }: TodoItemProps) => {
+const TodoItem = ({ todo, showDate = false }: TodoItemProps) => {
   const [checked, setChecked] = useState<boolean>(todo.isDone);
   const { mutate: updateTodoMutate } = useUpdateTodoMutation();
-  const { mutate: deleteTodoMutate } = useDeleteTodoMutation();
-
-  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    e.preventDefault();
-    deleteTodoMutate(todo.todoId);
-  };
+  const { mutate: deleteTodoData } = useDeleteTodoMutation();
 
   const handleCheckToggle = () => {
     updateTodoMutate(todo);
     setChecked(!checked);
+  };
+
+  const handleDelete = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    deleteTodoData(todo.todoId);
   };
 
   return (
@@ -49,7 +52,9 @@ const TodoItem = ({ todo }: TodoItemProps) => {
       </div>
       <div className='ml-10 mt-[5px]'>
         <Text size='16px-medium' textColor='sub'>
-          {changeDateSeparator(todo.scheduledDate)}
+          {showDate
+            ? changeDateSeparator(todo.scheduledDate)
+            : `${todo.topicTitle} &gt; ${todo.subtopicContent}`}
         </Text>
       </div>
     </div>

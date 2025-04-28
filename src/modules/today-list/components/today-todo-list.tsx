@@ -5,7 +5,6 @@ import MandalartTitleTab from '@/modules/today-list/components/mandalart-title-t
 import OrderOptionSelection from '@/modules/today-list/components/order-option-selection';
 import Title from '@/components/commons/title';
 import Spacer from '@/components/commons/spacer';
-import TodoItem from '@/modules/today-list/components/todo-item';
 import { filterByCompletionStatus } from '@/modules/calendar/utils/filter-by-completion-status';
 import { getBorderColorWithNumber } from '@/shared/utils/get-color-with-number';
 import { flattenTodos } from '../utils/flatten-todos';
@@ -16,6 +15,7 @@ import {
 } from '../types/today-list-type';
 import { groupBy } from '../utils/group-by';
 import { AnimatePresence, motion } from 'framer-motion';
+import TodoItem from '@/components/commons/todo-item';
 
 type TodayTodoListProps = {
   myMandalarts: MyMandalartsType;
@@ -136,7 +136,7 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
                                     exit={{ opacity: 0 }}
                                     transition={{ duration: 0.1 }}
                                   >
-                                    <TodoItem todo={todo} />
+                                    <TodoItem todo={todo} showDate={true} />
                                   </motion.div>
                                 ))}
                               </AnimatePresence>

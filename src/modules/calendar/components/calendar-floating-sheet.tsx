@@ -7,13 +7,13 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { FlatTodo } from '@/modules/today-list/types/today-list-type';
 import Spacer from '@/components/commons/spacer';
 import { getProcessedDate } from '../utils/get-processed-date';
-import CalendarTodoItem from './calendar-todo-item';
 import { X } from 'lucide-react';
 import { groupBy } from '@/modules/today-list/utils/group-by';
 import { rangeWithIndex } from '@/shared/utils/range-with-index';
 import { matchWithCommonColor } from '../utils/match-with-common-color';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
+import TodoItem from '@/components/commons/todo-item';
 
 type CalendarFloatingSheetProps = {
   todos: FlatTodo[];
@@ -102,7 +102,7 @@ const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
                         }}
                         transition={{ duration: 0.2 }}
                       >
-                        <CalendarTodoItem todo={todo} />
+                        <TodoItem todo={todo} />
                       </motion.div>
                     ))}
                   </AnimatePresence>
