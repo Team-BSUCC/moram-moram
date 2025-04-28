@@ -8,16 +8,17 @@ type AlertState = {
   type: AlertType;
   title: string;
   message: string;
-  onConfirm?: () => void;
-  onCancel?: () => void;
+  isLoading: boolean;
   openAlert: (
     type: AlertType,
     title: string,
     message?: string,
-    onConfirm?: () => void,
-    onCancel?: () => void
+    promiseResult?: (value: boolean) => void
   ) => void;
   closeAlert: () => void;
+  promiseResolve?: (value: boolean) => void;
+  loadingStart: () => void;
+  loadingEnd: () => void;
 };
 
 /**
@@ -25,9 +26,7 @@ type AlertState = {
  * @type 알람 타입 (success, error, info, confirm)
  * @title 알람 제목
  * @message 알람 메세지 내용
- * @onConfirm 확인버튼 누르면 실행되는 콜백 함수
- * @onCancel 취소버튼 누르면 실행되는 콜백 함수
- * @openAlert 알람 열기 위해 실행하는 함수 : (type, title, message, onConfirm, onCancel)
+ * @openAlert 알람 열기 위해 실행하는 함수 : (type, title, message)
  * @closeAlert 알람 닫기 위해 실행하는 함수
  */
 export const useAlertStore = create<AlertState>((set) => ({
@@ -35,9 +34,23 @@ export const useAlertStore = create<AlertState>((set) => ({
   type: 'info',
   title: '',
   message: '',
-  onConfirm: undefined,
-  onCancel: undefined,
-  openAlert: (type, title, message = '', onConfirm, onCancel) =>
-    set({ isOpen: true, type, title, message, onConfirm, onCancel }),
-  closeAlert: () => set({ isOpen: false }),
+  promiseResolve: undefined,
+  isLoading: false,
+
+  openAlert: (type, title, message = '', promiseResult) =>
+    set({
+      isOpen: true,
+      type,
+      title,
+      message,
+      isLoading: false,
+      promiseResolve: promiseResult,
+    }),
+
+  closeAlert: () =>
+    set({ isOpen: false, promiseResolve: undefined, isLoading: false }),
+
+  loadingStart: () => set({ isLoading: true }),
+
+  loadingEnd: () => set({ isLoading: false }),
 }));
