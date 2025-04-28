@@ -21,6 +21,7 @@ type GuestModalProps = {
 };
 
 const IMAGE_VIEW_SIZE = 585;
+const DESKTOP_SIZE = 1024;
 
 const GuestModal = ({
   isModalOpen,
@@ -28,6 +29,27 @@ const GuestModal = ({
   isSheetOpen,
   setIsSheetOpen,
 }: GuestModalProps) => {
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= DESKTOP_SIZE) {
+        setIsSheetOpen(false);
+      }
+
+      if (window.innerWidth < DESKTOP_SIZE) {
+        setIsModalOpen(false);
+      }
+    };
+
+    if (window.innerWidth >= DESKTOP_SIZE) {
+      setIsModalOpen(true);
+    } else {
+      setIsSheetOpen(true);
+    }
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const [isActive, setIsActive] = useState<boolean>(false);
 
   const { ref, width } = useElementWidthObserver();
