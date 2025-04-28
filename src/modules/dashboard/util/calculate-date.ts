@@ -17,7 +17,7 @@ export const getDateDiff = (endStr: Date): number => {
 
   const diffTime = end.getTime() - now.getTime();
   const diffDays = diffTime / (1000 * 60 * 60 * 24);
-  return diffDays;
+  return Math.ceil(diffDays);
 };
 
 export const getDateToString = (

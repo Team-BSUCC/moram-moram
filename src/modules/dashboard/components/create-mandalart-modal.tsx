@@ -8,7 +8,7 @@ import CalendarDropDown from './calendar-drop-down';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useMandalartForm } from '../hooks/use-mandalart-form';
 import { useMandalartCreator } from '../hooks/use-mandalart-creator';
-import { getPastelCodeWithIndex } from '@/shared/utils/get-color-with-index';
+import { getPigmentCodeWithIndex } from '@/shared/utils/get-color-with-index';
 import ModalPortal from '@/components/commons/modal-portal';
 
 const CreateMandalartModal = ({
@@ -75,7 +75,7 @@ const CreateMandalartModal = ({
           <div
             className='relative h-[357px] w-full max-w-sm rounded-br-lg rounded-tr-lg border-l-[10px] bg-white shadow-lg outline-red-pastel sm:h-[380px] sm:max-w-[535px] md:h-[408px]'
             onClick={(e) => e.stopPropagation()}
-            style={{ borderColor: getPastelCodeWithIndex(selectedColor) }}
+            style={{ borderColor: getPigmentCodeWithIndex(selectedColor) }}
           >
             <div
               onClick={handleClose}
@@ -106,7 +106,7 @@ const CreateMandalartModal = ({
                   >
                     <Text size='20px-medium' textColor='caption'>
                       {Object.values(date).every((v) => v !== '')
-                        ? `${date.startYear}.${date.startMonth}.${date.startDay} ~ ${date.endYear}.${date.endMonth}.${date.endDay}`
+                        ? `${date.startYear}.${date.startMonth.padStart(2, '0')}.${date.startDay.padStart(2, '0')} ~ ${date.endYear}.${date.endMonth.padStart(2, '0')}.${date.endDay.padStart(2, '0')}`
                         : '기간 설정'}
                     </Text>
                   </div>

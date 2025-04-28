@@ -29,9 +29,10 @@ const DashBoard = ({ user }: { user: string | null }) => {
               <Button
                 variant='secondary'
                 size='medium'
+                disabled={isCreateModalOpen}
                 onClick={() => setIsCreateModalOpen(true)}
               >
-                + 새 만다라트
+                <SquarePlus size={24} /> 새 만다라트
               </Button>
             </div>
           </div>
