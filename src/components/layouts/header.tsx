@@ -12,6 +12,7 @@ import { Menu, X } from 'lucide-react';
 import Text from '../commons/text';
 import Button from '../commons/button';
 import Profile from '../../modules/auth/components/profile/profile';
+import UserAvatarCard from '@/modules/auth/components/profile/user-avatar-card';
 
 type MenuItem = {
   to: string;
@@ -133,10 +134,11 @@ const Header = ({ user }: HeaderProps) => {
                 className='flex cursor-pointer items-center gap-2 pl-2'
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
               >
-                <Avatar className='border border-black hover:z-10'>
-                  <AvatarImage src={user.user_metadata.avatar_url} />
-                  <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
-                </Avatar>
+                <UserAvatarCard
+                  avatarUrl={user.user_metadata.avatar_url}
+                  userName={userName}
+                  sizeClassName='border border-black hover:z-10'
+                />
                 <div className='pr-[10px]'>
                   <Text size='20px-medium'>{userName}</Text>
                 </div>
@@ -175,10 +177,11 @@ const Header = ({ user }: HeaderProps) => {
                 className='mb-4 flex w-full cursor-pointer items-center gap-2 px-4'
                 onClick={() => setIsProfileOpen(true)}
               >
-                <Avatar className='border border-black hover:z-10'>
-                  <AvatarImage src={user.user_metadata.avatar_url} />
-                  <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
-                </Avatar>
+                <UserAvatarCard
+                  avatarUrl={user.user_metadata.avatar_url}
+                  userName={userName}
+                  sizeClassName='border border-black hover:z-10'
+                />
                 <Text size='20px-medium'>{userName}</Text>
               </div>
             </div>

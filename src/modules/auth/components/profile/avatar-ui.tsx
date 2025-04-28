@@ -1,7 +1,7 @@
 'use client';
 
 import { Camera } from 'lucide-react';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import UserAvatarCard from './user-avatar-card';
 
 type AvatarUIProps = {
   showPhotoMenu: boolean;
@@ -21,12 +21,13 @@ const AvatarUI = ({
   showMenu,
 }: AvatarUIProps) => {
   return (
-    <div className='relative h-[100px] w-[100px]'>
+    <div className='relative'>
       <div className='group relative h-full w-full'>
-        <Avatar className='h-full w-full'>
-          <AvatarImage src={avatarUrl} />
-          <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
-        </Avatar>
+        <UserAvatarCard
+          avatarUrl={avatarUrl}
+          userName={userName}
+          sizeClassName='h-full w-full h-[100px] w-[100px]'
+        />
 
         {/* Hover 오버레이 */}
         <div
@@ -47,7 +48,7 @@ const AvatarUI = ({
         >
           <label
             htmlFor='avatar-upload'
-            className='hover:bg-gray-100 block w-full cursor-pointer px-4 py-2 text-left'
+            className='block w-full cursor-pointer px-4 py-2 text-left hover:bg-gray-100'
           >
             사진 변경하기
           </label>
@@ -61,7 +62,7 @@ const AvatarUI = ({
             }}
           />
           <button
-            className='hover:bg-gray-100 w-full px-4 py-2 text-left'
+            className='w-full px-4 py-2 text-left hover:bg-gray-100'
             onClick={onDelete}
           >
             사진 삭제하기

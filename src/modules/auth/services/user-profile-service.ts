@@ -8,6 +8,12 @@ const supabaseAdmin = createClient(
   process.env.NEXT_SUPABASE_SERVICE_ROLE!
 );
 
+/**
+ * 유저 아바타 업데이트 함수
+ * @param userId
+ * @param file
+ * @returns
+ */
 export const updateUserAvatar = async (userId: string, file: File) => {
   const ext = file.name.split('.').pop();
   const filePath = `avatars/${userId}/profile-${Date.now()}.${ext}`;
@@ -47,6 +53,10 @@ export const updateUserAvatar = async (userId: string, file: File) => {
   return publicUrl;
 };
 
+/**
+ * 유저 아바타 삭제 함수
+ * @param userId
+ */
 export const deleteUserAvatar = async (userId: string) => {
   const folderPath = `avatars/${userId}`;
 
@@ -84,6 +94,11 @@ export const deleteUserAvatar = async (userId: string) => {
   if (deleteError) throw new Error(deleteError.message);
 };
 
+/**
+ * 유저 닉네임 변경 함수
+ * @param userId
+ * @param nickname
+ */
 export const updateUserNickname = async (userId: string, nickname: string) => {
   const { error: AuthError } = await supabaseAdmin.auth.admin.updateUserById(
     userId,
