@@ -9,7 +9,6 @@ import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 import Spacer from '@/components/commons/spacer';
 import { BicepsFlexed, CalendarDays, SquarePlus, X } from 'lucide-react';
 import Title from '@/components/commons/title';
-import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
 import { formatDate } from '@/modules/dashboard/util/format-date';
 import { getDateDiff } from '@/modules/dashboard/util/calculate-date';
 import { useClientStateStore } from '../hooks/use-client-state-store';
@@ -19,6 +18,8 @@ import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
 import { useCellBroadcastMutation } from '../hooks/use-cell-broadcast-mutation';
 import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate';
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
+import { MandalartFloatingSheetInfo } from '../types/realtime-type';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -35,8 +36,10 @@ const EmptyGuide = ({ children }: { children: string }) => {
 };
 
 const MandalartFloatingSheet = () => {
-  const info = useTodoFloatingSheetStore((state) => state.info);
-  const hide = useTodoFloatingSheetStore((state) => state.hide);
+  const info = useFloatingSheetStore(
+    (state) => state.info
+  ) as MandalartFloatingSheetInfo;
+  const hide = useFloatingSheetStore((state) => state.hide);
   useEscapeKey(hide);
 
   const coreTitle = useClientStateStore((state) => state.core);
