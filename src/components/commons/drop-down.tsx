@@ -9,6 +9,8 @@ type DropdownProps = {
   selection?: boolean;
   text?: ReactNode;
   size?: 'w-auto';
+  isChanged?: boolean;
+  setIsChanged?: (value: boolean) => void;
 };
 
 /**
@@ -22,6 +24,8 @@ const Dropdown = ({
   selection = false,
   text,
   size,
+  isChanged,
+  setIsChanged,
 }: DropdownProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -39,6 +43,13 @@ const Dropdown = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    if (isChanged) {
+      setIsOpen(false);
+      setIsChanged?.(false);
+    }
+  }, [isChanged]);
+
   return (
     <div className='relative inline-block' ref={dropdownRef}>
       <div
@@ -47,6 +58,7 @@ const Dropdown = ({
           e.preventDefault();
           setIsOpen((prev) => !prev);
         }}
+        className='cursor-pointer'
       >
         <div className='flex'>
           {text}
