@@ -10,6 +10,7 @@ import {
   DrawerTitle,
 } from '../ui/drawer';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
+
 type FloatingSheetProps = {
   children: ReactNode;
   hideOnOutsideClick?: boolean;
@@ -77,9 +78,14 @@ const FloatingSheet = ({
       <Drawer
         open={isVisible}
         onOpenChange={(open) => !open && hide()}
-        modal={true}
+        modal={false} // 뒷 배경 스크롤 불가능 여부
       >
-        <DrawerContent className='h-[60vh] overflow-y-auto rounded-t-lg p-0'>
+        <DrawerContent
+          className='h-[60vh] overflow-y-auto rounded-t-lg p-0'
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
+        >
           {/* 화면에는 보이지 않지만 스크린 리더가 읽을 수 있도록 표시 */}
           <DrawerHeader className='sr-only'>
             <DrawerTitle>바텀시트 영역</DrawerTitle>
