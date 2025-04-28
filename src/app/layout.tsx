@@ -11,11 +11,24 @@ import { Alert } from '@/components/commons/alert';
 export const metadata: Metadata = {
   title: 'Manda',
   description:
-    '오타니 쇼헤이가 목표를 이루기 위해 제작한 만다라트 표를 간단히 제작하고 세부사항을 todo로 관리하여 당신의 목적을 달성하세요!',
+    '오타니 쇼헤이가 목표를 이루기 위해 제작한 만다라트 표를 간단히 제작하고, 세부사항을 todo로 관리하여 당신의 목적을 달성하세요!',
   icons: {
     icon: '/images/manda-logo.svg',
   },
-  // openGraph:
+  metadataBase: new URL('https://www.manda.io.kr/'),
+  openGraph: {
+    title: 'Manda',
+    description: '만다라트로 목표를 설정하고, 세부 계획을 todo로 관리하세요!',
+    url: 'https://www.manda.io.kr/',
+    siteName: 'Manda',
+    images: [
+      {
+        url: '/open-graph/opengraph.png',
+        alt: 'Manda',
+      },
+    ],
+    type: 'website',
+  },
 };
 
 const pretendard = localFont({
@@ -43,7 +56,7 @@ export default async function RootLayout({
         </header>
 
         <main className='mt-[72px] flex-grow lg:mt-[100px]'>
-          <div className='flex flex-1 items-center justify-center'>
+          <div className='flex h-full flex-1 items-center justify-center'>
             <Alert />
             {/* children에 메인 영역이 위치합니다. 중앙 70%의 영역만 차지합니다 */}
             <div className='h-full w-full'>

@@ -5,32 +5,31 @@ import MandalartTitleTab from '@/modules/today-list/components/mandalart-title-t
 import OrderOptionSelection from '@/modules/today-list/components/order-option-selection';
 import Title from '@/components/commons/title';
 import Spacer from '@/components/commons/spacer';
-import TodoItem from '@/modules/today-list/components/todo-item';
 import { filterByCompletionStatus } from '@/modules/calendar/utils/filter-by-completion-status';
 import { getBorderColorWithNumber } from '@/shared/utils/get-color-with-number';
 import { flattenTodos } from '../utils/flatten-todos';
-import {
-  FlatTodo,
-  MandalartType,
-  MyMandalartsType,
-} from '../types/today-list-type';
+import { FlatTodo, MandalartType } from '../types/today-list-type';
 import { groupBy } from '../utils/group-by';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
+import { User } from '@supabase/supabase-js';
+import { useGetAllMandalartQuery } from '@/shared/hooks/use-get-all-mandalart-query';
+import TodoItem from '@/components/commons/todo-item';
 
 type TodayTodoListProps = {
-  myMandalarts: MyMandalartsType;
+  user: User | null;
 };
 
-const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
+const TodayTodoList = ({ user }: TodayTodoListProps) => {
   const [clickedTitle, setClickedTitle] = useState<string>('');
   const [selectedOption, setSelectedOption] = useState<string>('all');
 
+  const { data: myMandalarts, isPending } = useGetAllMandalartQuery({ user });
   // 최초 클릭된 만다라트 제목 세팅
   useEffect(() => {
-    if (myMandalarts && myMandalarts.length > 0) {
+    if (myMandalarts && myMandalarts.length > 0 && !clickedTitle) {
       setClickedTitle(myMandalarts[0].core.id);
     }
-  }, []);
+  }, [myMandalarts, clickedTitle]);
 
   // 선택된 만다라트의 평탄화된 todo 목록
   const flatTodos = useMemo(() => {
@@ -64,6 +63,8 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
     });
     return obj;
   })();
+
+  if (isPending) return <div>Loading..</div>;
 
   return (
     <div className='h-full w-full'>
@@ -124,20 +125,11 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
                             <div className='flex flex-col gap-5'>
                               <AnimatePresence>
                                 {subTodos.map((todo) => (
-                                  <motion.div
+                                  <TodoItem
+                                    todo={todo}
+                                    showDate={true}
                                     key={todo.todoId}
-                                    initial={{ opacity: 0 }}
-                                    animate={{
-                                      opacity: todo.isDone ? 0.7 : 1,
-                                      filter: todo.isDone
-                                        ? 'blur(0.5px)'
-                                        : 'none',
-                                    }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.1 }}
-                                  >
-                                    <TodoItem todo={todo} />
-                                  </motion.div>
+                                  />
                                 ))}
                               </AnimatePresence>
                             </div>
