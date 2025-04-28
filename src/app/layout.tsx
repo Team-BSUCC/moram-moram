@@ -6,6 +6,7 @@ import TQProvider from '@/providers/tq-provider';
 import Footer from '@/components/layouts/footer';
 import Header from '@/components/layouts/header';
 import { getUserInfo } from '@/modules/auth/services/auth-server-service';
+import { Alert } from '@/components/commons/alert';
 
 export const metadata: Metadata = {
   title: 'Manda',
@@ -43,6 +44,7 @@ export default async function RootLayout({
 
         <main className='mt-[72px] flex-grow lg:mt-[100px]'>
           <div className='flex flex-1 items-center justify-center'>
+            <Alert />
             {/* children에 메인 영역이 위치합니다. 중앙 70%의 영역만 차지합니다 */}
             <div className='h-full w-full'>
               <TQProvider>{children}</TQProvider>

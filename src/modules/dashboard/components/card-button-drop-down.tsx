@@ -15,6 +15,7 @@ import { useDateOptionList } from '../hooks/use-date-option-list';
 import { getDateToString } from '../util/calculate-date';
 import { useRoomDateUpdate } from '../hooks/use-room-date-update';
 import { useGetOutRoom } from '../hooks/use-get-out-room';
+import { format } from 'path';
 
 type CardButtonDropDownProps = {
   roomId: string;
@@ -129,7 +130,7 @@ const DeleteModal = ({
         '만다라트의 주인이 아닙니다.',
         '방을 나가시겠습니까?'
       ).then((result) => {
-        if (result.isConfirmed) {
+        if (result) {
           getOutRoom({
             roomId: id,
             userId: user as string,
@@ -144,7 +145,7 @@ const DeleteModal = ({
       '정말 삭제하시겠습니까?',
       '삭제한 내용은 되돌릴 수 없습니다.'
     ).then((result) => {
-      if (result.isConfirmed) {
+      if (result) {
         deleteRoom(id);
         setIsDeleteOpen(false);
         setIsOpen(false);
@@ -257,14 +258,27 @@ const UpdateColorModal = ({
   setIsOpen,
   colorId,
 }: UpdateColorModalProps) => {
-  const { mutate: updateRoom } = useUpdateRoomColor();
+  const { mutateAsync: updateRoom } = useUpdateRoomColor();
   const [selectedColor, setSelectedColor] = useState<number>(colorId);
+  const [onProgress, setOnProgress] = useState(false);
 
-  const handleUpdateRoomColor = (mandalartId: string) => {
-    if (selectedColor === colorId) return infoAlert('색상의 변화가 없는데요?');
-    updateRoom({ mandalartId: mandalartId, colorId: selectedColor });
-    setIsUpdateOpen(false);
-    setIsOpen(false);
+  const isColorSame = selectedColor === colorId;
+
+  const handleUpdateRoomColor = async (mandalartId: string) => {
+    if (isColorSame) {
+      return infoAlert('색상의 변화가 없는데요?');
+    }
+    try {
+      setOnProgress(true);
+      await updateRoom({ mandalartId: mandalartId, colorId: selectedColor });
+      setOnProgress(false);
+      setIsUpdateOpen(false);
+      setIsOpen(false);
+    } catch (_) {
+      setOnProgress(true);
+      setIsUpdateOpen(true);
+      setIsOpen(true);
+    }
   };
 
   return (
@@ -329,14 +343,19 @@ const UpdateColorModal = ({
               {/* 버튼들 */}
               <div className='flex w-full justify-center gap-[12px] py-[24px]'>
                 <button
-                  className='h-[58px] w-full rounded-lg bg-primary text-[14px] font-medium leading-[20px] transition-colors ease-in-out hover:bg-[#BF93E1] active:bg-[#A76BD6] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px]'
+                  disabled={isColorSame || onProgress}
+                  className='h-[58px] w-full rounded-lg bg-primary text-[14px] font-medium leading-[20px] transition-colors ease-in-out hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:pointer-events-none disabled:border-none disabled:bg-[#E6E6E6] disabled:text-caption sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px]'
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     handleUpdateRoomColor(mandalartId);
                   }}
                 >
-                  선택하기
+                  {isColorSame
+                    ? '색상을 변경해주세요!'
+                    : onProgress
+                      ? '변경중...'
+                      : '선택하기'}
                 </button>
               </div>
             </div>
@@ -361,12 +380,15 @@ const UpdateDateModal = ({
   setIsUpdateOpen,
   mandalartId,
   setIsOpen,
+  startDate,
   endDate,
 }: UpdateDateModalProps) => {
-  const { mutate: updateDate } = useRoomDateUpdate();
+  const { mutateAsync: updateDate } = useRoomDateUpdate();
 
   const formatedEndDate = getDateToString(endDate);
+  const formatedStartDate = getDateToString(startDate);
 
+  const [onProgress, setOnProgress] = useState(false);
   const [selectedDate, setSelectedDate] = useState<DateRangeState>({
     startYear: '',
     startMonth: '',
@@ -382,19 +404,47 @@ const UpdateDateModal = ({
     dayList: endDayList,
   } = useDateOptionList('yes', selectedDate.endYear, selectedDate.endMonth);
 
-  const handleUpdateRoomColor = (mandalartId: string) => {
-    if (
-      `${selectedDate.endYear}-${selectedDate.endMonth}-${selectedDate.endDay}` ===
-      `${formatedEndDate.yyyy}-${formatedEndDate.mm}-${formatedEndDate.dd}`
-    ) {
-      return infoAlert('날짜의 변화가 없는데요?');
+  const isDateSame =
+    `${selectedDate.endYear}-${selectedDate.endMonth}-${selectedDate.endDay}` ===
+    `${formatedEndDate.yyyy}-${formatedEndDate.mm}-${formatedEndDate.dd}`;
+
+  const isDateBlank =
+    selectedDate.endYear === '' ||
+    selectedDate.endMonth === '' ||
+    selectedDate.endDay === '';
+
+  const isDateValid =
+    new Date(
+      `${selectedDate.endYear}-${selectedDate.endMonth}-${selectedDate.endDay}`
+    ) >=
+    new Date(
+      `${formatedStartDate.yyyy}-${formatedStartDate.mm}-${formatedStartDate.dd}`
+    );
+
+  const handleUpdateRoomColor = async (mandalartId: string) => {
+    if (isDateSame) {
+      return infoAlert('날짜의 변화가 없습니다!');
     }
-    updateDate({
-      mandalartId: mandalartId,
-      endDate: `${selectedDate.endYear}-${selectedDate.endMonth}-${selectedDate.endDay}`,
-    });
-    setIsUpdateOpen(false);
-    setIsOpen(false);
+    if (isDateBlank) {
+      return infoAlert('날짜를 모두 선택해주세요!');
+    }
+    if (!isDateValid) {
+      return infoAlert('종료일은 시작일보다 빠를 수 없습니다!');
+    }
+    try {
+      setOnProgress(true);
+      await updateDate({
+        mandalartId: mandalartId,
+        endDate: `${selectedDate.endYear}-${selectedDate.endMonth}-${selectedDate.endDay}`,
+      });
+      setOnProgress(false);
+      setIsUpdateOpen(false);
+      setIsOpen(false);
+    } catch (_) {
+      setOnProgress(true);
+      setIsUpdateOpen(true);
+      setIsOpen(true);
+    }
   };
 
   return (
@@ -472,14 +522,25 @@ const UpdateDateModal = ({
               {/* 버튼들 */}
               <div className='flex w-full justify-center gap-[12px] py-[24px]'>
                 <button
-                  className='h-[58px] w-full rounded-lg bg-primary text-[14px] font-medium leading-[20px] transition-colors ease-in-out hover:bg-[#BF93E1] active:bg-[#A76BD6] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px]'
+                  disabled={
+                    isDateSame || isDateBlank || !isDateValid || onProgress
+                  }
+                  className='h-[58px] w-full rounded-lg bg-primary text-[14px] font-medium leading-[20px] transition-colors ease-in-out hover:bg-[#BF93E1] active:bg-[#A76BD6] disabled:pointer-events-none disabled:border-none disabled:bg-[#E6E6E6] disabled:text-caption sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px]'
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
                     handleUpdateRoomColor(mandalartId);
                   }}
                 >
-                  선택하기
+                  {isDateSame
+                    ? '날짜를 변경해주세요!'
+                    : isDateBlank
+                      ? '날짜를 선택해주세요!'
+                      : !isDateValid
+                        ? '종료일은 시작일보다 빠를 수 없습니다!'
+                        : onProgress
+                          ? '변경중...'
+                          : '선택하기'}
                 </button>
               </div>
             </div>
