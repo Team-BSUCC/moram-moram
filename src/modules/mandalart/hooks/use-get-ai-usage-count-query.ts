@@ -3,7 +3,12 @@ import { fetchGetAiUsageCount } from '../services/fetch-get-ai-usage-count';
 import { useEffect, useState } from 'react';
 
 export const useGetAiUsageCountQuery = () => {
-  const { data, isPending, error } = useQuery({
+  const {
+    data,
+    isPending,
+    error,
+    isFetching: isAiUsageCountFetching,
+  } = useQuery({
     queryKey: ['AI_USAGE_COUNT'],
     queryFn: () => fetchGetAiUsageCount(),
   });
@@ -16,5 +21,5 @@ export const useGetAiUsageCountQuery = () => {
     setAiUsageCount(data as number);
   }, [isPending, error, data]);
 
-  return { aiUsageCount };
+  return { aiUsageCount, isAiUsageCountFetching };
 };

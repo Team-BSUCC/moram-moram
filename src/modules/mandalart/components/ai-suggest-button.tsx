@@ -20,7 +20,7 @@ type AiSuggestButtonProps = {
 };
 
 const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
-  const { aiUsageCount } = useGetAiUsageCountQuery();
+  const { aiUsageCount, isAiUsageCountFetching } = useGetAiUsageCountQuery();
   const { mutateAsync: usageCountPlus } = useUsageCountMutations();
 
   const channel = useChannelStore((state) => state.channel);
@@ -56,9 +56,6 @@ const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
   const subtopicValueList = subtopicList
     .filter((subtopicValue) => subtopicValue.content)
     .map((subtopicValue) => subtopicValue.content);
-
-  const isFullMainBlock = topicValueList.length === 8;
-  const isFullSubBlock = topicValueList.length === 8;
 
   //대주제들을 추천받는 핸들러
   const handleAiTopicSuggest = async () => {
@@ -126,11 +123,10 @@ const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
     setIsFetching(false);
   };
 
-  const limitGuideTitle = '사용 횟 수 제한';
-
-  const limitGuideMessage =
-    isAiLimited &&
+  const LIMIT_GUIDE_TITLE = '사용 횟 수 제한';
+  const LIMIT_GUIDE_MESSAGE =
     '오늘은 더 이상 사용하실 수 없습니다. 내일 다시 이용해주세요';
+  const FULL_BLOCK_MESSAGE = '해당 블럭 칸이 가득 차 있습니다.';
 
   const confirmText = isAiLimited
     ? `사용제한 (${aiUsageCount}/${MAX_AI_USAGE_COUNT})`
@@ -138,33 +134,47 @@ const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
 
   const buttonActions = {
     core: {
-      title: isAiLimited ? limitGuideTitle : '대주제 추천받기',
-      message:
-        limitGuideMessage ||
-        '작성하신 핵심 목표와 관련된 대주제들을 추천해 드릴게요',
+      title: isAiLimited ? LIMIT_GUIDE_TITLE : '대주제 추천받기',
+      message: isAiLimited
+        ? LIMIT_GUIDE_MESSAGE
+        : '작성하신 핵심 목표와 관련된 대주제들을 추천해 드릴게요',
       confirmText,
       resolve: handleSuggest,
     },
 
     topic: {
-      title: isAiLimited ? limitGuideTitle : '소주제 추천받기',
-      message:
-        limitGuideMessage ||
-        '작성하신 대주제와 관련된 소주제들을 추천해 드릴게요',
+      title: isAiLimited ? LIMIT_GUIDE_TITLE : '소주제 추천받기',
+      message: isAiLimited
+        ? LIMIT_GUIDE_MESSAGE
+        : '작성하신 대주제와 관련된 소주제들을 추천해 드릴게요',
       confirmText,
       resolve: handleSuggest,
     },
   };
 
-  const isDisableSuggestButton = isAiFetching || aiUsageCount === null;
+  const isFullMainBlock = type === 'core' && topicValueList.length === 8;
+  const isFullSubBlock = type === 'topic' && subtopicValueList.length === 8;
+  const isDisableSuggestButton =
+    isAiFetching || isFullMainBlock || isFullSubBlock;
 
   return (
     <div>
       <Button
         size={null}
-        disabled={isAiFetching}
+        disabled={isDisableSuggestButton}
         variant='outline'
         onClick={() => {
+          if (!value) {
+            infoAlert('대주제가 비어있습니다.', '대주제를 입력해주세요');
+            return;
+          }
+          if (isAiUsageCountFetching) {
+            infoAlert(
+              '잠시만 기다려주세요',
+              'AI사용 횟 수를 불러오는 중입니다.'
+            );
+            return;
+          }
           openAlert(
             'confirm',
             buttonActions[type].title,
@@ -175,12 +185,10 @@ const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
         }}
       >
         <div className='flex h-10 items-center gap-2 p-3'>
-          {isDisableSuggestButton ? (
+          {isAiFetching ? (
             <>
               <LoaderCircle className='animate-spin' />
-              {aiUsageCount === null
-                ? '사용 횟 수를 불러오는 중입니다..'
-                : 'AI에게 데이터 요청중입니다.'}
+              AI에게 데이터 요청중입니다.
             </>
           ) : (
             <>
@@ -190,7 +198,9 @@ const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
                 width={30}
                 height={30}
               />
-              막막하다면? AI가 도와드릴게요!
+              {isFullMainBlock || isFullSubBlock
+                ? FULL_BLOCK_MESSAGE
+                : '막막하다면? AI가 도와드릴게요!'}
             </>
           )}
         </div>
