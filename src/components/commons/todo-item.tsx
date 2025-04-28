@@ -54,7 +54,7 @@ const TodoItem = ({ todo, showDate = false }: TodoItemProps) => {
                   size='20px-medium'
                   line={checked ? 'cancelLine' : 'default'}
                 >
-                  {todo.todoTitle}
+                  {todo.todoTitle || '작성된 TODO 내용이 없습니다'}
                 </Text>
               </div>
             </div>
