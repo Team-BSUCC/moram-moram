@@ -11,7 +11,7 @@ import { X } from 'lucide-react';
 import { groupBy } from '@/modules/today-list/utils/group-by';
 import { rangeWithIndex } from '@/shared/utils/range-with-index';
 import { matchWithCommonColor } from '../utils/match-with-common-color';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
 import TodoItem from '@/components/commons/todo-item';
 
@@ -93,17 +93,7 @@ const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
                   {/* 각 mandalart에 해당하는 todo 출력 */}
                   <AnimatePresence>
                     {todos.map((todo) => (
-                      <motion.div
-                        key={todo.todoId}
-                        layout
-                        animate={{
-                          opacity: todo.isDone ? 0.7 : 1,
-                          filter: todo.isDone ? 'blur(0.5px)' : 'none',
-                        }}
-                        transition={{ duration: 0.2 }}
-                      >
-                        <TodoItem todo={todo} />
-                      </motion.div>
+                      <TodoItem todo={todo} key={todo.todoId} />
                     ))}
                   </AnimatePresence>
                 </div>

@@ -14,7 +14,7 @@ import {
   MyMandalartsType,
 } from '../types/today-list-type';
 import { groupBy } from '../utils/group-by';
-import { AnimatePresence, motion } from 'framer-motion';
+import { AnimatePresence } from 'framer-motion';
 import TodoItem from '@/components/commons/todo-item';
 
 type TodayTodoListProps = {
@@ -124,20 +124,11 @@ const TodayTodoList = ({ myMandalarts }: TodayTodoListProps) => {
                             <div className='flex flex-col gap-5'>
                               <AnimatePresence>
                                 {subTodos.map((todo) => (
-                                  <motion.div
+                                  <TodoItem
+                                    todo={todo}
+                                    showDate={true}
                                     key={todo.todoId}
-                                    initial={{ opacity: 0 }}
-                                    animate={{
-                                      opacity: todo.isDone ? 0.7 : 1,
-                                      filter: todo.isDone
-                                        ? 'blur(0.5px)'
-                                        : 'none',
-                                    }}
-                                    exit={{ opacity: 0 }}
-                                    transition={{ duration: 0.1 }}
-                                  >
-                                    <TodoItem todo={todo} showDate={true} />
-                                  </motion.div>
+                                  />
                                 ))}
                               </AnimatePresence>
                             </div>

@@ -9,6 +9,7 @@ import Dropdown from './drop-down';
 import Button from './button';
 import { FlatTodo } from '@/modules/today-list/types/today-list-type';
 import { changeDateSeparator } from '@/modules/calendar/utils/get-processed-date';
+import { motion } from 'framer-motion';
 
 type TodoItemProps = {
   todo: FlatTodo;
@@ -32,30 +33,48 @@ const TodoItem = ({ todo, showDate = false }: TodoItemProps) => {
   };
 
   return (
-    <div className='w-full'>
-      <div className='flex w-full items-start justify-between'>
-        <div className='flex w-full items-center gap-3'>
-          <div className='py-2'>
-            <CheckBox checked={checked} onChange={handleCheckToggle} />
+    <div className='relative w-full'>
+      <motion.div
+        layout
+        animate={{
+          opacity: todo.isDone ? 0.7 : 1,
+          filter: todo.isDone ? 'blur(0.5px)' : 'none',
+        }}
+        transition={{ duration: 0.2 }}
+        className='w-full'
+      >
+        <div className='w-full'>
+          <div className='flex w-full items-start justify-between'>
+            <div className='flex w-full items-center gap-3'>
+              <div className='py-2'>
+                <CheckBox checked={checked} onChange={handleCheckToggle} />
+              </div>
+              <div className='flex w-full items-center justify-between border-b pb-[7px] pl-1 pt-2'>
+                <Text
+                  size='20px-medium'
+                  line={checked ? 'cancelLine' : 'default'}
+                >
+                  {todo.todoTitle}
+                </Text>
+              </div>
+            </div>
           </div>
-          <div className='flex w-full items-center justify-between border-b pb-[7px] pl-1 pt-2'>
-            <Text size='20px-medium' line={checked ? 'cancelLine' : 'default'}>
-              {todo.todoTitle}
+          <div className='ml-10 mt-[5px]'>
+            <Text size='16px-medium' textColor='sub'>
+              {showDate
+                ? changeDateSeparator(todo.scheduledDate)
+                : `${todo.topicTitle || ''} > ${todo.subtopicContent || ''}`}
             </Text>
-            <Dropdown>
-              <Button variant='none' size='none' onClick={handleDelete}>
-                삭제하기
-              </Button>
-            </Dropdown>
           </div>
         </div>
-      </div>
-      <div className='ml-10 mt-[5px]'>
-        <Text size='16px-medium' textColor='sub'>
-          {showDate
-            ? changeDateSeparator(todo.scheduledDate)
-            : `${todo.topicTitle} &gt; ${todo.subtopicContent}`}
-        </Text>
+      </motion.div>
+
+      <div className='absolute right-0 top-3'>
+        <Dropdown>
+          <Button variant='none' size='none' onClick={handleDelete}>
+            삭제하기
+          </Button>
+        </Dropdown>
       </div>
     </div>
   );
