@@ -15,8 +15,12 @@ const config: Config = {
         guestModal: '627/860',
       },
       keyframes: {
-        fadeIn: {
+        fadeInBottom: {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        fadeInTop: {
+          '0%': { opacity: '0', transform: 'translateY(-10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         fadeInRight: {
@@ -37,7 +41,8 @@ const config: Config = {
         },
       },
       animation: {
-        fadeInOnce: 'fadeIn 0.5s ease-out',
+        fadeInOnce: 'fadeInBottom 0.5s ease-out',
+        'fade-in-top': 'fadeInTop 0.7s ease-out',
         'fade-in-right': 'fadeInRight 0.4s ease-out',
         'fade-in-left': 'fadeInLeft 0.4s ease-out',
         'fade-out-right': 'fadeOutRight 0.4s ease-in forwards',
@@ -54,6 +59,7 @@ const config: Config = {
         '8': '8',
         '9': '9',
         '10': '10',
+        '100': '100',
       },
       fontFamily: {
         pretendard: ['var(--font-pretendard)'],

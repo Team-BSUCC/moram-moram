@@ -32,6 +32,7 @@ export const flattenTodos = (mandalart: MandalartType): FlatTodo[] => {
       todoTitle: todo.title,
       scheduledDate: todo.scheduledDate,
       isDone: todo.isDone,
+      topicColor: topic?.topicIndex,
       color: core.color,
     } as FlatTodo;
   });

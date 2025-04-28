@@ -6,7 +6,7 @@ import { cn } from '@/lib/utils';
 import MandalartCard from './mandalart-card';
 import Spacer from '@/components/commons/spacer';
 import Text from '@/components/commons/text';
-import { getColorWithIndexOrder } from '@/shared/utils/get-color-with-index';
+import { getColorWithIndexOrderPigment } from '@/shared/utils/get-color-with-index';
 import { useGetMandalartCards } from '../hooks/use-get-mandalart-cards';
 import { FetchUserRoomsAndParticipantsResponse } from '@/modules/dashboard/types/dashboard-type';
 
@@ -115,7 +115,7 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
                   card: FetchUserRoomsAndParticipantsResponse,
                   index: number
                 ) => {
-                  const bandColor = getColorWithIndexOrder(
+                  const bandColor = getColorWithIndexOrderPigment(
                     card.mandalart.color || index
                   );
 
@@ -134,7 +134,8 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
           ) : (
             <div className='flex w-full justify-center'>
               <Text size='18px-medium' textColor='caption'>
-                아직은 비어 있지만, 곧 채워질 당신의 여정을 기대할게요 :)
+                현재 진행 중인 목표가 없어요. ‘새 만다라트’ 버튼을 눌러 지금
+                바로 시작해보세요!
               </Text>
             </div>
           )}
@@ -148,7 +149,7 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
                   card: FetchUserRoomsAndParticipantsResponse,
                   index: number
                 ) => {
-                  const bandColor = getColorWithIndexOrder(
+                  const bandColor = getColorWithIndexOrderPigment(
                     card.mandalart.color || index
                   );
                   return (
@@ -166,8 +167,7 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
           ) : (
             <div className='flex w-full justify-center'>
               <Text size='18px-medium' textColor='caption'>
-                현재 진행 중인 목표가 없어요. ‘새 만다라트’ 버튼을 눌러 지금
-                바로 시작해보세요!
+                아직은 비어 있지만, 곧 채워질 당신의 여정을 기대할게요 :)
               </Text>
             </div>
           )}
