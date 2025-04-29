@@ -12,6 +12,9 @@ import UsersInfoSheet from './users-info-sheet';
 import { User } from '@supabase/supabase-js';
 import { useRealtimePresenceRoom } from '../hooks/use-realtime-presence-room';
 import { useUsersStore } from '../hooks/use-users-store';
+import { infoAlert } from '@/shared/utils/sweet-alert';
+import { useRouter } from 'next/navigation';
+import URLS from '@/shared/constants/url-constants';
 
 export type AvatarStackProps = {
   user: User | null;
@@ -26,8 +29,17 @@ export type AvatarStackProps = {
  * @returns
  */
 const AvatarStack = ({ user, roomName }: AvatarStackProps) => {
-  useRealtimePresenceRoom(roomName, user);
+  const { isNewUser } = useRealtimePresenceRoom(roomName, user);
   const avatars = useUsersStore((state) => state.currentUsers);
+
+  const router = useRouter();
+  const MAX_USER_COUNT = 8;
+  if (avatars.length === MAX_USER_COUNT) {
+    if (isNewUser) {
+      router.replace(URLS.HOME);
+      infoAlert('방 인원이 가득 차있습니다.');
+    }
+  }
 
   const MAX_AVATARS_AMOUNT = 3;
   const shownAvatars = avatars.slice(0, MAX_AVATARS_AMOUNT);
