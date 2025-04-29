@@ -19,6 +19,10 @@ const GuestNavigation = ({
       }
     };
 
+    if (window.innerWidth < DESKTOP_SIZE) {
+      setIsNavigationOpen(true);
+    }
+
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
@@ -33,13 +37,16 @@ const GuestNavigation = ({
           }}
         >
           <div className='absolute left-1/2 top-1/2 flex h-[300px] w-[210px] -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center gap-[40px] bg-transparent'>
-            <div className='flex justify-center gap-[16px]'>
+            <div className='flex animate-fade-in-top justify-center gap-[16px]'>
               <ZoomInGesture />
               <ZoomOutGesture />
             </div>
             <div className='break-keep'>
-              <Text size='16px-semibold' align='center' textColor='white'>
+              <Text size='16px-semibold' align='center' textColor='lightwhite'>
                 손가락 제스쳐로 만다라트 판을 확대/축소 할 수 있어요.
+              </Text>
+              <Text size='16px-regular' align='center' textColor='white'>
+                두 손가락으로 판을 움직여보세요!
               </Text>
             </div>
           </div>
