@@ -118,6 +118,7 @@ const TodoItem = ({ todo, isCreateTodo }: TodoItemProps) => {
           onBlur={() => {
             setIsFocus(false);
           }}
+          line={thisTodo?.isDone ? 'cancelLine' : 'default'}
           onKeyDown={handleInputKeyDown}
           maxLength={charLimit}
           variant='outline'
