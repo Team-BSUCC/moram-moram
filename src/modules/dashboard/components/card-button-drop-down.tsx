@@ -15,7 +15,6 @@ import { useDateOptionList } from '../hooks/use-date-option-list';
 import { getDateToString } from '../util/calculate-date';
 import { useRoomDateUpdate } from '../hooks/use-room-date-update';
 import { useGetOutRoom } from '../hooks/use-get-out-room';
-import { format } from 'path';
 
 type CardButtonDropDownProps = {
   roomId: string;
@@ -229,6 +228,7 @@ const DeleteModal = ({
                   onClick={(e) => {
                     e.stopPropagation();
                     e.preventDefault();
+                    setIsDeleteOpen(false);
                     handleDeleteRoom(roomId);
                   }}
                 >
