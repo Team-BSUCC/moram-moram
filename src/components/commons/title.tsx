@@ -63,7 +63,7 @@ export const titleVariants = cva('flex gap-4 transition-all', {
       gray: 'text-gray',
       primary: 'text-primary',
       secondary: 'text-secondary',
-      lightgray: 'text-lightgray',
+      lightgray: 'text-gray-lightgray',
       lightwhite: 'text-white-light',
       darkwhite: 'text-white-dark',
       main: 'text-main',

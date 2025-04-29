@@ -12,7 +12,7 @@ const inputVariants = cva(
         none: 'border-none',
         auth: 'bg-white border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-primary ',
         nickname:
-          'h-[43px] w-[151px] rounded-md border-2 border-grayInput border-gray px-4 py-2',
+          'h-[43px] w-[151px] rounded-md border-2 border-gray-inputGray border-gray px-4 py-2',
       },
       sizes: {
         '48px-semibold':
