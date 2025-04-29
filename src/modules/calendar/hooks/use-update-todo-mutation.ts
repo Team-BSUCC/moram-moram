@@ -1,20 +1,15 @@
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { updateTodoToggleData } from '../services/edit-todo-data';
-import { useTransition } from 'react';
-import { useRouter } from 'next/navigation';
 import * as Sentry from '@sentry/nextjs';
 import { errorAlert } from '@/shared/utils/sweet-alert';
 
 export const useUpdateTodoMutation = () => {
-  const [_, startTransition] = useTransition();
-  const router = useRouter();
+  const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: updateTodoToggleData,
     onSuccess: () => {
-      startTransition(() => {
-        router.refresh();
-      });
+      queryClient.invalidateQueries({ queryKey: ['myMandalarts'] });
     },
     onError: (error) => {
       Sentry.withScope((scope) => {

@@ -1,7 +1,7 @@
 import { MandalartSubtopic } from '../types/realtime-type';
 import React from 'react';
 import Text from '@/components/commons/text';
-import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
 type SubTopicCellProps = {
   index: number;
@@ -15,8 +15,8 @@ type SubTopicCellProps = {
  * @returns
  */
 const SubTopicCell = ({ index, subTopic }: SubTopicCellProps) => {
-  const show = useTodoFloatingSheetStore((state) => state.show);
-  const setInfo = useTodoFloatingSheetStore((state) => state.setInfo);
+  const show = useFloatingSheetStore((state) => state.show);
+  const setInfo = useFloatingSheetStore((state) => state.setInfo);
 
   // 플로팅 시트를 띄우는 이벤트 핸들러
   const handleFloatingToggle = () => {

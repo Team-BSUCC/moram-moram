@@ -13,6 +13,7 @@ import Text from '../commons/text';
 import Button from '../commons/button';
 import Profile from '../../modules/auth/components/profile/profile';
 import UserAvatarCard from '@/modules/auth/components/profile/user-avatar-card';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
 type MenuItem = {
   to: string;
@@ -36,6 +37,7 @@ const DESKTOP_SIZE = 1024;
 const Header = ({ user }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const hide = useFloatingSheetStore((state) => state.hide);
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -93,7 +95,10 @@ const Header = ({ user }: HeaderProps) => {
       ];
 
   return (
-    <div className='h-full bg-white-light shadow-[2px_2px_10px_1px_rgba(0,0,0,0.05)]'>
+    <div
+      className='h-full bg-white-light shadow-[2px_2px_10px_1px_rgba(0,0,0,0.05)]'
+      onClick={hide}
+    >
       <div className='flex h-full items-center justify-between'>
         <Link href={URLS.HOME}>
           <button className='px-6 py-4'>

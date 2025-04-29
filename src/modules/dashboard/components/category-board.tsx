@@ -132,7 +132,7 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
               )}
             </div>
           ) : (
-            <div className='flex w-full justify-center'>
+            <div className='flex w-full justify-center pt-[13px]'>
               <Text size='18px-medium' textColor='caption'>
                 현재 진행 중인 목표가 없어요. ‘새 만다라트’ 버튼을 눌러 지금
                 바로 시작해보세요!

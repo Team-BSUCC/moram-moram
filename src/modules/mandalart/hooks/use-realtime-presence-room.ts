@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useBroadcastStore } from './use-broadcast-store';
 import { useReceiveBroadcastStore } from './use-receive-broadcast-store';
@@ -27,14 +27,13 @@ export type UserInfoType = {
 /**
  * 특정 방에 접속한 사용자들의 실시간 presence 정보를 제공하는 훅
  * @param roomName - 채널명
- * @returns - 방에 있는 사용자들의 정보
+ * @returns - isNewUser - 유저가 신규 유저인지 확인하는 state
  */
 export const useRealtimePresenceRoom = (
   roomName: string,
   user: User | null
 ) => {
   // 현재 나의 이미지와 이름 받아오기
-
   const myJoinTime = useRef<number>(Date.now());
 
   const { receiveBroadcastStore } = useReceiveBroadcastStore();
@@ -47,6 +46,8 @@ export const useRealtimePresenceRoom = (
 
   const currentUserImage = user?.user_metadata.avatar_url ?? null;
   const currentUserName = getCurrentUserName(user);
+
+  const [isNewUser, setIsNewUser] = useState<boolean>(false);
 
   useEffect(() => {
     const channel = supabase.channel(roomName);
@@ -66,6 +67,8 @@ export const useRealtimePresenceRoom = (
           payload: { firstUserJoinTime, newUserJoinTime },
         });
       }
+
+      setIsNewUser(isNewUser);
     });
 
     channel.on('presence', { event: 'leave' }, (payload) => {
@@ -120,4 +123,6 @@ export const useRealtimePresenceRoom = (
       channel.unsubscribe();
     };
   }, []);
+
+  return { isNewUser };
 };
