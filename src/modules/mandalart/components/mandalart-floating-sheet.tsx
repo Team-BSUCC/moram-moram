@@ -172,7 +172,7 @@ const MandalartFloatingSheet = () => {
                 </Text>
               </div>
               <div className='mt-2 flex w-full justify-end'>
-                <AiSuggestButton value={value} type='core' />
+                <AiSuggestButton value={inputValue} type='core' />
               </div>
             </div>
           </div>
@@ -237,7 +237,7 @@ const MandalartFloatingSheet = () => {
                 {info.topic || `대주제${info.topicIndex}`}
               </Text>
               <div className='mt-2 flex w-full justify-end'>
-                <AiSuggestButton value={value} type='topic' />
+                <AiSuggestButton value={inputValue} type='topic' />
               </div>
             </div>
           </div>
