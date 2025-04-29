@@ -17,6 +17,7 @@ export const Alert = () => {
     closeAlert,
     isLoading,
     loadingStart,
+    confirmText,
   } = useAlertStore();
 
   if (!isOpen) return null;
@@ -44,7 +45,7 @@ export const Alert = () => {
         e.stopPropagation();
         e.preventDefault();
       }}
-      className='z-100 fixed inset-0 flex items-center justify-center bg-[rgba(0,0,0,0.6)]'
+      className='fixed inset-0 z-100 flex items-center justify-center bg-[rgba(0,0,0,0.6)]'
     >
       <div className='flex -translate-y-8 flex-col items-center justify-center transition-transform'>
         <div className='animate-fade-in-top'>
@@ -116,7 +117,11 @@ export const Alert = () => {
               onClick={handleConfirm}
               disabled={isLoading}
             >
-              {isLoading ? '로딩중...' : type === 'confirm' ? '확인' : '닫기'}
+              {isLoading
+                ? '로딩중...'
+                : type === 'confirm'
+                  ? confirmText
+                  : '닫기'}
             </Button>
             {type === 'confirm' && (
               <Button
