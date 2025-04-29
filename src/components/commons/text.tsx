@@ -63,6 +63,7 @@ const textVariants = cva('transition-all', {
       assist: 'text-assist',
       error: 'text-error',
       focus: 'text-focus',
+      email: 'text-email',
     },
     align: {
       center: 'text-center',
