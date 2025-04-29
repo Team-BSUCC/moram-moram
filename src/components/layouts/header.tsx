@@ -14,6 +14,7 @@ import Button from '../commons/button';
 import Profile from '../../modules/auth/components/profile/profile';
 import UserAvatarCard from '@/modules/auth/components/profile/user-avatar-card';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
+import { deleteAuthCookies } from '@/shared/utils/delete-auth-cookie';
 
 type MenuItem = {
   to: string;
@@ -26,6 +27,7 @@ type MenuItem = {
     | 'none'
     | null
     | undefined;
+  onClick?: () => Promise<void> | void;
 };
 
 type HeaderProps = {
@@ -38,6 +40,10 @@ const Header = ({ user }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const hide = useFloatingSheetStore((state) => state.hide);
+
+  const handleDeleteCookies = async () => {
+    await deleteAuthCookies();
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -81,16 +87,19 @@ const Header = ({ user }: HeaderProps) => {
           to: URLS.GUEST,
           label: '비회원으로 체험하기',
           variant: 'header',
+          onClick: handleDeleteCookies,
         },
         {
           to: URLS.SIGN_IN,
           label: '로그인',
           variant: 'secondary',
+          onClick: handleDeleteCookies,
         },
         {
           to: URLS.SIGN_UP,
           label: '3초만에 시작하기',
           variant: 'default',
+          onClick: handleDeleteCookies,
         },
       ];
 
@@ -126,7 +135,13 @@ const Header = ({ user }: HeaderProps) => {
         {/* 데스크탑 메뉴 */}
         <div className='hidden gap-4 pr-8 lg:flex'>
           {menuItems.map((item, index) => (
-            <Link key={index} href={item.to}>
+            <Link
+              key={index}
+              href={item.to}
+              onClick={async () => {
+                await item.onClick?.();
+              }}
+            >
               <Button variant={item.variant} size={user ? 'header' : 'none'}>
                 {item.label}
               </Button>
@@ -195,7 +210,10 @@ const Header = ({ user }: HeaderProps) => {
             <Link
               key={index}
               href={item.to}
-              onClick={toggleMenu}
+              onClick={async () => {
+                toggleMenu();
+                await item.onClick?.();
+              }}
               className='w-full'
             >
               <Button variant='none' size='none'>
