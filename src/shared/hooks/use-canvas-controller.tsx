@@ -123,7 +123,7 @@ export const usePanzoomController = () => {
       grid.removeEventListener('touchmove', handleTouchMove);
       grid.removeEventListener('touchend', handleTouchEnd);
     };
-  }, [isMobile]);
+  }, [isMobile, gridRef.current?.clientWidth]);
 
   const resetCanvas = async () => {
     if (!panzoomRef.current || !gridRef.current) return;

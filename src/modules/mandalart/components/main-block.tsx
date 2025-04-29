@@ -10,7 +10,7 @@ const MainBlock = () => {
   const subTopics = useClientStateStore((state) => state.subTopics);
 
   return (
-    <div className='col-start-2 row-start-2 grid h-full grid-cols-3 grid-rows-3 gap-2'>
+    <div className='col-start-2 row-start-2 grid aspect-square h-full grid-cols-3 grid-rows-3 gap-2'>
       <CoreCell />
       {Array.from(topics).map(([key, value], idx) => {
         const isTopicDone =
