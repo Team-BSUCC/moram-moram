@@ -1,11 +1,9 @@
 import { useClientStateStore } from '../hooks/use-client-state-store';
-import {
-  getColorWithNumber,
-  getPigmentColorWithNumber,
-} from '@/shared/utils/get-color-with-number';
+import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
 import CoreCell from './core-cell';
 import TopicCell from './topic-cell';
 import React from 'react';
+import { getColorWithIndexOrderPigment } from '@/shared/utils/get-color-with-index';
 
 const MainBlock = () => {
   const topics = useClientStateStore((state) => state.topics);
@@ -21,7 +19,7 @@ const MainBlock = () => {
             .map(([_, value]) => value).length === 8;
 
         const backColor = isTopicDone
-          ? getPigmentColorWithNumber(idx)
+          ? getColorWithIndexOrderPigment(idx)
           : getColorWithNumber(idx);
 
         return <TopicCell key={key} value={value} backColor={backColor} />;
