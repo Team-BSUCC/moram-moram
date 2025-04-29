@@ -15,7 +15,6 @@ export const usePanzoomController = () => {
   const gridRef = useRef<HTMLDivElement>(null);
   const panzoomRef = useRef<ReturnType<typeof panzoom> | null>(null);
 
-  const [defaultScale, setDefaultScale] = useState(1);
   const [earlyState, setEarlyState] = useState<EarlyStateType>({
     x: 0,
     y: 0,
@@ -38,8 +37,6 @@ export const usePanzoomController = () => {
     const gridWidth = 888;
     const initial = availableWidth / gridWidth;
     const finalScale = Math.min(initial, 1);
-
-    setDefaultScale(finalScale);
 
     const rect = grid.getBoundingClientRect();
 

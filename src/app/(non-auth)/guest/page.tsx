@@ -14,7 +14,7 @@ import {
   useDownloadMandalartWithOutCanvas,
 } from '@/modules/guest/hooks/use-download-mandalart';
 import { useOnBeforeUnload } from '@/shared/hooks/use-on-before-unload';
-import { usePanzoomController } from '@/modules/guest/hooks/use-canvas-controller';
+import { usePanzoomController } from '@/shared/hooks/use-canvas-controller';
 import React, { useEffect, useState } from 'react';
 
 const DESKTOP_SIZE = 1024;
