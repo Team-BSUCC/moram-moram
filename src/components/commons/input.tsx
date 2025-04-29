@@ -48,6 +48,11 @@ const inputVariants = cva(
         '16px-regular':
           'text-[13px] leading-[17px] font-normal sm:text-[14px] sm:leading-[18px] md:text-[16px] md:leading-[20px]',
       },
+      line: {
+        underline: 'underline',
+        cancelLine: 'line-through',
+        default: 'no-underline',
+      },
     },
     defaultVariants: {
       variant: 'default',
@@ -57,7 +62,9 @@ const inputVariants = cva(
 );
 
 type InputProps = VariantProps<typeof inputVariants> &
-  React.InputHTMLAttributes<HTMLInputElement> & { className?: never };
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    className?: never;
+  };
 
 /**
  * 인풋 공통 컴포넌트
@@ -67,11 +74,11 @@ type InputProps = VariantProps<typeof inputVariants> &
  */
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ variant, sizes, ...props }, ref) => {
+  ({ variant, sizes, line, ...props }, ref) => {
     return (
       <input
         ref={ref}
-        className={twMerge(inputVariants({ variant, sizes }))}
+        className={twMerge(inputVariants({ variant, sizes, line }))}
         {...props}
       />
     );

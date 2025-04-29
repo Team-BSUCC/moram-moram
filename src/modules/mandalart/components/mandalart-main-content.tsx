@@ -54,6 +54,11 @@ const MandalartMainContent = ({
   const downLoadRef = useRef<HTMLDivElement>(null);
 
   const initialize = useClientStateStore((state) => state.initialize);
+  const subTopics = useClientStateStore((state) => state.subTopics);
+  const subtopicDoneList = Array.from(subTopics.values()).filter(
+    (subtopicValue) => subtopicValue.isDone
+  );
+
   const { data, isPending, isError } = useRpcMandalartDataQuery(mandalartId);
 
   useEffect(() => {
@@ -119,7 +124,7 @@ const MandalartMainContent = ({
       <div className='flex flex-col items-center md:w-[1088px]'>
         <div ref={downLoadRef} className='bg-white-light px-8'>
           <Spacer size='lg' />
-          <LinearProgress value={calculatorProgress(data.core.doneCount)} />
+          <LinearProgress value={calculatorProgress(subtopicDoneList.length)} />
           <Spacer size='lg' />
           <div
             className='grid w-fit animate-fadeInOnce grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'

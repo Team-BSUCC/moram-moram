@@ -4,6 +4,7 @@ import TopicCell from './topic-cell';
 import { MandalartTopic } from '../types/realtime-type';
 import React from 'react';
 import SubTopicCell from './sub-topic-cell';
+import { getColorWithIndexOrderPigment } from '@/shared/utils/get-color-with-index';
 
 type SubBlockProps = {
   topic: MandalartTopic;
@@ -19,11 +20,17 @@ type SubBlockProps = {
 const SubBlock = ({ topic, index }: SubBlockProps) => {
   const subTopic = useClientStateStore((state) => state.subTopics);
   const getTopic = useClientStateStore((state) => state.getTopicItem(topic.id));
-  const backColor = getColorWithNumber(index);
 
   const subTopicsWithTopicId = Array.from(subTopic)
-    .filter(([key, value]) => value.topicId === topic.id)
+    .filter(([_, value]) => value.topicId === topic.id)
     .map(([_, value]) => value);
+
+  const isBlockDone =
+    subTopicsWithTopicId.filter((subTopic) => subTopic.isDone).length === 8;
+
+  const backColor = isBlockDone
+    ? getColorWithIndexOrderPigment(index)
+    : getColorWithNumber(index);
 
   return (
     // 서브블럭 스타일 지정
@@ -34,9 +41,14 @@ const SubBlock = ({ topic, index }: SubBlockProps) => {
         backColor={backColor}
         className='col-start-2 row-start-2 h-full rounded-lg border-[3px] border-main'
       />
-      {subTopicsWithTopicId.map((subTopic, idx) => {
+      {subTopicsWithTopicId.map((subTopic) => {
+        const subTopicBgColor = subTopic.isDone && getColorWithNumber(index);
         return (
-          <SubTopicCell key={subTopic.id} index={idx} subTopic={subTopic} />
+          <SubTopicCell
+            key={subTopic.id}
+            subTopic={subTopic}
+            bgColor={subTopicBgColor || ''}
+          />
         );
       })}
     </div>

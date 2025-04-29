@@ -31,34 +31,31 @@ const TodoItem = ({ todo, isCreateTodo }: TodoItemProps) => {
     state.getTodoItem(`${todo.cellId}-${todo.id}`)
   );
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isFocus, setIsFocus] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const [date, setDate] = useState<DateRangeState>({
     year: '',
     month: '',
     day: '',
   });
-  const [isFocus, setIsFocus] = useState<boolean>(false);
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const getInitialValue = thisTodo?.title || '';
   const [value, setValue] = useState<string>(getInitialValue);
-  const changeTodo = useMemo(
-    () => setValue(thisTodo?.title ?? ''),
-    [thisTodo?.title]
-  );
 
   const [done, setDone] = useState<boolean>(thisTodo?.isDone ?? false);
-  const changeDone = useMemo(
-    () => setDone(thisTodo?.isDone ?? false),
-    [thisTodo?.isDone]
-  );
 
   const { mutate: mutationTodo } = useTodoBroadcastMutation(channel);
   const throttleMutate = useThrottleMutateWithTrailing(
     mutationTodo,
     0.5 * 1000
   );
+
+  useEffect(() => {
+    setValue(thisTodo?.title ?? '');
+    setDone(thisTodo?.isDone ?? false);
+  }, [thisTodo]);
 
   useEffect(() => {
     if (isCreateTodo) {
@@ -121,11 +118,12 @@ const TodoItem = ({ todo, isCreateTodo }: TodoItemProps) => {
           onBlur={() => {
             setIsFocus(false);
           }}
+          line={thisTodo?.isDone ? 'cancelLine' : 'default'}
           onKeyDown={handleInputKeyDown}
           maxLength={charLimit}
           variant='outline'
           sizes='20px-regular'
-          value={value || thisTodo?.title}
+          value={value}
           placeholder='TODO를 작성해주세요.'
           onChange={(e) => {
             handleInputValue(e);
