@@ -1,4 +1,4 @@
-export async function POST(req: Request) {
+export const POST = async (req: Request) => {
   const { topic, existingKeywords = [] } = await req.json();
 
   const remainingCount = 8 - existingKeywords.length;
@@ -138,4 +138,4 @@ export async function POST(req: Request) {
       status: 500,
     });
   }
-}
+};
