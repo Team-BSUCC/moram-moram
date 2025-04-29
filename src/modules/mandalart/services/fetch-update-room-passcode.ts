@@ -15,7 +15,6 @@ export const fetchUpdateRoomPasscode = async (
     Sentry.withScope((scope) => {
       scope.setTag('page', 'mandalart page');
       scope.setTag('feature', 'fetchUpdateRoomPasscode');
-
       Sentry.captureException(
         new Error(`[fetchUpdateRoomPasscode] ${error.message}`)
       );

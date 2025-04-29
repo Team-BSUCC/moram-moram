@@ -1,9 +1,11 @@
 /**
  * 만다라트 차트의 키워드를 생성하는 API에 요청하는 함수
- * @param {string} topic - 중심 주제 (예: "다이어트", "전교 1등", "개발자 취업")
- * @param {string[]} existingKeywords - 이미 존재하는 키워드 배열 (선택적)
- * @returns {Promise<{ideas: string[]}>} - 생성된 키워드 배열을 담은 객체
+ * @param topic - 중심 주제 (예: "다이어트", "전교 1등", "개발자 취업")
+ * @param existingKeywords - 이미 존재하는 키워드 배열 (선택적)
+ * @returns - 생성된 키워드 배열을 담은 객체
  */
+import * as Sentry from '@sentry/nextjs';
+
 export const fetchGetAiSuggestKeywords = async (
   topic: string,
   existingKeywords: string[] = []
@@ -29,7 +31,13 @@ export const fetchGetAiSuggestKeywords = async (
 
     return data.ideas; // { ideas: [...키워드 배열...] }
   } catch (error) {
-    console.error('만다라트 키워드 요청 오류:', error);
+    Sentry.withScope((scope) => {
+      scope.setTag('page', 'mandalart page');
+      scope.setTag('feature', 'fetchGetAiSuggestKeywords');
+      Sentry.captureException(
+        new Error(`[fetchGetAiSuggestKeywords] ${error}`)
+      );
+    });
     throw error;
   }
 };

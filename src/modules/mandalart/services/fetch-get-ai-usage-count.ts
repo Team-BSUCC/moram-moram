@@ -20,10 +20,10 @@ export const fetchGetAiUsageCount = async (): Promise<number | null> => {
   if (error) {
     Sentry.withScope((scope) => {
       scope.setTag('page', 'mandalart page');
-      scope.setTag('feature', 'fetchCreateParticipantsUser');
+      scope.setTag('feature', 'fetchGetAiUsageCount');
 
       Sentry.captureException(
-        new Error(`[fetchCreateParticipantsUser] ${error.message}`)
+        new Error(`[fetchGetAiUsageCount] ${error.message}`)
       );
     });
     return null;
