@@ -44,21 +44,19 @@ const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
   const isAiLimited =
     aiUsageCount === null || aiUsageCount >= MAX_AI_USAGE_COUNT;
 
-  const topicList = Array.from(topics.values());
+  const topicList = Array.from(topics);
   //ai api에 요청할 대주제 배열 생성
   const topicValueList = topicList
-    .filter((topicValue) => topicValue.topic)
-    .map((topicValue) => topicValue.topic);
+    .filter(([_, topicValue]) => topicValue.topic)
+    .map(([_, topicValue]) => topicValue.topic);
 
-  const subtopicList = Array.from(
-    subTopics
-      .values()
-      .filter((subtopicValue) => subtopicValue.topicId === info.id)
+  const subtopicList = Array.from(subTopics).filter(
+    ([_, subtopicValue]) => subtopicValue.topicId === info.id
   );
   //ai api에 요청할 소주제 배열 생성
   const subtopicValueList = subtopicList
-    .filter((subtopicValue) => subtopicValue.content)
-    .map((subtopicValue) => subtopicValue.content);
+    .filter(([_, subtopicValue]) => subtopicValue.content)
+    .map(([_, subtopicValue]) => subtopicValue.content);
 
   //대주제들을 추천받는 핸들러
   const handleAiTopicSuggest = async () => {
@@ -70,7 +68,7 @@ const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
       topicValueList as string[]
     );
     usageCountPlus();
-    topicList.forEach((topicValue) => {
+    topicList.forEach(([_, topicValue]) => {
       if (!topicValue.topic) {
         mutationCell({
           action: 'topic',
@@ -90,7 +88,7 @@ const AiSuggestButton = ({ value, type }: AiSuggestButtonProps) => {
       subtopicValueList as string[]
     );
     usageCountPlus();
-    subtopicList.forEach((subtopicValue) => {
+    subtopicList.forEach(([_, subtopicValue]) => {
       if (!subtopicValue.content) {
         mutationCell({
           action: 'subTopic',
