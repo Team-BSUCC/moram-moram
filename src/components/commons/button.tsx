@@ -14,6 +14,8 @@ const buttonVariants = cva(
         none: 'bg-white-light justify-start w-full rounded-none hover:bg-beige-light active:bg-beige',
         header:
           'bg-transparent hover:font-bold hover:scale-105 active:font-bold text-sub hover:text-main active:text-main',
+        nickname:
+          'bg-primary bg-primary hover:bg-[#BF93E1] active:bg-[#A76BD6] h-[43px]',
         profile:
           'bg-transparent justify-start w-full rounded-none hover:bg-beige-light action:bg-beige-light px-6 py-4 text-left lg:px-8 lg:py-4',
       },
@@ -29,8 +31,7 @@ const buttonVariants = cva(
         none: 'text-[14px] leading-[20px] font-medium sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]',
         header:
           'text-[16px] leading-[24px] font-medium sm:text-[18px] sm:leading-[27px] md:text-[20px] md:leading-[30px] py-[6px] px-[6px] sm:py-[8px] sm:px-[8px] md:py-[10px] md:px-[10px]',
-        nickName:
-          'text-[16px] leading-[24px] font-medium py-[8px] px-[12px] h-[44px]',
+        nickName: 'text-[16px] leading-[24px] font-medium py-[8px] px-[12px]',
       },
     },
     defaultVariants: {

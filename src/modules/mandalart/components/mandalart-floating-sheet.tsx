@@ -20,6 +20,7 @@ import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate'
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { MandalartFloatingSheetInfo } from '../types/realtime-type';
+import AiSuggestButton from './ai-suggest-button';
 import CheckBox from '@/components/commons/check-box';
 
 /**
@@ -140,7 +141,7 @@ const MandalartFloatingSheet = () => {
                 <X />
               </button>
             </div>
-            <div className='flex flex-col items-start p-6 lg:p-8'>
+            <div className='flex flex-col items-start pb-2 pl-6 pr-2 pt-6 lg:pb-2 lg:pl-8 lg:pr-2 lg:pt-8'>
               <Text size='16px-medium' textColor='sub'>
                 TO DO LIST
               </Text>
@@ -167,8 +168,11 @@ const MandalartFloatingSheet = () => {
               <div className='flex gap-[8px]'>
                 <BicepsFlexed color='var(--color-sub)' size={30} />
                 <Text size='20px-medium' textColor='sub'>
-                  {info.subTitle}
+                  {info.subTitle || '반드시 완수한다'}
                 </Text>
+              </div>
+              <div className='mt-2 flex w-full justify-end'>
+                <AiSuggestButton value={value} type='core' />
               </div>
             </div>
           </div>
@@ -209,7 +213,7 @@ const MandalartFloatingSheet = () => {
                 <X />
               </button>
             </div>
-            <div className='flex flex-col items-start p-6 lg:p-8'>
+            <div className='flex flex-col items-start pb-2 pl-6 pr-2 pt-6 lg:pb-2 lg:pl-8 lg:pr-2 lg:pt-8'>
               <Text size='16px-medium' textColor='sub'>
                 TO DO LIST - {charLimitNotice}
               </Text>
@@ -232,6 +236,9 @@ const MandalartFloatingSheet = () => {
                 {coreTitle?.title} &gt;{' '}
                 {info.topic || `대주제${info.topicIndex}`}
               </Text>
+              <div className='mt-2 flex w-full justify-end'>
+                <AiSuggestButton value={value} type='topic' />
+              </div>
             </div>
           </div>
           <div className='flex-grow overflow-y-auto py-6'>

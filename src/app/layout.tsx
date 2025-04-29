@@ -44,6 +44,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const user = await getUserInfo();
+
   return (
     <html lang='ko-KR' className='h-full w-full'>
       <body
@@ -64,7 +65,7 @@ export default async function RootLayout({
             </div>
           </div>
         </main>
-        <footer className='w-full border-t border-lightgray bg-white-light py-8'>
+        <footer className='border-lightgray w-full border-t bg-white-light py-8'>
           <Footer />
         </footer>
       </body>

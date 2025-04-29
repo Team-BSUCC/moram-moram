@@ -5,14 +5,16 @@ type AlertType = 'success' | 'error' | 'info' | 'confirm';
 type AlertState = {
   isOpen: boolean;
   type: AlertType;
-  title: string;
-  message: string;
+  title: string | JSX.Element;
+  message: string | JSX.Element;
   isLoading: boolean;
+  confirmText: string;
   openAlert: (
     type: AlertType,
-    title: string,
-    message?: string,
-    promiseResult?: (value: boolean) => void
+    title: string | JSX.Element,
+    message?: string | JSX.Element,
+    promiseResult?: (value: boolean) => void,
+    confirmText?: string
   ) => void;
   closeAlert: () => void;
   promiseResolve?: (value: boolean) => void;
@@ -33,10 +35,11 @@ export const useAlertStore = create<AlertState>((set) => ({
   type: 'info',
   title: '',
   message: '',
+  confirmText: '확인',
   promiseResolve: undefined,
   isLoading: false,
 
-  openAlert: (type, title, message = '', promiseResult) =>
+  openAlert: (type, title, message = '', promiseResult, confirmText = '확인') =>
     set({
       isOpen: true,
       type,
@@ -44,10 +47,16 @@ export const useAlertStore = create<AlertState>((set) => ({
       message,
       isLoading: false,
       promiseResolve: promiseResult,
+      confirmText,
     }),
 
   closeAlert: () =>
-    set({ isOpen: false, promiseResolve: undefined, isLoading: false }),
+    set({
+      isOpen: false,
+      promiseResolve: undefined,
+      isLoading: false,
+      confirmText: '확인',
+    }),
 
   loadingStart: () => set({ isLoading: true }),
 

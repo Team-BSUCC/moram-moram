@@ -5,7 +5,7 @@ const DashBoardPage = async () => {
   const user = await getUserInfo();
   const userId = user?.id ?? '';
   return (
-    <div className='h-full w-full bg-white-dark'>
+    <div className='h-full w-full break-keep bg-white-dark'>
       <DashBoard user={userId} />
     </div>
   );
