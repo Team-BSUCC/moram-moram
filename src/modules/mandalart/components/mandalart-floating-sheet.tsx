@@ -1,7 +1,7 @@
 import FloatingSheet from '@/components/commons/floating-sheet';
 import Input from '@/components/commons/input';
 import Text from '@/components/commons/text';
-import { ChangeEvent, KeyboardEvent, useRef, useState } from 'react';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
 import TodoItem from './todo-item';
 import TopicGroup from './topic-group';
 import SubtopicGroup from './subtopic-group';
@@ -20,6 +20,7 @@ import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate'
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { MandalartFloatingSheetInfo } from '../types/realtime-type';
+import CheckBox from '@/components/commons/check-box';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -44,20 +45,24 @@ const MandalartFloatingSheet = () => {
 
   const coreTitle = useClientStateStore((state) => state.core);
   const topics = useClientStateStore((state) => state.topics);
+  const getTopicItem = useClientStateStore((state) => state.getTopicItem);
   const subTopics = useClientStateStore((state) => state.subTopics);
+  const getSubTopicItem = useClientStateStore((state) => state.getSubTopicItem);
   const parentTopic = useClientStateStore((state) => state.getTopicItem);
   const todos = useClientStateStore((state) => state.todos);
 
   const inputRef = useRef<HTMLInputElement>(null);
   const isCreateTodo = useRef<boolean>(false);
 
-  const [value, setValue] = useState<string>(() => {
+  const [inputValue, setInputValue] = useState<string>(() => {
     if (!info) return '';
     if ('private' in info) return info.title ?? '';
     if ('topicIndex' in info) return info.topic ?? '';
     if ('cellIndex' in info) return info.content ?? '';
     return '';
   });
+  const subTopicDone = !!info && 'isDone' in info && info.isDone;
+  const [isDoneState, setIsDoneState] = useState<boolean>(subTopicDone);
 
   const channel = useChannelStore((state) => state.channel);
 
@@ -69,6 +74,23 @@ const MandalartFloatingSheet = () => {
     0.5 * 1000
   );
 
+  useEffect(() => {
+    if (!info) {
+      return;
+    }
+    //대주제일경우
+    if ('topic' in info) {
+      setInputValue(getTopicItem(info.id)?.topic || '');
+      return;
+    }
+    //소주제일경우
+    if ('isDone' in info) {
+      const thisSubTopic = getSubTopicItem(`${info.topicId}-${info.id}`);
+      setInputValue(thisSubTopic?.content || '');
+      setIsDoneState(thisSubTopic?.isDone || false);
+    }
+  }, [topics, subTopics]);
+
   if (info === null) {
     return <div>오류</div>;
   }
@@ -78,11 +100,11 @@ const MandalartFloatingSheet = () => {
   }
 
   const charLimit = 15;
-  const charLimitNotice = `글자 수 제한 ${value.length} / ${charLimit}`;
+  const charLimitNotice = `글자 수 제한 ${inputValue.length} / ${charLimit}`;
   const handleInputValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length - 1 === charLimit) return;
     const newValue = e.target.value;
-    setValue(newValue);
+    setInputValue(newValue);
     if ('topic' in info) {
       throttleMutate({
         action: 'topic',
@@ -199,8 +221,8 @@ const MandalartFloatingSheet = () => {
                   maxLength={charLimit}
                   sizes='28px-regular'
                   type='text'
-                  value={value}
-                  placeholder={value || '목표를 작성해 주세요'}
+                  value={inputValue}
+                  placeholder={inputValue || '목표를 작성해 주세요'}
                   onChange={(e) => {
                     handleInputValueChange(e);
                   }}
@@ -259,7 +281,18 @@ const MandalartFloatingSheet = () => {
             <Text size='16px-medium' textColor='sub'>
               TO DO LIST - {charLimitNotice}
             </Text>
-            <div className='no-drag'>
+            <div className='no-drag flex gap-3'>
+              <CheckBox
+                sizes='lg'
+                checked={isDoneState}
+                onChange={() => {
+                  mutationCell({
+                    action: 'subTopic',
+                    value: { ...info, isDone: !isDoneState },
+                  });
+                  setIsDoneState(!info.isDone);
+                }}
+              />
               <Input
                 ref={inputRef}
                 onKeyDown={handleInputKeyDown}
@@ -267,8 +300,8 @@ const MandalartFloatingSheet = () => {
                 maxLength={charLimit}
                 sizes='28px-regular'
                 type='text'
-                value={value}
-                placeholder={value || '목표를 작성해 주세요'}
+                value={inputValue}
+                placeholder={inputValue || '목표를 작성해 주세요'}
                 onChange={(e) => {
                   handleInputValueChange(e);
                 }}
