@@ -19,7 +19,11 @@ import { useCellBroadcastMutation } from '../hooks/use-cell-broadcast-mutation';
 import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate';
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { MandalartFloatingSheetInfo } from '../types/realtime-type';
+import {
+  MandalartFloatingSheetInfo,
+  MandalartSubtopic,
+  MandalartTopic,
+} from '../types/realtime-type';
 import AiSuggestButton from './ai-suggest-button';
 import CheckBox from '@/components/commons/check-box';
 
@@ -44,14 +48,12 @@ const MandalartFloatingSheet = () => {
   const hide = useFloatingSheetStore((state) => state.hide);
   useEscapeKey(hide);
 
-  const coreTitle = useClientStateStore((state) => state.core);
+  const core = useClientStateStore((state) => state.core);
   const topics = useClientStateStore((state) => state.topics);
   const getTopicItem = useClientStateStore((state) => state.getTopicItem);
   const subTopics = useClientStateStore((state) => state.subTopics);
   const getSubTopicItem = useClientStateStore((state) => state.getSubTopicItem);
-  const parentTopic = useClientStateStore((state) => state.getTopicItem);
   const todos = useClientStateStore((state) => state.todos);
-
   const inputRef = useRef<HTMLInputElement>(null);
   const isCreateTodo = useRef<boolean>(false);
 
@@ -81,12 +83,11 @@ const MandalartFloatingSheet = () => {
     }
     //대주제일경우
     if ('topic' in info) {
-      setInputValue(getTopicItem(info.id)?.topic || '');
+      setInputValue(thisTopic.topic || '');
       return;
     }
     //소주제일경우
     if ('isDone' in info) {
-      const thisSubTopic = getSubTopicItem(`${info.topicId}-${info.id}`);
       setInputValue(thisSubTopic?.content || '');
       setIsDoneState(thisSubTopic?.isDone || false);
     }
@@ -126,7 +127,8 @@ const MandalartFloatingSheet = () => {
   };
 
   // core
-  if ('private' in info) {
+  const isCore = 'private' in info;
+  if (isCore) {
     const diff = getDateDiff(info.endDate);
     const topicGroupComponents = Array.from(topics)
       .filter(([_, value]) => value.topic)
@@ -168,7 +170,7 @@ const MandalartFloatingSheet = () => {
               <div className='flex gap-[8px]'>
                 <BicepsFlexed color='var(--color-sub)' size={30} />
                 <Text size='20px-medium' textColor='sub'>
-                  {info.subTitle || '반드시 완수한다'}
+                  {inputValue || '반드시 완수한다'}
                 </Text>
               </div>
               <div className='mt-2 flex w-full justify-end'>
@@ -194,7 +196,12 @@ const MandalartFloatingSheet = () => {
   }
 
   // topic
-  if ('topic' in info) {
+  const isTopic = 'topic' in info;
+  const thisTopic = isTopic
+    ? (getTopicItem(info.id) as MandalartTopic)
+    : (getTopicItem(info.topicId) as MandalartTopic);
+
+  if (isTopic) {
     const subTopicsWithTopicId = Array.from(subTopics)
       .filter(([_, value]) => value.topicId === info.id && value.content)
       .map(([_, value]) => value);
@@ -233,8 +240,8 @@ const MandalartFloatingSheet = () => {
                 />
               </div>
               <Text size='18px-medium' textColor='sub'>
-                {coreTitle?.title} &gt;{' '}
-                {info.topic || `대주제${info.topicIndex}`}
+                {core?.title} &gt;{' '}
+                {thisTopic.topic || `대주제${thisTopic.topicIndex}`}
               </Text>
               <div className='mt-2 flex w-full justify-end'>
                 <AiSuggestButton value={inputValue} type='topic' />
@@ -259,7 +266,9 @@ const MandalartFloatingSheet = () => {
   }
 
   // subTopic
-  const topicTitle = parentTopic(info.topicId);
+  const thisSubTopic = getSubTopicItem(
+    `${info.topicId}-${info.id}`
+  ) as MandalartSubtopic;
 
   const todosWithSubTopicId = Array.from(todos)
     .filter(([_, value]) => value.cellId === info.id)
@@ -274,7 +283,6 @@ const MandalartFloatingSheet = () => {
 
   const customButtonClass =
     'w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
-
   return (
     <FloatingSheet hideOnOutsideClick={true}>
       <div className='flex h-full flex-col'>
@@ -295,9 +303,9 @@ const MandalartFloatingSheet = () => {
                 onChange={() => {
                   mutationCell({
                     action: 'subTopic',
-                    value: { ...info, isDone: !isDoneState },
+                    value: { ...thisSubTopic, isDone: !isDoneState },
                   });
-                  setIsDoneState(!info.isDone);
+                  setIsDoneState(!thisSubTopic.isDone);
                 }}
               />
               <Input
@@ -315,9 +323,9 @@ const MandalartFloatingSheet = () => {
               />
             </div>
             <Text size='18px-medium' textColor='sub'>
-              {coreTitle?.title} &gt;{' '}
-              {topicTitle?.topic || `대주제${topicTitle?.topicIndex}`} &gt;{' '}
-              {info.content || '소주제'}
+              {core?.title} &gt;{' '}
+              {thisTopic?.topic || `대주제${thisTopic?.topicIndex}`} &gt;{' '}
+              {inputValue || '소주제'}
             </Text>
           </div>
           <div className='px-8'>
