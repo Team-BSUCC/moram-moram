@@ -29,6 +29,9 @@ export const metadata: Metadata = {
     ],
     type: 'website',
   },
+  verification: {
+    google: 'hqmxMlStpr94SZheqeOeogRi431jztKqSDx2frEtdqU',
+  },
 };
 
 const pretendard = localFont({
