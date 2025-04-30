@@ -108,22 +108,23 @@ const MandalartFloatingSheet = () => {
   const charLimitNotice = `글자 수 제한 ${inputValue.length} / ${charLimit}`;
   const handleInputValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length - 1 === charLimit) return;
+
     const newValue = e.target.value;
     setInputValue(newValue);
-    if ('topic' in info) {
+    if (isTopic && thisTopic) {
       throttleMutate({
         action: 'topic',
-        value: { ...info, topic: newValue },
+        value: { ...thisTopic, topic: newValue },
       });
-    } else if ('cellIndex' in info) {
+    } else if (isSubTopic && thisSubTopic) {
       throttleMutate({
         action: 'subTopic',
-        value: { ...info, content: newValue },
+        value: { ...thisSubTopic, content: newValue },
       });
     }
   };
 
-  const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleInputKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       inputRef.current?.blur();
     }
@@ -226,7 +227,7 @@ const MandalartFloatingSheet = () => {
               <div className='no-drag'>
                 <Input
                   ref={inputRef}
-                  onKeyDown={handleInputKeyDown}
+                  onKeyUp={handleInputKeyUp}
                   autoFocus
                   maxLength={charLimit}
                   sizes='28px-regular'
@@ -307,7 +308,7 @@ const MandalartFloatingSheet = () => {
                 />
                 <Input
                   ref={inputRef}
-                  onKeyDown={handleInputKeyDown}
+                  onKeyUp={handleInputKeyUp}
                   autoFocus
                   maxLength={charLimit}
                   sizes='28px-regular'
