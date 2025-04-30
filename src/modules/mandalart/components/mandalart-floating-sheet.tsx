@@ -19,7 +19,10 @@ import { useCellBroadcastMutation } from '../hooks/use-cell-broadcast-mutation';
 import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate';
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { MandalartFloatingSheetInfo } from '../types/realtime-type';
+import {
+  MandalartFloatingSheetInfo,
+  MandalartSubtopic,
+} from '../types/realtime-type';
 import AiSuggestButton from './ai-suggest-button';
 import CheckBox from '@/components/commons/check-box';
 
@@ -38,31 +41,33 @@ const EmptyGuide = ({ children }: { children: string }) => {
 };
 
 const MandalartFloatingSheet = () => {
-  const info = useFloatingSheetStore(
-    (state) => state.info
-  ) as MandalartFloatingSheetInfo;
+  const info = useFloatingSheetStore((state) => state.info) as Exclude<
+    MandalartFloatingSheetInfo,
+    null | undefined
+  >;
   const hide = useFloatingSheetStore((state) => state.hide);
   useEscapeKey(hide);
 
-  const coreTitle = useClientStateStore((state) => state.core);
+  const core = useClientStateStore((state) => state.core);
   const topics = useClientStateStore((state) => state.topics);
   const getTopicItem = useClientStateStore((state) => state.getTopicItem);
   const subTopics = useClientStateStore((state) => state.subTopics);
   const getSubTopicItem = useClientStateStore((state) => state.getSubTopicItem);
-  const parentTopic = useClientStateStore((state) => state.getTopicItem);
   const todos = useClientStateStore((state) => state.todos);
-
   const inputRef = useRef<HTMLInputElement>(null);
   const isCreateTodo = useRef<boolean>(false);
 
+  const isCore = 'private' in info;
+  const isTopic = 'topic' in info;
+  const isSubTopic = 'cellIndex' in info;
+
   const [inputValue, setInputValue] = useState<string>(() => {
-    if (!info) return '';
-    if ('private' in info) return info.title ?? '';
-    if ('topicIndex' in info) return info.topic ?? '';
-    if ('cellIndex' in info) return info.content ?? '';
+    if (isCore) return info.title ?? '';
+    if (isTopic) return info.topic ?? '';
+    if (isSubTopic) return info.content ?? '';
     return '';
   });
-  const subTopicDone = !!info && 'isDone' in info && info.isDone;
+  const subTopicDone = isSubTopic && info.isDone;
   const [isDoneState, setIsDoneState] = useState<boolean>(subTopicDone);
 
   const channel = useChannelStore((state) => state.channel);
@@ -75,30 +80,29 @@ const MandalartFloatingSheet = () => {
     0.5 * 1000
   );
 
+  let thisTopic = null;
+  if (isTopic) {
+    thisTopic = getTopicItem(info.id);
+  } else if (isSubTopic) {
+    thisTopic = getTopicItem(info.topicId);
+  }
+
+  const thisSubTopic = isSubTopic
+    ? (getSubTopicItem(`${info.topicId}-${info.id}`) as MandalartSubtopic)
+    : null;
+
   useEffect(() => {
-    if (!info) {
-      return;
-    }
     //대주제일경우
-    if ('topic' in info) {
-      setInputValue(getTopicItem(info.id)?.topic || '');
+    if (isTopic && thisTopic) {
+      setInputValue(thisTopic.topic || '');
       return;
     }
     //소주제일경우
-    if ('isDone' in info) {
-      const thisSubTopic = getSubTopicItem(`${info.topicId}-${info.id}`);
+    if (isSubTopic && thisSubTopic) {
       setInputValue(thisSubTopic?.content || '');
-      setIsDoneState(thisSubTopic?.isDone || false);
+      setIsDoneState(thisSubTopic?.isDone);
     }
-  }, [topics, subTopics]);
-
-  if (info === null) {
-    return <div>오류</div>;
-  }
-
-  if (info === undefined) {
-    return <div>오류</div>;
-  }
+  }, [thisTopic, thisSubTopic]);
 
   const charLimit = 15;
   const charLimitNotice = `글자 수 제한 ${inputValue.length} / ${charLimit}`;
@@ -126,7 +130,8 @@ const MandalartFloatingSheet = () => {
   };
 
   // core
-  if ('private' in info) {
+
+  if (isCore) {
     const diff = getDateDiff(info.endDate);
     const topicGroupComponents = Array.from(topics)
       .filter(([_, value]) => value.topic)
@@ -168,7 +173,7 @@ const MandalartFloatingSheet = () => {
               <div className='flex gap-[8px]'>
                 <BicepsFlexed color='var(--color-sub)' size={30} />
                 <Text size='20px-medium' textColor='sub'>
-                  {info.subTitle || '반드시 완수한다'}
+                  {inputValue || '반드시 완수한다'}
                 </Text>
               </div>
               <div className='mt-2 flex w-full justify-end'>
@@ -194,7 +199,8 @@ const MandalartFloatingSheet = () => {
   }
 
   // topic
-  if ('topic' in info) {
+
+  if (isTopic) {
     const subTopicsWithTopicId = Array.from(subTopics)
       .filter(([_, value]) => value.topicId === info.id && value.content)
       .map(([_, value]) => value);
@@ -233,8 +239,8 @@ const MandalartFloatingSheet = () => {
                 />
               </div>
               <Text size='18px-medium' textColor='sub'>
-                {coreTitle?.title} &gt;{' '}
-                {info.topic || `대주제${info.topicIndex}`}
+                {core?.title} &gt;{' '}
+                {thisTopic?.topic || `대주제${thisTopic?.topicIndex}`}
               </Text>
               <div className='mt-2 flex w-full justify-end'>
                 <AiSuggestButton value={inputValue} type='topic' />
@@ -259,96 +265,98 @@ const MandalartFloatingSheet = () => {
   }
 
   // subTopic
-  const topicTitle = parentTopic(info.topicId);
 
-  const todosWithSubTopicId = Array.from(todos)
-    .filter(([_, value]) => value.cellId === info.id)
-    .map(([_, value]) => value);
-  const todoItemComponents = todosWithSubTopicId.map((todo, index) => (
-    <TodoItem
-      key={todo.id + index}
-      todo={todo}
-      isCreateTodo={isCreateTodo.current}
-    />
-  ));
+  if (isSubTopic && thisSubTopic) {
+    const todosWithSubTopicId = Array.from(todos)
+      .filter(([_, value]) => value.cellId === info.id)
+      .map(([_, value]) => value);
+    const todoItemComponents = todosWithSubTopicId.map((todo, index) => (
+      <TodoItem
+        key={todo.id + index}
+        todo={todo}
+        isCreateTodo={isCreateTodo.current}
+      />
+    ));
 
-  const customButtonClass =
-    'w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
-
-  return (
-    <FloatingSheet hideOnOutsideClick={true}>
-      <div className='flex h-full flex-col'>
-        <div className='handle cursor-grab rounded-t-lg active:cursor-grabbing'>
-          <div className='fixed right-4 top-4 w-fit'>
-            <button className='hidden bg-transparent sm:block' onClick={hide}>
-              <X />
-            </button>
-          </div>
-          <div className='flex flex-col items-start p-6 lg:p-8'>
-            <Text size='16px-medium' textColor='sub'>
-              TO DO LIST - {charLimitNotice}
-            </Text>
-            <div className='no-drag flex gap-3'>
-              <CheckBox
-                sizes='lg'
-                checked={isDoneState}
-                onChange={() => {
-                  mutationCell({
-                    action: 'subTopic',
-                    value: { ...info, isDone: !isDoneState },
-                  });
-                  setIsDoneState(!info.isDone);
-                }}
-              />
-              <Input
-                ref={inputRef}
-                onKeyDown={handleInputKeyDown}
-                autoFocus
-                maxLength={charLimit}
-                sizes='28px-regular'
-                type='text'
-                value={inputValue}
-                placeholder={inputValue || '목표를 작성해 주세요'}
-                onChange={(e) => {
-                  handleInputValueChange(e);
-                }}
-              />
+    const customButtonClass =
+      'w-full inline-flex items-center text-main w-fit justify-center rounded-lg font-medium outline-none bg-beige-light hover:bg-[#DDCEC5] active:bg-[#CBB2A4] text-[14px] leading-[20px] sm:text-[16px] sm:leading-[24px] md:text-[18px] md:leading-[27px] py-[12px] px-[20px] sm:py-[14px] sm:px-[22px] md:py-[16px] md:px-[24px]';
+    return (
+      <FloatingSheet hideOnOutsideClick={true}>
+        <div className='flex h-full flex-col'>
+          <div className='handle cursor-grab rounded-t-lg active:cursor-grabbing'>
+            <div className='fixed right-4 top-4 w-fit'>
+              <button className='hidden bg-transparent sm:block' onClick={hide}>
+                <X />
+              </button>
             </div>
-            <Text size='18px-medium' textColor='sub'>
-              {coreTitle?.title} &gt;{' '}
-              {topicTitle?.topic || `대주제${topicTitle?.topicIndex}`} &gt;{' '}
-              {info.content || '소주제'}
-            </Text>
+            <div className='flex flex-col items-start p-6 lg:p-8'>
+              <Text size='16px-medium' textColor='sub'>
+                TO DO LIST - {charLimitNotice}
+              </Text>
+              <div className='no-drag flex gap-3'>
+                <CheckBox
+                  sizes='lg'
+                  checked={isDoneState}
+                  onChange={() => {
+                    mutationCell({
+                      action: 'subTopic',
+                      value: { ...thisSubTopic, isDone: !isDoneState },
+                    });
+                    setIsDoneState(!thisSubTopic.isDone);
+                  }}
+                />
+                <Input
+                  ref={inputRef}
+                  onKeyDown={handleInputKeyDown}
+                  autoFocus
+                  maxLength={charLimit}
+                  sizes='28px-regular'
+                  type='text'
+                  value={inputValue}
+                  placeholder={inputValue || '목표를 작성해 주세요'}
+                  onChange={(e) => {
+                    handleInputValueChange(e);
+                  }}
+                />
+              </div>
+              <Text size='18px-medium' textColor='sub'>
+                {core?.title} &gt;{' '}
+                {thisTopic?.topic || `대주제${thisTopic?.topicIndex}`} &gt;{' '}
+                {inputValue || '소주제'}
+              </Text>
+            </div>
+            <div className='px-8'>
+              <button
+                className={customButtonClass}
+                onClick={() => {
+                  isCreateTodo.current = true;
+                  mutationTodo({
+                    value: createNewTodoRowValue(info.id),
+                    action: 'CREATE',
+                  });
+                }}
+              >
+                <SquarePlus />
+                투두 리스트 추가하기
+              </button>
+            </div>
           </div>
-          <div className='px-8'>
-            <button
-              className={customButtonClass}
-              onClick={() => {
-                isCreateTodo.current = true;
-                mutationTodo({
-                  value: createNewTodoRowValue(info.id),
-                  action: 'CREATE',
-                });
-              }}
-            >
-              <SquarePlus />
-              투두 리스트 추가하기
-            </button>
+          <div className='flex-grow overflow-y-auto py-6'>
+            <div className='px-8'>
+              {todoItemComponents.length === 0 ? (
+                <EmptyGuide>
+                  소주제를 이루기 위한 투두를 작성해주세요.
+                </EmptyGuide>
+              ) : (
+                todoItemComponents
+              )}
+            </div>
           </div>
+          <Spacer size='4xl' />
         </div>
-        <div className='flex-grow overflow-y-auto py-6'>
-          <div className='px-8'>
-            {todoItemComponents.length === 0 ? (
-              <EmptyGuide>소주제를 이루기 위한 투두를 작성해주세요.</EmptyGuide>
-            ) : (
-              todoItemComponents
-            )}
-          </div>
-        </div>
-        <Spacer size='4xl' />
-      </div>
-    </FloatingSheet>
-  );
+      </FloatingSheet>
+    );
+  }
 };
 
 export default MandalartFloatingSheet;
