@@ -32,24 +32,22 @@ const OrderOptionSelection = ({
 
   return (
     <div className='mb-4 flex w-full items-center justify-end'>
-      <Button variant='secondary' size='small'>
-        <Dropdown
-          selection
-          text={<Text>{getSelectedLabel(selectedOption)}</Text>}
-          isChanged={isChanged}
-          setIsChanged={setIsChanged}
-        >
-          <Button variant='none' onClick={() => handleSelectOption('left')}>
-            남은 할 일
-          </Button>
-          <Button variant='none' onClick={() => handleSelectOption('done')}>
-            완료한 일
-          </Button>
-          <Button variant='none' onClick={() => handleSelectOption('all')}>
-            전체 보기
-          </Button>
-        </Dropdown>
-      </Button>
+      <Dropdown
+        selection
+        text={<Text>{getSelectedLabel(selectedOption)}</Text>}
+        isChanged={isChanged}
+        setIsChanged={setIsChanged}
+      >
+        <Button variant='none' onClick={() => handleSelectOption('left')}>
+          남은 할 일
+        </Button>
+        <Button variant='none' onClick={() => handleSelectOption('done')}>
+          완료한 일
+        </Button>
+        <Button variant='none' onClick={() => handleSelectOption('all')}>
+          전체 보기
+        </Button>
+      </Dropdown>
     </div>
   );
 };
