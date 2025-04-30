@@ -141,7 +141,8 @@ const GuestPage = () => {
           size='medium'
           onClick={async () => {
             setIsDownloading(true);
-            if (panzoomRef === null) return handleDownload(setIsDownloading);
+            if (panzoomRef.current === null)
+              return handleDownload(setIsDownloading);
             handleDownloadCanvas(setIsDownloading);
           }}
         >
