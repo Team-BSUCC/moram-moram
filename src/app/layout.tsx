@@ -7,6 +7,7 @@ import Footer from '@/components/layouts/footer';
 import Header from '@/components/layouts/header';
 import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 import { Alert } from '@/components/commons/alert';
+import ErrorBoundaryWrapper from './error-boundary-wrapper';
 
 export const metadata: Metadata = {
   title: 'Manda',
@@ -62,9 +63,10 @@ export default async function RootLayout({
         <main className='mt-[72px] flex-grow lg:mt-[100px]'>
           <div className='flex h-full flex-1 items-center justify-center'>
             <Alert />
-            {/* children에 메인 영역이 위치합니다. 중앙 70%의 영역만 차지합니다 */}
             <div className='h-full w-full'>
-              <TQProvider>{children}</TQProvider>
+              <ErrorBoundaryWrapper>
+                <TQProvider>{children}</TQProvider>
+              </ErrorBoundaryWrapper>
             </div>
           </div>
         </main>
