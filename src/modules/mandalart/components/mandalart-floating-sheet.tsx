@@ -25,6 +25,7 @@ import {
 } from '../types/realtime-type';
 import AiSuggestButton from './ai-suggest-button';
 import CheckBox from '@/components/commons/check-box';
+import { infoAlert } from '@/shared/utils/sweet-alert';
 
 /**
  * Todo floating sheet 컴포넌트
@@ -108,17 +109,18 @@ const MandalartFloatingSheet = () => {
   const charLimitNotice = `글자 수 제한 ${inputValue.length} / ${charLimit}`;
   const handleInputValueChange = (e: ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length - 1 === charLimit) return;
+
     const newValue = e.target.value;
     setInputValue(newValue);
-    if ('topic' in info) {
+    if (isTopic && thisTopic) {
       throttleMutate({
         action: 'topic',
-        value: { ...info, topic: newValue },
+        value: { ...thisTopic, topic: newValue },
       });
-    } else if ('cellIndex' in info) {
+    } else if (isSubTopic && thisSubTopic) {
       throttleMutate({
         action: 'subTopic',
-        value: { ...info, content: newValue },
+        value: { ...thisSubTopic, content: newValue },
       });
     }
   };

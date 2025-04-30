@@ -30,7 +30,6 @@ import {
 import { notFound } from 'next/navigation';
 import UserNavigation from './user-navigation';
 import InstructionModal from './instruction-modal';
-import { useOnBeforeUnload } from '@/shared/hooks/use-on-before-unload';
 
 const DESKTOP_SIZE = 1024;
 
@@ -217,7 +216,8 @@ const MandalartMainContent = ({
             variant='secondary'
             onClick={async () => {
               setIsDownloading(true);
-              if (panzoomRef === null) return handleDownload(setIsDownloading);
+              if (panzoomRef.current === null)
+                return handleDownload(setIsDownloading);
               handleDownloadCanvas(setIsDownloading);
             }}
           >

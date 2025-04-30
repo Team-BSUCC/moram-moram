@@ -1,10 +1,12 @@
-import { getColorWithNumber } from '@/shared/utils/get-color-with-number';
+import {
+  getColorWithNumber,
+  getDoneColorWithNumber,
+} from '@/shared/utils/get-color-with-number';
 import { useClientStateStore } from '../hooks/use-client-state-store';
 import TopicCell from './topic-cell';
 import { MandalartTopic } from '../types/realtime-type';
 import React from 'react';
 import SubTopicCell from './sub-topic-cell';
-import { getColorWithIndexOrderPigment } from '@/shared/utils/get-color-with-index';
 
 type SubBlockProps = {
   topic: MandalartTopic;
@@ -29,7 +31,7 @@ const SubBlock = ({ topic, index }: SubBlockProps) => {
     subTopicsWithTopicId.filter((subTopic) => subTopic.isDone).length === 8;
 
   const backColor = isBlockDone
-    ? getColorWithIndexOrderPigment(index)
+    ? getDoneColorWithNumber(index)
     : getColorWithNumber(index);
 
   return (
