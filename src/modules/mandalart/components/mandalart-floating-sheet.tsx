@@ -25,7 +25,6 @@ import {
 } from '../types/realtime-type';
 import AiSuggestButton from './ai-suggest-button';
 import CheckBox from '@/components/commons/check-box';
-import { infoAlert } from '@/shared/utils/sweet-alert';
 
 /**
  * Todo floating sheet 컴포넌트

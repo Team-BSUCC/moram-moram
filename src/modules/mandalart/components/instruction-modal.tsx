@@ -34,24 +34,25 @@ const InstructionModal = ({
     } else {
       setIsSheetOpen(true);
     }
-
     window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
   }, []);
 
   const { ref } = useElementWidthObserver();
 
   useEffect(() => {
-    if (isSheetOpen) {
+    if (isModalOpen) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'auto';
     }
-
     return () => {
       document.body.style.overflow = 'auto';
     };
-  }, [isSheetOpen]);
+  }, [isModalOpen]);
 
   const eventStop = (e: MouseEvent) => {
     e.stopPropagation();
