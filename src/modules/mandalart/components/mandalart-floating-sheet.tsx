@@ -123,7 +123,7 @@ const MandalartFloatingSheet = () => {
     }
   };
 
-  const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+  const handleInputKeyUp = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       inputRef.current?.blur();
     }
@@ -226,7 +226,7 @@ const MandalartFloatingSheet = () => {
               <div className='no-drag'>
                 <Input
                   ref={inputRef}
-                  onKeyDown={handleInputKeyDown}
+                  onKeyUp={handleInputKeyUp}
                   autoFocus
                   maxLength={charLimit}
                   sizes='28px-regular'
@@ -307,7 +307,7 @@ const MandalartFloatingSheet = () => {
                 />
                 <Input
                   ref={inputRef}
-                  onKeyDown={handleInputKeyDown}
+                  onKeyUp={handleInputKeyUp}
                   autoFocus
                   maxLength={charLimit}
                   sizes='28px-regular'
