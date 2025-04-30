@@ -109,7 +109,7 @@ const config: Config = {
         focus: 'var(--color-focus)',
         black: 'var(--color-black)',
         email: '#989898',
-        gary: {
+        gray: {
           DEFAULT: 'var(--color-gray)',
           lightgray: 'var(--color-lightgray)',
           inputGray: 'var(--color-inputGray)',

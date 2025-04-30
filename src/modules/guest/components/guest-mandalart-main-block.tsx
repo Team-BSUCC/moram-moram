@@ -50,7 +50,7 @@ const GuestMandalartMainBlock = ({ coreColor }: GuestMainBlock) => {
       {Array.from({ length: 8 }).map((_, index) => (
         <div
           key={index}
-          className={`${!active ? getColorWithNumber(index) : 'bg-lightgray'} relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border border-assist p-2 text-sub transition-all`}
+          className={`${!active ? getColorWithNumber(index) : 'bg-gray-lightgray'} relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border border-assist p-2 text-sub transition-all`}
         >
           <GuestMandalartMainCell index={index} active={active} />
         </div>

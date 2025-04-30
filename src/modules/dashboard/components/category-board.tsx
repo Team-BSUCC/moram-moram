@@ -76,7 +76,7 @@ export const CategoryBoard = ({ user }: CategoryBoardProps) => {
           {Array.from({ length: 6 }).map((_, i) => (
             <div
               key={i}
-              className='h-[280px] w-full max-w-[360px] animate-fade-out-left rounded-lg bg-lightgray shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]'
+              className='bg-gray-lightgray h-[280px] w-full max-w-[360px] animate-fade-out-left rounded-lg shadow-[0px_0px_12px_0px_rgba(0,_0,_0,_0.1)]'
             />
           ))}
         </div>

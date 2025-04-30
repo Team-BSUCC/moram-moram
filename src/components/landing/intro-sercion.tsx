@@ -32,7 +32,7 @@ const IntroSection = () => {
 
           <Spacer size='xl' />
 
-          <div className='w-full max-w-5xl rounded-lg bg-lightgray px-6 py-4 sm:px-12'>
+          <div className='bg-gray-lightgray w-full max-w-5xl rounded-lg px-6 py-4 sm:px-12'>
             <Text size='28px-regular' align='center'>
               📌 참고로, 세계적인 야구 선수 오타니 쇼헤이도 고등학생 시절
               <br />이 만다라트 기법으로 목표를 정리하며 ‘메이저리거’라는 꿈을

@@ -69,7 +69,7 @@ const CardButtonDropDown = ({
       </div>
 
       {isOpen && (
-        <div className='absolute right-0 z-10 w-[154px] space-y-2 overflow-hidden rounded-lg border border-lightgray bg-white-light shadow-md'>
+        <div className='border-gray-lightgray absolute right-0 z-10 w-[154px] space-y-2 overflow-hidden rounded-lg border bg-white-light shadow-md'>
           <div className='flex-col'>
             <UpdateDateModal
               isUpdateOpen={isUpdateDateOpen}

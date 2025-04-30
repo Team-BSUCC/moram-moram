@@ -87,7 +87,7 @@ const SignUpForm = () => {
                 type='button'
                 onClick={handleCheckNickname}
                 disabled={checkingNickname}
-                className='min-w-[88px] whitespace-nowrap rounded-lg bg-lightgray px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50'
+                className='bg-gray-lightgray min-w-[88px] whitespace-nowrap rounded-lg px-4 py-2 disabled:cursor-not-allowed disabled:opacity-50'
               >
                 {checkingNickname ? '확인 중...' : '중복확인'}
               </button>

@@ -39,7 +39,7 @@ const GuestMandalartBlock = ({ index }: GuestMandalartBlockProps) => {
   return (
     <div className='grid aspect-square grid-cols-3 grid-rows-3 gap-2'>
       <div
-        className={`${!active ? getColorWithNumber(index) : 'bg-lightgray'} relative col-start-2 row-start-2 flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[3px] border-main p-2 transition-all delay-100 duration-500`}
+        className={`${!active ? getColorWithNumber(index) : 'bg-gray-lightgray'} relative col-start-2 row-start-2 flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border-[3px] border-main p-2 transition-all delay-100 duration-500`}
       >
         <textarea
           disabled={active}

@@ -19,7 +19,7 @@ const wrapperVariants = cva(
 );
 
 const barVariants = cva(
-  'rounded-full h-full place-item-center border border-lightgray bg-green-400',
+  'rounded-full h-full place-item-center border border-gray-lightgray bg-green-400',
   {
     variants: {
       height: {
@@ -134,7 +134,7 @@ const LinearProgress = ({ value, size, height }: LinearProgressProps) => {
       {/* 진행바 */}
       <div
         className={twMerge(
-          'h-[24px] w-full overflow-hidden rounded-full border-[2px] border-lightgray bg-white md:h-[32px]'
+          'border-gray-lightgray h-[24px] w-full overflow-hidden rounded-full border-[2px] bg-white md:h-[32px]'
         )}
       >
         <div

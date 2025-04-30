@@ -50,7 +50,7 @@ const TodoYearSelect = ({
             <div
               key={year}
               onClick={() => handleSelect(year)}
-              className={`cursor-pointer px-[10px] py-[4px] text-left hover:bg-lightgray ${
+              className={`hover:bg-gray-lightgray cursor-pointer px-[10px] py-[4px] text-left ${
                 selected === year ? 'bg-white-dark' : ''
               }`}
             >
