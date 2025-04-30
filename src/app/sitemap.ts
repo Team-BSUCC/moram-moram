@@ -26,7 +26,7 @@ import { MetadataRoute } from 'next';
  *
  * @returns  사이트맵 배열
  */
-export default function sitemap(): MetadataRoute.Sitemap {
+const sitemap = (): MetadataRoute.Sitemap => {
   // 기본 URL 설정 - 실제 도메인으로 변경 필요
   const baseUrl = 'https://www.manda.io.kr';
   const currentDate = new Date();
@@ -57,4 +57,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.7,
     },
   ];
-}
+};
+
+export default sitemap;
