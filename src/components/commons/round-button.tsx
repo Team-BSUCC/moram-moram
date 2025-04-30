@@ -18,7 +18,7 @@ const roundButtonVariants = cva(
         black: 'border-black',
         white: 'border-white',
         gray: 'border-gray',
-        lightgray: 'border-gary-lightgray',
+        lightgray: 'border-gray-lightgray',
         lightwhite: 'border-white-light',
         darkwhite: 'border-white-dark',
         primary: 'border-primary',
