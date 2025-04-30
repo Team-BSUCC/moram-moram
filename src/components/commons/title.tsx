@@ -5,6 +5,7 @@ import { twMerge } from 'tailwind-merge';
 export const titleVariants = cva('flex gap-4 transition-all', {
   variants: {
     size: {
+      '64px-regular': 'text-[64px] font-normal',
       '48px-semibold':
         'text-[36px] leading-[54px] font-semibold sm:text-[40px] sm:leading-[60px] md:text-[48px] md:leading-[72px]',
       '40px-semibold':

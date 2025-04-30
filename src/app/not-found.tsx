@@ -1,23 +1,20 @@
 'use client';
 
-import { useEffect } from 'react';
-import * as Sentry from '@sentry/nextjs';
 import Button from '@/components/commons/button';
-import Text from '@/components/commons/text';
-import Image from 'next/image';
 import Spacer from '@/components/commons/spacer';
+import Text from '@/components/commons/text';
 import Title from '@/components/commons/title';
+import Image from 'next/image';
+import { useRouter } from 'next/navigation';
 
-const GlobalError = ({ error, reset }: { error: Error; reset: () => void }) => {
-  useEffect(() => {
-    Sentry.captureException(error);
-  }, [error]);
+const NotFound = () => {
+  const router = useRouter();
 
   return (
     <div className='flex h-full w-full flex-col items-center justify-center bg-white-light'>
       <div className='mb-[12px] flex flex-col items-center justify-center'>
         <Title as='h1' size='64px-regular'>
-          Error
+          404
         </Title>
         <Spacer size='md' />
         <Text size='32px-medium' align='center'>
@@ -35,14 +32,17 @@ const GlobalError = ({ error, reset }: { error: Error; reset: () => void }) => {
 
       <div className='my-[32px]'>
         <Text size='20px-medium' textColor='caption' align='center'>
-          {error.message || '알 수 없는 에러가 발생했어요.'}
+          찾으려는 페이지가 아직 싹을 틔우지 못했어요.
+          <br />
+          이전으로 돌아가 목표를 향해 나아가볼까요?
         </Text>
       </div>
 
-      <Button variant='error' onClick={() => reset()}>
-        <Text size='20px-medium'>새로 고침</Text>
+      <Button variant='error' onClick={() => router.back()}>
+        <Text size='20px-medium'>이전으로 가기</Text>
       </Button>
     </div>
   );
 };
-export default GlobalError;
+
+export default NotFound;
