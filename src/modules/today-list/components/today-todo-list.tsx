@@ -23,7 +23,7 @@ const TodayTodoList = ({ user }: TodayTodoListProps) => {
   const [clickedTitle, setClickedTitle] = useState<string>('');
   const [selectedOption, setSelectedOption] = useState<string>('all');
 
-  const { data: myMandalarts, isPending } = useGetAllMandalartQuery({ user });
+  const { data: myMandalarts } = useGetAllMandalartQuery({ user });
   // 최초 클릭된 만다라트 제목 세팅
   useEffect(() => {
     if (myMandalarts && myMandalarts.length > 0 && !clickedTitle) {
@@ -63,8 +63,6 @@ const TodayTodoList = ({ user }: TodayTodoListProps) => {
     });
     return obj;
   })();
-
-  if (isPending) return <div>Loading..</div>;
 
   return (
     <div className='h-full w-full'>
