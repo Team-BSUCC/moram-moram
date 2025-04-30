@@ -92,7 +92,7 @@ const MandalartCalendar = ({ user }: MandalartCalendarProps) => {
 
   return (
     <div className='right-0 min-h-screen w-full bg-white-dark'>
-      <Spacer size='top' />
+      <Spacer size='lg' />
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView='dayGridMonth'
@@ -142,7 +142,6 @@ const MandalartCalendar = ({ user }: MandalartCalendarProps) => {
         eventOrder='isDone'
       />
       {isVisible && <CalendarFloatingSheet todos={flatTodos} />}
-      <Spacer size='top' />
     </div>
   );
 };
