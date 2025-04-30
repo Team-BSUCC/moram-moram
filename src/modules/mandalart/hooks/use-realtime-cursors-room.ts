@@ -84,7 +84,6 @@ export const useRealtimeCursors = ({
     (event: MouseEvent) => {
       if (isVisible || !boardRef.current) return;
       const rect = boardRef.current.getBoundingClientRect();
-
       const payload: CursorEventPayload = {
         position: {
           x: (event.clientX - rect.left) / rect.width,
@@ -104,7 +103,7 @@ export const useRealtimeCursors = ({
         payload: payload,
       });
     },
-    [color, userId, username]
+    [color, userId, username, isVisible]
   );
 
   const handleMouseMove = useThrottleCallback(callback, throttleMs);

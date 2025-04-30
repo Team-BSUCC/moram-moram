@@ -11,6 +11,8 @@ const inputVariants = cva(
         outline: 'border-gray-400',
         none: 'border-none',
         auth: 'bg-white border border-gray-300 rounded-lg px-4 py-3 placeholder-gray-400 text-black focus:outline-none focus:ring-1 focus:ring-primary ',
+        nickname:
+          'h-[43px] w-[151px] rounded-md border-2 border-gray-inputGray border-gray px-4 py-2',
       },
       sizes: {
         '48px-semibold':
@@ -46,6 +48,11 @@ const inputVariants = cva(
         '16px-regular':
           'text-[13px] leading-[17px] font-normal sm:text-[14px] sm:leading-[18px] md:text-[16px] md:leading-[20px]',
       },
+      line: {
+        underline: 'underline',
+        cancelLine: 'line-through',
+        default: 'no-underline',
+      },
     },
     defaultVariants: {
       variant: 'default',
@@ -55,7 +62,9 @@ const inputVariants = cva(
 );
 
 type InputProps = VariantProps<typeof inputVariants> &
-  React.InputHTMLAttributes<HTMLInputElement> & { className?: never };
+  React.InputHTMLAttributes<HTMLInputElement> & {
+    className?: never;
+  };
 
 /**
  * 인풋 공통 컴포넌트
@@ -65,11 +74,11 @@ type InputProps = VariantProps<typeof inputVariants> &
  */
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ variant, sizes, ...props }, ref) => {
+  ({ variant, sizes, line, ...props }, ref) => {
     return (
       <input
         ref={ref}
-        className={twMerge(inputVariants({ variant, sizes }))}
+        className={twMerge(inputVariants({ variant, sizes, line }))}
         {...props}
       />
     );

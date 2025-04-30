@@ -54,7 +54,7 @@ const TodoDaySelect = ({
             <div
               key={day}
               onClick={() => handleSelect(day)}
-              className={`cursor-pointer px-[10px] py-[4px] text-left hover:bg-lightgray ${
+              className={`hover:bg-gray-lightgray cursor-pointer px-[10px] py-[4px] text-left ${
                 selected === day ? 'bg-white-dark' : ''
               }`}
             >

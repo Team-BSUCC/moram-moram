@@ -36,3 +36,8 @@ export type ColorMutationParams = {
   mandalartId: string;
   colorId: number;
 };
+
+export type useRoomDateUpdateParams = {
+  mandalartId: string;
+  endDate: string;
+};

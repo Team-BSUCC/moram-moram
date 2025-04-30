@@ -54,7 +54,7 @@ const textVariants = cva('transition-all', {
       gray: 'text-gray',
       primary: 'text-primary',
       secondary: 'text-secondary',
-      lightgray: 'text-lightgray',
+      lightgray: 'text-gray-lightgray',
       lightwhite: 'text-white-light',
       darkwhite: 'text-white-dark',
       main: 'text-main',
@@ -63,6 +63,7 @@ const textVariants = cva('transition-all', {
       assist: 'text-assist',
       error: 'text-error',
       focus: 'text-focus',
+      email: 'text-email',
     },
     align: {
       center: 'text-center',

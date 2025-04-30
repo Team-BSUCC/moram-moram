@@ -1,10 +1,10 @@
 import { MandalartSubtopic } from '../types/realtime-type';
 import React from 'react';
 import Text from '@/components/commons/text';
-import useTodoFloatingSheetStore from '../hooks/use-todo-floating-sheet-store';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 
 type SubTopicCellProps = {
-  index: number;
+  bgColor: string;
   subTopic: MandalartSubtopic;
 };
 
@@ -14,9 +14,9 @@ type SubTopicCellProps = {
  * @param info - 셀에 대한 모든 DB 컬럼 정보
  * @returns
  */
-const SubTopicCell = ({ index, subTopic }: SubTopicCellProps) => {
-  const show = useTodoFloatingSheetStore((state) => state.show);
-  const setInfo = useTodoFloatingSheetStore((state) => state.setInfo);
+const SubTopicCell = ({ bgColor, subTopic }: SubTopicCellProps) => {
+  const show = useFloatingSheetStore((state) => state.show);
+  const setInfo = useFloatingSheetStore((state) => state.setInfo);
 
   // 플로팅 시트를 띄우는 이벤트 핸들러
   const handleFloatingToggle = () => {
@@ -27,7 +27,7 @@ const SubTopicCell = ({ index, subTopic }: SubTopicCellProps) => {
   return (
     <div
       onClick={handleFloatingToggle}
-      className='relative flex aspect-square h-[88px] w-[88px] max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer'
+      className={`${bgColor} relative flex aspect-square h-[88px] w-[88px] max-w-full items-center justify-center overflow-hidden rounded-lg border-[1px] border-assist p-2 hover:cursor-pointer`}
     >
       <Text align='center' size='16px-regular' textColor='main'>
         {subTopic?.content}

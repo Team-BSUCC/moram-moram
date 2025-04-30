@@ -1,6 +1,7 @@
 import * as Sentry from '@sentry/nextjs';
 import { NextResponse, NextRequest } from 'next/server';
 import { getServerClientAction } from '@/shared/utils/supabase/server-client-action';
+import { updateAuthMetadataAvatar } from '@/shared/utils/avatar-utils';
 
 export const GET = async (request: NextRequest) => {
   const url = new URL(request.url);
@@ -28,6 +29,17 @@ export const GET = async (request: NextRequest) => {
     });
     return NextResponse.redirect(new URL('/auth/auth-code-error', request.url));
   }
+
+  const {
+    data: { user },
+    error: userError,
+  } = await supabase.auth.getUser();
+
+  if (userError || !user) {
+    return res;
+  }
+
+  await updateAuthMetadataAvatar(user.id);
 
   return res;
 };

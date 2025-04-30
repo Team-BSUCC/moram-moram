@@ -92,7 +92,7 @@ const DashboardAvatarStack = ({
         {hiddenAvatars.length ? (
           <Tooltip key='hidden-avatars'>
             <TooltipTrigger asChild>
-              <Avatar className='z-0 h-[22px] w-[32px] bg-lightgray text-md'>
+              <Avatar className='bg-gray-lightgray z-0 h-[22px] w-[32px] text-md'>
                 <AvatarFallback>
                   {/* 3개 이상 시 +(개수)로 아바타 표시 */}+
                   {avatars.length - shownAvatars.length}

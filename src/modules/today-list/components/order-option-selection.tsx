@@ -3,6 +3,7 @@ import Button from '@/components/commons/button';
 import Dropdown from '@/components/commons/drop-down';
 import Text from '@/components/commons/text';
 import { getSelectedLabel } from '../utils/get-selected-label';
+import { useState } from 'react';
 
 type OrderOptionSelectionProps = {
   selectedOption: string;
@@ -13,6 +14,7 @@ const OrderOptionSelection = ({
   selectedOption,
   setSelectedOption,
 }: OrderOptionSelectionProps) => {
+  const [isChanged, setIsChanged] = useState<boolean>(false);
   const handleSelectOption = (label: string) => {
     switch (label) {
       case 'left':
@@ -25,13 +27,16 @@ const OrderOptionSelection = ({
         setSelectedOption('all');
         break;
     }
+    setIsChanged(true);
   };
 
   return (
-    <div className='flex w-full items-center justify-end'>
+    <div className='mb-4 flex w-full items-center justify-end'>
       <Dropdown
         selection
         text={<Text>{getSelectedLabel(selectedOption)}</Text>}
+        isChanged={isChanged}
+        setIsChanged={setIsChanged}
       >
         <Button variant='none' onClick={() => handleSelectOption('left')}>
           남은 할 일

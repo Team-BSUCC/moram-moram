@@ -7,13 +7,15 @@ import '../../../styles/calendar-custom.css';
 import interactionPlugin from '@fullcalendar/interaction';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import CalendarFloatingSheet from '@/modules/calendar/components/calendar-floating-sheet';
-import { MyMandalartsType } from '@/modules/today-list/types/today-list-type';
 import { flattenTodos } from '@/modules/today-list/utils/flatten-todos';
 import Spacer from '@/components/commons/spacer';
 import { getPastelCodeWithIndex } from '@/shared/utils/get-color-with-index';
+import { User } from '@supabase/supabase-js';
+import { useGetAllMandalartQuery } from '@/shared/hooks/use-get-all-mandalart-query';
+import LoadingSpinner from '@/components/commons/loading-spinner';
 
 type MandalartCalendarProps = {
-  myMandalarts: MyMandalartsType;
+  user: User | null;
 };
 
 /**
@@ -21,10 +23,12 @@ type MandalartCalendarProps = {
  * @param myMandalarts - 내 만다라트 정보
  * @returns
  */
-const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
+const MandalartCalendar = ({ user }: MandalartCalendarProps) => {
   const isVisible = useFloatingSheetStore((state) => state.isVisible);
   const show = useFloatingSheetStore((state) => state.show);
   const setInfo = useFloatingSheetStore((state) => state.setInfo);
+
+  const { data: myMandalarts } = useGetAllMandalartQuery({ user });
 
   const [headerToolbar, setHeaderToolbar] = useState({
     start: 'today prev,next',
@@ -79,13 +83,15 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
 
   // 셀 클릭 시 날짜 저장 + 플로팅 시트 열기
   const handleCellClick = (dateStr: string) => {
-    setInfo(dateStr);
     show();
+    if (!isVisible) {
+      setInfo(dateStr);
+    }
   };
 
   return (
     <div className='right-0 min-h-screen w-full bg-white-dark'>
-      <Spacer size='top' />
+      <Spacer size='lg' />
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView='dayGridMonth'
@@ -101,7 +107,13 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
             className='custom-event cursor-pointer'
             style={{ backgroundColor: arg.backgroundColor }}
           >
-            <span>{arg.event.title}</span>
+            <span
+              className={
+                arg.event.extendedProps.isDone ? 'text-sub line-through' : ''
+              }
+            >
+              {arg.event.title}
+            </span>
           </div>
         )}
         dateClick={(arg) => {
@@ -126,6 +138,7 @@ const MandalartCalendar = ({ myMandalarts }: MandalartCalendarProps) => {
         moreLinkDidMount={(info) => {
           info.el.style.pointerEvents = 'none';
         }}
+        eventOrder='isDone'
       />
       {isVisible && <CalendarFloatingSheet todos={flatTodos} />}
     </div>

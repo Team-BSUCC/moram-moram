@@ -7,11 +7,13 @@ import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { FlatTodo } from '@/modules/today-list/types/today-list-type';
 import Spacer from '@/components/commons/spacer';
 import { getProcessedDate } from '../utils/get-processed-date';
-import CalendarTodoItem from './calendar-todo-item';
 import { X } from 'lucide-react';
 import { groupBy } from '@/modules/today-list/utils/group-by';
 import { rangeWithIndex } from '@/shared/utils/range-with-index';
 import { matchWithCommonColor } from '../utils/match-with-common-color';
+import { AnimatePresence } from 'framer-motion';
+import { useEscapeKey } from '@/shared/hooks/use-escape-key';
+import TodoItem from '@/components/commons/todo-item';
 
 type CalendarFloatingSheetProps = {
   todos: FlatTodo[];
@@ -25,6 +27,7 @@ type CalendarFloatingSheetProps = {
 const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
   const info = useFloatingSheetStore((state) => state.info) as string;
   const hide = useFloatingSheetStore((state) => state.hide);
+  useEscapeKey(hide);
 
   // 날짜 기준 필터링
   const filteredTodos = todos
@@ -46,12 +49,17 @@ const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
     <FloatingSheet>
       <div className='flex h-full flex-col'>
         <div className='handle cursor-grab border-b px-5 active:cursor-grabbing'>
-          <div className='fixed right-4 top-4 w-fit' onClick={hide}>
-            <button className='bg-transparent'>
+          <div className='fixed right-4 top-4 w-fit'>
+            <button
+              className='hidden bg-transparent sm:block sm:p-2'
+              onClick={hide}
+            >
               <X />
             </button>
           </div>
-          <Spacer size='lg' />
+          <div className='flex h-8 items-center justify-center bg-transparent'>
+            <div className='h-[3px] w-[135px] rounded-[8px] bg-black sm:hidden'></div>
+          </div>
           <div className='flex justify-start'>
             <Text size='18px-semibold' textColor='sub'>
               {getProcessedDate(info)}
@@ -83,9 +91,11 @@ const CalendarFloatingSheet = ({ todos }: CalendarFloatingSheetProps) => {
                   </Title>
 
                   {/* 각 mandalart에 해당하는 todo 출력 */}
-                  {todos.map((todo) => (
-                    <CalendarTodoItem key={todo.todoId} todo={todo} />
-                  ))}
+                  <AnimatePresence>
+                    {todos.map((todo) => (
+                      <TodoItem todo={todo} key={todo.todoId} />
+                    ))}
+                  </AnimatePresence>
                 </div>
               ))}
             </div>

@@ -1,5 +1,6 @@
 'use server';
 
+import { timeStamp } from '@/shared/utils/avatar-utils';
 import { createClient } from '@supabase/supabase-js';
 
 const supabaseAdmin = createClient(
@@ -7,18 +8,37 @@ const supabaseAdmin = createClient(
   process.env.NEXT_SUPABASE_SERVICE_ROLE!
 );
 
+/**
+ * 유저 아바타 업데이트 함수
+ * @param userId
+ * @param file
+ * @returns
+ */
 export const updateUserAvatar = async (userId: string, file: File) => {
   const ext = file.name.split('.').pop();
-  const filePath = `avatars/${userId}/profile.${ext}`;
+  const filePath = `avatars/${userId}/profile-${Date.now()}.${ext}`;
+
+  deleteUserAvatar(userId);
 
   const { error: uploadError } = await supabaseAdmin.storage
     .from('avatars')
-    .upload(filePath, file, { upsert: true });
+    .upload(filePath, file);
 
-  if (uploadError) throw new Error(uploadError.message);
+  if (uploadError) {
+    throw new Error(uploadError.message);
+  }
 
   const { data } = supabaseAdmin.storage.from('avatars').getPublicUrl(filePath);
-  const publicUrl = `${data.publicUrl}?t=${Date.now()}`;
+  const publicUrl = timeStamp(data.publicUrl);
+
+  const { error: userError } = await supabaseAdmin
+    .from('users')
+    .update({ profile_url: publicUrl })
+    .eq('id', userId);
+
+  if (userError) {
+    throw new Error(userError.message);
+  }
 
   const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
     userId,
@@ -26,12 +46,17 @@ export const updateUserAvatar = async (userId: string, file: File) => {
       user_metadata: { avatar_url: publicUrl },
     }
   );
-
-  if (updateError) throw new Error(updateError.message);
+  if (updateError) {
+    throw new Error(updateError.message);
+  }
 
   return publicUrl;
 };
 
+/**
+ * 유저 아바타 삭제 함수
+ * @param userId
+ */
 export const deleteUserAvatar = async (userId: string) => {
   const folderPath = `avatars/${userId}`;
 
@@ -52,20 +77,45 @@ export const deleteUserAvatar = async (userId: string) => {
 
     if (removeError) throw new Error(removeError.message);
   }
+
   const { error: updateError } = await supabaseAdmin.auth.admin.updateUserById(
     userId,
     {
       user_metadata: { avatar_url: '' },
     }
   );
-
   if (updateError) throw new Error(updateError.message);
+
+  const { error: deleteError } = await supabaseAdmin
+    .from('users')
+    .update({ profile_url: null })
+    .eq('id', userId);
+
+  if (deleteError) throw new Error(deleteError.message);
 };
 
+/**
+ * 유저 닉네임 변경 함수
+ * @param userId
+ * @param nickname
+ */
 export const updateUserNickname = async (userId: string, nickname: string) => {
-  const { error } = await supabaseAdmin.auth.admin.updateUserById(userId, {
-    user_metadata: { nickname },
-  });
+  const { error: AuthError } = await supabaseAdmin.auth.admin.updateUserById(
+    userId,
+    {
+      user_metadata: { nickname },
+    }
+  );
+  if (AuthError) {
+    throw new Error(AuthError.message);
+  }
 
-  if (error) throw new Error(error.message);
+  const { error: userError } = await supabaseAdmin
+    .from('users')
+    .update({ nickname })
+    .eq('id', userId);
+
+  if (userError) {
+    throw new Error(userError.message);
+  }
 };

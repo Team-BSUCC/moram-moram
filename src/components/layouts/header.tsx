@@ -12,6 +12,9 @@ import { Menu, X } from 'lucide-react';
 import Text from '../commons/text';
 import Button from '../commons/button';
 import Profile from '../../modules/auth/components/profile/profile';
+import UserAvatarCard from '@/modules/auth/components/profile/user-avatar-card';
+import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
+import { deleteAuthCookies } from '@/shared/utils/delete-auth-cookie';
 
 type MenuItem = {
   to: string;
@@ -24,6 +27,7 @@ type MenuItem = {
     | 'none'
     | null
     | undefined;
+  onClick?: () => Promise<void> | void;
 };
 
 type HeaderProps = {
@@ -35,6 +39,11 @@ const DESKTOP_SIZE = 1024;
 const Header = ({ user }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const hide = useFloatingSheetStore((state) => state.hide);
+
+  const handleDeleteCookies = async () => {
+    await deleteAuthCookies();
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -43,13 +52,13 @@ const Header = ({ user }: HeaderProps) => {
   // 메뉴가 열렸을 때 스크롤 방지
   useEffect(() => {
     if (isMenuOpen) {
-      document.body.style.overflow = 'hidden';
+      document.body.classList.add('overflow-hidden');
     } else {
-      document.body.style.overflow = 'auto';
+      document.body.classList.remove('overflow-hidden');
     }
 
     return () => {
-      document.body.style.overflow = 'auto';
+      document.body.classList.remove('overflow-hidden');
     };
   }, [isMenuOpen]);
 
@@ -78,23 +87,29 @@ const Header = ({ user }: HeaderProps) => {
           to: URLS.GUEST,
           label: '비회원으로 체험하기',
           variant: 'header',
+          onClick: handleDeleteCookies,
         },
         {
           to: URLS.SIGN_IN,
           label: '로그인',
           variant: 'secondary',
+          onClick: handleDeleteCookies,
         },
         {
           to: URLS.SIGN_UP,
           label: '3초만에 시작하기',
           variant: 'default',
+          onClick: handleDeleteCookies,
         },
       ];
 
   return (
-    <div className='h-full w-full border-none bg-white-light shadow-[2px_2px_10px_1px_rgba(0,0,0,0.05)] lg:border-b'>
-      <div className='flex items-center justify-between'>
-        <Link href={user ? URLS.DASHBOARD : URLS.HOME}>
+    <div
+      className='h-full bg-white-light shadow-[2px_2px_10px_1px_rgba(0,0,0,0.05)]'
+      onClick={hide}
+    >
+      <div className='flex h-full items-center justify-between'>
+        <Link href={URLS.HOME}>
           <button className='px-6 py-4'>
             <Image
               src='/images/manda-logo-text.svg'
@@ -120,7 +135,13 @@ const Header = ({ user }: HeaderProps) => {
         {/* 데스크탑 메뉴 */}
         <div className='hidden gap-4 pr-8 lg:flex'>
           {menuItems.map((item, index) => (
-            <Link key={index} href={item.to}>
+            <Link
+              key={index}
+              href={item.to}
+              onClick={async () => {
+                await item.onClick?.();
+              }}
+            >
               <Button variant={item.variant} size={user ? 'header' : 'none'}>
                 {item.label}
               </Button>
@@ -133,10 +154,11 @@ const Header = ({ user }: HeaderProps) => {
                 className='flex cursor-pointer items-center gap-2 pl-2'
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
               >
-                <Avatar className='border border-black hover:z-10'>
-                  <AvatarImage src={user.user_metadata.avatar_url} />
-                  <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
-                </Avatar>
+                <UserAvatarCard
+                  avatarUrl={user.user_metadata.avatar_url}
+                  userName={userName}
+                  sizeClassName='border border-black hover:z-10'
+                />
                 <div className='pr-[10px]'>
                   <Text size='20px-medium'>{userName}</Text>
                 </div>
@@ -175,10 +197,11 @@ const Header = ({ user }: HeaderProps) => {
                 className='mb-4 flex w-full cursor-pointer items-center gap-2 px-4'
                 onClick={() => setIsProfileOpen(true)}
               >
-                <Avatar className='border border-black hover:z-10'>
-                  <AvatarImage src={user.user_metadata.avatar_url} />
-                  <AvatarFallback>{userName.slice(0, 1)}</AvatarFallback>
-                </Avatar>
+                <UserAvatarCard
+                  avatarUrl={user.user_metadata.avatar_url}
+                  userName={userName}
+                  sizeClassName='border border-black hover:z-10'
+                />
                 <Text size='20px-medium'>{userName}</Text>
               </div>
             </div>
@@ -187,7 +210,10 @@ const Header = ({ user }: HeaderProps) => {
             <Link
               key={index}
               href={item.to}
-              onClick={toggleMenu}
+              onClick={async () => {
+                toggleMenu();
+                await item.onClick?.();
+              }}
               className='w-full'
             >
               <Button variant='none' size='none'>
@@ -198,7 +224,7 @@ const Header = ({ user }: HeaderProps) => {
         </div>
       </div>
       {/* Profile 공통 */}
-      {user && (
+      {user && isProfileOpen && (
         <Profile
           isOpen={isProfileOpen}
           onClose={() => setIsProfileOpen(false)}

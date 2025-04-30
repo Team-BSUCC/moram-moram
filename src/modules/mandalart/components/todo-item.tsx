@@ -1,5 +1,12 @@
 import CheckBox from '@/components/commons/check-box';
-import { useEffect, useMemo, useState } from 'react';
+import {
+  ChangeEvent,
+  KeyboardEvent,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { CellTodo, DateRangeState } from '../types/realtime-type';
 import Input from '@/components/commons/input';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
@@ -15,15 +22,19 @@ import { useClientStateStore } from '../hooks/use-client-state-store';
 
 type TodoItemProps = {
   todo: CellTodo;
+  isCreateTodo?: boolean;
 };
 
-const TodoItem = ({ todo }: TodoItemProps) => {
+const TodoItem = ({ todo, isCreateTodo }: TodoItemProps) => {
   const channel = useChannelStore((state) => state.channel);
   const thisTodo = useClientStateStore((state) =>
     state.getTodoItem(`${todo.cellId}-${todo.id}`)
   );
 
+  const inputRef = useRef<HTMLInputElement>(null);
+  const [isFocus, setIsFocus] = useState<boolean>(false);
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
   const [date, setDate] = useState<DateRangeState>({
     year: '',
     month: '',
@@ -32,22 +43,25 @@ const TodoItem = ({ todo }: TodoItemProps) => {
 
   const getInitialValue = thisTodo?.title || '';
   const [value, setValue] = useState<string>(getInitialValue);
-  const changeTodo = useMemo(
-    () => setValue(thisTodo?.title ?? ''),
-    [thisTodo?.title]
-  );
 
   const [done, setDone] = useState<boolean>(thisTodo?.isDone ?? false);
-  const changeDone = useMemo(
-    () => setDone(thisTodo?.isDone ?? false),
-    [thisTodo?.isDone]
-  );
 
   const { mutate: mutationTodo } = useTodoBroadcastMutation(channel);
   const throttleMutate = useThrottleMutateWithTrailing(
     mutationTodo,
     0.5 * 1000
   );
+
+  useEffect(() => {
+    setValue(thisTodo?.title ?? '');
+    setDone(thisTodo?.isDone ?? false);
+  }, [thisTodo]);
+
+  useEffect(() => {
+    if (isCreateTodo) {
+      inputRef.current?.focus();
+    }
+  }, []);
 
   const handleMutateDate = () => {
     if (Object.values(date).every((value) => value !== '')) {
@@ -58,6 +72,24 @@ const TodoItem = ({ todo }: TodoItemProps) => {
         },
         action: 'UPDATE',
       });
+    }
+  };
+
+  const charLimit = 20;
+  const charLimitNotice = `글자 수 제한 ${value.length} / ${charLimit}`;
+  const handleInputValue = (e: ChangeEvent<HTMLInputElement>) => {
+    const newValue = e.target.value;
+    if (newValue.length - 1 === charLimit) return;
+    setValue(newValue);
+    throttleMutate({
+      value: { ...todo, title: newValue },
+      action: 'UPDATE',
+    });
+  };
+
+  const handleInputKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      inputRef.current?.blur();
     }
   };
 
@@ -79,17 +111,22 @@ const TodoItem = ({ todo }: TodoItemProps) => {
           }}
         />
         <Input
+          ref={inputRef}
+          onFocus={() => {
+            setIsFocus(true);
+          }}
+          onBlur={() => {
+            setIsFocus(false);
+          }}
+          line={thisTodo?.isDone ? 'cancelLine' : 'default'}
+          onKeyDown={handleInputKeyDown}
+          maxLength={charLimit}
           variant='outline'
           sizes='20px-regular'
-          value={value || thisTodo?.title}
+          value={value}
           placeholder='TODO를 작성해주세요.'
           onChange={(e) => {
-            const newValue = e.target.value;
-            setValue(newValue);
-            throttleMutate({
-              value: { ...todo, title: newValue },
-              action: 'UPDATE',
-            });
+            handleInputValue(e);
           }}
         />
         <Dropdown>
@@ -113,19 +150,26 @@ const TodoItem = ({ todo }: TodoItemProps) => {
         }}
         className='cursor-pointer pl-12'
       >
-        <div className='flex place-items-center justify-start'>
-          <Text size='16px-medium' textColor='sub'>
-            {todo.scheduledDate
-              ? formatDate(todo.scheduledDate)
-              : '날짜가 필요합니다!'}
-          </Text>
-          <TodoDateSelector
-            onChange={handleMutateDate}
-            isOpen={isOpen}
-            setIsOpen={setIsOpen}
-            handleDate={setDate}
-            date={date}
-          />
+        <div className='flex place-items-center justify-between'>
+          <div className='flex place-items-center justify-start'>
+            <Text size='16px-medium' textColor='sub'>
+              {todo.scheduledDate
+                ? formatDate(todo.scheduledDate)
+                : '날짜가 필요합니다!'}
+            </Text>
+            <TodoDateSelector
+              onChange={handleMutateDate}
+              isOpen={isOpen}
+              setIsOpen={setIsOpen}
+              handleDate={setDate}
+              date={date}
+            />
+          </div>
+          {isFocus && (
+            <Text size='16px-medium' textColor='sub'>
+              {charLimitNotice}
+            </Text>
+          )}
         </div>
       </div>
       <Spacer size='sm' />
