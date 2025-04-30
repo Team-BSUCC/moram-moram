@@ -3,7 +3,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'next/navigation';
 import { User } from '@supabase/supabase-js';
-import Button from '@/components/commons/button';
 import Input from '@/components/commons/input';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useGetRoomData } from '../hooks/use-get-room-data';

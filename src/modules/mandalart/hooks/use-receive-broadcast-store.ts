@@ -3,7 +3,7 @@ import {
   ReceiveBroadCastPayload,
 } from '../types/realtime-type';
 import { useBroadcastStore } from './use-broadcast-store';
-import { useReceiveBroadCastUpdater } from '../services/receive-broadcast-update';
+import { useReceiveBroadCastUpdater } from './use-receive-broadcast-update';
 
 export const useReceiveBroadcastStore = () => {
   /**

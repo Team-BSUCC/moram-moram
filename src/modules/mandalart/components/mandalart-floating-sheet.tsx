@@ -14,7 +14,7 @@ import { getDateDiff } from '@/modules/dashboard/util/calculate-date';
 import { useClientStateStore } from '../hooks/use-client-state-store';
 import { useChannelStore } from '../hooks/use-channel-store';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
-import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
+import { createNewTodoRowValue } from '../utils/create-new-todo-row-value';
 import { useCellBroadcastMutation } from '../hooks/use-cell-broadcast-mutation';
 import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate';
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
@@ -75,22 +75,22 @@ const MandalartFloatingSheet = () => {
     0.5 * 1000
   );
 
-  useEffect(() => {
-    if (!info) {
-      return;
-    }
-    //대주제일경우
-    if ('topic' in info) {
-      setInputValue(getTopicItem(info.id)?.topic || '');
-      return;
-    }
-    //소주제일경우
-    if ('isDone' in info) {
-      const thisSubTopic = getSubTopicItem(`${info.topicId}-${info.id}`);
-      setInputValue(thisSubTopic?.content || '');
-      setIsDoneState(thisSubTopic?.isDone || false);
-    }
-  }, [topics, subTopics]);
+  // useEffect(() => {
+  //   if (!info) {
+  //     return;
+  //   }
+  //   //대주제일경우
+  //   if ('topic' in info) {
+  //     setInputValue(getTopicItem(info.id)?.topic || '');
+  //     return;
+  //   }
+  //   //소주제일경우
+  //   if ('isDone' in info) {
+  //     const thisSubTopic = getSubTopicItem(`${info.topicId}-${info.id}`);
+  //     setInputValue(thisSubTopic?.content || '');
+  //     setIsDoneState(thisSubTopic?.isDone || false);
+  //   }
+  // }, [topics, subTopics]);
 
   if (info === null) {
     return <div>오류</div>;
