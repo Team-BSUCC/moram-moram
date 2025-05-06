@@ -21,18 +21,15 @@ import { useClientStateStore } from '../hooks/use-client-state-store';
 import { formatDate } from '@/modules/dashboard/util/format-date';
 import { useEffect, useState } from 'react';
 import { RealtimeCursors } from './realtime-cursors';
-import { useBroadcastStore } from '../hooks/use-broadcast-store';
-import {
-  errorAlert,
-  infoAlert,
-  successAlert,
-} from '@/shared/utils/sweet-alert';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
 import { usePanzoomController } from '@/shared/hooks/use-canvas-controller';
 import {
   useDownloadMandalartInCanvas,
   useDownloadMandalartWithOutCanvas,
 } from '../hooks/use-download-realtime-mandalart';
+import { notFound } from 'next/navigation';
+import UserNavigation from './user-navigation';
+import InstructionModal from './instruction-modal';
 
 const DESKTOP_SIZE = 1024;
 
@@ -50,9 +47,6 @@ const MandalartMainContent = ({
 
   useRealtimeBroadCastRoom(`broadcast-room ${mandalartId}`);
   useBatchUpdateTrigger();
-  const batchUpdateSupabase = useBroadcastStore(
-    (state) => state.batchUpdateSupabase
-  );
 
   const initialize = useClientStateStore((state) => state.initialize);
   const subTopics = useClientStateStore((state) => state.subTopics);
@@ -75,6 +69,9 @@ const MandalartMainContent = ({
 
   const [isDownloading, setIsDownloading] = useState<boolean>(false);
   const [isDesktop, setIsDesktop] = useState<boolean>(false);
+  const [isNavigationOpen, setIsNavigationOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   useEffect(() => {
     const screenResize = () => {
@@ -106,12 +103,14 @@ const MandalartMainContent = ({
     data?.core.title
   );
 
-  if (isPending) return <div>Loading...</div>;
-  if (isError) return <div>error</div>;
+  if (isPending) return <></>;
+  if (isError) {
+    notFound();
+  }
 
   return (
     <div
-      className='flex flex-col items-center'
+      className='flex animate-fadeInOnce flex-col items-center'
       onClick={() => {
         if (isVisible) {
           hide();
@@ -149,7 +148,7 @@ const MandalartMainContent = ({
             />
             <Spacer size='lg' />
             <div
-              className='grid w-fit animate-fadeInOnce grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'
+              className='grid w-fit grid-cols-3 grid-rows-3 gap-2 text-ss md:gap-5 md:text-md'
               ref={gridRef}
             >
               {/* 중앙 블록 */}
@@ -202,27 +201,23 @@ const MandalartMainContent = ({
         <div className='flex gap-8'>
           <Button
             onClick={() => {
-              batchUpdateSupabase().then((isSuccess) => {
-                if (isSuccess) {
-                  successAlert('저장 되었습니다.');
-                }
-                if (isSuccess === false) {
-                  errorAlert('저장에 실패했습니다.');
-                }
-                if (isSuccess === null) {
-                  infoAlert('변경된 값이 없습니다.');
-                }
-              });
+              if (window.innerWidth >= 1024) {
+                return setIsModalOpen(true);
+              }
+              setIsSheetOpen(true);
             }}
+            variant='default'
+            size='medium'
           >
-            저장하기
+            작성법 보기
           </Button>
           <Button
             disabled={isDownloading}
             variant='secondary'
             onClick={async () => {
               setIsDownloading(true);
-              if (panzoomRef === null) return handleDownload(setIsDownloading);
+              if (panzoomRef.current === null)
+                return handleDownload(setIsDownloading);
               handleDownloadCanvas(setIsDownloading);
             }}
           >
@@ -231,6 +226,16 @@ const MandalartMainContent = ({
         </div>
         <Spacer size='3xl' />
       </div>
+      <InstructionModal
+        isModalOpen={isModalOpen}
+        setIsModalOpen={setIsModalOpen}
+        isSheetOpen={isSheetOpen}
+        setIsSheetOpen={setIsSheetOpen}
+      />
+      <UserNavigation
+        isNavigationOpen={isNavigationOpen}
+        setIsNavigationOpen={setIsNavigationOpen}
+      />
       {/* 플로팅 시트 */}
       {isVisible && <MandalartFloatingSheet />}
       {isDesktop && (

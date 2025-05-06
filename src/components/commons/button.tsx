@@ -18,6 +18,7 @@ const buttonVariants = cva(
           'bg-primary bg-primary hover:bg-[#BF93E1] active:bg-[#A76BD6] h-[43px]',
         profile:
           'bg-transparent justify-start w-full rounded-none hover:bg-beige-light action:bg-beige-light px-6 py-4 text-left lg:px-8 lg:py-4',
+        error: 'bg-white px-[32px] py-[12px] rounded-md border border-[1px]',
       },
       size: {
         large:

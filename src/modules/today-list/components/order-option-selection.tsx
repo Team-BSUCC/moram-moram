@@ -31,7 +31,7 @@ const OrderOptionSelection = ({
   };
 
   return (
-    <div className='flex w-full items-center justify-end'>
+    <div className='mb-4 flex w-full items-center justify-end'>
       <Dropdown
         selection
         text={<Text>{getSelectedLabel(selectedOption)}</Text>}

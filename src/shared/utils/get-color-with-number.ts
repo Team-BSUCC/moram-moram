@@ -14,6 +14,22 @@ export const getColorWithNumber = (index: number): string => {
   return color[idx];
 };
 
+export const getDoneColorWithNumber = (index: number): string => {
+  const idx = index % 8;
+  const color: Record<number, string> = {
+    0: 'bg-pink-pigment',
+    1: 'bg-red-pigment',
+    2: 'bg-orange-pigment',
+    3: 'bg-purple-pigment',
+    4: 'bg-yellow-pigment',
+    5: 'bg-blue-pigment',
+    6: 'bg-sky-pigment',
+    7: 'bg-green-pigment',
+  };
+
+  return color[idx];
+};
+
 export const getBorderColorWithNumber = (index: number): string => {
   const idx = index % 8;
   const color: Record<number, string> = {

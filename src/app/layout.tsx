@@ -7,27 +7,36 @@ import Footer from '@/components/layouts/footer';
 import Header from '@/components/layouts/header';
 import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 import { Alert } from '@/components/commons/alert';
+import ErrorBoundaryWrapper from './error-boundary-wrapper';
 
 export const metadata: Metadata = {
-  title: 'Manda',
+  title:
+    'Manda-친구와 함께 만다라트로 목표를 설정하고, 세부 계획을 todo로 관리하세요!',
   description:
-    '오타니 쇼헤이가 목표를 이루기 위해 제작한 만다라트 표를 간단히 제작하고, 세부사항을 todo로 관리하여 당신의 목적을 달성하세요!',
+    '오타니 쇼헤이가 목표를 이루기 위해 제작한 만다라트 표를 간단히 제작하고, 공통 목표를 친구와 실시간으로 편집해 보세요!',
   icons: {
     icon: '/images/manda-logo.svg',
   },
-  metadataBase: new URL('https://www.manda.io.kr/'),
+  metadataBase: new URL('https://www.manda.io.kr'),
   openGraph: {
-    title: 'Manda',
-    description: '만다라트로 목표를 설정하고, 세부 계획을 todo로 관리하세요!',
+    title:
+      'Manda-친구와 함께 만다라트로 목표를 설정하고, 세부 계획을 todo로 관리하세요!',
+    description:
+      '오타니 쇼헤이가 목표를 이루기 위해 제작한 만다라트 표를 간단히 제작하고, 공통 목표를 친구와 실시간으로 편집해 보세요!',
     url: 'https://www.manda.io.kr/',
     siteName: 'Manda',
     images: [
       {
-        url: '/open-graph/opengraph.png',
+        url: '/images/open-graph/opengraph.png',
         alt: 'Manda',
       },
     ],
     type: 'website',
+  },
+  alternates: {
+    languages: {
+      ko: 'https://www.manda.io.kr/',
+    },
   },
   verification: {
     google: 'hqmxMlStpr94SZheqeOeogRi431jztKqSDx2frEtdqU',
@@ -62,13 +71,14 @@ export default async function RootLayout({
         <main className='mt-[72px] flex-grow lg:mt-[100px]'>
           <div className='flex h-full flex-1 items-center justify-center'>
             <Alert />
-            {/* children에 메인 영역이 위치합니다. 중앙 70%의 영역만 차지합니다 */}
             <div className='h-full w-full'>
-              <TQProvider>{children}</TQProvider>
+              <ErrorBoundaryWrapper>
+                <TQProvider>{children}</TQProvider>
+              </ErrorBoundaryWrapper>
             </div>
           </div>
         </main>
-        <footer className='w-full border-t border-gary-lightgray bg-white-light py-8'>
+        <footer className='w-full border-t border-gray-lightgray bg-white-light py-8'>
           <Footer />
         </footer>
       </body>

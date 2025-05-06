@@ -55,7 +55,7 @@ const GuestMandalartBlock = ({ index }: GuestMandalartBlockProps) => {
       {Array.from({ length: 8 }).map((_, index) => (
         <div
           key={index}
-          className={`${!activeSub ? 'bg-white-light' : 'bg-lightgray'} ${delayWithIndex(index)} relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border border-caption p-2 transition-all duration-500`}
+          className={`${!activeSub ? 'bg-white-light' : 'bg-gray-lightgray'} ${delayWithIndex(index)} relative flex aspect-square max-w-full items-center justify-center overflow-hidden rounded-lg border border-caption p-2 transition-all duration-500`}
         >
           <GuestMandalartCell key={index} active={activeSub} />
         </div>

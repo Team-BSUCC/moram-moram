@@ -12,6 +12,7 @@ import Spacer from '@/components/commons/spacer';
 import { getPastelCodeWithIndex } from '@/shared/utils/get-color-with-index';
 import { User } from '@supabase/supabase-js';
 import { useGetAllMandalartQuery } from '@/shared/hooks/use-get-all-mandalart-query';
+import LoadingSpinner from '@/components/commons/loading-spinner';
 
 type MandalartCalendarProps = {
   user: User | null;
@@ -27,7 +28,7 @@ const MandalartCalendar = ({ user }: MandalartCalendarProps) => {
   const show = useFloatingSheetStore((state) => state.show);
   const setInfo = useFloatingSheetStore((state) => state.setInfo);
 
-  const { data: myMandalarts, isPending } = useGetAllMandalartQuery({ user });
+  const { data: myMandalarts } = useGetAllMandalartQuery({ user });
 
   const [headerToolbar, setHeaderToolbar] = useState({
     start: 'today prev,next',
@@ -88,11 +89,9 @@ const MandalartCalendar = ({ user }: MandalartCalendarProps) => {
     }
   };
 
-  if (isPending) return <div>Loading...</div>;
-
   return (
     <div className='right-0 min-h-screen w-full bg-white-dark'>
-      <Spacer size='top' />
+      <Spacer size='lg' />
       <FullCalendar
         plugins={[dayGridPlugin, interactionPlugin]}
         initialView='dayGridMonth'
@@ -142,7 +141,6 @@ const MandalartCalendar = ({ user }: MandalartCalendarProps) => {
         eventOrder='isDone'
       />
       {isVisible && <CalendarFloatingSheet todos={flatTodos} />}
-      <Spacer size='top' />
     </div>
   );
 };

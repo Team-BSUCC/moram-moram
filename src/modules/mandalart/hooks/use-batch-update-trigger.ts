@@ -14,7 +14,7 @@ export const useBatchUpdateTrigger = () => {
   useEffect(() => {
     setInterval(() => {
       batchUpdateSupabase();
-    }, 30 * 1000);
+    }, 3 * 1000);
     return () => {
       batchUpdateSupabase();
     };
