@@ -8,6 +8,7 @@ import Header from '@/components/layouts/header';
 import { getUserInfo } from '@/modules/auth/services/auth-server-service';
 import { Alert } from '@/components/commons/alert';
 import ErrorBoundaryWrapper from './error-boundary-wrapper';
+import Script from 'next/script';
 
 export const metadata: Metadata = {
   title:
@@ -62,6 +63,24 @@ export default async function RootLayout({
       <body
         className={`${pretendard.variable} flex h-full w-full flex-col antialiased`}
       >
+        <Script id='google-tag-manager' strategy='beforeInteractive'>
+          {`
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-5M277ZGH');
+          `}
+        </Script>
+        <noscript>
+          <iframe
+            src='https://www.googletagmanager.com/ns.html?id=GTM-5M277ZGH'
+            height='0'
+            width='0'
+            style={{ display: 'none', visibility: 'hidden' }}
+          />
+        </noscript>
+
         <SessionInit />
 
         <header className='fixed left-0 right-0 top-0 z-50 h-[72px] w-screen lg:h-[100px]'>
