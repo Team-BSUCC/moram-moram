@@ -4,7 +4,7 @@ import {
   TodoBroadCastType,
 } from '../types/realtime-type';
 import { useMutation } from '@tanstack/react-query';
-import { useTodoOptimisticUpdater } from '../services/optimistic-update';
+import { useTodoOptimisticUpdater } from './use-optimistic-update';
 import * as Sentry from '@sentry/nextjs';
 import { errorAlert } from '@/shared/utils/sweet-alert';
 import { useBroadcastStore } from './use-broadcast-store';
@@ -35,7 +35,7 @@ export const useTodoBroadcastMutation = (myChannel: RealtimeChannel | null) => {
           new Error(`[useTodoBroadcastMutation] ${error.message}`)
         );
       });
-      errorAlert('broadcast에 오류가 발생했습니다!');
+      errorAlert('실시간 편집 중 오류가 발생했습니다.');
     },
   });
 

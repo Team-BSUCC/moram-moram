@@ -1,5 +1,5 @@
 /* eslint-disable indent */
-import { useClientStateStore } from '../hooks/use-client-state-store';
+import { useClientStateStore } from './use-client-state-store';
 import {
   CellBroadCastParamsType,
   TodoBroadCastType,

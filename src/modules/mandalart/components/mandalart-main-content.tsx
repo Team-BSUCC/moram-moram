@@ -22,7 +22,6 @@ import { formatDate } from '@/modules/dashboard/util/format-date';
 import { useEffect, useState } from 'react';
 import { RealtimeCursors } from './realtime-cursors';
 import useFloatingSheetStore from '@/shared/hooks/use-floating-sheet-store';
-import { usePanzoomController } from '@/shared/hooks/use-canvas-controller';
 import {
   useDownloadMandalartInCanvas,
   useDownloadMandalartWithOutCanvas,
@@ -30,6 +29,7 @@ import {
 import { notFound } from 'next/navigation';
 import UserNavigation from './user-navigation';
 import InstructionModal from './instruction-modal';
+import { usePanzoomController } from '@/shared/hooks/use-canvas-controller';
 
 const DESKTOP_SIZE = 1024;
 

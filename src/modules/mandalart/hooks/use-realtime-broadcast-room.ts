@@ -1,7 +1,7 @@
 import { useBroadcastStore } from './use-broadcast-store';
 import { getBrowserClient } from '@/shared/utils/supabase/browser-client';
 import { useEffect } from 'react';
-import { useReceiveBroadCastUpdater } from '../services/receive-broadcast-update';
+import { useReceiveBroadCastUpdater } from './use-receive-broadcast-update';
 import { useChannelStore } from './use-channel-store';
 
 export const useRealtimeBroadCastRoom = (roomName: string) => {
