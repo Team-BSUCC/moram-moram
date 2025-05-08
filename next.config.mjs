@@ -1,12 +1,18 @@
 import { withSentryConfig } from '@sentry/nextjs';
-/** @type {import('next').NextConfig} */
-const nextConfig = {};
+import withPWA from 'next-pwa';
 
-export default withSentryConfig(nextConfig, {
+const sentryOptions = {
   org: 'moram-moram-mr',
   project: 'javascript-nextjs',
   silent: !process.env.CI,
   widenClientFileUpload: true,
   disableLogger: true,
   automaticVercelMonitors: true,
-});
+};
+
+export default withSentryConfig(
+  withPWA({
+    dest: 'public',
+  }),
+  sentryOptions
+);
