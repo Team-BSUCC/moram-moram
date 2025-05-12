@@ -14,7 +14,7 @@ import { getDateDiff } from '@/modules/dashboard/util/calculate-date';
 import { useClientStateStore } from '../hooks/use-client-state-store';
 import { useChannelStore } from '../hooks/use-channel-store';
 import { useTodoBroadcastMutation } from '../hooks/use-todo-broadcast-mutation';
-import { createNewTodoRowValue } from '../services/create-new-todo-row-value';
+import { createNewTodoRowValue } from '../utils/create-new-todo-row-value';
 import { useCellBroadcastMutation } from '../hooks/use-cell-broadcast-mutation';
 import { useThrottleMutateWithTrailing } from '../hooks/use-arg-throttle-mutate';
 import { useEscapeKey } from '@/shared/hooks/use-escape-key';
